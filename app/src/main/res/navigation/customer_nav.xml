@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/restoFragment"
-        android:name="com.example.alfaresto_customersapp.ui.components.restoTab.restoFragment"
+        android:name="com.example.alfaresto_customersapp.ui.components.restoTab.RestoFragment"
         android:label="fragment_resto"
         tools:layout="@layout/fragment_resto" />
     <fragment
         android:id="@+id/orderHistoryFragment"
-        android:name="com.example.alfaresto_customersapp.ui.components.orderHistoryTab.orderHistoryFragment"
+        android:name="com.example.alfaresto_customersapp.ui.components.orderHistoryTab.OrderHistoryFragment"
         android:label="fragment_order_history"
         tools:layout="@layout/fragment_order_history" />
 </navigation>
