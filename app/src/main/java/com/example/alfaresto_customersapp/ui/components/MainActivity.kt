@@ -22,5 +22,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.bnvCustomerNavigation.setupWithNavController(navController)
 
+
+
     }
 }

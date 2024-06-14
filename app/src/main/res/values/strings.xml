@@ -2,4 +2,17 @@
     <string name="app_name">AlfaResto-CustomersApp</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="checkout">Checkout Order</string>
+    <string name="red_n_hot_taco">Red n Hot Taco</string>
+    <string name="spicy_chicken_beef">Spicy chicken, beef</string>
+    <string name="rp_50_000">Rp 50.000,-</string>
+    <string name="total">Total</string>
+    <string name="_2_items">(2 items)</string>
+    <string name="rp_112_000">Rp 112.000,-</string>
+    <string name="tempat_kerja">Tempat Kerja</string>
+    <string name="dummy_address">Alam Sutera, Jl. Jalur Sutera Bar. No.Kav. 7-9, RT.003/RW.006, Panunggangan Tim., Kec. Pinang, Kota Tangerang, Banten 15143</string>
+    <string name="icon_proceed">Icon_Proceed</string>
+    <string name="select_payment_method">Select payment method</string>
+    <string name="cod">COD</string>
+    <string name="gopay">GOPAY</string>
 </resources>

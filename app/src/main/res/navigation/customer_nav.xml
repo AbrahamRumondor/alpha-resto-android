@@ -7,12 +7,25 @@
 
     <fragment
         android:id="@+id/restoFragment"
-        android:name="com.example.alfaresto_customersapp.ui.components.restoTab.restoFragment"
+        android:name="com.example.alfaresto_customersapp.ui.components.restoTab.RestoFragment"
         android:label="fragment_resto"
-        tools:layout="@layout/fragment_resto" />
+        tools:layout="@layout/fragment_resto" >
+        <action
+            android:id="@+id/action_restoFragment_to_orderSummaryFragment"
+            app:destination="@id/orderSummaryFragment" />
+    </fragment>
     <fragment
         android:id="@+id/orderHistoryFragment"
-        android:name="com.example.alfaresto_customersapp.ui.components.orderHistoryTab.orderHistoryFragment"
+        android:name="com.example.alfaresto_customersapp.ui.components.orderHistoryTab.OrderHistoryFragment"
         android:label="fragment_order_history"
         tools:layout="@layout/fragment_order_history" />
+    <fragment
+        android:id="@+id/orderSummaryFragment"
+        android:name="com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.OrderSummaryFragment"
+        android:label="fragment_order_summary"
+        tools:layout="@layout/fragment_order_summary" >
+        <action
+            android:id="@+id/action_orderSummaryFragment_to_restoFragment"
+            app:destination="@id/restoFragment" />
+    </fragment>
 </navigation>
