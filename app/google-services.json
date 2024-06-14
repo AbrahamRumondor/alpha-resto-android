@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "536141996872",
+    "project_id": "final-project-alfa",
+    "storage_bucket": "final-project-alfa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:536141996872:android:6dc670976a8988d177897d",
+        "android_client_info": {
+          "package_name": "com.example.alfaresto_customersapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBfiXLEZOhJKVhGzcpYSleSrHt00ygtjo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
