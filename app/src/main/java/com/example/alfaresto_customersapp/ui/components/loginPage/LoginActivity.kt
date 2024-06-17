@@ -3,10 +3,13 @@ package com.example.alfaresto_customersapp.ui.components.loginPage
 import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
+import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.alfaresto_customersapp.databinding.LoginPageBinding
 import com.example.alfaresto_customersapp.ui.components.MainActivity
+import com.example.alfaresto_customersapp.ui.components.registerPage.RegisterActivity
 import com.google.firebase.auth.FirebaseAuth
 import java.util.regex.Pattern
 
@@ -44,7 +47,16 @@ class LoginActivity : AppCompatActivity()  {
 
             loginAuth(email, password)
         }
+        val registerTextClicked: TextView = binding.registerTextView
+        registerTextClicked.setOnClickListener {
+            directToRegister(it)
+        }
     }
+}
+
+fun directToRegister(view: View) {
+    val intent = Intent(view.context.applicationContext, RegisterActivity::class.java)
+    view.context.startActivity(intent)
 }
 
 fun LoginActivity.loginAuth(email: String, password: String) {

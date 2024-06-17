@@ -3,6 +3,8 @@ package com.example.alfaresto_customersapp.ui.components.registerPage
 import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
+import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.alfaresto_customersapp.databinding.RegisterPageBinding
@@ -12,7 +14,7 @@ import java.util.regex.Pattern
 
 class RegisterActivity : AppCompatActivity() {
 
-    private lateinit var binding: RegisterPageBinding
+    lateinit var binding: RegisterPageBinding
     lateinit var auth: FirebaseAuth
     private val passwordPatterns = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@\$!%*?&])[A-Za-z\\d@\$!%*?&]{8,}$")
 
@@ -54,18 +56,27 @@ class RegisterActivity : AppCompatActivity() {
 
             registerAuth(email, password)
         }
+        val loginTextClicked: TextView = binding.loginTextView
+        loginTextClicked.setOnClickListener {
+            directToLogin(it)
+        }
     }
+}
+
+fun directToLogin(view: View) {
+    val intent = Intent(view.context.applicationContext, LoginActivity::class.java)
+    view.context.startActivity(intent)
 }
 
 fun RegisterActivity.registerAuth(email: String, password: String) {
     auth.createUserWithEmailAndPassword(email, password)
-        .addOnCompleteListener(this) { task ->
-            if (task.isSuccessful) {
+        .addOnCompleteListener(this) { register ->
+            if (register.isSuccessful) {
                 Toast.makeText(this, "Register Success", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
             } else {
-                Toast.makeText(this, "Register Failed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Register Failed. This email is already used.", Toast.LENGTH_SHORT).show()
             }
         }
 }
