@@ -2,7 +2,17 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:src="@drawable/ic_logo"
+        app:layout_constraintStart_toStartOf="@id/emailContainer"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/registerTitle"
@@ -64,7 +74,9 @@
         android:layout_marginTop="45dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/emailContainer">
+        app:layout_constraintTop_toBottomOf="@id/emailContainer"
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="@color/black">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/passwordTextInput"
@@ -92,7 +104,9 @@
         android:layout_marginTop="45dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/passwordContainer">
+        app:layout_constraintTop_toBottomOf="@id/passwordContainer"
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="@color/black">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/reEnterPasswordTextInput"
@@ -108,11 +122,11 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="120dp"
+        android:background="@drawable/button_shape"
+        android:fontFamily="@font/extrabold"
         android:text="@string/register"
         android:textColor="@color/semiwhite"
-        android:fontFamily="@font/extrabold"
         android:textSize="15sp"
-        android:background="@drawable/button_shape"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/reEnterPasswordContainer" />
@@ -122,14 +136,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        android:clickable="true"
+        android:focusable="true"
         android:fontFamily="@font/regular"
-        android:textSize="14sp"
         android:gravity="center"
         android:text="@string/direct_to_login"
-        android:clickable="true"
-        app:layout_constraintStart_toStartOf="@id/registerButton"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="@id/registerButton"
-        app:layout_constraintTop_toBottomOf="@id/registerButton"
-        android:focusable="true" />
+        app:layout_constraintStart_toStartOf="@id/registerButton"
+        app:layout_constraintTop_toBottomOf="@id/registerButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
