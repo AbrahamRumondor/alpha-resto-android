@@ -6,10 +6,12 @@ import com.example.alfaresto_customersapp.databinding.ActivityMainBinding
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.alfaresto_customersapp.R
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,5 +24,13 @@ class MainActivity : AppCompatActivity() {
 
         binding.bnvCustomerNavigation.setupWithNavController(navController)
 
+        showUserInfo()
+    }
+
+    private fun showUserInfo() {
+        auth = FirebaseAuth.getInstance()
+        val user = auth.currentUser
+
+        binding.email.text = user?.email
     }
 }
