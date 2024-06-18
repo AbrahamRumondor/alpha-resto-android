@@ -14,7 +14,7 @@ import java.util.regex.Pattern
 
 class RegisterActivity : AppCompatActivity() {
 
-    lateinit var binding: RegisterPageBinding
+    private lateinit var binding: RegisterPageBinding
     lateinit var auth: FirebaseAuth
     private val passwordPatterns = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@\$!%*?&])[A-Za-z\\d@\$!%*?&]{8,}$")
 
