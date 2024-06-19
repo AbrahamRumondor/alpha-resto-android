@@ -30,10 +30,11 @@ class RestoFragment : Fragment() {
         val menuRv = binding.menuRv
 
         menuRv.adapter = adapter
-        menuRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        menuRv.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
-        val menuList = viewModel.getMenuList()
-        adapter.submitRestoList(menuList)
+//        val menuList = viewModel.getMenuList()
+//        adapter.submitRestoList(menuList)
     }
 
 }
