@@ -15,4 +15,23 @@
     <string name="select_payment_method">Select payment method</string>
     <string name="cod">COD</string>
     <string name="gopay">GOPAY</string>
+    <string name="add_new_address">Add new address</string>
+    <string name="address">Address</string>
+    <string name="marker">marker</string>
+    <string name="go_to_settings">Go to settings</string>
+    <string name="we_re_sorry_we_need_your_location_permission_to_use_this_app">we\'re sorry we need your location permission to use this app</string>
+
+    <string name="dialog_to_settings_message">The app is unavailable because it needs the permissions that you denied</string>
+    <string name="permission_required">Permission Required</string>
+    <string name="settings">Settings</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="dialog_for_permission_message">This app requires location permissions for the apps to work</string>
+    <string name="access_granted">Access Granted</string>
+    <string name="dialog_for_enable_gps_message">Your GPS seems to be disabled. Do you want to enable it?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="address_label">Address Label</string>
+    <string name="address_detail">Address Detail</string>
+    <string name="save">Save</string>
 </resources>

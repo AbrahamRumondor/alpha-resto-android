@@ -27,5 +27,22 @@
         <action
             android:id="@+id/action_orderSummaryFragment_to_restoFragment"
             app:destination="@id/restoFragment" />
+        <action
+            android:id="@+id/action_orderSummaryFragment_to_addressList"
+            app:destination="@id/addressList" />
     </fragment>
+    <fragment
+        android:id="@+id/addressList"
+        android:name="com.example.alfaresto_customersapp.ui.components.restoTab.address.addressList.AddressList"
+        android:label="fragment_address_list"
+        tools:layout="@layout/fragment_address_list" >
+        <action
+            android:id="@+id/action_addressList_to_addNewAddressFragment"
+            app:destination="@id/addNewAddressFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addNewAddressFragment"
+        android:name="com.example.alfaresto_customersapp.ui.components.restoTab.address.addNewAddress.AddNewAddressFragment"
+        android:label="fragment_add_new_address"
+        tools:layout="@layout/fragment_add_new_address" />
 </navigation>

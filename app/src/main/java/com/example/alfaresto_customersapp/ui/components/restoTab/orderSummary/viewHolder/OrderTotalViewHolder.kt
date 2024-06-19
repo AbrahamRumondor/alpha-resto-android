@@ -2,11 +2,10 @@ package com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.v
 
 import androidx.recyclerview.widget.RecyclerView
 import com.example.alfaresto_customersapp.databinding.OrderTotalPriceBinding
-import com.example.alfaresto_customersapp.ui.components.listener.ItemListener
+import com.example.alfaresto_customersapp.ui.components.listener.OrderSummaryItemListener
 
 class OrderTotalViewHolder (
     private val view: OrderTotalPriceBinding,
-    private val onAddressClicked: ItemListener?
 ) : RecyclerView.ViewHolder(view.root) {
 
     fun bind(total: Pair<Int, Int>?) {

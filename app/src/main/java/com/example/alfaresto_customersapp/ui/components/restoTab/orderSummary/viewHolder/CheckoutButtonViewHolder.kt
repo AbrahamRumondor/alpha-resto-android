@@ -2,16 +2,18 @@ package com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.v
 
 import androidx.recyclerview.widget.RecyclerView
 import com.example.alfaresto_customersapp.databinding.CheckoutButtonBinding
-import com.example.alfaresto_customersapp.ui.components.listener.ItemListener
+import com.example.alfaresto_customersapp.ui.components.listener.OrderSummaryItemListener
 
 class CheckoutButtonViewHolder (
     private val view: CheckoutButtonBinding,
-    private val onAddressClicked: ItemListener?
+    private val orderSummaryItemListener: OrderSummaryItemListener?
 ) : RecyclerView.ViewHolder(view.root) {
 
     fun bind() {
         view.run {
-
+            btnCheckoutOrder.setOnClickListener {
+                orderSummaryItemListener?.onCheckoutButtonClicked()
+            }
         }
     }
 }

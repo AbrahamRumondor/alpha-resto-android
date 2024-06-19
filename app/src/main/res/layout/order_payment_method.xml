@@ -50,10 +50,11 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/tv_payment_title">
 
                 <RadioButton
-                    android:id="@+id/radioButton2"
+                    android:id="@+id/rb_cod"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/cod" />
@@ -61,7 +62,7 @@
                 <View style="@style/Divider" />
 
                 <RadioButton
-                    android:id="@+id/radioButton"
+                    android:id="@+id/rb_gopay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/gopay" />
