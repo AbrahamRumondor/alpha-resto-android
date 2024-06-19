@@ -6,11 +6,11 @@ xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     tools:context=".ui.components.restoTab.RestoFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <Button
+        android:id="@+id/all_menu_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="RESTO"
+        android:text="List All Menu"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
