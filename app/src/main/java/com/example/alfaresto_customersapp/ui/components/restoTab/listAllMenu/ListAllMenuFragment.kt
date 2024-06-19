@@ -1,6 +1,7 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +11,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.alfaresto_customersapp.databinding.FragmentListAllMenuBinding
 import com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu.adapter.ListAllMenuAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class ListAllMenuFragment : Fragment() {
 
     private lateinit var binding: FragmentListAllMenuBinding
@@ -36,6 +39,7 @@ class ListAllMenuFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.menuList.collectLatest {
                 adapter.submitData(it)
+                Log.d("MENU", "onViewCreated: $it")
             }
         }
     }
