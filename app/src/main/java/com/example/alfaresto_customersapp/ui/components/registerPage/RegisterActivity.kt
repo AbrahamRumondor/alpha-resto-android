@@ -34,6 +34,8 @@ class RegisterActivity : AppCompatActivity() {
 
         binding.registerButton.setOnClickListener {
             val email = binding.emailTextInput.text.toString()
+            val id = ref.id
+            val image = "-"
             val password = binding.passwordTextInput.text.toString()
             val name = binding.nameTextInput.text.toString()
             val noTelp = binding.noTelpTextInput.text.toString()
@@ -63,7 +65,7 @@ class RegisterActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            registerAuth(email, password, name, noTelp)
+            registerAuth(email, id, image, name, noTelp, password)
         }
         val loginTextClicked: TextView = binding.loginTextView
         loginTextClicked.setOnClickListener {
@@ -77,11 +79,11 @@ fun directToLogin(view: View) {
     view.context.startActivity(intent)
 }
 
-fun RegisterActivity.registerAuth(email: String, password: String, name: String, noTelp: String) {
+fun RegisterActivity.registerAuth(email: String, id: String, image: String, name: String, noTelp: String, password: String) {
     auth.createUserWithEmailAndPassword(email, password)
         .addOnCompleteListener(this) { register ->
             if (register.isSuccessful) {
-                addToFirestore(name, email, noTelp)
+                addToFirestore(email, id, image, name, noTelp, password)
                 Toast.makeText(this, R.string.register_success, Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
@@ -91,11 +93,14 @@ fun RegisterActivity.registerAuth(email: String, password: String, name: String,
         }
 }
 
-fun addToFirestore(name: String, email: String, noTelp: String) {
+fun addToFirestore(email: String, id: String, image: String, name: String, noTelp: String, password: String) {
     val user = hashMapOf(
-        "name" to name,
-        "email" to email,
-        "noTelp" to noTelp
+        "user_email" to email,
+        "user_id" to id,
+        "user_image" to image,
+        "user_name" to name,
+        "user_no_telp" to noTelp,
+        "user_password" to password.hashCode()
     )
     FirebaseFirestore.getInstance().collection("users").document().set(user)
 }

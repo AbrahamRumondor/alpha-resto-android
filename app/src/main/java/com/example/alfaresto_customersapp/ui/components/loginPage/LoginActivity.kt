@@ -74,13 +74,13 @@ fun LoginActivity.loginAuth(email: String, password: String, address: String) {
             if (task.isSuccessful) {
                 Toast.makeText(baseContext, R.string.login_success, Toast.LENGTH_SHORT).show()
                 //addAddress(email, address)
+
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
             } else {
                 Toast.makeText(baseContext, R.string.login_failed, Toast.LENGTH_SHORT).show()
             }
         }
-
 }
 //
 //fun LoginActivity.addAddress(email: String, address: String) {
