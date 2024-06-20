@@ -1,8 +1,8 @@
 package com.example.alfaresto_customersapp.domain.usecase
 
-import com.example.alfaresto_customersapp.domain.repository.Menus
-import kotlinx.coroutines.flow.Flow
+import com.example.alfaresto_customersapp.domain.model.Menu
+import kotlinx.coroutines.flow.StateFlow
 
 interface MenuUseCase {
-    fun getMenus(): Flow<Menus>
+    suspend fun getMenus(): StateFlow<List<Menu>>
 }

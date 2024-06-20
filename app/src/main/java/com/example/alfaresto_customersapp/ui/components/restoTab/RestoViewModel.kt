@@ -1,10 +1,14 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.example.alfaresto_customersapp.domain.model.Response
-import com.example.alfaresto_customersapp.domain.repository.MenuList
+import androidx.lifecycle.viewModelScope
+import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.domain.usecase.MenuUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -12,14 +16,23 @@ class RestoViewModel @Inject constructor(
     private val menuUseCase: MenuUseCase
 ) : ViewModel() {
 
-    private var menusResponse: Response<MenuList> = Response.Loading
-        private set
+    private val _menus: MutableStateFlow<List<Menu>> = MutableStateFlow(emptyList())
+    val menus: StateFlow<List<Menu>> = _menus
 
     init {
-        getMenus()
+        fetchMenus()
     }
 
-    private fun getMenus() {
-
+    private fun fetchMenus() {
+        viewModelScope.launch {
+            try {
+                val fetchedMenus = menuUseCase.getMenus().value
+                _menus.value = fetchedMenus
+                Log.d("MENU viewmodel", "Menus fetched: $fetchedMenus")
+            } catch (e: Exception) {
+                Log.e("MENU viewmodel", "Error fetching menus: ${e.message}")
+            }
+        }
     }
+
 }
