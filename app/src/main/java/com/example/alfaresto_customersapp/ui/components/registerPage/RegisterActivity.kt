@@ -7,12 +7,13 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.RegisterPageBinding
 import com.example.alfaresto_customersapp.ui.components.loginPage.LoginActivity
+import com.example.alfaresto_customersapp.ui.util.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
-import java.util.regex.Pattern
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -20,7 +21,7 @@ class RegisterActivity : AppCompatActivity() {
     lateinit var auth: FirebaseAuth
     private lateinit var firebaseFirestore: FirebaseFirestore
     private lateinit var ref: DocumentReference
-    private val passwordPatterns = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@\$!%*?&])[A-Za-z\\d@\$!%*?&]{8,}$")
+    private val passwordPatterns = Constants.passwordPatterns
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,31 +40,30 @@ class RegisterActivity : AppCompatActivity() {
             val reEnterPassword = binding.reEnterPasswordTextInput.text.toString()
 
             if (email.isEmpty() || password.isEmpty() || reEnterPassword.isEmpty()) {
-                binding.emailTextInput.error = "Email or password is empty"
-                binding.passwordTextInput.error = "Email or password is empty"
+                binding.emailTextInput.error = getString(R.string.email_pass_empty)
+                binding.passwordTextInput.error = getString(R.string.email_pass_empty)
                 return@setOnClickListener
             }
 
             if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                binding.emailTextInput.error = "Email is not valid"
+                binding.emailTextInput.error = getString(R.string.email_not_valid)
                 binding.emailTextInput.requestFocus()
                 return@setOnClickListener
             }
 
             if (!passwordPatterns.matcher(password).matches()) {
-                binding.passwordTextInput.error = "Password is not valid"
+                binding.passwordTextInput.error = getString(R.string.password_not_valid)
                 binding.passwordTextInput.requestFocus()
                 return@setOnClickListener
             }
 
             if (password != reEnterPassword) {
-                binding.reEnterPasswordTextInput.error = "Password is not match"
+                binding.reEnterPasswordTextInput.error = getString(R.string.password_not_match)
                 binding.reEnterPasswordTextInput.requestFocus()
                 return@setOnClickListener
             }
 
-            registerAuth(email, password)
-            addToFirestore(name, email, noTelp)
+            registerAuth(email, password, name, noTelp)
         }
         val loginTextClicked: TextView = binding.loginTextView
         loginTextClicked.setOnClickListener {
@@ -77,15 +77,16 @@ fun directToLogin(view: View) {
     view.context.startActivity(intent)
 }
 
-fun RegisterActivity.registerAuth(email: String, password: String) {
+fun RegisterActivity.registerAuth(email: String, password: String, name: String, noTelp: String) {
     auth.createUserWithEmailAndPassword(email, password)
         .addOnCompleteListener(this) { register ->
             if (register.isSuccessful) {
-                Toast.makeText(this, "Register Success", Toast.LENGTH_SHORT).show()
+                addToFirestore(name, email, noTelp)
+                Toast.makeText(this, R.string.register_success, Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
             } else {
-                Toast.makeText(this, "Register Failed. This email is already used.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, R.string.register_failed, Toast.LENGTH_SHORT).show()
             }
         }
 }
@@ -98,3 +99,4 @@ fun addToFirestore(name: String, email: String, noTelp: String) {
     )
     FirebaseFirestore.getInstance().collection("users").document().set(user)
 }
+

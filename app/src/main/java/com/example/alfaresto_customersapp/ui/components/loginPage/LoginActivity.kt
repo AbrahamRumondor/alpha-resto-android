@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.LoginPageBinding
 import com.example.alfaresto_customersapp.ui.components.MainActivity
 import com.example.alfaresto_customersapp.ui.components.registerPage.RegisterActivity
@@ -32,19 +33,19 @@ class LoginActivity : AppCompatActivity()  {
             val address = binding.addressTextInput.text.toString()
 
             if (email.isEmpty() || password.isEmpty()) {
-                binding.emailTextInput.error = "Email or password is empty"
-                binding.passwordTextInput.error = "Email or password is empty"
+                binding.emailTextInput.error = getString(R.string.email_pass_empty)
+                binding.passwordTextInput.error = getString(R.string.email_pass_empty)
                 return@setOnClickListener
             }
 
             if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                binding.emailTextInput.error = "Email is not valid"
+                binding.emailTextInput.error = getString(R.string.email_not_valid)
                 binding.emailTextInput.requestFocus()
                 return@setOnClickListener
             }
 
             if (!passwordPatterns.matcher(password).matches()) {
-                binding.passwordTextInput.error = "Password is not valid"
+                binding.passwordTextInput.error = getString(R.string.password_not_valid)
                 binding.passwordTextInput.requestFocus()
                 return@setOnClickListener
             }
@@ -71,12 +72,12 @@ fun LoginActivity.loginAuth(email: String, password: String, address: String) {
     auth.signInWithEmailAndPassword(email, password)
         .addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
-                Toast.makeText(baseContext, "Login Success", Toast.LENGTH_SHORT).show()
+                Toast.makeText(baseContext, R.string.login_success, Toast.LENGTH_SHORT).show()
                 //addAddress(email, address)
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
             } else {
-                Toast.makeText(baseContext, "Login Failed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(baseContext, R.string.login_failed, Toast.LENGTH_SHORT).show()
             }
         }
 
