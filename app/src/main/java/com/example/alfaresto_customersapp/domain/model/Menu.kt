@@ -5,7 +5,7 @@ data class Menu(
     val menuId: String = "",
     val restoId:String = "",
     val menuName: String = "",
-    val menuDesc: String = "",
+    val menuDescription: String = "",
     val menuPrice: Int = -1,
     val menuStock: Int = -1,
     val menuImage: String = "",
