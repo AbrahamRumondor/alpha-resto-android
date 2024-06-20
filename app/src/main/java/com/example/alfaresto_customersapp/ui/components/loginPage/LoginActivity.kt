@@ -11,8 +11,10 @@ import com.example.alfaresto_customersapp.databinding.LoginPageBinding
 import com.example.alfaresto_customersapp.ui.components.MainActivity
 import com.example.alfaresto_customersapp.ui.components.registerPage.RegisterActivity
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.regex.Pattern
 
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity()  {
     private lateinit var binding: LoginPageBinding
     lateinit var auth: FirebaseAuth

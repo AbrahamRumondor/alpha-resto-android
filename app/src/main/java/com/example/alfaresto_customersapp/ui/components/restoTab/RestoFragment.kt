@@ -50,10 +50,8 @@ class RestoFragment : Fragment() {
                     return@collect
                 }
 
-                Log.d("MENU", "Menus received: $menus")
-                adapter.submitMenuList(menus)
-
                 menuRv.adapter = adapter
+                adapter.submitMenuList(menus)
                 menuRv.layoutManager =
                     LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             }
