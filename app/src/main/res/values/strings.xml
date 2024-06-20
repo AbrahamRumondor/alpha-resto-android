@@ -10,4 +10,7 @@
     <string name="user_email">User Email</string>
     <string name="direct_to_login">Already have an account? Login here</string>
     <string name="register_here">Register here</string>
+    <string name="no_telp">No. Telp</string>
+    <string name="name">Name</string>
+    <string name="address">Address</string>
 </resources>

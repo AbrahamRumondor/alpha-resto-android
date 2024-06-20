@@ -10,12 +10,16 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.alfaresto_customersapp.databinding.RegisterPageBinding
 import com.example.alfaresto_customersapp.ui.components.loginPage.LoginActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FirebaseFirestore
 import java.util.regex.Pattern
 
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding: RegisterPageBinding
     lateinit var auth: FirebaseAuth
+    private lateinit var firebaseFirestore: FirebaseFirestore
+    private lateinit var ref: DocumentReference
     private val passwordPatterns = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@\$!%*?&])[A-Za-z\\d@\$!%*?&]{8,}$")
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,10 +28,14 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         auth = FirebaseAuth.getInstance()
+        firebaseFirestore = FirebaseFirestore.getInstance()
+        ref = firebaseFirestore.collection("users").document()
 
         binding.registerButton.setOnClickListener {
             val email = binding.emailTextInput.text.toString()
             val password = binding.passwordTextInput.text.toString()
+            val name = binding.nameTextInput.text.toString()
+            val noTelp = binding.noTelpTextInput.text.toString()
             val reEnterPassword = binding.reEnterPasswordTextInput.text.toString()
 
             if (email.isEmpty() || password.isEmpty() || reEnterPassword.isEmpty()) {
@@ -55,6 +63,7 @@ class RegisterActivity : AppCompatActivity() {
             }
 
             registerAuth(email, password)
+            addToFirestore(name, email, noTelp)
         }
         val loginTextClicked: TextView = binding.loginTextView
         loginTextClicked.setOnClickListener {
@@ -79,4 +88,13 @@ fun RegisterActivity.registerAuth(email: String, password: String) {
                 Toast.makeText(this, "Register Failed. This email is already used.", Toast.LENGTH_SHORT).show()
             }
         }
+}
+
+fun addToFirestore(name: String, email: String, noTelp: String) {
+    val user = hashMapOf(
+        "name" to name,
+        "email" to email,
+        "noTelp" to noTelp
+    )
+    FirebaseFirestore.getInstance().collection("users").document().set(user)
 }
