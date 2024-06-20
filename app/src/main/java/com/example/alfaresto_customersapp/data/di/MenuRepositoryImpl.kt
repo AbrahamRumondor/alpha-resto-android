@@ -1,6 +1,5 @@
 package com.example.alfaresto_customersapp.data.di
 
-import android.util.Log
 import com.example.alfaresto_customersapp.data.model.MenuResponse
 import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.domain.repository.MenuRepository
@@ -23,11 +22,8 @@ class MenuRepositoryImpl @Inject constructor(
             val snapshot = menusRef.get().await()
             val menuList = snapshot.toObjects(MenuResponse::class.java)
             _menus.value = menuList.map { MenuResponse.transform(it) }
-
-            Log.d("MENU repoImpl try", "Menus fetched: ${menus.value}")
         } catch (e: Exception) {
             _menus.value = emptyList()
-            Log.e("MENU repoImpl", "Error fetching menus: ${e.message}")
         }
         return menus
     }

@@ -28,9 +28,8 @@ class RestoViewModel @Inject constructor(
             try {
                 val fetchedMenus = menuUseCase.getMenus().value
                 _menus.value = fetchedMenus
-                Log.d("MENU viewmodel", "Menus fetched: $fetchedMenus")
             } catch (e: Exception) {
-                Log.e("MENU viewmodel", "Error fetching menus: ${e.message}")
+                Log.e("MENU", "Error fetching menus: ${e.message}")
             }
         }
     }
