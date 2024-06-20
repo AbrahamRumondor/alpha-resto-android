@@ -45,4 +45,9 @@
         android:name="com.example.alfaresto_customersapp.ui.components.restoTab.address.addNewAddress.AddNewAddressFragment"
         android:label="fragment_add_new_address"
         tools:layout="@layout/fragment_add_new_address" />
+    <fragment
+        android:id="@+id/listAllMenuFragment"
+        android:name="com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu.ListAllMenuFragment"
+        android:label="fragment_list_all_menu"
+        tools:layout="@layout/fragment_list_all_menu" />
 </navigation>

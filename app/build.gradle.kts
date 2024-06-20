@@ -47,6 +47,10 @@ android {
     }
 }
 
+kapt {
+    correctErrorTypes = true
+}
+
 dependencies {
 
     val coroutinesAndroid = "1.7.1"

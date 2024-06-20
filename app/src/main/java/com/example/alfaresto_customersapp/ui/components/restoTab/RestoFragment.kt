@@ -2,14 +2,16 @@ package com.example.alfaresto_customersapp.ui.components.restoTab
 
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.Navigation
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.FragmentRestoBinding
 import com.example.alfaresto_customersapp.ui.components.restoTab.adapter.RestoAdapter
@@ -22,6 +24,7 @@ class RestoFragment : Fragment() {
     private lateinit var binding: FragmentRestoBinding
     private val viewModel: RestoViewModel by viewModels()
     private val adapter by lazy { RestoAdapter() }
+    private val restoViewModel: RestoViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

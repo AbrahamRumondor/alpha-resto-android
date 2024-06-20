@@ -1,6 +1,8 @@
 package com.example.alfaresto_customersapp.data.di
 
 import com.example.alfaresto_customersapp.domain.repository.MenuRepository
+import com.example.alfaresto_customersapp.data.local.room.repository.CartRepositoryImpl
+import com.example.alfaresto_customersapp.domain.repository.CartRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -14,4 +16,9 @@ abstract class AppRepositoryModule {
     abstract fun provideMenuRepository(
         menuRepositoryImpl: MenuRepositoryImpl
     ): MenuRepository
+
+    @Binds
+    abstract fun provideCartRepository(
+        cartRepositoryImpl: CartRepositoryImpl
+    ): CartRepository
 }
