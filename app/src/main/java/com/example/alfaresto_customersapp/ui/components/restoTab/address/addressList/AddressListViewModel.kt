@@ -2,24 +2,30 @@ package com.example.alfaresto_customersapp.ui.components.restoTab.address.addres
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.alfaresto_customersapp.domain.model.Address
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class AddressListViewModel : ViewModel() {
     val db = Firebase.firestore
 
-    private val _orderSummaryFlow = MutableStateFlow<List<Address>>(mutableListOf())
-    val orderSummaryFlow: StateFlow<List<Address>> = _orderSummaryFlow
+    private val _userAddressFlow = MutableStateFlow<List<Address>>(mutableListOf())
+    val userAddressFlow: StateFlow<List<Address>> = _userAddressFlow
+
+    private val _selectedAddress = MutableStateFlow<Address?>(null)
+    val selectedAddress: StateFlow<Address?> = _selectedAddress
 
     private var selectedAddressIdx: Int? = null
 
     fun updateAddress(index: Int): Int? {
         var previousSelected: Int? = null
-        if (_orderSummaryFlow.value.isNotEmpty()) {
-            val allAddresses = _orderSummaryFlow.value.toMutableList()
+        if (_userAddressFlow.value.isNotEmpty()) {
+            val allAddresses = _userAddressFlow.value.toMutableList()
             allAddresses.forEachIndexed { i, address ->
                 if (address.isSelected && i != index) {
                     previousSelected = i
@@ -30,7 +36,7 @@ class AddressListViewModel : ViewModel() {
             val selectedAddress = allAddresses[index]
             allAddresses[index] = selectedAddress.copy(isSelected = true)
 
-            _orderSummaryFlow.value = allAddresses
+            _userAddressFlow.value = allAddresses
         }
         return previousSelected
     }
@@ -47,10 +53,28 @@ class AddressListViewModel : ViewModel() {
                     addressList.add(address)
                     Log.d("test", "SUCCESS FETCH DATA: ${address.addressID}")
                 }
-                _orderSummaryFlow.value = addressList
+                _userAddressFlow.value = addressList
             }
             .addOnFailureListener {
                 Log.d("test", "GAGAL FETCH DATA: $it")
             }
+    }
+
+
+    fun setAnAddress(userId: String, addressId: String) {
+        viewModelScope.launch {
+            try {
+                val documentSnapshot = db.collection("users")
+                    .document(userId)
+                    .collection("addresses")
+                    .document(addressId)
+                    .get()
+                    .await() // Suspends coroutine until document is fetched
+
+                _selectedAddress.value = documentSnapshot.toObject(Address::class.java)
+            } catch (e: Exception) {
+                Log.d("test", "GAGAL FETCH DATA: $e")
+            }
+        }
     }
 }

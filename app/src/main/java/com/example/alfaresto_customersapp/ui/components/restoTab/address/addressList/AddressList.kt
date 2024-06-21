@@ -10,11 +10,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.FragmentAddressListBinding
-import com.example.alfaresto_customersapp.databinding.FragmentOrderSummaryBinding
 import com.example.alfaresto_customersapp.ui.components.listener.AddressItemListener
-import com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.OrderSummaryAdapter
-import com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.OrderSummaryViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_ID
 import kotlinx.coroutines.launch
 
 class AddressList : Fragment() {
@@ -46,11 +43,11 @@ class AddressList : Fragment() {
     private fun setupAddressAdapter() {
         addressListViewModel.fetchAllAddresses("amnRLCt7iYGogz6JRxi5")
         addressAdapter =
-            AddressListAdapter(addressListViewModel.orderSummaryFlow.value, requireContext())
+            AddressListAdapter(addressListViewModel.userAddressFlow.value, requireContext())
         binding.rvAddressList.adapter = addressAdapter
 
         lifecycleScope.launch {
-            addressListViewModel.orderSummaryFlow.collect { data ->
+            addressListViewModel.userAddressFlow.collect { data ->
                 addressAdapter.updateData(data)
             }
         }
@@ -60,7 +57,8 @@ class AddressList : Fragment() {
 
     private fun setAddressListener() {
         addressAdapter.setItemListener(object : AddressItemListener {
-            override fun onAddressClicked(position: Int) {
+            override fun onAddressClicked(position: Int, addressId: String) {
+                addressListViewModel.setAnAddress(USER_ID, addressId)
                 val otherAddress = addressListViewModel.updateAddress(position)
                 otherAddress?.let {previousSelected->
                     addressAdapter.notifyItemChanged(previousSelected)

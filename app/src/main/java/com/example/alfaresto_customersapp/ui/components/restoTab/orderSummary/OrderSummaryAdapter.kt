@@ -21,7 +21,7 @@ import com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.vi
 class OrderSummaryAdapter() :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var items: MutableList<Any> = mutableListOf()
+    private var items: MutableList<Any?> = mutableListOf()
 
     private var orderSummaryItemListener: OrderSummaryItemListener? = null
 
@@ -33,7 +33,7 @@ class OrderSummaryAdapter() :
 
     override fun getItemViewType(position: Int): Int {
         return when (items[position]) {
-            is Address -> SHOW_ADDRESS
+            is Address? -> SHOW_ADDRESS
             is Menu -> SHOW_ORDER_LIST
             is Pair<*, *> -> SHOW_ORDER_TOTAL
             is String -> when (items[position] as String) {
@@ -80,7 +80,7 @@ class OrderSummaryAdapter() :
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (val item = items[position]) {
-            is Address -> (holder as OrderAddressViewHolder).bind(item)
+            is Address? -> (holder as OrderAddressViewHolder).bind(item)
             is Menu -> (holder as OrderListViewHolder).bind(item, position)
             is Pair<*, *> -> (holder as OrderTotalViewHolder).bind(item as Pair<Int, Int>)
             is String -> when (item) {
@@ -94,7 +94,7 @@ class OrderSummaryAdapter() :
         return items.size
     }
 
-    fun submitOrderList(items: MutableList<Any> ) {
+    fun submitOrderList(items: MutableList<Any?> ) {
         this.items = items
         Log.d("ORDER adapter", "order list submitted: $items")
     }

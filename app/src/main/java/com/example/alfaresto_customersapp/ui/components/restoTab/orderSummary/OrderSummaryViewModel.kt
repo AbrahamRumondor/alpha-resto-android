@@ -43,8 +43,8 @@ class OrderSummaryViewModel @Inject constructor(
     private val _cart: MutableStateFlow<List<CartEntity>> = MutableStateFlow(emptyList())
     val carts: StateFlow<List<CartEntity>> = _cart
 
-    private val _orders: MutableStateFlow<MutableList<Any>> = MutableStateFlow(mutableListOf())
-    val orders: StateFlow<List<Any>> = _orders
+    private val _orders: MutableStateFlow<MutableList<Any?>> = MutableStateFlow(mutableListOf())
+    val orders: StateFlow<List<Any?>> = _orders
 
     private val PAYMENT_METHOD = _orders.value.size - 2
     private val TOTAL = orders.value.size - 3
@@ -62,7 +62,7 @@ class OrderSummaryViewModel @Inject constructor(
         _menus.value = list
     }
 
-    fun makeOrders(address: Address, orders: List<Menu>, total: Pair<Int, Int>): MutableList<Any> {
+    fun makeOrders(address: Address?, orders: List<Menu>, total: Pair<Int, Int>): MutableList<Any?> {
         val orderList = mutableListOf(
             address,
             total,

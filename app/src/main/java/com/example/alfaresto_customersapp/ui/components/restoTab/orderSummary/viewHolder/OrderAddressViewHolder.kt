@@ -1,5 +1,6 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.viewHolder
 
+import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import com.example.alfaresto_customersapp.databinding.OrderAddressBinding
 import com.example.alfaresto_customersapp.domain.model.Address
@@ -16,9 +17,15 @@ class OrderAddressViewHolder(
             if (address != null) {
                 tvAddressLabel.text = address.addressLabel
                 tvAddressLocation.text = address.address
+            } else {
+                val noAddressLabel = "Please choose an address"
+                val noAddressDesc = "we need you address to be able to perform transaction"
+                tvAddressLabel.text = noAddressLabel
+                tvAddressLocation.text = noAddressDesc
             }
 
             clAddressView.setOnClickListener {
+                Log.d("test", "HI")
                 itemListener?.onAddressClicked(position)
             }
         }

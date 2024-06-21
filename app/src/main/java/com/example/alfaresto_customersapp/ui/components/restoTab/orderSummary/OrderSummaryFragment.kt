@@ -18,6 +18,7 @@ import com.example.alfaresto_customersapp.databinding.OrderPaymentMethodBinding
 import com.example.alfaresto_customersapp.domain.model.Address
 import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.ui.components.listener.OrderSummaryItemListener
+import com.example.alfaresto_customersapp.ui.components.restoTab.address.addressList.AddressListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -27,6 +28,7 @@ class OrderSummaryFragment : Fragment() {
 
     private lateinit var binding: FragmentOrderSummaryBinding
     private val orderSummaryViewModel: OrderSummaryViewModel by activityViewModels()
+    private val addressListViewModel: AddressListViewModel by activityViewModels()
     private val orderAdapter by lazy { OrderSummaryAdapter() }
 
 
@@ -53,18 +55,11 @@ class OrderSummaryFragment : Fragment() {
                         }?.copy(orderCartQuantity = cartOrder.menuQty)
                     }
                     binding.rvOrderSummary.adapter = orderAdapter
-                    countTotalItemAndPrice(orders)
                     orderAdapter.submitOrderList(
                         orderSummaryViewModel.makeOrders(
                             orders = orders,
-                            total = countTotalItemAndPrice(menus),
-                            address = Address(
-                                address = "Jl. Alam Sutera Boulevard No.Kav. 21, Pakulonan, Kec. Serpong Utara, Kota Tangerang Selatan, Banten 15325",
-                                addressLabel = "Kantor",
-                                addressID = "adfi90sdjaaf98uf",
-                                latitude = 0.0,
-                                longitude = 0.0
-                            )
+                            total = countTotalItemAndPrice(orders),
+                            address = addressListViewModel.selectedAddress.value
                         )
                     )
                     setOrderSummaryListener(orders, carts)
@@ -77,8 +72,8 @@ class OrderSummaryFragment : Fragment() {
         orderAdapter.setItemListener(object : OrderSummaryItemListener {
             override fun onAddressClicked(position: Int) {
 //                TODO go to address page
-//                Navigation.findNavController(binding.root)
-//                    .navigate(R.id.action_orderSummaryFragment_to_addressList)
+                Navigation.findNavController(binding.root)
+                    .navigate(R.id.action_orderSummaryFragment_to_addressList)
             }
 
             override fun onAddItemClicked(position: Int,  menuId: String) {
