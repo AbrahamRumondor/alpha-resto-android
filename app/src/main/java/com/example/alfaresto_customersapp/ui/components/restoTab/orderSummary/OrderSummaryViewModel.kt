@@ -167,4 +167,36 @@ class OrderSummaryViewModel @Inject constructor(
         val dateFormat = SimpleDateFormat("dd MMMM yyyy, HH:mm", Locale.getDefault())
         return dateFormat.format(currentDate)
     }
+
+    val menu1 = Menu(
+        menuName = "Pizza AB",
+        menuPrice = 15000,
+        menuDescription = "daging cincang dan keju",
+        orderCartQuantity = 2,
+    )
+
+    val menu2 = Menu(
+        menuName = "Taco AB",
+        menuPrice = 10000,
+        menuDescription = "daging cincang dan keju",
+        orderCartQuantity = 1,
+    )
+
+    val menu3 = Menu(
+        menuName = "Kebab AB",
+        menuPrice = 5000,
+        menuDescription = "daging cincang dan keju",
+        orderCartQuantity = 3,
+    )
+
+    val cart = mutableListOf(
+        address,
+        menu1,
+        menu2,
+        menu3,
+        Pair(-1, -1),
+        "payment_method",
+        "checkout"
+    )
+
 }

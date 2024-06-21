@@ -1,6 +1,7 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.FragmentOrderSummaryBinding
@@ -25,6 +27,7 @@ class OrderSummaryFragment : Fragment() {
     private lateinit var binding: FragmentOrderSummaryBinding
     private val orderSummaryViewModel: OrderSummaryViewModel by activityViewModels()
     private val orderAdapter by lazy { OrderSummaryAdapter() }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,9 +47,12 @@ class OrderSummaryFragment : Fragment() {
             orderSummaryViewModel.carts.collectLatest { carts ->
                 orderSummaryViewModel.menus.collectLatest { menus ->
                     val orders = carts.mapNotNull { cartOrder ->
-                        menus.find { it.menuId == cartOrder.menuId }
+                        menus.find {
+                            it.menuId == cartOrder.menuId
+                        }?.copy(orderCartQuantity = cartOrder.menuQty)
                     }
-                    countTotalItemAndPrice(menus)
+                    binding.rvOrderSummary.adapter = orderAdapter
+                    countTotalItemAndPrice(orders)
                     orderAdapter.submitOrderList(
                         orderSummaryViewModel.makeOrders(
                             orders = orders,
@@ -60,8 +66,6 @@ class OrderSummaryFragment : Fragment() {
                             )
                         )
                     )
-
-                    binding.rvOrderSummary.adapter = orderAdapter
                     setOrderSummaryListener(orders)
                 }
             }
@@ -72,8 +76,8 @@ class OrderSummaryFragment : Fragment() {
         orderAdapter.setItemListener(object : OrderSummaryItemListener {
             override fun onAddressClicked(position: Int) {
 //                TODO go to address page
-                Navigation.findNavController(binding.root)
-                    .navigate(R.id.action_orderSummaryFragment_to_addressList)
+//                Navigation.findNavController(binding.root)
+//                    .navigate(R.id.action_orderSummaryFragment_to_addressList)
             }
 
             override fun onAddItemClicked(position: Int) {
@@ -148,9 +152,9 @@ class OrderSummaryFragment : Fragment() {
             totalPrice += it.menuPrice * it.orderCartQuantity
             totalItem += it.orderCartQuantity
         }
-        if (totalPrice == 0 && totalItem == 0) {
-            findNavController().popBackStack()
-        }
+//        if (totalPrice == 0 && totalItem == 0) {
+//            findNavController().popBackStack()
+//        }
         return Pair(totalItem, totalPrice)
     }
 }

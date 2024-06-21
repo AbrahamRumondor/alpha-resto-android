@@ -21,7 +21,7 @@ import com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.vi
 class OrderSummaryAdapter() :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var items: List<Any> = listOf()
+    private var items: MutableList<Any> = mutableListOf()
 
     private var orderSummaryItemListener: OrderSummaryItemListener? = null
 
@@ -94,7 +94,7 @@ class OrderSummaryAdapter() :
         return items.size
     }
 
-    fun submitOrderList(items: List<Any> ) {
+    fun submitOrderList(items: MutableList<Any> ) {
         this.items = items
         Log.d("ORDER adapter", "order list submitted: $items")
     }
