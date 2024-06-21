@@ -1,4 +1,4 @@
-package com.example.alfaresto_customersapp.ui.components.orderHistoryTab
+package com.example.alfaresto_customersapp.ui.components.orderHistoryTab.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil

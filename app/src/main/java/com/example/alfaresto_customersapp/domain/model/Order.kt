@@ -4,8 +4,9 @@ data class Order(
     val orderID: String = "",
     val userID: String = "",
     val addressID: String = "",
+    val restoID: String = "",
     val orderDate : String = "",
-    val statusDelivery : String = "",
-    val orderTotalPrice : Int = -1,
+    val orderPaymentMethod : String = "",
+    val totalPrice : Int = -1,
     val orderItems: List<OrderItem> = mutableListOf()
 )
