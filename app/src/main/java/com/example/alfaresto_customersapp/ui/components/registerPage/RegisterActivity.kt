@@ -14,6 +14,7 @@ import com.example.alfaresto_customersapp.ui.util.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import java.security.MessageDigest
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -95,13 +96,16 @@ fun RegisterActivity.registerAuth(email: String, image: String, name: String, no
 }
 
 fun addToFirestore(email: String, id: String, image: String, name: String, noTelp: String, password: String) {
+    val hashedPassword = MessageDigest.getInstance("SHA-256").digest(password.toByteArray()).joinToString("") {
+        "%02x".format(it)
+    }
     val user = hashMapOf(
         "user_email" to email,
         "user_id" to id,
         "user_image" to image,
         "user_name" to name,
         "user_no_telp" to noTelp,
-        "user_password" to password.hashCode()
+        "user_password" to hashedPassword
     )
     FirebaseFirestore.getInstance().collection("users").document().set(user)
 }
