@@ -9,6 +9,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.alfaresto_customersapp.databinding.FragmentListAllMenuBinding
+import com.example.alfaresto_customersapp.ui.components.listener.MenuListener
+import com.example.alfaresto_customersapp.ui.components.restoTab.adapter.RestoAdapter
 import com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu.adapter.ListAllMenuAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -19,6 +21,7 @@ class ListAllMenuFragment : Fragment() {
 
     private lateinit var binding: FragmentListAllMenuBinding
     private val viewModel: ListAllMenuViewModel by viewModels()
+    private val adapter by lazy { ListAllMenuAdapter() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,8 +34,8 @@ class ListAllMenuFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = ListAllMenuAdapter()
         binding.listAllMenuRv.adapter = adapter
+        setMenusAdapterButtons()
         binding.listAllMenuRv.layoutManager = GridLayoutManager(requireContext(), 2)
 
         lifecycleScope.launch {
@@ -40,5 +43,17 @@ class ListAllMenuFragment : Fragment() {
                 adapter.submitData(it)
             }
         }
+    }
+
+    private fun setMenusAdapterButtons() {
+        adapter.setItemListener(object : MenuListener {
+            override fun onAddItemClicked(position: Int,  menuId: String) {
+
+            }
+
+            override fun onDecreaseItemClicked(position: Int, menuId: String) {
+
+            }
+        })
     }
 }

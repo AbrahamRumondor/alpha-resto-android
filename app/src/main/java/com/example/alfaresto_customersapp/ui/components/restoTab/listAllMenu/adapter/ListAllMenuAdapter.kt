@@ -4,12 +4,16 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.example.alfaresto_customersapp.domain.model.Menu
+import com.example.alfaresto_customersapp.ui.components.listener.MenuListener
 
 class ListAllMenuAdapter : PagingDataAdapter<Menu, ListAllMenuViewHolder>(MenuComparator) {
+
+    private var menuListener: MenuListener? = null
+
     override fun onBindViewHolder(holder: ListAllMenuViewHolder, position: Int) {
         val item = getItem(position)
         if (item != null) {
-            holder.bind(item)
+            holder.bind(item, position, menuListener)
         }
     }
 
@@ -27,5 +31,9 @@ class ListAllMenuAdapter : PagingDataAdapter<Menu, ListAllMenuViewHolder>(MenuCo
                 return oldItem == newItem
             }
         }
+    }
+
+    fun setItemListener(menuListener: MenuListener) {
+        this.menuListener = menuListener
     }
 }

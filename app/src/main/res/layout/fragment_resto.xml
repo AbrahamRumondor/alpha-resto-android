@@ -82,18 +82,20 @@ xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="List All Menu"
-        app:layout_constraintBottom_toTopOf="@+id/imageButton"
+        app:layout_constraintBottom_toTopOf="@+id/iv_icon_cart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/iv_icon_cart"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:background="@android:color/transparent"
         android:contentDescription="cart"
         android:src="@drawable/cart"
+        android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="20dp"
         app:layout_constraintEnd_toEndOf="parent" />
 
 

@@ -3,30 +3,38 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="200dp"
-    android:layout_height="300dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     app:cardCornerRadius="24dp"
     app:cardElevation="5dp"
     app:cardUseCompatPadding="true">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clActionButtons"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <ImageView
             android:id="@+id/menu_image_iv"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:contentDescription="menuImageView"
+            android:contentDescription="@string/menuimageview"
             android:scaleType="centerCrop"
+            app:layout_constraintDimensionRatio="9:9"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@tools:sample/avatars" />
 
         <LinearLayout
+            android:id="@+id/ll_texts"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/menu_image_iv"
+            android:layout_marginHorizontal="20dp"
             android:padding="10dp">
 
             <TextView
@@ -34,7 +42,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Soft Shell Taco"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -42,7 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Rp 50.000"
-                android:textSize="24sp" />
+                android:textSize="16sp" />
         </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatButton
@@ -52,31 +60,35 @@
             android:background="@drawable/menu_add_button"
             android:padding="16dp"
             android:text="ADD TO CART"
-            android:visibility="visible"
+            android:visibility="invisible"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:fontFamily="@font/bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ll_texts"
             android:textSize="18sp" />
 
-        <LinearLayout
-            android:id="@+id/quantityLayout"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="gone"
-            android:layout_marginHorizontal="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/restoCard">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/menu_add_btn"
+            app:layout_constraintBottom_toBottomOf="@id/menu_add_btn"
+            >
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/minusButton"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@drawable/minus"
+                android:id="@+id/btn_decrease_order"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                app:layout_constraintDimensionRatio="1:1"
+                android:background="@drawable/ic_decrease_order"
                 android:fontFamily="@font/bold"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
+                android:layout_marginHorizontal="20dp"
+                app:layout_constraintStart_toStartOf="parent"
                 android:textSize="20sp" />
 
             <TextView
@@ -87,19 +99,27 @@
                 android:fontFamily="@font/bold"
                 android:text="1"
                 android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 android:textSize="20sp" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/plusButton"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@drawable/plus"
+                android:id="@+id/btn_add_order"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                app:layout_constraintDimensionRatio="1:1"
+                android:background="@drawable/ic_add_order"
                 android:fontFamily="@font/bold"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginHorizontal="20dp"
                 android:textSize="24sp" />
-        </LinearLayout>
 
-    </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
