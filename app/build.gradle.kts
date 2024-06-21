@@ -44,6 +44,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 
@@ -76,7 +77,7 @@ dependencies {
 
     // hilt
     implementation("com.google.dagger:hilt-android:2.48")
-//    kapt("com.google.dagger:hilt-android-compiler:2.48")
+    kapt("com.google.dagger:hilt-android-compiler:2.48")
 
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation("androidx.activity:activity-ktx:1.9.0")
@@ -84,4 +85,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$coroutinesAndroid")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesAndroid")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesCore")
+
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
 }

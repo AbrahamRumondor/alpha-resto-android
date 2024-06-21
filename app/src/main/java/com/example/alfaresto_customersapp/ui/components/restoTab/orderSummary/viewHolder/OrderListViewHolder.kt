@@ -14,7 +14,7 @@ class OrderListViewHolder (
         view.run {
             if (menu != null) {
                 tvFoodTitle.text = menu.menuName
-                tvFoodDesc.text = menu.menuDesc
+                tvFoodDesc.text = menu.menuDescription
                 tvFoodPrice.text = menu.menuPrice.toString()
                 tvFoodQty.text = menu.orderCartQuantity.toString()
             }

@@ -27,21 +27,21 @@ class OrderSummaryViewModel : ViewModel() {
     val menu1 = Menu(
         menuName = "Pizza AB",
         menuPrice = 15000,
-        menuDesc = "daging cincang dan keju",
+        menuDescription = "daging cincang dan keju",
         orderCartQuantity = 2,
     )
 
     val menu2 = Menu(
         menuName = "Taco AB",
         menuPrice = 10000,
-        menuDesc = "daging cincang dan keju",
+        menuDescription = "daging cincang dan keju",
         orderCartQuantity = 1,
     )
 
     val menu3 = Menu(
         menuName = "Kebab AB",
         menuPrice = 5000,
-        menuDesc = "daging cincang dan keju",
+        menuDescription = "daging cincang dan keju",
         orderCartQuantity = 3,
     )
 

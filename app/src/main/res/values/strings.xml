@@ -42,4 +42,5 @@
     <string name="address_label">Address Label</string>
     <string name="address_detail">Address Detail</string>
     <string name="save">Save</string>
+    <string name="menuimageview">menuImageView</string>
 </resources>

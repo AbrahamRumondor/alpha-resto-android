@@ -4,8 +4,6 @@ import com.example.alfaresto_customersapp.domain.usecase.MenuUseCase
 import com.example.alfaresto_customersapp.domain.usecase.MenuUseCaseImpl
 import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
 import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCaseImpl
-import com.example.alfaresto_customersapp.domain.usecase.MenuUseCase
-import com.example.alfaresto_customersapp.domain.usecase.MenuUseCaseImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
