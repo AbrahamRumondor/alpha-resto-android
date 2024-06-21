@@ -10,6 +10,8 @@ import com.example.alfaresto_customersapp.domain.model.Order
 import com.example.alfaresto_customersapp.domain.model.OrderItem
 import com.example.alfaresto_customersapp.domain.usecase.MenuUseCase
 import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
+import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_ADDRESS
+import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_ID
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,14 +31,6 @@ class OrderSummaryViewModel @Inject constructor(
 
     val db = Firebase.firestore
 
-    val address = Address(
-        address = "Jl. Alam Sutera Boulevard No.Kav. 21, Pakulonan, Kec. Serpong Utara, Kota Tangerang Selatan, Banten 15325",
-        addressLabel = "Kantor",
-        addressID = "adfi90sdjaaf98uf",
-        latitude = 0.0,
-        longitude = 0.0
-    )
-
     private val _menus: MutableStateFlow<List<Menu>> = MutableStateFlow(emptyList())
     val menus: StateFlow<List<Menu>> = _menus
 
@@ -46,8 +40,6 @@ class OrderSummaryViewModel @Inject constructor(
     private val _orders: MutableStateFlow<MutableList<Any?>> = MutableStateFlow(mutableListOf())
     val orders: StateFlow<List<Any?>> = _orders
 
-    private val PAYMENT_METHOD = _orders.value.size - 2
-    private val TOTAL = orders.value.size - 3
 
     fun setPayment(method: String) {
         _orders.value[orders.value.size - 2] = method
@@ -62,7 +54,11 @@ class OrderSummaryViewModel @Inject constructor(
         _menus.value = list
     }
 
-    fun makeOrders(address: Address?, orders: List<Menu>, total: Pair<Int, Int>): MutableList<Any?> {
+    fun makeOrders(
+        address: Address?,
+        orders: List<Menu>,
+        total: Pair<Int, Int>
+    ): MutableList<Any?> {
         val orderList = mutableListOf(
             address,
             total,
@@ -122,7 +118,7 @@ class OrderSummaryViewModel @Inject constructor(
         viewModelScope.launch {
             Log.d("test", "${cart?.menuId} dan ${cart?.menuQty}")
             cart?.let {
-                cartUseCase.insertMenu(it.copy(menuQty = cart.menuQty+1))
+                cartUseCase.insertMenu(it.copy(menuQty = cart.menuQty + 1))
             } ?: insertMenu(menuId = menuId, menuQty = 1)
         }
     }
@@ -130,7 +126,7 @@ class OrderSummaryViewModel @Inject constructor(
     fun decreaseOrderQuantity(menuId: String, cart: CartEntity?) {
         viewModelScope.launch {
             cart?.let {
-                if (cart.menuQty > 0) cartUseCase.insertMenu(it.copy(menuQty = cart.menuQty-1))
+                if (cart.menuQty > 0) cartUseCase.insertMenu(it.copy(menuQty = cart.menuQty - 1))
             }
         }
     }
@@ -147,44 +143,69 @@ class OrderSummaryViewModel @Inject constructor(
     }
 
     // TODO 1:userID,addressID,restoID (fetch dr firestore) | 2:menuID (fetch dari firestore)
-//    fun saveOrderInDatabase() {
-//        val total = cart[TOTAL] as? Pair<Int, Int>
-//        db.runTransaction {
-//            val order = Order(
-//                orderID = getOrderDocumentId(),
-//                userID = "-",
-//                addressID = "-",
-//                restoID = "NrhoLsLLieXFly9dXj7vu2ETi1T2", // nanti buat singleton
-//                orderDate = getCurrentDateTime(),
-//                orderPaymentMethod = cart[PAYMENT_METHOD].toString(),
-//                totalPrice = total?.second ?: -1
-//            )
-//            db.collection("orders").document(order.orderID)
-//                .set(order)
-//                .addOnSuccessListener { }
-//                .addOnFailureListener { Log.d("TEST", "ERROR ON ORDER INSERTION") }
-//
-//            cart.forEach {
-//                when (it) {
-//                    is Menu -> {
-//
-//                        val orderItem = OrderItem(
-//                            orderItemId = getOrderItemDocumentId(order.orderID),
-//                            menuID = "-",
-//                            quantity = it.orderCartQuantity,
-//                            menuPrice = it.menuPrice
-//                        )
-//
-//                        db.collection("orders").document(order.orderID)
-//                            .collection("order_items").document(orderItem.orderItemId)
-//                            .set(order)
-//                            .addOnSuccessListener { }
-//                            .addOnFailureListener { Log.d("TEST", "ERROR ON ORDER INSERTION") }
-//                    }
-//                }
-//            }
-//        }
-//    }
+    fun saveOrderInDatabase() {
+        val PAYMENT_METHOD = _orders.value.size - 2
+        val TOTAL = orders.value.size - 3
+
+        val payment =
+            if (_orders.value[PAYMENT_METHOD].toString() == "COD" || _orders.value[PAYMENT_METHOD].toString() == "GOPAY")
+                _orders.value[PAYMENT_METHOD].toString() else null
+
+        val total = _orders.value[TOTAL] as Pair<Int, Int> ?: null
+
+        if (!payment.isNullOrEmpty() && total != null && _orders.value.size > 4) {
+            db.runTransaction {
+                USER_ADDRESS?.let { addressId ->
+                    val order = Order(
+                        orderID = getOrderDocumentId(),
+                        userID = USER_ID,
+                        addressID = addressId,
+                        restoID = "NrhoLsLLieXFly9dXj7vu2ETi1T2", // nanti buat singleton
+                        orderDate = getCurrentDateTime(),
+                        orderPaymentMethod = payment,
+                        totalPrice = total.second ?: -1
+                    )
+                    db.collection("orders").document(order.orderID)
+                        .set(order)
+                        .addOnSuccessListener {
+                            Log.d(
+                                "TEST",
+                                "SUCCESS ON ORDER INSERTION"
+                            )
+                        }
+                        .addOnFailureListener { Log.d("TEST", "ERROR ON ORDER INSERTION") }
+
+                    for (i in 1..<TOTAL) {
+                        val menu = _orders.value[i] as Menu ?: null
+                        menu?.let {
+                            val orderItem = OrderItem(
+                                orderItemId = getOrderItemDocumentId(order.orderID),
+                                menuID = menu.menuId,
+                                quantity = menu.orderCartQuantity,
+                                menuPrice = menu.menuPrice
+                            )
+
+                            db.collection("orders").document(order.orderID)
+                                .collection("order_items").document(orderItem.orderItemId)
+                                .set(orderItem)
+                                .addOnSuccessListener {
+                                    Log.d(
+                                        "TEST",
+                                        "SUCCESS ON ORDER ITEM INSERTION"
+                                    )
+                                }
+                                .addOnFailureListener {
+                                    Log.d(
+                                        "TEST",
+                                        "ERROR ON ORDER INSERTION"
+                                    )
+                                }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     private fun getCurrentDateTime(): String {
         val currentDate = Date()

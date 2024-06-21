@@ -135,7 +135,7 @@ class OrderSummaryFragment : Fragment() {
 
             override fun onCheckoutButtonClicked() {
                 // TODO send to firebase
-
+                orderSummaryViewModel.saveOrderInDatabase()
             }
 
         })
