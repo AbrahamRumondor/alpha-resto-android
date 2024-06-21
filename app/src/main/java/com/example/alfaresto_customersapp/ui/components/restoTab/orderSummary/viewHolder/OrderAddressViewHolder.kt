@@ -15,7 +15,7 @@ class OrderAddressViewHolder(
     fun bind(address: Address?) {
         view.run {
             if (address != null) {
-                tvAddressLabel.text = address.addressLabel
+                tvAddressLabel.text = address.label
                 tvAddressLocation.text = address.address
             } else {
                 val noAddressLabel = "Please choose an address"

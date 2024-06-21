@@ -51,7 +51,7 @@ class AddressListViewModel : ViewModel() {
                 for (document in documents) {
                     val address = document.toObject(Address::class.java)
                     addressList.add(address)
-                    Log.d("test", "SUCCESS FETCH DATA: ${address.addressID}")
+                    Log.d("test", "SUCCESS FETCH DATA: ${address.id}")
                 }
                 _userAddressFlow.value = addressList
             }

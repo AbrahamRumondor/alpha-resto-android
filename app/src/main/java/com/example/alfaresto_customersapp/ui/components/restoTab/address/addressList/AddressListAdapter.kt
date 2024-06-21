@@ -20,8 +20,8 @@ class AddressListAdapter(private var addresses: List<Address>, private val conte
         RecyclerView.ViewHolder(itemBinding.root) {
         fun bindItem(address: Address, position: Int) {
             itemBinding.run {
-                tvAddressLabel.text = address.addressLabel
-                tvAddressLabel2.text = address.addressLabel
+                tvAddressLabel.text = address.label
+                tvAddressLabel2.text = address.label
                 tvAddressDetail.text = address.address
 
                 cvAddress.strokeColor = ContextCompat.getColor(context, R.color.dark_gray)
@@ -30,8 +30,8 @@ class AddressListAdapter(private var addresses: List<Address>, private val conte
                 }
 
                 cvAddress.setOnClickListener {
-                    UserConstants.USER_ADDRESS = address.addressID
-                    addressItemListener?.onAddressClicked(position, addressId = address.addressID)
+                    UserConstants.USER_ADDRESS = address.id
+                    addressItemListener?.onAddressClicked(position, addressId = address.id)
                 }
             }
         }

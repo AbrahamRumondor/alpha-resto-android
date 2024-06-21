@@ -30,8 +30,8 @@ class AddNewAddressViewModel : ViewModel() {
                 try {
                     addressCollection.document(newId).set(
                         Address(
-                            addressID = newId,
-                            addressLabel = addressLabel,
+                            id = newId,
+                            label = addressLabel,
                             address = addressDetail,
                             latitude = latlng.latitude,
                             longitude = latlng.longitude

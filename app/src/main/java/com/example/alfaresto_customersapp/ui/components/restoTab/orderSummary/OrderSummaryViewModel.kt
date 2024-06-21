@@ -157,15 +157,15 @@ class OrderSummaryViewModel @Inject constructor(
             db.runTransaction {
                 USER_ADDRESS?.let { addressId ->
                     val order = Order(
-                        orderID = getOrderDocumentId(),
+                        id = getOrderDocumentId(),
                         userID = USER_ID,
                         addressID = addressId,
                         restoID = "NrhoLsLLieXFly9dXj7vu2ETi1T2", // nanti buat singleton
-                        orderDate = getCurrentDateTime(),
-                        orderPaymentMethod = payment,
+                        date = getCurrentDateTime(),
+                        paymentMethod = payment,
                         totalPrice = total.second ?: -1
                     )
-                    db.collection("orders").document(order.orderID)
+                    db.collection("orders").document(order.id)
                         .set(order)
                         .addOnSuccessListener {
                             Log.d(
@@ -179,14 +179,14 @@ class OrderSummaryViewModel @Inject constructor(
                         val menu = _orders.value[i] as Menu ?: null
                         menu?.let {
                             val orderItem = OrderItem(
-                                orderItemId = getOrderItemDocumentId(order.orderID),
-                                menuID = menu.menuId,
+                                id = getOrderItemDocumentId(order.id),
+                                menuID = menu.id,
                                 quantity = menu.orderCartQuantity,
-                                menuPrice = menu.menuPrice
+                                menuPrice = menu.price
                             )
 
-                            db.collection("orders").document(order.orderID)
-                                .collection("order_items").document(orderItem.orderItemId)
+                            db.collection("orders").document(order.id)
+                                .collection("order_items").document(orderItem.id)
                                 .set(orderItem)
                                 .addOnSuccessListener {
                                     Log.d(

@@ -13,15 +13,15 @@ class OrderListViewHolder(
     fun bind(menu: Menu?, position: Int) {
         view.run {
             if (menu != null) {
-                tvFoodTitle.text = menu.menuName
-                tvFoodDesc.text = menu.menuDescription
-                tvFoodPrice.text = menu.menuPrice.toString()
+                tvFoodTitle.text = menu.name
+                tvFoodDesc.text = menu.description
+                tvFoodPrice.text = menu.price.toString()
                 tvFoodQty.text = menu.orderCartQuantity.toString()
                 ivOrderAdd.setOnClickListener {
-                    itemListener?.onAddItemClicked(position, menu.menuId)
+                    itemListener?.onAddItemClicked(position, menu.id)
                 }
                 ivOrderDecrease.setOnClickListener {
-                    itemListener?.onDecreaseItemClicked(position, menu.menuId)
+                    itemListener?.onDecreaseItemClicked(position, menu.id)
                 }
                 ivOrderDelete.setOnClickListener {
                     itemListener?.onDeleteItemClicked(position)

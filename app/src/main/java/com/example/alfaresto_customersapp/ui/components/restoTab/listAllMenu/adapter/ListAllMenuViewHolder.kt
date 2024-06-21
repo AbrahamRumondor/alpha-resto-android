@@ -14,8 +14,8 @@ class ListAllMenuViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(menu: Menu, position: Int, listener: MenuListener?) {
         binding.run {
-            menuNameTv.text = menu.menuName
-            menuPriceTv.text = menu.menuPrice.toString()
+            menuNameTv.text = menu.name
+            menuPriceTv.text = menu.price.toString()
             menuImageIv.setImageResource(R.drawable.dummy)
 
             val isVisible = menu.orderCartQuantity != 0
@@ -24,8 +24,8 @@ class ListAllMenuViewHolder(
 
             val clickListener = View.OnClickListener { view ->
                 when (view) {
-                    menuAddBtn, btnAddOrder -> listener?.onAddItemClicked(position, menuId = menu.menuId)
-                    btnDecreaseOrder -> listener?.onDecreaseItemClicked(position, menuId = menu.menuId)
+                    menuAddBtn, btnAddOrder -> listener?.onAddItemClicked(position, menuId = menu.id)
+                    btnDecreaseOrder -> listener?.onDecreaseItemClicked(position, menuId = menu.id)
                 }
             }
 

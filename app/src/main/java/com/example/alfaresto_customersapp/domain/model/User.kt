@@ -1,10 +1,10 @@
 package com.example.alfaresto_customersapp.domain.model
 
 data class User(
-    val userID: String = "",
-    val userName: String = "",
-    val userNoPhone: String = "",
-    val userEmail: String = "",
-    val userPassword: String = "",
-    val userAddress: List<Address> = mutableListOf(),
+    val id: String = "",
+    val name: String = "",
+    val noPhone: String = "",
+    val email: String = "",
+    val password: String = "",
+    val address: List<Address> = mutableListOf(),
 )

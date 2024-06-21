@@ -6,11 +6,11 @@ import com.google.firebase.firestore.PropertyName
 data class Address(
     @get:PropertyName("address_id")
     @set:PropertyName("address_id")
-    var addressID: String = "",
+    var id: String = "",
 
     @get:PropertyName("address_label")
     @set:PropertyName("address_label")
-    var addressLabel: String = "",
+    var label: String = "",
 
     @get:PropertyName("address")
     @set:PropertyName("address")

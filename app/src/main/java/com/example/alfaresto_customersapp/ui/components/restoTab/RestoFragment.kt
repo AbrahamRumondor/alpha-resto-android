@@ -10,11 +10,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.Navigation
-import androidx.lifecycle.distinctUntilChanged
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.databinding.FragmentRestoBinding
-import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.ui.components.listener.MenuListener
 import com.example.alfaresto_customersapp.ui.components.restoTab.adapter.RestoAdapter
 import com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu.ListAllMenuFragment
@@ -67,7 +65,7 @@ class RestoFragment : Fragment() {
                     }
 
                     val updatedMenus = menus.map { menu ->
-                        val cartItem = it.find { cart -> cart.menuId == menu.menuId }
+                        val cartItem = it.find { cart -> cart.menuId == menu.id }
                         if (cartItem != null) {
                             menu.copy(orderCartQuantity = cartItem.menuQty)
                         } else {
