@@ -12,7 +12,6 @@ import com.example.alfaresto_customersapp.databinding.RegisterPageBinding
 import com.example.alfaresto_customersapp.ui.components.loginPage.LoginActivity
 import com.example.alfaresto_customersapp.ui.util.Constants
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import java.security.MessageDigest
 
@@ -21,7 +20,6 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: RegisterPageBinding
     lateinit var auth: FirebaseAuth
     private lateinit var firebaseFirestore: FirebaseFirestore
-    private lateinit var ref: DocumentReference
     private val passwordPatterns = Constants.passwordPatterns
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +29,6 @@ class RegisterActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
         firebaseFirestore = FirebaseFirestore.getInstance()
-        ref = firebaseFirestore.collection("users").document("user_id").collection("user_id").document()
 
         binding.registerButton.setOnClickListener {
             val email = binding.emailTextInput.text.toString()
@@ -107,6 +104,6 @@ fun addToFirestore(email: String, id: String, image: String, name: String, noTel
         "user_no_telp" to noTelp,
         "user_password" to hashedPassword
     )
-    FirebaseFirestore.getInstance().collection("users").document().set(user)
+    FirebaseFirestore.getInstance().collection("users").document(id).set(user)
 }
 
