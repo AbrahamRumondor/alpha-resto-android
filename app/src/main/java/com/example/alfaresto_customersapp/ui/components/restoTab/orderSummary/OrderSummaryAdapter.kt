@@ -1,5 +1,6 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -17,8 +18,10 @@ import com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.vi
 import com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.viewHolder.OrderTotalViewHolder
 import com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.viewHolder.PaymentMethodViewHolder
 
-class OrderSummaryAdapter(private val items: List<Any>) :
+class OrderSummaryAdapter() :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    private var items: List<Any> = listOf()
 
     private var orderSummaryItemListener: OrderSummaryItemListener? = null
 
@@ -89,6 +92,11 @@ class OrderSummaryAdapter(private val items: List<Any>) :
 
     override fun getItemCount(): Int {
         return items.size
+    }
+
+    fun submitOrderList(items: List<Any> ) {
+        this.items = items
+        Log.d("ORDER adapter", "order list submitted: $items")
     }
 
     fun setItemListener(orderSummaryItemListener: OrderSummaryItemListener) {

@@ -85,7 +85,7 @@ class RestoFragment : Fragment() {
         }
 
         binding.ivIconCart.setOnClickListener {
-            Navigation.findNavController(it).navigate(R.id.action_restoFragment_to_orderSummaryFragment)
+            Navigation.findNavController(requireView()).navigate(R.id.action_restoFragment_to_orderSummaryFragment)
         }
     }
 

@@ -1,28 +1,30 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.FragmentOrderSummaryBinding
-import com.example.alfaresto_customersapp.databinding.FragmentRestoBinding
 import com.example.alfaresto_customersapp.databinding.OrderPaymentMethodBinding
 import com.example.alfaresto_customersapp.domain.model.Address
 import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.ui.components.listener.OrderSummaryItemListener
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class OrderSummaryFragment : Fragment() {
 
     private lateinit var binding: FragmentOrderSummaryBinding
     private val orderSummaryViewModel: OrderSummaryViewModel by activityViewModels()
-    private lateinit var orderAdapter: OrderSummaryAdapter
+    private val orderAdapter by lazy { OrderSummaryAdapter() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,31 +40,54 @@ class OrderSummaryFragment : Fragment() {
     }
 
     private fun populateOrderSummaryAdapter() {
-        countTotalItemAndPrice()
-        orderAdapter = OrderSummaryAdapter(orderSummaryViewModel.cart)
-        binding.rvOrderSummary.adapter = orderAdapter
-        setOrderSummaryListener()
+        lifecycleScope.launch {
+            orderSummaryViewModel.carts.collectLatest { carts ->
+                orderSummaryViewModel.menus.collectLatest { menus ->
+                    val orders = carts.mapNotNull { cartOrder ->
+                        menus.find { it.menuId == cartOrder.menuId }
+                    }
+                    countTotalItemAndPrice(menus)
+                    orderAdapter.submitOrderList(
+                        orderSummaryViewModel.makeOrders(
+                            orders = orders,
+                            total = countTotalItemAndPrice(menus),
+                            address = Address(
+                                address = "Jl. Alam Sutera Boulevard No.Kav. 21, Pakulonan, Kec. Serpong Utara, Kota Tangerang Selatan, Banten 15325",
+                                addressLabel = "Kantor",
+                                addressID = "adfi90sdjaaf98uf",
+                                latitude = 0.0,
+                                longitude = 0.0
+                            )
+                        )
+                    )
+
+                    binding.rvOrderSummary.adapter = orderAdapter
+                    setOrderSummaryListener(orders)
+                }
+            }
+        }
     }
 
-    private fun setOrderSummaryListener() {
+    private fun setOrderSummaryListener(orders: List<Menu>) {
         orderAdapter.setItemListener(object : OrderSummaryItemListener {
             override fun onAddressClicked(position: Int) {
 //                TODO go to address page
-                Navigation.findNavController(binding.root).navigate(R.id.action_orderSummaryFragment_to_addressList)
+                Navigation.findNavController(binding.root)
+                    .navigate(R.id.action_orderSummaryFragment_to_addressList)
             }
 
             override fun onAddItemClicked(position: Int) {
-                val addMenu = orderSummaryViewModel.cart[position] as? Menu
+                val addMenu = orderSummaryViewModel.orders.value[position] as? Menu
                 addMenu?.let {
                     it.orderCartQuantity += 1
                     orderAdapter.notifyItemChanged(position)
-                    orderAdapter.notifyItemChanged(orderSummaryViewModel.cart.size - 3)
-                    countTotalItemAndPrice()
+                    orderAdapter.notifyItemChanged(orderSummaryViewModel.orders.value.size - 3)
+                    countTotalItemAndPrice(orders)
                 }
             }
 
             override fun onDecreaseItemClicked(position: Int) {
-                val addMenu = orderSummaryViewModel.cart[position] as? Menu
+                val addMenu = orderSummaryViewModel.orders.value[position] as? Menu
                 addMenu?.let {
                     if (it.orderCartQuantity > 0) {
                         it.orderCartQuantity -= 1
@@ -72,8 +97,8 @@ class OrderSummaryFragment : Fragment() {
                             orderAdapter.notifyItemChanged(position)
                         }
                     }
-                    countTotalItemAndPrice()
-                    orderAdapter.notifyItemChanged(orderSummaryViewModel.cart.size - 3)
+                    countTotalItemAndPrice(orders)
+                    orderAdapter.notifyItemChanged(orderSummaryViewModel.orders.value.size - 3)
                 }
             }
 
@@ -87,7 +112,7 @@ class OrderSummaryFragment : Fragment() {
                 } else {
                     "GOPAY"
                 }
-                orderSummaryViewModel.cart[orderSummaryViewModel.cart.size - 2] = payment
+                orderSummaryViewModel.setPayment(payment)
             }
 
             override fun onPaymentMethodClicked(view: OrderPaymentMethodBinding) {
@@ -111,24 +136,21 @@ class OrderSummaryFragment : Fragment() {
     }
 
     private fun removeMenu(position: Int) {
-        orderSummaryViewModel.cart.removeAt(position)
+        val size = orderSummaryViewModel.removeOrder(position)
         orderAdapter.notifyItemRemoved(position)
-        orderAdapter.notifyItemRangeChanged(position, orderSummaryViewModel.cart.size)
+        orderAdapter.notifyItemRangeChanged(position, size)
     }
 
-    private fun countTotalItemAndPrice() {
+    private fun countTotalItemAndPrice(list: List<Menu>): Pair<Int, Int> {
         var totalPrice = 0
         var totalItem = 0
-        orderSummaryViewModel.cart.forEach {
-            if (it is Menu) {
-                totalPrice += it.menuPrice * it.orderCartQuantity
-                totalItem += it.orderCartQuantity
-            }
+        list.forEach {
+            totalPrice += it.menuPrice * it.orderCartQuantity
+            totalItem += it.orderCartQuantity
         }
         if (totalPrice == 0 && totalItem == 0) {
             findNavController().popBackStack()
         }
-        val newPair = Pair(totalItem, totalPrice)
-        orderSummaryViewModel.cart[orderSummaryViewModel.cart.size - 3] = newPair
+        return Pair(totalItem, totalPrice)
     }
 }
