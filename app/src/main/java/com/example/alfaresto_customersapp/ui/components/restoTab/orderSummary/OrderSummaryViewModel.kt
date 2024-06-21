@@ -111,6 +111,30 @@ class OrderSummaryViewModel @Inject constructor(
         }
     }
 
+    fun insertMenu(menuId: String, menuQty: Int) {
+        viewModelScope.launch {
+            val cartEntity = CartEntity(menuId = menuId, menuQty = menuQty)
+            cartUseCase.insertMenu(cartEntity)
+        }
+    }
+
+    fun addOrderQuantity(menuId: String, cart: CartEntity?) {
+        viewModelScope.launch {
+            Log.d("test", "${cart?.menuId} dan ${cart?.menuQty}")
+            cart?.let {
+                cartUseCase.insertMenu(it.copy(menuQty = cart.menuQty+1))
+            } ?: insertMenu(menuId = menuId, menuQty = 1)
+        }
+    }
+
+    fun decreaseOrderQuantity(menuId: String, cart: CartEntity?) {
+        viewModelScope.launch {
+            cart?.let {
+                if (cart.menuQty > 0) cartUseCase.insertMenu(it.copy(menuQty = cart.menuQty-1))
+            }
+        }
+    }
+
     private fun getOrderDocumentId(): String {
         val item = db.collection("orders").document()
         return item.id
@@ -167,36 +191,5 @@ class OrderSummaryViewModel @Inject constructor(
         val dateFormat = SimpleDateFormat("dd MMMM yyyy, HH:mm", Locale.getDefault())
         return dateFormat.format(currentDate)
     }
-
-    val menu1 = Menu(
-        menuName = "Pizza AB",
-        menuPrice = 15000,
-        menuDescription = "daging cincang dan keju",
-        orderCartQuantity = 2,
-    )
-
-    val menu2 = Menu(
-        menuName = "Taco AB",
-        menuPrice = 10000,
-        menuDescription = "daging cincang dan keju",
-        orderCartQuantity = 1,
-    )
-
-    val menu3 = Menu(
-        menuName = "Kebab AB",
-        menuPrice = 5000,
-        menuDescription = "daging cincang dan keju",
-        orderCartQuantity = 3,
-    )
-
-    val cart = mutableListOf(
-        address,
-        menu1,
-        menu2,
-        menu3,
-        Pair(-1, -1),
-        "payment_method",
-        "checkout"
-    )
 
 }

@@ -6,8 +6,8 @@ import com.example.alfaresto_customersapp.domain.model.Address
 
 interface OrderSummaryItemListener {
     fun onAddressClicked(position: Int)
-    fun onAddItemClicked(position: Int)
-    fun onDecreaseItemClicked(position: Int)
+    fun onAddItemClicked(position: Int,  menuId: String)
+    fun onDecreaseItemClicked(position: Int,  menuId: String)
     fun onDeleteItemClicked(position: Int)
     fun onRadioButtonClicked(position: Int, id: Int)
     fun onPaymentMethodClicked(view: OrderPaymentMethodBinding)

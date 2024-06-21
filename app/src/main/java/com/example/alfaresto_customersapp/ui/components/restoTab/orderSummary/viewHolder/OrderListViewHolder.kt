@@ -5,7 +5,7 @@ import com.example.alfaresto_customersapp.databinding.OrderItemBinding
 import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.ui.components.listener.OrderSummaryItemListener
 
-class OrderListViewHolder (
+class OrderListViewHolder(
     private val view: OrderItemBinding,
     private val itemListener: OrderSummaryItemListener?,
 ) : RecyclerView.ViewHolder(view.root) {
@@ -17,15 +17,15 @@ class OrderListViewHolder (
                 tvFoodDesc.text = menu.menuDescription
                 tvFoodPrice.text = menu.menuPrice.toString()
                 tvFoodQty.text = menu.orderCartQuantity.toString()
-            }
-            ivOrderAdd.setOnClickListener {
-                itemListener?.onAddItemClicked(position)
-            }
-            ivOrderDecrease.setOnClickListener {
-                itemListener?.onDecreaseItemClicked(position)
-            }
-            ivOrderDelete.setOnClickListener {
-                itemListener?.onDeleteItemClicked(position)
+                ivOrderAdd.setOnClickListener {
+                    itemListener?.onAddItemClicked(position, menu.menuId)
+                }
+                ivOrderDecrease.setOnClickListener {
+                    itemListener?.onDecreaseItemClicked(position, menu.menuId)
+                }
+                ivOrderDelete.setOnClickListener {
+                    itemListener?.onDeleteItemClicked(position)
+                }
             }
         }
     }

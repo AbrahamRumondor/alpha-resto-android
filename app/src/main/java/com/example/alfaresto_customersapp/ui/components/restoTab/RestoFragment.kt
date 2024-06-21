@@ -59,7 +59,7 @@ class RestoFragment : Fragment() {
 
                     if (it.isEmpty()){ Log.d("test", "NO DATA")
                         menuRv.adapter = adapter
-                        setRestoAdapterButtons(it, menus)
+                        setRestoAdapterButtons(it)
                         adapter.submitMenuList(menus)
                         menuRv.layoutManager =
                             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -76,7 +76,7 @@ class RestoFragment : Fragment() {
                     }
 
                     menuRv.adapter = adapter
-                    setRestoAdapterButtons(it, updatedMenus)
+                    setRestoAdapterButtons(it)
                     adapter.submitMenuList(updatedMenus)
                     menuRv.layoutManager =
                         LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -89,7 +89,7 @@ class RestoFragment : Fragment() {
         }
     }
 
-    private fun setRestoAdapterButtons(cart: List<CartEntity>?, menus: List<Menu>) {
+    private fun setRestoAdapterButtons(cart: List<CartEntity>?) {
         adapter.setItemListener(object : MenuListener {
             override fun onAddItemClicked(position: Int, menuId: String) {
                 var item: CartEntity? = null

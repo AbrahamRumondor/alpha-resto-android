@@ -12,6 +12,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.example.alfaresto_customersapp.R
+import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.databinding.FragmentOrderSummaryBinding
 import com.example.alfaresto_customersapp.databinding.OrderPaymentMethodBinding
 import com.example.alfaresto_customersapp.domain.model.Address
@@ -48,7 +49,7 @@ class OrderSummaryFragment : Fragment() {
                 orderSummaryViewModel.menus.collectLatest { menus ->
                     val orders = carts.mapNotNull { cartOrder ->
                         menus.find {
-                            it.menuId == cartOrder.menuId
+                            it.menuId == cartOrder.menuId && cartOrder.menuQty > 0
                         }?.copy(orderCartQuantity = cartOrder.menuQty)
                     }
                     binding.rvOrderSummary.adapter = orderAdapter
@@ -66,13 +67,13 @@ class OrderSummaryFragment : Fragment() {
                             )
                         )
                     )
-                    setOrderSummaryListener(orders)
+                    setOrderSummaryListener(orders, carts)
                 }
             }
         }
     }
 
-    private fun setOrderSummaryListener(orders: List<Menu>) {
+    private fun setOrderSummaryListener(orders: List<Menu>, cart: List<CartEntity>?) {
         orderAdapter.setItemListener(object : OrderSummaryItemListener {
             override fun onAddressClicked(position: Int) {
 //                TODO go to address page
@@ -80,9 +81,12 @@ class OrderSummaryFragment : Fragment() {
 //                    .navigate(R.id.action_orderSummaryFragment_to_addressList)
             }
 
-            override fun onAddItemClicked(position: Int) {
+            override fun onAddItemClicked(position: Int,  menuId: String) {
                 val addMenu = orderSummaryViewModel.orders.value[position] as? Menu
                 addMenu?.let {
+                    var item: CartEntity? = null
+                    item = cart?.find { it.menuId == menuId }
+                    orderSummaryViewModel.addOrderQuantity(menuId, item)
                     it.orderCartQuantity += 1
                     orderAdapter.notifyItemChanged(position)
                     orderAdapter.notifyItemChanged(orderSummaryViewModel.orders.value.size - 3)
@@ -90,11 +94,14 @@ class OrderSummaryFragment : Fragment() {
                 }
             }
 
-            override fun onDecreaseItemClicked(position: Int) {
+            override fun onDecreaseItemClicked(position: Int,  menuId: String) {
                 val addMenu = orderSummaryViewModel.orders.value[position] as? Menu
                 addMenu?.let {
                     if (it.orderCartQuantity > 0) {
                         it.orderCartQuantity -= 1
+                        var item: CartEntity? = null
+                        item = cart?.find { it.menuId == menuId }
+                        orderSummaryViewModel.decreaseOrderQuantity(menuId, item)
                         if (it.orderCartQuantity == 0) {
                             removeMenu(position)
                         } else {
