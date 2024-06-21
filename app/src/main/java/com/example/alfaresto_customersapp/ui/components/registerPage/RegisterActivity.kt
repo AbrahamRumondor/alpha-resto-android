@@ -30,11 +30,10 @@ class RegisterActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
         firebaseFirestore = FirebaseFirestore.getInstance()
-        ref = firebaseFirestore.collection("users").document()
+        ref = firebaseFirestore.collection("users").document("user_id").collection("user_id").document()
 
         binding.registerButton.setOnClickListener {
             val email = binding.emailTextInput.text.toString()
-            val id = ref.id
             val image = "-"
             val password = binding.passwordTextInput.text.toString()
             val name = binding.nameTextInput.text.toString()
@@ -65,7 +64,7 @@ class RegisterActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            registerAuth(email, id, image, name, noTelp, password)
+            registerAuth(email, image, name, noTelp, password)
         }
         val loginTextClicked: TextView = binding.loginTextView
         loginTextClicked.setOnClickListener {
@@ -79,10 +78,12 @@ fun directToLogin(view: View) {
     view.context.startActivity(intent)
 }
 
-fun RegisterActivity.registerAuth(email: String, id: String, image: String, name: String, noTelp: String, password: String) {
+fun RegisterActivity.registerAuth(email: String, image: String, name: String, noTelp: String, password: String) {
     auth.createUserWithEmailAndPassword(email, password)
         .addOnCompleteListener(this) { register ->
             if (register.isSuccessful) {
+                val user = auth.currentUser
+                val id = user?.uid ?: return@addOnCompleteListener
                 addToFirestore(email, id, image, name, noTelp, password)
                 Toast.makeText(this, R.string.register_success, Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, LoginActivity::class.java)
