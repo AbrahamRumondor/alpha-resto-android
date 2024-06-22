@@ -1,35 +1,38 @@
 package com.example.alfaresto_customersapp.ui.components.orderHistoryTab
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.alfaresto_customersapp.domain.model.Order
-import com.example.alfaresto_customersapp.domain.usecase.order.OrderUseCase
+import com.example.alfaresto_customersapp.domain.model.OrderHistory
+import com.example.alfaresto_customersapp.domain.usecase.orderHistory.OrderHistoryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class OrderHistoryViewModel @Inject constructor(
-    private val orderUseCase: OrderUseCase
+    private val orderHistoryUseCase: OrderHistoryUseCase
 ) : ViewModel() {
 
-    private val _orders: MutableLiveData<List<Order>> = MutableLiveData(emptyList())
-    val orders: MutableLiveData<List<Order>> = _orders
+    private val _orderHitories: MutableLiveData<List<OrderHistory>> = MutableLiveData()
+    val orderHistories: LiveData<List<OrderHistory>> = _orderHitories
 
     init {
-        fetchOrders()
+        fetchOrderHistories()
     }
 
-    private fun fetchOrders() {
+    private fun fetchOrderHistories() {
         viewModelScope.launch {
-            try {
-                val fetchedOrders = orderUseCase.getOrders().value ?: return@launch
-                _orders.value = fetchedOrders
-                Log.d("ORDER viewmodel", "Orders fetched: $fetchedOrders")
-            } catch (e: Exception) {
-                e.printStackTrace()
+            orderHistoryUseCase.getOrderHistories().observeForever { orderHistories ->
+                if (orderHistories.isEmpty()) {
+                    Log.d("ORDER", "Order histories is empty, waiting for data...")
+                    // Optionally, you can show a loading state or handle the empty case
+                    return@observeForever
+                }
+
+                _orderHitories.value = orderHistories
             }
         }
     }

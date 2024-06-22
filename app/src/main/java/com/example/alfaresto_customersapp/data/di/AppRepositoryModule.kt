@@ -2,6 +2,7 @@ package com.example.alfaresto_customersapp.data.di
 
 import com.example.alfaresto_customersapp.domain.repository.MenuRepository
 import com.example.alfaresto_customersapp.domain.repository.OrderRepository
+import com.example.alfaresto_customersapp.domain.repository.ShipmentRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -20,4 +21,9 @@ abstract class AppRepositoryModule {
     abstract fun provideOrderRepository(
         orderRepositoryImpl: OrderRepositoryImpl
     ): OrderRepository
+
+    @Binds
+    abstract fun provideShipmentRepository(
+        shipmentRepositoryImpl: ShipmentRepositoryImpl
+    ): ShipmentRepository
 }

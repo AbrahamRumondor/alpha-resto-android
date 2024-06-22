@@ -1,6 +1,5 @@
 package com.example.alfaresto_customersapp.data.di
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.alfaresto_customersapp.data.model.OrderResponse

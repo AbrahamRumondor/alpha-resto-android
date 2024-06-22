@@ -1,6 +1,5 @@
 package com.example.alfaresto_customersapp.domain.usecase.order
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.alfaresto_customersapp.domain.model.Order
 import com.example.alfaresto_customersapp.domain.repository.OrderRepository

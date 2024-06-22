@@ -33,14 +33,14 @@ class OrderHistoryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         lifecycleScope.launch {
-            viewModel.orders.observe(viewLifecycleOwner) { orders ->
-                if (orders.isEmpty()) {
+            viewModel.orderHistories.observe(viewLifecycleOwner) { orderHistories ->
+                if (orderHistories.isEmpty()) {
                     Log.d("ORDER", "Orders is empty, waiting for data...")
                     // Optionally, you can show a loading state or handle the empty case
                     return@observe
                 }
 
-                adapter.submitList(orders)
+//                adapter.submitList(orderHistories)
                 binding.orderHistoryRv.adapter = adapter
                 binding.orderHistoryRv.layoutManager =
                     LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)

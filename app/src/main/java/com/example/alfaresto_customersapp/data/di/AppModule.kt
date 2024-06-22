@@ -27,4 +27,11 @@ object AppModule {
     fun provideOrdersRef(): CollectionReference {
         return Firebase.firestore.collection("orders")
     }
+
+    @Provides
+    @Singleton
+    @Named("shipmentsRef")
+    fun provideShipmentRef(): CollectionReference {
+        return Firebase.firestore.collection("shipments")
+    }
 }
