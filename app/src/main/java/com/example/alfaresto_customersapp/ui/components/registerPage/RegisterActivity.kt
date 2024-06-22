@@ -13,8 +13,6 @@ import com.example.alfaresto_customersapp.ui.components.loginPage.LoginActivity
 import com.example.alfaresto_customersapp.ui.util.Constants
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.regex.Pattern
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import java.security.MessageDigest
 
