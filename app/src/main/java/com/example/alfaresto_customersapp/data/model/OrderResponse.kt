@@ -1,23 +1,24 @@
 package com.example.alfaresto_customersapp.data.model
 
 import com.example.alfaresto_customersapp.domain.model.Order
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.PropertyName
 
 data class OrderResponse(
-    val id: String = "",
+    @get:PropertyName("order_id")
+    @set:PropertyName("order_id")
+    var orderID: String = "",
 
     @get:PropertyName("user_id")
     @set:PropertyName("user_id")
-    var userID: DocumentReference? = null,
+    var userID: String = "",
 
     @get:PropertyName("address_id")
     @set:PropertyName("address_id")
-    var addressID: DocumentReference? = null,
+    var addressID: String = "",
 
     @get:PropertyName("resto_id")
     @set:PropertyName("resto_id")
-    var restoID: DocumentReference? = null,
+    var restoID: String = "",
 
     @get:PropertyName("order_date")
     @set:PropertyName("order_date")
@@ -36,15 +37,15 @@ data class OrderResponse(
     var orderItems: List<OrderItemResponse>
 ) {
     // Public no-argument constructor required by Firestore
-    constructor() : this("", null, null, null, "", "", -1, emptyList())
+    constructor() : this("", "", "", "", "", "", -1, emptyList())
 
     companion object {
         fun transform(orderResponse: OrderResponse): Order {
             return Order(
-                orderID = orderResponse.id,
-                userID = orderResponse.userID?.id.orEmpty(),
-                addressID = orderResponse.addressID?.id.orEmpty(),
-                restoID = orderResponse.restoID?.id.orEmpty(),
+                orderID = orderResponse.orderID,
+                userID = orderResponse.userID,
+                addressID = orderResponse.addressID,
+                restoID = orderResponse.restoID,
                 orderDate = orderResponse.orderDate,
                 orderPaymentMethod = orderResponse.orderPaymentMethod,
                 totalPrice = orderResponse.totalPrice,

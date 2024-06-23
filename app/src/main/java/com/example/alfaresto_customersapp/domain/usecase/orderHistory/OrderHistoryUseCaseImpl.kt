@@ -28,6 +28,8 @@ class OrderHistoryUseCaseImpl @Inject constructor(
             myOrders.any { it.orderID == shipment.orderID }
         }
 
+        Log.d("OrderHistory UseCaseImpl", "My orders: $myOrders")
+
         // Map to order history
         val orderHistories = myOrders.map { order ->
             val shipment = myShipments.find { it.orderID == order.orderID }

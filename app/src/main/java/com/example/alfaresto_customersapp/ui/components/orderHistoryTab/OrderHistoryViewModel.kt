@@ -16,8 +16,8 @@ class OrderHistoryViewModel @Inject constructor(
     private val orderHistoryUseCase: OrderHistoryUseCase
 ) : ViewModel() {
 
-    private val _orderHitories: MutableLiveData<List<OrderHistory>> = MutableLiveData()
-    val orderHistories: LiveData<List<OrderHistory>> = _orderHitories
+    private val _orderHistories: MutableLiveData<List<OrderHistory>> = MutableLiveData()
+    val orderHistories: LiveData<List<OrderHistory>> = _orderHistories
 
     init {
         fetchOrderHistories()
@@ -27,12 +27,12 @@ class OrderHistoryViewModel @Inject constructor(
         viewModelScope.launch {
             orderHistoryUseCase.getOrderHistories().observeForever { orderHistories ->
                 if (orderHistories.isEmpty()) {
-                    Log.d("ORDER", "Order histories is empty, waiting for data...")
+                    Log.d("OrderHistory viewmodel", "Order histories is empty, waiting for data...")
                     // Optionally, you can show a loading state or handle the empty case
                     return@observeForever
                 }
 
-                _orderHitories.value = orderHistories
+                _orderHistories.value = orderHistories
             }
         }
     }
