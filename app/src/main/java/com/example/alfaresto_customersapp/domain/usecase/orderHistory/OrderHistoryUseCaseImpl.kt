@@ -1,6 +1,5 @@
 package com.example.alfaresto_customersapp.domain.usecase.orderHistory
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.example.alfaresto_customersapp.domain.model.Order
@@ -28,18 +27,16 @@ class OrderHistoryUseCaseImpl @Inject constructor(
             myOrders.any { it.orderID == shipment.orderID }
         }
 
-        Log.d("OrderHistory UseCaseImpl", "My orders: $myOrders")
-
         // Map to order history
         val orderHistories = myOrders.map { order ->
             val shipment = myShipments.find { it.orderID == order.orderID }
             OrderHistory(
-                orderID = order.orderID,
+                orderDate = order.orderDate,
+                orderTotalPrice = order.totalPrice,
+                address = "Home",
                 orderStatus = shipment?.shipmentStatus ?: "Pending",
             )
         }
-
-        Log.d("OrderHistory UseCaseImpl", "Order histories: $orderHistories")
 
         emit(orderHistories)
     }

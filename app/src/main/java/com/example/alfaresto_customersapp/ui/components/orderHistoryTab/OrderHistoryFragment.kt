@@ -40,9 +40,7 @@ class OrderHistoryFragment : Fragment() {
                     return@observe
                 }
 
-                Log.d("OrderHistory", "orderHistories: $orderHistories")
-
-//                adapter.submitList(orderHistories)
+                adapter.submitList(orderHistories)
                 binding.orderHistoryRv.adapter = adapter
                 binding.orderHistoryRv.layoutManager =
                     LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
