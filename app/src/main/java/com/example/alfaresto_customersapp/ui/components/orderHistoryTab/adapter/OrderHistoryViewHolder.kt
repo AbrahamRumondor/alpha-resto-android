@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.OrderHistoryItemBinding
 import com.example.alfaresto_customersapp.domain.model.OrderHistory
+import com.example.alfaresto_customersapp.domain.model.OrderStatus
 
 class OrderHistoryViewHolder(
     private var binding: OrderHistoryItemBinding
@@ -15,14 +16,18 @@ class OrderHistoryViewHolder(
         binding.let {
             it.tvOrderDate.text = order.orderDate
             it.tvOrderPrice.text = order.orderTotalPrice.toString()
-            it.cvOrderStatus.setCardBackgroundColor(
-                when (order.orderStatus) {
-                    "delivered" -> it.root.context.getColor(R.color.green)
-                    "process" -> it.root.context.getColor(R.color.yellow)
-                    else -> it.root.context.getColor(R.color.orange)
-                }
-            )
-            it.tvOrderStatus.text = order.orderStatus
+            order.orderStatus.name.let { status ->
+                it.tvOrderStatus.text = status
+                it.cvOrderStatus.setCardBackgroundColor(
+                    it.root.context.getColor(
+                        when (status) {
+                            OrderStatus.DELIVERED.name -> R.color.green
+                            OrderStatus.ON_DELIVERY.name -> R.color.orange
+                            else -> R.color.yellow
+                        }
+                    )
+                )
+            }
             it.tvOrderAddress.text = order.addressLabel
         }
     }

@@ -5,6 +5,7 @@ import androidx.lifecycle.liveData
 import com.example.alfaresto_customersapp.domain.model.Address
 import com.example.alfaresto_customersapp.domain.model.Order
 import com.example.alfaresto_customersapp.domain.model.OrderHistory
+import com.example.alfaresto_customersapp.domain.model.OrderStatus
 import com.example.alfaresto_customersapp.domain.model.Shipment
 import com.example.alfaresto_customersapp.domain.repository.OrderRepository
 import com.example.alfaresto_customersapp.domain.repository.ShipmentRepository
@@ -39,7 +40,11 @@ class OrderHistoryUseCaseImpl @Inject constructor(
                 orderTotalPrice = order.totalPrice,
                 addressLabel = userAddresses.find { it.addressID == order.addressID }?.addressLabel
                     ?: "Unknown",
-                orderStatus = shipment?.shipmentStatus ?: "Pending",
+                orderStatus = when (shipment?.shipmentStatus) {
+                    "delivered" -> OrderStatus.DELIVERED
+                    "onDelivery" -> OrderStatus.ON_DELIVERY
+                    else -> OrderStatus.ON_PROCESS
+                }
             )
         }
 

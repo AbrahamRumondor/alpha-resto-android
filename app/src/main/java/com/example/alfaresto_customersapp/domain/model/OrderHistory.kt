@@ -5,5 +5,5 @@ data class OrderHistory(
     val orderDate: String = "",
     val orderTotalPrice: Int = 0,
     val addressLabel: String = "",
-    val orderStatus: String = ""
+    val orderStatus: OrderStatus = OrderStatus.ON_PROCESS
 )
