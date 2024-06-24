@@ -32,8 +32,10 @@ class ListAllMenuFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val adapter = ListAllMenuAdapter()
-        binding.listAllMenuRv.adapter = adapter
-        binding.listAllMenuRv.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.rvListAllMenu.let {
+            it.adapter = adapter
+            it.layoutManager = GridLayoutManager(requireContext(), 2)
+        }
 
         lifecycleScope.launch {
             viewModel.menuList.collectLatest {

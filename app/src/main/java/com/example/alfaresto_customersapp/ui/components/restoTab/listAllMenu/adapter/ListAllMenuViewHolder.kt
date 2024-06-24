@@ -3,7 +3,7 @@ package com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu.ad
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.alfaresto_customersapp.R
+import com.bumptech.glide.Glide
 import com.example.alfaresto_customersapp.databinding.AllMenuItemBinding
 import com.example.alfaresto_customersapp.domain.model.Menu
 
@@ -11,9 +11,14 @@ class ListAllMenuViewHolder(
     private var binding: AllMenuItemBinding
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(menu: Menu) {
-        binding.menuNameTv.text = menu.menuName
-        binding.menuPriceTv.text = menu.menuPrice.toString()
-        binding.menuImageIv.setImageResource(R.drawable.dummy)
+        binding.let {
+            it.tvMenuName.text = menu.menuName
+            it.tvMenuPrice.text = menu.menuPrice.toString()
+            Glide.with(it.root)
+                .load(menu.menuImage)
+                .placeholder(android.R.drawable.ic_menu_report_image)
+                .into(it.ivMenuImage)
+        }
     }
 
     companion object {
