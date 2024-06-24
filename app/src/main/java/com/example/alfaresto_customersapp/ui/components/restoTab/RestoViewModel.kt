@@ -10,7 +10,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import androidx.lifecycle.LiveData
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
+import com.example.alfaresto_customersapp.domain.model.Token
 import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -97,5 +100,40 @@ class RestoViewModel @Inject constructor(
                 if (cart.menuQty > 0) cartUseCase.insertMenu(it.copy(menuQty = cart.menuQty-1))
             }
         }
+    }
+
+    fun getToken() {
+        FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
+            if (token != null) {
+                Log.i("FCM Token", token)
+                saveToken(token)
+            }
+        }.addOnFailureListener { e ->
+            Log.e("FCM Token", "Failed to get token", e)
+        }
+    }
+
+    private fun saveToken(token: String) {
+        val db = FirebaseFirestore.getInstance()
+//        val currentUser = FirebaseAuth.getInstance().currentUser
+
+//        if (currentUser != null) {
+//            val userId = currentUser.uid
+            val documentId = db.collection("users").document("amnRLCt7iYGogz6JRxi5")
+                .collection("tokens").document().id
+
+            val userToken = Token(userToken = token)
+            db.collection("users").document("amnRLCt7iYGogz6JRxi5")
+                .collection("tokens").document(documentId)
+                .set(userToken)
+                .addOnSuccessListener {
+                    Log.d("PushNotificationService", "FCM token added to Firestore")
+                }
+                .addOnFailureListener { e ->
+                    Log.w("PushNotificationService", "Error adding FCM token to Firestore", e)
+                }
+//        } else {
+//            Log.w("PushNotificationService", "User not authenticated")
+//        }
     }
 }

@@ -4,10 +4,14 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
+import com.example.alfaresto_customersapp.data.remote.FcmApi
+import com.example.alfaresto_customersapp.data.remote.NotificationBody
+import com.example.alfaresto_customersapp.data.remote.SendMessageDto
 import com.example.alfaresto_customersapp.domain.model.Address
 import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.domain.model.Order
 import com.example.alfaresto_customersapp.domain.model.OrderItem
+import com.example.alfaresto_customersapp.domain.model.Token
 import com.example.alfaresto_customersapp.domain.usecase.MenuUseCase
 import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
 import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_ADDRESS
@@ -18,6 +22,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.create
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -203,6 +211,8 @@ class OrderSummaryViewModel @Inject constructor(
                         }
                     }
                 }
+
+                sendNotificationToResto()
             }
         }
     }
@@ -212,5 +222,55 @@ class OrderSummaryViewModel @Inject constructor(
         val dateFormat = SimpleDateFormat("dd MMMM yyyy, HH:mm", Locale.getDefault())
         return dateFormat.format(currentDate)
     }
+
+    private val api: FcmApi = Retrofit.Builder()
+        .baseUrl("http://10.0.2.2:8080/")
+        .addConverterFactory(MoshiConverterFactory.create())
+        .build()
+        .create()
+
+    private fun sendNotificationToResto() {
+        db.collection("users").document("amnRLCt7iYGogz6JRxi5")
+            .collection("tokens")
+            .get()
+            .addOnSuccessListener { documents ->
+                Log.d("test", "SUCCESS FETCH DATA: $documents")
+                val tokenList = mutableListOf<Token>()
+                for (document in documents) {
+                    val token = document.toObject(Token::class.java)
+                    tokenList.add(token)
+                    Log.d("test", "SUCCESS FETCH DATA: ${token.userToken}")
+                }
+                val latestToken = tokenList[tokenList.size-1]
+
+                sendMessageToBackend(
+                    message = "There's new order. Check your Resto App",
+                    token = latestToken.userToken
+                )
+            }
+            .addOnFailureListener {
+                Log.d("test", "GAGAL FETCH DATA: $it")
+            }
+    }
+
+    private fun sendMessageToBackend(message: String, token: String) {
+        viewModelScope.launch {
+            val messageDto = SendMessageDto(
+                to = token,
+                notification = NotificationBody(
+                    title = "New Message",
+                    body = message
+                )
+            )
+
+            try {
+                api.sendMessage(messageDto)
+            } catch (e: Exception) {
+                Log.d("test", e.toString())
+            }
+        }
+    }
+
+
 
 }

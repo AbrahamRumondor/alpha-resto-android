@@ -19,8 +19,8 @@ data class Order(
     @set:PropertyName("resto_id")
     var restoID: String = "",
 
-    @get:PropertyName("date")
-    @set:PropertyName("date")
+    @get:PropertyName("order_date")
+    @set:PropertyName("order_date")
     var date : String = "",
 
     @get:PropertyName("payment_method")
@@ -30,6 +30,4 @@ data class Order(
     @get:PropertyName("total_price")
     @set:PropertyName("total_price")
     var totalPrice : Int = -1,
-
-    var items: List<OrderItem> = mutableListOf()
 )

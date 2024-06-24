@@ -9,6 +9,7 @@
 
     <application
         android:name=".MainApplication"
+        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -37,6 +38,12 @@
         <activity android:name=".ui.components.loginPage.LoginActivity"
             android:exported="true">
         </activity>
+        <service android:name=".ui.components.restoTab.orderSummary.pushNotification.PushNotificationService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

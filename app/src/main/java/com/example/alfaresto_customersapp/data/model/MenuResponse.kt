@@ -3,7 +3,7 @@ package com.example.alfaresto_customersapp.data.model
 import com.example.alfaresto_customersapp.domain.model.Menu
 import com.google.firebase.firestore.PropertyName
 
-data class MenuResponse(
+data class  MenuResponse(
     val id: String = "",
 
     @get:PropertyName("menu_description")

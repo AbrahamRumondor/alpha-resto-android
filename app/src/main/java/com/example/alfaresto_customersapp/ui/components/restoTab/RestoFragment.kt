@@ -38,6 +38,8 @@ class RestoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+//        viewModel.getToken()
+
         val menuRv = binding.menuRv
 
         binding.allMenuBtn.setOnClickListener {

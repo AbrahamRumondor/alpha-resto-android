@@ -54,6 +54,7 @@ kapt {
 
 dependencies {
 
+    implementation("com.google.firebase:firebase-messaging:24.0.0")
     val coroutinesAndroid = "1.7.1"
     val coroutinesCore = "1.6.4"
 
@@ -89,4 +90,7 @@ dependencies {
     implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
     kapt("androidx.room:room-compiler:2.6.1")
+
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
 }

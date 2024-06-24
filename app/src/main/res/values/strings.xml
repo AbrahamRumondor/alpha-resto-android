@@ -2,7 +2,7 @@
     <string name="app_name">AlfaResto-CustomersApp</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="register">Register</string>
-    <string name="emailHint">email@gmail.com</string>
+    <string name="email_hint">email@gmail.com</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="reenter_password">Re-enter Password</string>
@@ -42,5 +42,8 @@
     <string name="address_label">Address Label</string>
     <string name="address_detail">Address Detail</string>
     <string name="save">Save</string>
-    <string name="menuimageview">menuImageView</string>
+    <string name="menu_image_view">menuImageView</string>
+    <string name="soft_shell_taco">Soft Shell Taco</string>
+    <string name="add_to_cart">Add To Cart</string>
+    <string name="_1">1</string>
 </resources>
