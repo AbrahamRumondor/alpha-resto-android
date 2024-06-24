@@ -16,59 +16,58 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/toolbar_title_tv"
+            android:id="@+id/tv_toolbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="AlfaResto"
+            android:text="@string/alfaresto"
             android:textColor="@color/orange"
             android:textSize="24sp"
             android:textStyle="bold" />
 
         <ImageButton
-            android:id="@+id/profile_btn"
+            android:id="@+id/btn_profile"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="end"
             android:layout_marginEnd="12dp"
             android:background="@android:color/transparent"
-            android:contentDescription="logo"
+            android:contentDescription="@string/logo"
             android:src="@drawable/profile" />
 
     </androidx.appcompat.widget.Toolbar>
 
     <TextView
-        android:id="@+id/greetings_tv"
+        android:id="@+id/tv_greetings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hi, Bella!"
         android:textSize="24sp"
         android:layout_marginStart="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/menu_rv"
+        app:layout_constraintBottom_toTopOf="@+id/rv_menu"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <TextView
-        android:id="@+id/deliver_to_tv"
+        android:id="@+id/tv_deliver_to"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Deliver to:"
+        android:text="@string/deliver_to"
         android:textSize="18sp"
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="@+id/toolbar"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <TextView
-        android:id="@+id/address_tv"
+        android:id="@+id/tv_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Home"
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/deliver_to_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_deliver_to" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/menu_rv"
+        android:id="@+id/rv_menu"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:paddingStart="24dp"
@@ -76,7 +75,7 @@
         app:layout_constraintBottom_toTopOf="@+id/relativeLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/address_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_address" />
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
@@ -87,22 +86,22 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <ImageButton
-            android:id="@+id/cart_btn"
+            android:id="@+id/btn_cart"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:background="@android:color/transparent"
-            android:contentDescription="logo"
+            android:contentDescription="@string/logo"
             android:src="@drawable/cart" />
 
         <TextView
-            android:id="@+id/cart_count_tv"
+            android:id="@+id/tv_cart_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@id/cart_btn"
-            android:layout_alignEnd="@id/cart_btn"
+            android:layout_alignTop="@id/btn_cart"
+            android:layout_alignEnd="@id/btn_cart"
             android:background="@drawable/badge_circle"
             android:paddingHorizontal="10dp"
-            android:text="0"
+            android:text="@string/_0"
             android:textColor="@color/black"
             android:textSize="12sp" />
 

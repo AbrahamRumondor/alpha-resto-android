@@ -14,7 +14,7 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/menu_image_iv"
+            android:id="@+id/iv_menu_image"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -29,7 +29,7 @@
             android:padding="10dp">
 
             <TextView
-                android:id="@+id/menu_name_tv"
+                android:id="@+id/tv_menu_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Soft Shell Taco"
@@ -37,7 +37,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/menu_price_tv"
+                android:id="@+id/tv_menu_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Rp 50.000"
@@ -45,7 +45,7 @@
         </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/menu_add_btn"
+            android:id="@+id/btn_menu_add"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/menu_add_button"

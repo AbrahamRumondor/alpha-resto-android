@@ -31,7 +31,7 @@ class RestoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val menuRv = binding.menuRv
+        val rvMenu = binding.rvMenu
 
         lifecycleScope.launch {
             viewModel.menus.collect { menus ->
@@ -41,14 +41,12 @@ class RestoFragment : Fragment() {
                     return@collect
                 }
 
-                Log.d("MENU", "Menus received: $menus")
                 adapter.submitMenuList(menus)
 
-                menuRv.adapter = adapter
-                menuRv.layoutManager =
+                rvMenu.adapter = adapter
+                rvMenu.layoutManager =
                     LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             }
         }
     }
-
 }
