@@ -2,7 +2,7 @@
     <string name="app_name">AlfaResto-CustomersApp</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="register">Register</string>
-    <string name="emailHint">email@gmail.com</string>
+    <string name="email_hint">email@gmail.com</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="reenter_password">Re-enter Password</string>
@@ -17,4 +17,15 @@
     <string name="hi_bella">Hi, Bella!</string>
     <string name="menuimageview">menuImageView</string>
     <string name="add_to_cart">ADD TO CART</string>
+    <string name="no_telp">No. Telp</string>
+    <string name="name">Name</string>
+    <string name="address">Address</string>
+    <string name="login_success">Login Success</string>
+    <string name="login_failed">Login Failed</string>
+    <string name="register_success">Register Success</string>
+    <string name="register_failed">Register Failed. This email is already used.</string>
+    <string name="email_pass_empty">Email or password is empty</string>
+    <string name="email_not_valid">Email is not valid</string>
+    <string name="password_not_valid">Password is not valid</string>
+    <string name="password_not_match">Password is not match</string>
 </resources>
