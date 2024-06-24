@@ -7,6 +7,6 @@ data class Order(
     val restoID: String = "",
     val orderDate : String = "",
     val orderPaymentMethod : String = "",
-    val totalPrice : Int = -1,
+    val totalPrice : Int = 0,
     val orderItems: List<OrderItem> = mutableListOf()
 )

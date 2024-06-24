@@ -37,7 +37,7 @@ data class OrderResponse(
     var orderItems: List<OrderItemResponse>
 ) {
     // Public no-argument constructor required by Firestore
-    constructor() : this("", "", "", "", "", "", -1, emptyList())
+    constructor() : this("", "", "", "", "", "", 0, emptyList())
 
     companion object {
         fun transform(orderResponse: OrderResponse): Order {

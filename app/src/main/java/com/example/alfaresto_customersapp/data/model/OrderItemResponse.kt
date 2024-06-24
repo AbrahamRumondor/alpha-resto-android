@@ -10,13 +10,13 @@ data class OrderItemResponse(
     @set:PropertyName("menu_id")
     var menuID: String = "",
 
-    val qty: Int = -1,
+    val qty: Int = 0,
 
     @get:PropertyName("menu_price")
     @set:PropertyName("menu_price")
-    var menuPrice: Int = -1
+    var menuPrice: Int = 0
 ) {
-    constructor() : this("", "", -1, -1)
+    constructor() : this("", "", 0, 0)
 
     companion object {
         fun transform(orderItemResponse: OrderItemResponse): OrderItem {
