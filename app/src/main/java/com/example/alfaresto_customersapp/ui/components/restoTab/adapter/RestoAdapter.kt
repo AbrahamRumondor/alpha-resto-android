@@ -24,7 +24,6 @@ class RestoAdapter : RecyclerView.Adapter<RestoViewHolder>() {
 
     fun submitMenuList(menuList: List<Menu>) {
         this.menuList = menuList
-        Log.d("MENU adapter", "Menu list submitted: $menuList")
     }
 
 }
