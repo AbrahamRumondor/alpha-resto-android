@@ -41,8 +41,8 @@ class OrderHistoryFragment : Fragment() {
                 }
 
                 adapter.submitList(orderHistories)
-                binding.orderHistoryRv.adapter = adapter
-                binding.orderHistoryRv.layoutManager =
+                binding.rvOrderHistory.adapter = adapter
+                binding.rvOrderHistory.layoutManager =
                     LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
             }

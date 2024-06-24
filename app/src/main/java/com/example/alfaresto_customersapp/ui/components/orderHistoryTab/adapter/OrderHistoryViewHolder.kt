@@ -12,10 +12,10 @@ class OrderHistoryViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(order: OrderHistory) {
-        binding.orderDateTv.text = order.orderDate
-        binding.orderPriceTv.text = order.orderTotalPrice.toString()
+        binding.tvOrderDate.text = order.orderDate
+        binding.tvOrderPrice.text = order.orderTotalPrice.toString()
 
-        binding.orderStatusCv.setCardBackgroundColor(
+        binding.cvOrderStatus.setCardBackgroundColor(
             when (order.orderStatus) {
                 "delivered" -> binding.root.context.getColor(R.color.green)
                 "process" -> binding.root.context.getColor(R.color.yellow)
@@ -23,8 +23,8 @@ class OrderHistoryViewHolder(
             }
         )
 
-        binding.orderStatusTv.text = order.orderStatus
-        binding.orderAddressTv.text = order.addressLabel
+        binding.tvOrderStatus.text = order.orderStatus
+        binding.tvOrderAddress.text = order.addressLabel
     }
 
     companion object {

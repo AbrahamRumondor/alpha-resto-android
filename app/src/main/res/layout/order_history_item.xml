@@ -12,7 +12,7 @@
         android:padding="20dp">
 
         <TextView
-            android:id="@+id/order_date_tv"
+            android:id="@+id/tv_order_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="20/06/2024"
@@ -23,7 +23,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/order_price_tv"
+            android:id="@+id/tv_order_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Rp 100.000"
@@ -41,7 +41,7 @@
             app:layout_constraintGuide_percent="0.5" />
 
         <TextView
-            android:id="@+id/order_address_tv"
+            android:id="@+id/tv_order_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Home"
@@ -51,7 +51,7 @@
             app:layout_constraintTop_toTopOf="@+id/middle_guideline" />
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/order_status_cv"
+            android:id="@+id/cv_order_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:cardCornerRadius="24dp"
@@ -60,7 +60,7 @@
             app:layout_constraintTop_toTopOf="@+id/middle_guideline">
 
             <TextView
-                android:id="@+id/order_status_tv"
+                android:id="@+id/tv_order_status"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="16dp"

@@ -6,7 +6,7 @@
     tools:context=".ui.components.orderHistoryTab.OrderHistoryFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/order_history_rv"
+        android:id="@+id/rv_order_history"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="24dp" />
