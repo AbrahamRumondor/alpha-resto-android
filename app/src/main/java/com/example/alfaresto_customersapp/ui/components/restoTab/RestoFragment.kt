@@ -7,12 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alfaresto_customersapp.databinding.FragmentRestoBinding
 import com.example.alfaresto_customersapp.ui.components.restoTab.adapter.RestoAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class RestoFragment : Fragment() {
@@ -31,20 +29,17 @@ class RestoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val rvMenu = binding.rvMenu
+        viewModel.menus.observe(viewLifecycleOwner) { menus ->
+            if (menus.isEmpty()) {
+                Log.d("RestoFragment", "Menus is empty, waiting for data...")
+                // Optionally, you can show a loading state or handle the empty case
+                return@observe
+            }
 
-        lifecycleScope.launch {
-            viewModel.menus.collect { menus ->
-                if (menus.isEmpty()) {
-                    Log.d("MENU", "Menus is empty, waiting for data...")
-                    // Optionally, you can show a loading state or handle the empty case
-                    return@collect
-                }
-
-                adapter.submitMenuList(menus)
-
-                rvMenu.adapter = adapter
-                rvMenu.layoutManager =
+            adapter.submitMenuList(menus)
+            binding.rvMenu.let {
+                it.adapter = adapter
+                it.layoutManager =
                     LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             }
         }
