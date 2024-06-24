@@ -7,4 +7,6 @@
     <string name="_0">0</string>
     <string name="deliver_to">Deliver to:</string>
     <string name="hi_bella">Hi, Bella!</string>
+    <string name="menuimageview">menuImageView</string>
+    <string name="add_to_cart">ADD TO CART</string>
 </resources>
