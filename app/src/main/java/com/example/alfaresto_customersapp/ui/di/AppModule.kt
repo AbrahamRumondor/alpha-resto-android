@@ -6,6 +6,8 @@ import com.example.alfaresto_customersapp.domain.usecase.orderHistory.OrderHisto
 import com.example.alfaresto_customersapp.domain.usecase.orderHistory.OrderHistoryUseCaseImpl
 import com.example.alfaresto_customersapp.domain.usecase.shipment.ShipmentUseCase
 import com.example.alfaresto_customersapp.domain.usecase.shipment.ShipmentUseCaseImpl
+import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase
+import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCaseImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -33,4 +35,10 @@ abstract class AppModule {
     abstract fun provideOrderHistoryUseCase(
         orderHistoryUseCaseImpl: OrderHistoryUseCaseImpl
     ): OrderHistoryUseCase
+
+    @Binds
+    @ViewModelScoped
+    abstract fun provideUserUseCase(
+        userUseCaseImpl: UserUseCaseImpl
+    ): UserUseCase
 }

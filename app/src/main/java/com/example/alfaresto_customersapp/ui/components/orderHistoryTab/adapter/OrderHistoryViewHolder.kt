@@ -24,6 +24,7 @@ class OrderHistoryViewHolder(
         )
 
         binding.orderStatusTv.text = order.orderStatus
+        binding.orderAddressTv.text = order.addressLabel
     }
 
     companion object {

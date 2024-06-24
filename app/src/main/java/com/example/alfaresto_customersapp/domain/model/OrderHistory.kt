@@ -4,6 +4,6 @@ data class OrderHistory(
     val id: String = "",
     val orderDate: String = "",
     val orderTotalPrice: Int = 0,
-    val address: String = "",
+    val addressLabel: String = "",
     val orderStatus: String = ""
 )

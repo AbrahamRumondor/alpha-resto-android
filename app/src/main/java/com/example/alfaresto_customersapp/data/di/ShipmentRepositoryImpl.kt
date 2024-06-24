@@ -1,6 +1,5 @@
 package com.example.alfaresto_customersapp.data.di
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.alfaresto_customersapp.data.model.ShipmentResponse
@@ -24,12 +23,8 @@ class ShipmentRepositoryImpl @Inject constructor(
             val shipmentList = snapshot.toObjects(ShipmentResponse::class.java)
                 .map { ShipmentResponse.transform(it) }
             _shipments.value = shipmentList
-
-            Log.d("OrderHistory shipmentrepoimpl", "Shipments: $shipments")
         } catch (e: Exception) {
             _shipments.value = emptyList()
-
-            Log.e("OrderHistory shipmentrepoimpl", "Error fetching shipments", e)
         }
         return shipments
     }
