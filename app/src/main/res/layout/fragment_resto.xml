@@ -71,40 +71,40 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_none"
         android:paddingTop="@dimen/dimen_48dp"
-        app:layout_constraintBottom_toTopOf="@+id/relativeLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_address" />
 
-    <RelativeLayout
-        android:id="@+id/relativeLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dimen_16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+<!--    <RelativeLayout-->
+<!--        android:id="@+id/relativeLayout"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_margin="@dimen/dimen_16dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent">-->
 
-        <ImageButton
-            android:id="@+id/btn_cart"
-            android:layout_width="@dimen/dimen_50dp"
-            android:layout_height="@dimen/dimen_50dp"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/logo"
-            android:src="@drawable/cart" />
+<!--        <ImageButton-->
+<!--            android:id="@+id/btn_cart"-->
+<!--            android:layout_width="@dimen/dimen_50dp"-->
+<!--            android:layout_height="@dimen/dimen_50dp"-->
+<!--            android:background="@android:color/transparent"-->
+<!--            android:contentDescription="@string/logo"-->
+<!--            android:src="@drawable/cart" />-->
 
-        <TextView
-            android:id="@+id/tv_cart_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@id/btn_cart"
-            android:layout_alignEnd="@id/btn_cart"
-            android:background="@drawable/badge_circle"
-            android:paddingHorizontal="@dimen/dimen_10dp"
-            android:text="@string/_0"
-            android:textColor="@color/black"
-            android:textSize="@dimen/dimen_12sp" />
+<!--        <TextView-->
+<!--            android:id="@+id/tv_cart_count"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignTop="@id/btn_cart"-->
+<!--            android:layout_alignEnd="@id/btn_cart"-->
+<!--            android:background="@drawable/badge_circle"-->
+<!--            android:paddingHorizontal="@dimen/dimen_10dp"-->
+<!--            android:text="@string/_0"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:textSize="@dimen/dimen_12sp" />-->
 
-    </RelativeLayout>
+<!--    </RelativeLayout>-->
+
     <Button
         android:id="@+id/all_menu_btn"
         android:layout_width="wrap_content"

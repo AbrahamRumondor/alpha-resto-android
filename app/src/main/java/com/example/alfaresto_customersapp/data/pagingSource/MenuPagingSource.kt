@@ -1,6 +1,5 @@
 package com.example.alfaresto_customersapp.data.pagingSource
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.alfaresto_customersapp.data.model.MenuResponse
@@ -17,9 +16,7 @@ class MenuPagingSource(
     override suspend fun load(params: LoadParams<QuerySnapshot>): LoadResult<QuerySnapshot, Menu> {
         return try {
             val currentPage = params.key ?: menusRef.get().addOnSuccessListener {
-                Log.d("MenuPagingSource", "Success: $it")
-                val menus = it.toObjects(MenuResponse::class.java)
-                Log.d("MenuPagingSource", "Menus: $menus")
+                it.toObjects(MenuResponse::class.java)
             }.await()
 
             val menus = currentPage.toObjects<MenuResponse>().map { MenuResponse.transform(it) }
