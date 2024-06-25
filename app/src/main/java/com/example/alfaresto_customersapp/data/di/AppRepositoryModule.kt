@@ -20,4 +20,9 @@ abstract class AppRepositoryModule {
     abstract fun provideAuthRepository(
         authRepositoryImpl: AuthRepositoryImpl
     ): AuthRepository
+
+    @Binds
+    abstract fun provideCartRepository(
+        cartRepositoryImpl: CartRepositoryImpl
+    ): CartRepository
 }

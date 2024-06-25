@@ -16,6 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class RestoFragment : Fragment() {
+
     private lateinit var binding: FragmentRestoBinding
     private val viewModel: RestoViewModel by viewModels()
     private val adapter by lazy { RestoAdapter() }

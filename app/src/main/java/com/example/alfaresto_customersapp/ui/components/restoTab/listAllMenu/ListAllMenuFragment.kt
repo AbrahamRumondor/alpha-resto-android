@@ -1,7 +1,6 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,13 +32,14 @@ class ListAllMenuFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val adapter = ListAllMenuAdapter()
-        binding.listAllMenuRv.adapter = adapter
-        binding.listAllMenuRv.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.rvListAllMenu.let {
+            it.adapter = adapter
+            it.layoutManager = GridLayoutManager(requireContext(), 2)
+        }
 
         lifecycleScope.launch {
             viewModel.menuList.collectLatest {
                 adapter.submitData(it)
-                Log.d("MENU", "onViewCreated: $it")
             }
         }
     }

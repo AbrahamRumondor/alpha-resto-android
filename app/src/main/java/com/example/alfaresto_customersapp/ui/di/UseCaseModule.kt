@@ -4,6 +4,8 @@ import com.example.alfaresto_customersapp.domain.usecase.MenuUseCase
 import com.example.alfaresto_customersapp.domain.usecase.MenuUseCaseImpl
 import com.example.alfaresto_customersapp.domain.usecase.auth.AuthUseCase
 import com.example.alfaresto_customersapp.domain.usecase.auth.AuthUseCaseImpl
+import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
+import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCaseImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -25,4 +27,10 @@ abstract class UseCaseModule {
     abstract fun provideAuthUseCase(
         authUseCaseImpl: AuthUseCaseImpl
     ): AuthUseCase
+
+    @Binds
+    @ViewModelScoped
+    abstract fun provideCartUseCase(
+        cartUseCaseImpl: CartUseCaseImpl
+    ): CartUseCase
 }
