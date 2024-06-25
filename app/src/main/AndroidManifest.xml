@@ -20,7 +20,7 @@
         android:theme="@style/Theme.AlfaRestoCustomersApp"
         tools:targetApi="tiramisu">
 
-        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyDgi6aV9k0sLJkTsXlbaUBRD2k_jUm6zpo"/>
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="${location.apikey}"/>
 
         <activity
             android:name=".ui.components.registerPage.RegisterActivity"
