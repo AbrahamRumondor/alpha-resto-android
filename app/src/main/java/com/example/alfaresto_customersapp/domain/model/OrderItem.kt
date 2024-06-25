@@ -7,9 +7,9 @@ data class OrderItem(
     @set:PropertyName("order_item_id")
     var id: String = "",
 
-    @get:PropertyName("menu_id")
-    @set:PropertyName("menu_id")
-    var menuID: String = "",
+    @get:PropertyName("menu_name")
+    @set:PropertyName("menu_name")
+    var menuName: String = "",
 
     @get:PropertyName("quantity")
     @set:PropertyName("v")

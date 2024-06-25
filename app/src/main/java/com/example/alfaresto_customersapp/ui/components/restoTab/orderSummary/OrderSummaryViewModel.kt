@@ -7,22 +7,22 @@ import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.data.remote.FcmApi
 import com.example.alfaresto_customersapp.data.remote.NotificationBody
 import com.example.alfaresto_customersapp.data.remote.SendMessageDto
+import com.example.alfaresto_customersapp.domain.error.FirestoreCallback
 import com.example.alfaresto_customersapp.domain.model.Address
 import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.domain.model.Order
 import com.example.alfaresto_customersapp.domain.model.OrderItem
 import com.example.alfaresto_customersapp.domain.model.Token
+import com.example.alfaresto_customersapp.domain.model.User
 import com.example.alfaresto_customersapp.domain.usecase.MenuUseCase
 import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
 import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_ADDRESS
-import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_ID
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
@@ -151,7 +151,7 @@ class OrderSummaryViewModel @Inject constructor(
     }
 
     // TODO 1:userID,addressID,restoID (fetch dr firestore) | 2:menuID (fetch dari firestore)
-    fun saveOrderInDatabase() {
+    fun saveOrderInDatabase(username: String?) {
         val PAYMENT_METHOD = _orders.value.size - 2
         val TOTAL = orders.value.size - 3
 
@@ -161,17 +161,21 @@ class OrderSummaryViewModel @Inject constructor(
 
         val total = _orders.value[TOTAL] as Pair<Int, Int> ?: null
 
-        if (!payment.isNullOrEmpty() && total != null && _orders.value.size > 4) {
+        if (!payment.isNullOrEmpty() && total != null && _orders.value.size > 4
+            && !username.isNullOrEmpty()
+        ) {
             db.runTransaction {
-                USER_ADDRESS?.let { addressId ->
+                USER_ADDRESS?.let {
                     val order = Order(
                         id = getOrderDocumentId(),
-                        userID = USER_ID,
-                        addressID = addressId,
+                        userName = username,
+                        fullAddress = it.address,
                         restoID = "NrhoLsLLieXFly9dXj7vu2ETi1T2", // nanti buat singleton
                         date = getCurrentDateTime(),
                         paymentMethod = payment,
-                        totalPrice = total.second ?: -1
+                        totalPrice = total.second ?: -1,
+                        latitude = it.latitude,
+                        longitude = it.longitude
                     )
                     db.collection("orders").document(order.id)
                         .set(order)
@@ -188,7 +192,7 @@ class OrderSummaryViewModel @Inject constructor(
                         menu?.let {
                             val orderItem = OrderItem(
                                 id = getOrderItemDocumentId(order.id),
-                                menuID = menu.id,
+                                menuName = menu.name,
                                 quantity = menu.orderCartQuantity,
                                 menuPrice = menu.price
                             )
@@ -217,6 +221,25 @@ class OrderSummaryViewModel @Inject constructor(
         }
     }
 
+    fun getUserFromDB(userId: String, callback: FirestoreCallback) {
+        db.collection("users").document(userId)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document != null && document.exists()) {
+                    val user = document.toObject(User::class.java)
+                    Log.d("test", "SUCCESS FETCH DATA: $user")
+                    callback.onSuccess(user)
+                } else {
+                    Log.d("test", "No such document")
+                    callback.onSuccess(null)
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d("test", "Error fetching data: $exception")
+                callback.onFailure(exception)
+            }
+    }
+
     private fun getCurrentDateTime(): String {
         val currentDate = Date()
         val dateFormat = SimpleDateFormat("dd MMMM yyyy, HH:mm", Locale.getDefault())
@@ -224,7 +247,7 @@ class OrderSummaryViewModel @Inject constructor(
     }
 
     private val api: FcmApi = Retrofit.Builder()
-        .baseUrl("http://10.0.2.2:8080/")
+        .baseUrl("http://192.168.196.165:8081/")
         .addConverterFactory(MoshiConverterFactory.create())
         .build()
         .create()
@@ -241,7 +264,7 @@ class OrderSummaryViewModel @Inject constructor(
                     tokenList.add(token)
                     Log.d("test", "SUCCESS FETCH DATA: ${token.userToken}")
                 }
-                val latestToken = tokenList[tokenList.size-1]
+                val latestToken = tokenList[tokenList.size - 1]
 
                 sendMessageToBackend(
                     message = "There's new order. Check your Resto App",
@@ -270,7 +293,6 @@ class OrderSummaryViewModel @Inject constructor(
             }
         }
     }
-
 
 
 }
