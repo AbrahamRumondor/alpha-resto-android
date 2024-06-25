@@ -11,7 +11,8 @@ import com.google.firebase.firestore.toObjects
 import kotlinx.coroutines.tasks.await
 
 class MenuPagingSource(
-    private val menusRef: CollectionReference
+    private val menusRef: CollectionReference,
+    private val query: String?
 ) : PagingSource<QuerySnapshot, Menu>() {
 
     override suspend fun load(params: LoadParams<QuerySnapshot>): LoadResult<QuerySnapshot, Menu> {
@@ -23,9 +24,12 @@ class MenuPagingSource(
             }.await()
 
             val menus = currentPage.toObjects<MenuResponse>().map { MenuResponse.transform(it) }
+            val queriedMenu = currentPage.toObjects(MenuResponse::class.java)
+                .filter { it.menuName.contains(query ?: "", ignoreCase = true) }
+                .map { MenuResponse.transform(it) }
 
             LoadResult.Page(
-                data = menus,
+                if (query.isNullOrEmpty()) menus else queriedMenu,
                 prevKey = null,
                 nextKey = null
             )
