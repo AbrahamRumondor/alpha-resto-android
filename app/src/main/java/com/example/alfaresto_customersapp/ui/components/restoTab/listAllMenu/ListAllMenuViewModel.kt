@@ -20,10 +20,11 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Named
 
 @HiltViewModel
 class ListAllMenuViewModel @Inject constructor(
-    private val menusRef: CollectionReference,
+    @Named("menusRef") private val menusRef: CollectionReference,
     private val cartUseCase: CartUseCase
 ) : ViewModel() {
 

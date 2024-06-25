@@ -66,4 +66,5 @@
     <string name="list_all_menu">List All Menu</string>
     <string name="add_to_menu">Add to Menu</string>
     <string name="greetings">Hi, %1$s</string>
+    <string name="_0">0"</string>
 </resources>

@@ -3,6 +3,7 @@ package com.example.alfaresto_customersapp.ui.components.restoTab.address.addres
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.alfaresto_customersapp.data.model.AddressResponse
 import com.example.alfaresto_customersapp.domain.model.Address
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
@@ -49,8 +50,9 @@ class AddressListViewModel : ViewModel() {
                 Log.d("test", "SUCCESS FETCH DATA: $documents")
                 val addressList = mutableListOf<Address>()
                 for (document in documents) {
-                    val address = document.toObject(Address::class.java)
-                    addressList.add(address)
+                    val address = document.toObject(AddressResponse::class.java)
+                    val newAddress = AddressResponse.transform(address)
+                    addressList.add(newAddress)
                     Log.d("test", "SUCCESS FETCH DATA: ${address.id}")
                 }
                 _userAddressFlow.value = addressList
@@ -71,7 +73,10 @@ class AddressListViewModel : ViewModel() {
                     .get()
                     .await() // Suspends coroutine until document is fetched
 
-                _selectedAddress.value = documentSnapshot.toObject(Address::class.java)
+                val address = documentSnapshot.toObject(AddressResponse::class.java)
+                address?.let {
+                    _selectedAddress.value = AddressResponse.transform(address)
+                }
             } catch (e: Exception) {
                 Log.d("test", "GAGAL FETCH DATA: $e")
             }

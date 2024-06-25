@@ -12,7 +12,7 @@ import kotlinx.coroutines.tasks.await
 import javax.inject.Named
 
 class MenuPagingSource(
-    @Named("menusRef") private val menusRef: CollectionReference
+    @Named("menusRef") private val menusRef: CollectionReference,
     private val cartItems: List<CartEntity>?
 ) : PagingSource<QuerySnapshot, Menu>() {
 

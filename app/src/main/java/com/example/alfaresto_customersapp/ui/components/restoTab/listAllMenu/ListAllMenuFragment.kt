@@ -38,7 +38,7 @@ class ListAllMenuFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.listAllMenuRv.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.rvListAllMenu.layoutManager = GridLayoutManager(requireContext(), 2)
 
         lifecycleScope.launch {
             viewModel.menuList.collectLatest {
@@ -47,7 +47,7 @@ class ListAllMenuFragment : Fragment() {
             }
         }
 
-        binding.listAllMenuRv.adapter = adapter
+        binding.rvListAllMenu.adapter = adapter
         setMenusAdapterButtons()
 
 

@@ -45,11 +45,11 @@ data class OrderResponse(
     companion object {
         fun transform(orderResponse: OrderResponse): Order {
             return Order(
-                orderID = orderResponse.orderID,
+                id = orderResponse.orderID,
                 userName = orderResponse.userName,
                 fullAddress = orderResponse.fullAddress,
                 restoID = orderResponse.restoID,
-                orderDate = orderResponse.orderDate,
+                date = orderResponse.orderDate,
                 paymentMethod = orderResponse.paymentMethod,
                 totalPrice = orderResponse.totalPrice,
                 latitude = orderResponse.latitude,

@@ -14,7 +14,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,8 +26,6 @@ class MainActivity : AppCompatActivity() {
 
         binding.bnvCustomerNavigation.setupWithNavController(navController)
 
-        showUserInfo()
-
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.addressList -> hideBottomNav()
@@ -36,13 +33,6 @@ class MainActivity : AppCompatActivity() {
                 else -> showBottomNav()
             }
         }
-    }
-
-    private fun showUserInfo() {
-        auth = FirebaseAuth.getInstance()
-        val user = auth.currentUser
-
-        binding.email.text = user?.email
     }
 
     private fun hideBottomNav() {

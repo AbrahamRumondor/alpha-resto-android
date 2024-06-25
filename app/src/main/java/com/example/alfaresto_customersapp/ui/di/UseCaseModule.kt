@@ -4,8 +4,6 @@ import com.example.alfaresto_customersapp.domain.usecase.MenuUseCase
 import com.example.alfaresto_customersapp.domain.usecase.MenuUseCaseImpl
 import com.example.alfaresto_customersapp.domain.usecase.auth.AuthUseCase
 import com.example.alfaresto_customersapp.domain.usecase.auth.AuthUseCaseImpl
-import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
-import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCaseImpl
 import com.example.alfaresto_customersapp.domain.usecase.order.OrderUseCase
 import com.example.alfaresto_customersapp.domain.usecase.order.OrderUseCaseImpl
 import com.example.alfaresto_customersapp.domain.usecase.orderHistory.OrderHistoryUseCase

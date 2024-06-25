@@ -9,9 +9,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.domain.model.Token
 import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
+import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.flow.Flow
@@ -21,8 +23,12 @@ import javax.inject.Inject
 @HiltViewModel
 class RestoViewModel @Inject constructor(
     private val menuUseCase: MenuUseCase,
-    private val cartUseCase: CartUseCase
+    private val cartUseCase: CartUseCase,
+    private val userUseCase: UserUseCase
 ) : ViewModel() {
+
+    private val _username: MutableLiveData<String> = MutableLiveData("")
+    val username: LiveData<String> = _username
 
     private val _menus: MutableStateFlow<List<Menu>> = MutableStateFlow(emptyList())
     val menus: StateFlow<List<Menu>> = _menus
@@ -147,8 +153,8 @@ class RestoViewModel @Inject constructor(
                     return@observeForever
                 }
 
-                Log.d("Resto viewmodel", "User: ${user.userName}")
-                _username.value = user.userName
+                Log.d("Resto viewmodel", "User: ${user.name}")
+                _username.value = user.name
             }
         }
     }
