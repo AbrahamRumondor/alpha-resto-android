@@ -6,32 +6,35 @@ import com.google.firebase.firestore.PropertyName
 data class UserResponse(
     @get:PropertyName("user_id")
     @set:PropertyName("user_id")
-    var id: String = "",
+    var userID: String = "",
 
     @get:PropertyName("user_name")
     @set:PropertyName("user_name")
-    var name: String = "",
+    var userName: String = "",
 
     @get:PropertyName("user_no_telp")
     @set:PropertyName("user_no_telp")
-    var noPhone: String = "",
+    var userNoTelp: String = "",
 
     @get:PropertyName("user_email")
     @set:PropertyName("user_email")
-    var email: String = "",
+    var userEmail: String = "",
 
-    @get:PropertyName("user_password")
-    @set:PropertyName("user_password")
-    var password: String = "",
+    @get:PropertyName("user_address")
+    @set:PropertyName("user_address")
+    var userAddress: List<AddressResponse> = mutableListOf()
 ) {
+    // Public no-argument constructor required by Firestore
+    constructor() : this("", "", "", "", mutableListOf())
+
     companion object {
-        fun transform(itemResponse: UserResponse): User {
+        fun transform(userResponse: UserResponse): User {
             return User(
-                id = itemResponse.id,
-                name = itemResponse.name,
-                noPhone = itemResponse.noPhone,
-                email = itemResponse.email,
-                password = itemResponse.password,
+                userID = userResponse.userID,
+                userName = userResponse.userName,
+                userNoTelp = userResponse.userNoTelp,
+                userEmail = userResponse.userEmail,
+                userAddress = userResponse.userAddress.map { AddressResponse.transform(it) }
             )
         }
     }

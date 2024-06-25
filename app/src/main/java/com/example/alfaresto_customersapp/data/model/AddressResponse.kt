@@ -13,26 +13,18 @@ data class AddressResponse(
     @set:PropertyName("address_label")
     var label: String = "",
 
-    @get:PropertyName("address")
-    @set:PropertyName("address")
-    var address: String = "",
-
-    @get:PropertyName("latitude")
-    @set:PropertyName("latitude")
-    var latitude: Double = Double.MAX_VALUE,
-
-    @get:PropertyName("longitude")
-    @set:PropertyName("longitude")
-    var longitude: Double = Double.MAX_VALUE,
+    val address: String = "",
+    val latitude: Double = 0.0,
+    val longitude: Double = 0.0,
 ){
     companion object {
-        fun transform(itemResponse: AddressResponse): Address {
+        fun transform(addressResponse: AddressResponse): Address {
             return Address(
-                id = itemResponse.id,
-                address = itemResponse.address,
-                longitude = itemResponse.longitude,
-                latitude = itemResponse.latitude,
-                label = itemResponse.label
+                addressID = addressResponse.id,
+                addressLabel = addressResponse.label,
+                address = addressResponse.address,
+                latitude = addressResponse.latitude,
+                longitude = addressResponse.longitude
             )
         }
     }

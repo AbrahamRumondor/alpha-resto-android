@@ -4,25 +4,9 @@ import com.google.firebase.firestore.PropertyName
 
 
 data class Address(
-    @get:PropertyName("address_id")
-    @set:PropertyName("address_id")
-    var id: String = "",
-
-    @get:PropertyName("address_label")
-    @set:PropertyName("address_label")
-    var label: String = "",
-
-    @get:PropertyName("address")
-    @set:PropertyName("address")
-    var address: String = "",
-
-    @get:PropertyName("latitude")
-    @set:PropertyName("latitude")
-    var latitude: Double = Double.MAX_VALUE,
-
-    @get:PropertyName("longitude")
-    @set:PropertyName("longitude")
-    var longitude: Double = Double.MAX_VALUE,
-
-    var isSelected: Boolean = false
+    val addressID: String = "",
+    val addressLabel: String = "",
+    val address: String = "",
+    val latitude: Double = 0.0,
+    val longitude: Double = 0.0,
 )

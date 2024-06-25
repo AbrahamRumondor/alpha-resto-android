@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.Navigation
 import com.example.alfaresto_customersapp.R
@@ -47,6 +48,10 @@ class RestoFragment : Fragment() {
             transaction.replace(R.id.fragmentContainerView, ListAllMenuFragment())
             transaction.addToBackStack(null)
             transaction.commit()
+        }
+
+        viewModel.username.observe(viewLifecycleOwner) { username ->
+            binding.tvGreetings.setText(getString(R.string.greetings, username))
         }
 
         lifecycleScope.launch {

@@ -39,6 +39,7 @@ class RestoViewModel @Inject constructor(
     init {
         fetchMenus()
         fetchCart()
+        fetchCurrentUser()
     }
 
     private fun fetchMenus() {
@@ -136,4 +137,20 @@ class RestoViewModel @Inject constructor(
 //            Log.w("PushNotificationService", "User not authenticated")
 //        }
     }
+
+    private fun fetchCurrentUser() {
+        viewModelScope.launch {
+            userUseCase.getCurrentUser().observeForever { user ->
+                if (user == null) {
+                    Log.d("TEST", "User is null, waiting for data...")
+                    // Optionally, you can show a loading state or handle the null case
+                    return@observeForever
+                }
+
+                Log.d("Resto viewmodel", "User: ${user.userName}")
+                _username.value = user.userName
+            }
+        }
+    }
+
 }

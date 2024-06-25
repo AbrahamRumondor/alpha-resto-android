@@ -12,7 +12,6 @@
     <string name="register_here">Register here</string>
     <string name="alfaresto">AlfaResto</string>
     <string name="logo">logo</string>
-    <string name="_0">0</string>
     <string name="deliver_to">Deliver to:</string>
     <string name="hi_bella">Hi, Bella!</string>
     <string name="menuimageview">menuImageView</string>
@@ -62,4 +61,9 @@
     <string name="soft_shell_taco">Soft Shell Taco</string>
     <string name="add_to_cart">Add To Cart</string>
     <string name="_1">1</string>
+    <string name="menuimage">menuImage</string>
+    <string name="cartlogo">cartLogo</string>
+    <string name="list_all_menu">List All Menu</string>
+    <string name="add_to_menu">Add to Menu</string>
+    <string name="greetings">Hi, %1$s</string>
 </resources>
