@@ -8,9 +8,10 @@ import com.example.alfaresto_customersapp.domain.repository.MenuRepository
 import com.google.firebase.firestore.CollectionReference
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
+import javax.inject.Named
 
 class MenuRepositoryImpl @Inject constructor(
-    private val menusRef: CollectionReference
+    @Named("menusRef") private val menusRef: CollectionReference
 ) : MenuRepository {
 
     private val _menus = MutableLiveData<List<Menu>>(emptyList())

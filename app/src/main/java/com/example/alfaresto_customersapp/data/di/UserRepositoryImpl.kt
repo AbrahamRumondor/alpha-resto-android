@@ -1,8 +1,8 @@
 package com.example.alfaresto_customersapp.data.di
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.liveData
 import com.example.alfaresto_customersapp.data.model.AddressResponse
 import com.example.alfaresto_customersapp.data.model.UserResponse
 import com.example.alfaresto_customersapp.domain.model.Address
@@ -23,18 +23,21 @@ class UserRepositoryImpl @Inject constructor(
     private val _addresses = MutableLiveData<List<Address>>(emptyList())
     private val addresses: LiveData<List<Address>> = _addresses
 
-    override suspend fun getCurrentUser(): LiveData<User> {
-        return liveData {
-            try {
-                val snapshot = usersRef.get().await()
-                val userList = snapshot.toObjects(UserResponse::class.java)
-                    .map { UserResponse.transform(it) }
-                _currentUser.value = userList.first()
-            } catch (e: Exception) {
-                _currentUser.value = User()
-            }
-            currentUser.value?.let { emit(it) }
+    override suspend fun getCurrentUser(uid: String): LiveData<User> {
+        try {
+            val snapshot = usersRef.get().await()
+            val user = snapshot.toObjects(UserResponse::class.java)
+                .find { it.userID == uid }
+
+            _currentUser.value = user?.let { UserResponse.transform(it) }
+        } catch (e: Exception) {
+            _currentUser.value = User()
+
+            Log.e("UserRepositoryImpl", "Error fetching user", e)
         }
+
+        Log.d("UserRepositoryImpl", "User: ${currentUser.value}")
+        return currentUser
     }
 
     override suspend fun getUserAddresses(uid: String): LiveData<List<Address>> {

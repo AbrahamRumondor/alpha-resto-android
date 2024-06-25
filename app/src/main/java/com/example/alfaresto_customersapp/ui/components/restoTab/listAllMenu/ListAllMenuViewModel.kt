@@ -12,10 +12,11 @@ import com.google.firebase.firestore.CollectionReference
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
+import javax.inject.Named
 
 @HiltViewModel
 class ListAllMenuViewModel @Inject constructor(
-    private val menusRef: CollectionReference
+    @Named("menusRef") private val menusRef: CollectionReference
 ) : ViewModel() {
 
     val menuList: Flow<PagingData<Menu>> = Pager(

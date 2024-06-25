@@ -39,6 +39,10 @@ class RestoFragment : Fragment() {
             transaction.commit()
         }
 
+        viewModel.username.observe(viewLifecycleOwner) { username ->
+            binding.tvGreetings.setText(getString(R.string.greetings, username))
+        }
+
         viewModel.menus.observe(viewLifecycleOwner) { menus ->
             if (menus.isEmpty()) {
                 Log.d("RestoFragment", "Menus is empty, waiting for data...")

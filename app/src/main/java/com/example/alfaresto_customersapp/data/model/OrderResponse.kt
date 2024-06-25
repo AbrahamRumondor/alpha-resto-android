@@ -8,13 +8,13 @@ data class OrderResponse(
     @set:PropertyName("order_id")
     var orderID: String = "",
 
-    @get:PropertyName("user_id")
-    @set:PropertyName("user_id")
-    var userID: String = "",
+    @get:PropertyName("user_name")
+    @set:PropertyName("user_name")
+    var userName: String = "",
 
-    @get:PropertyName("address_id")
-    @set:PropertyName("address_id")
-    var addressID: String = "",
+    @get:PropertyName("full_address")
+    @set:PropertyName("full_address")
+    var fullAddress: String = "",
 
     @get:PropertyName("resto_id")
     @set:PropertyName("resto_id")
@@ -24,31 +24,36 @@ data class OrderResponse(
     @set:PropertyName("order_date")
     var orderDate: String = "",
 
-    @get:PropertyName("order_payment_method")
-    @set:PropertyName("order_payment_method")
-    var orderPaymentMethod: String = "",
+    @get:PropertyName("payment_method")
+    @set:PropertyName("payment_method")
+    var paymentMethod: String = "",
 
     @get:PropertyName("total_price")
     @set:PropertyName("total_price")
-    var totalPrice: Int = -1,
+    var totalPrice: Int = 0,
+
+    val latitude: Double = 0.0,
+    val longitude: Double = 0.0,
 
     @get:PropertyName("order_items")
     @set:PropertyName("order_items")
     var orderItems: List<OrderItemResponse>
 ) {
     // Public no-argument constructor required by Firestore
-    constructor() : this("", "", "", "", "", "", 0, emptyList())
+    constructor() : this("", "", "", "", "", "", 0, 0.0, 0.0, emptyList())
 
     companion object {
         fun transform(orderResponse: OrderResponse): Order {
             return Order(
                 orderID = orderResponse.orderID,
-                userID = orderResponse.userID,
-                addressID = orderResponse.addressID,
+                userName = orderResponse.userName,
+                fullAddress = orderResponse.fullAddress,
                 restoID = orderResponse.restoID,
                 orderDate = orderResponse.orderDate,
-                orderPaymentMethod = orderResponse.orderPaymentMethod,
+                paymentMethod = orderResponse.paymentMethod,
                 totalPrice = orderResponse.totalPrice,
+                latitude = orderResponse.latitude,
+                longitude = orderResponse.longitude,
                 orderItems = orderResponse.orderItems.map { OrderItemResponse.transform(it) }
             )
         }

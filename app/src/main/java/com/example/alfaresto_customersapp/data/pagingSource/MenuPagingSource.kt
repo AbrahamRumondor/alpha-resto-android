@@ -8,9 +8,10 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.toObjects
 import kotlinx.coroutines.tasks.await
+import javax.inject.Named
 
 class MenuPagingSource(
-    private val menusRef: CollectionReference
+    @Named("menusRef") private val menusRef: CollectionReference
 ) : PagingSource<QuerySnapshot, Menu>() {
 
     override suspend fun load(params: LoadParams<QuerySnapshot>): LoadResult<QuerySnapshot, Menu> {

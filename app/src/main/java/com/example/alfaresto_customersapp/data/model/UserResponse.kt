@@ -20,16 +20,12 @@ data class UserResponse(
     @set:PropertyName("user_email")
     var userEmail: String = "",
 
-    @get:PropertyName("user_password")
-    @set:PropertyName("user_password")
-    var userPassword: String = "",
-
     @get:PropertyName("user_address")
     @set:PropertyName("user_address")
     var userAddress: List<AddressResponse> = mutableListOf()
 ) {
     // Public no-argument constructor required by Firestore
-    constructor() : this("", "", "", "", "", mutableListOf())
+    constructor() : this("", "", "", "", mutableListOf())
 
     companion object {
         fun transform(userResponse: UserResponse): User {
@@ -38,7 +34,6 @@ data class UserResponse(
                 userName = userResponse.userName,
                 userNoTelp = userResponse.userNoTelp,
                 userEmail = userResponse.userEmail,
-                userPassword = userResponse.userPassword,
                 userAddress = userResponse.userAddress.map { AddressResponse.transform(it) }
             )
         }
