@@ -1,5 +1,6 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu.adapter
 
+import android.util.Log
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil

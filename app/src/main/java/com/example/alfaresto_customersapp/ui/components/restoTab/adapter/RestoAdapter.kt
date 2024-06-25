@@ -32,5 +32,4 @@ class RestoAdapter : RecyclerView.Adapter<RestoViewHolder>() {
     fun setItemListener(menuListener: MenuListener) {
         this.menuListener = menuListener
     }
-
 }

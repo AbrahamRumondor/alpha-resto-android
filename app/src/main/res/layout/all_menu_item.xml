@@ -10,13 +10,12 @@
     app:cardUseCompatPadding="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clActionButtons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/menu_image_iv"
+            android:id="@+id/iv_menu_image"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:contentDescription="@string/menu_image_view"
@@ -33,12 +32,12 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/menu_image_iv"
+            app:layout_constraintTop_toBottomOf="@id/iv_menu_image"
             android:layout_marginHorizontal="20dp"
             android:padding="10dp">
 
             <TextView
-                android:id="@+id/menu_name_tv"
+                android:id="@+id/tv_menu_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/soft_shell_taco"
@@ -46,7 +45,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/menu_price_tv"
+                android:id="@+id/tv_menu_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/rp_50_000"
@@ -54,7 +53,7 @@
         </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/menu_add_btn"
+            android:id="@+id/btn_menu_add"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/menu_add_button"
@@ -70,12 +69,13 @@
             android:textSize="18sp" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_action_buttons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/menu_add_btn"
-            app:layout_constraintBottom_toBottomOf="@id/menu_add_btn"
+            app:layout_constraintTop_toTopOf="@id/btn_menu_add"
+            app:layout_constraintBottom_toBottomOf="@id/btn_menu_add"
             >
 
             <androidx.appcompat.widget.AppCompatButton
@@ -92,7 +92,7 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/quantityPerItem"
+                android:id="@+id/tv_order_qty"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"

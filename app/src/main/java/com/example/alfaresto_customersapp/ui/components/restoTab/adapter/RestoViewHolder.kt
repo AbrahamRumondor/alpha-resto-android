@@ -28,8 +28,8 @@ class RestoViewHolder(
             val isVisible = menu.orderCartQuantity != 0
             clActionButtons.visibility = View.VISIBLE
             btnMenuAdd.visibility = View.INVISIBLE
-//            clActionButtons.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
-//            menuAddBtn.visibility = if (isVisible) View.INVISIBLE else View.VISIBLE
+            clActionButtons.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
+            btnMenuAdd.visibility = if (isVisible) View.INVISIBLE else View.VISIBLE
 
             val clickListener = View.OnClickListener { view ->
                 when (view) {
