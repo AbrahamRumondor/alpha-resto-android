@@ -6,8 +6,8 @@ data class Menu(
     val restoId:String = "",
     val menuName: String = "",
     val menuDescription: String = "",
-    val menuPrice: Int = -1,
-    val menuStock: Int = -1,
+    val menuPrice: Int = 0,
+    val menuStock: Int = 0,
     val menuImage: String = "",
 
     // specific application use
