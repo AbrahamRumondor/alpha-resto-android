@@ -45,7 +45,7 @@ class RestoViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val fetchedMenus = menuUseCase.getMenus().value
-                _menus.value = fetchedMenus
+                _menus.value = fetchedMenus ?: emptyList()
             } catch (e: Exception) {
                 Log.e("MENU", "Error fetching menus: ${e.message}")
             }

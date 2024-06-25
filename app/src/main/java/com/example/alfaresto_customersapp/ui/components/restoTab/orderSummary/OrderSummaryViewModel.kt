@@ -1,21 +1,24 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary
 
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
-import com.example.alfaresto_customersapp.data.remote.FcmApi
-import com.example.alfaresto_customersapp.data.remote.NotificationBody
-import com.example.alfaresto_customersapp.data.remote.SendMessageDto
+import com.example.alfaresto_customersapp.data.remote.pushNotification.NotificationBody
+import com.example.alfaresto_customersapp.data.remote.pushNotification.SendMessageDto
 import com.example.alfaresto_customersapp.domain.error.FirestoreCallback
+import com.example.alfaresto_customersapp.domain.error.Result
 import com.example.alfaresto_customersapp.domain.model.Address
 import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.domain.model.Order
 import com.example.alfaresto_customersapp.domain.model.OrderItem
 import com.example.alfaresto_customersapp.domain.model.Token
 import com.example.alfaresto_customersapp.domain.model.User
+import com.example.alfaresto_customersapp.domain.repository.FcmApiRepository
 import com.example.alfaresto_customersapp.domain.usecase.MenuUseCase
 import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
+import com.example.alfaresto_customersapp.utils.getText
 import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_ADDRESS
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
@@ -23,9 +26,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.create
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -34,7 +34,8 @@ import javax.inject.Inject
 @HiltViewModel
 class OrderSummaryViewModel @Inject constructor(
     private val menuUseCase: MenuUseCase,
-    private val cartUseCase: CartUseCase
+    private val cartUseCase: CartUseCase,
+    private val fcmApiRepository: FcmApiRepository
 ) : ViewModel() {
 
     val db = Firebase.firestore
@@ -92,7 +93,7 @@ class OrderSummaryViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val fetchedMenus = menuUseCase.getMenus().value
-                _menus.value = fetchedMenus
+                _menus.value = fetchedMenus ?: emptyList()
             } catch (e: Exception) {
                 Log.e("MENU", "Error fetching menus: ${e.message}")
             }
@@ -151,7 +152,7 @@ class OrderSummaryViewModel @Inject constructor(
     }
 
     // TODO 1:userID,addressID,restoID (fetch dr firestore) | 2:menuID (fetch dari firestore)
-    fun saveOrderInDatabase(username: String?) {
+    fun saveOrderInDatabase(username: String?, onResult: (msg: String) -> Unit) {
         val PAYMENT_METHOD = _orders.value.size - 2
         val TOTAL = orders.value.size - 3
 
@@ -216,7 +217,7 @@ class OrderSummaryViewModel @Inject constructor(
                     }
                 }
 
-                sendNotificationToResto()
+                sendNotificationToResto(onResult)
             }
         }
     }
@@ -246,13 +247,7 @@ class OrderSummaryViewModel @Inject constructor(
         return dateFormat.format(currentDate)
     }
 
-    private val api: FcmApi = Retrofit.Builder()
-        .baseUrl("http://192.168.196.165:8081/")
-        .addConverterFactory(MoshiConverterFactory.create())
-        .build()
-        .create()
-
-    private fun sendNotificationToResto() {
+    private fun sendNotificationToResto(onResult: (msg: String) -> Unit) {
         db.collection("users").document("amnRLCt7iYGogz6JRxi5")
             .collection("tokens")
             .get()
@@ -268,7 +263,8 @@ class OrderSummaryViewModel @Inject constructor(
 
                 sendMessageToBackend(
                     message = "There's new order. Check your Resto App",
-                    token = latestToken.userToken
+                    token = latestToken.userToken,
+                    onResult
                 )
             }
             .addOnFailureListener {
@@ -276,7 +272,7 @@ class OrderSummaryViewModel @Inject constructor(
             }
     }
 
-    private fun sendMessageToBackend(message: String, token: String) {
+    private fun sendMessageToBackend(message: String, token: String, onResult: (msg: String) -> Unit) {
         viewModelScope.launch {
             val messageDto = SendMessageDto(
                 to = token,
@@ -286,11 +282,16 @@ class OrderSummaryViewModel @Inject constructor(
                 )
             )
 
-            try {
-                api.sendMessage(messageDto)
-            } catch (e: Exception) {
-                Log.d("test", e.toString())
+            when(val result = fcmApiRepository.sendMessage(messageDto)) {
+                is Result.Success -> {
+                    onResult(result.data)
+                }
+
+                is Result.Error -> {
+                    onResult(result.error.getText())
+                }
             }
+
         }
     }
 

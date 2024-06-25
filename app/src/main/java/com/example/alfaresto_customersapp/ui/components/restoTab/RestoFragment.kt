@@ -40,7 +40,7 @@ class RestoFragment : Fragment() {
 
 //        viewModel.getToken()
 
-        val menuRv = binding.menuRv
+        val menuRv = binding.rvMenu
 
         binding.allMenuBtn.setOnClickListener {
             val transaction = requireActivity().supportFragmentManager.beginTransaction()

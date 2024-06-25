@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
@@ -138,15 +139,15 @@ class OrderSummaryFragment : Fragment() {
                 orderSummaryViewModel.getUserFromDB(USER_ID, object : FirestoreCallback {
                     override fun onSuccess(user: User?) {
                         if (user != null) {
-                            orderSummaryViewModel.saveOrderInDatabase(user.name)
+                            orderSummaryViewModel.saveOrderInDatabase(user.name) {
+                                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+                            }
                         } else {
-                            // Handle the case where the user is not found
                             Log.d("test", "User not found")
                         }
                     }
 
                     override fun onFailure(exception: Exception) {
-                        // Handle the error
                         Log.d("test", "Error fetching user: $exception")
                     }
                 })
