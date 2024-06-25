@@ -2,6 +2,8 @@ package com.example.alfaresto_customersapp.ui.di
 
 import com.example.alfaresto_customersapp.domain.usecase.MenuUseCase
 import com.example.alfaresto_customersapp.domain.usecase.MenuUseCaseImpl
+import com.example.alfaresto_customersapp.domain.usecase.auth.AuthUseCase
+import com.example.alfaresto_customersapp.domain.usecase.auth.AuthUseCaseImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -17,4 +19,10 @@ abstract class UseCaseModule {
     abstract fun provideMenuUseCase(
         menuUseCaseImpl: MenuUseCaseImpl
     ): MenuUseCase
+
+    @Binds
+    @ViewModelScoped
+    abstract fun provideAuthUseCase(
+        authUseCaseImpl: AuthUseCaseImpl
+    ): AuthUseCase
 }

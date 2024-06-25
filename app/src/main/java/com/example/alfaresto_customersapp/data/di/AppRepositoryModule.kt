@@ -1,5 +1,6 @@
 package com.example.alfaresto_customersapp.data.di
 
+import com.example.alfaresto_customersapp.domain.repository.AuthRepository
 import com.example.alfaresto_customersapp.domain.repository.MenuRepository
 import dagger.Binds
 import dagger.Module
@@ -14,4 +15,9 @@ abstract class AppRepositoryModule {
     abstract fun provideMenuRepository(
         menuRepositoryImpl: MenuRepositoryImpl
     ): MenuRepository
+
+    @Binds
+    abstract fun provideAuthRepository(
+        authRepositoryImpl: AuthRepositoryImpl
+    ): AuthRepository
 }

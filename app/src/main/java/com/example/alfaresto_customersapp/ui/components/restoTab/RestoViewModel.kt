@@ -7,13 +7,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.domain.usecase.MenuUseCase
+import com.example.alfaresto_customersapp.domain.usecase.auth.AuthUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class RestoViewModel @Inject constructor(
-    private val menuUseCase: MenuUseCase
+    private val menuUseCase: MenuUseCase,
+    private val authUseCase: AuthUseCase
 ) : ViewModel() {
 
     private val _menus: MutableLiveData<List<Menu>> = MutableLiveData()
@@ -21,6 +23,7 @@ class RestoViewModel @Inject constructor(
 
     init {
         fetchMenus()
+        fetchCurrentUser()
     }
 
     private fun fetchMenus() {
@@ -35,6 +38,11 @@ class RestoViewModel @Inject constructor(
                 _menus.value = menus
             }
         }
+    }
+
+    private fun fetchCurrentUser() {
+        val user = authUseCase.getCurrentUserID()
+        Log.d("Resto viewmodel", "User: ${user}")
     }
 
 }
