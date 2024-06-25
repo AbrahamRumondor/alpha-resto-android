@@ -1,8 +1,8 @@
 package com.example.alfaresto_customersapp.domain.repository
 
+import androidx.lifecycle.LiveData
 import com.example.alfaresto_customersapp.domain.model.Menu
-import kotlinx.coroutines.flow.StateFlow
 
 interface MenuRepository {
-    suspend fun getMenus(): StateFlow<List<Menu>>
+    suspend fun getMenus(): LiveData<List<Menu>>
 }

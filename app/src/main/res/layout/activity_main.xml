@@ -18,8 +18,8 @@
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView"
         android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="@dimen/dimen_none"
+        android:layout_height="@dimen/dimen_none"
         app:defaultNavHost="true"
         app:layout_constraintBottom_toTopOf="@id/bnv_customer_navigation"
         app:layout_constraintEnd_toEndOf="parent"

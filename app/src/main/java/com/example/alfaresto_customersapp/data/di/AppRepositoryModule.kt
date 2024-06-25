@@ -6,10 +6,10 @@ import com.example.alfaresto_customersapp.domain.repository.CartRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dagger.hilt.android.components.ViewModelComponent
 
-@Module(includes = [AppModule::class])
-@InstallIn(SingletonComponent::class)
+@Module
+@InstallIn(ViewModelComponent::class)
 abstract class AppRepositoryModule {
 
     @Binds
