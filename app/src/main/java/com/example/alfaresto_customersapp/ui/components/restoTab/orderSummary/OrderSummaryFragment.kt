@@ -136,10 +136,10 @@ class OrderSummaryFragment : Fragment() {
 
             override fun onCheckoutButtonClicked() {
                 // TODO send to firebase
-                orderSummaryViewModel.getUserFromDB(USER_ID, object : FirestoreCallback {
+                orderSummaryViewModel.getUserFromDB(object : FirestoreCallback {
                     override fun onSuccess(user: User?) {
                         if (user != null) {
-                            orderSummaryViewModel.saveOrderInDatabase(user.name) {
+                            orderSummaryViewModel.saveOrderInDatabase(user) {
                                 Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
                             }
                         } else {

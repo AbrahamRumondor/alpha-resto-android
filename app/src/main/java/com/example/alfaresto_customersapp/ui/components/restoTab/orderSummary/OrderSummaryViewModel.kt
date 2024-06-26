@@ -5,6 +5,8 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
+import com.example.alfaresto_customersapp.data.model.OrderItemResponse
+import com.example.alfaresto_customersapp.data.model.OrderResponse
 import com.example.alfaresto_customersapp.data.remote.pushNotification.NotificationBody
 import com.example.alfaresto_customersapp.data.remote.pushNotification.SendMessageDto
 import com.example.alfaresto_customersapp.domain.error.FirestoreCallback
@@ -15,9 +17,13 @@ import com.example.alfaresto_customersapp.domain.model.Order
 import com.example.alfaresto_customersapp.domain.model.OrderItem
 import com.example.alfaresto_customersapp.domain.model.Token
 import com.example.alfaresto_customersapp.domain.model.User
+import com.example.alfaresto_customersapp.domain.repository.AuthRepository
 import com.example.alfaresto_customersapp.domain.repository.FcmApiRepository
+import com.example.alfaresto_customersapp.domain.repository.UserRepository
 import com.example.alfaresto_customersapp.domain.usecase.MenuUseCase
+import com.example.alfaresto_customersapp.domain.usecase.auth.AuthUseCase
 import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
+import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase
 import com.example.alfaresto_customersapp.utils.getText
 import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_ADDRESS
 import com.google.firebase.Firebase
@@ -35,7 +41,9 @@ import javax.inject.Inject
 class OrderSummaryViewModel @Inject constructor(
     private val menuUseCase: MenuUseCase,
     private val cartUseCase: CartUseCase,
-    private val fcmApiRepository: FcmApiRepository
+    private val fcmApiRepository: FcmApiRepository,
+    private val authUseCase: AuthUseCase,
+    private val userUseCase: UserUseCase
 ) : ViewModel() {
 
     val db = Firebase.firestore
@@ -152,7 +160,7 @@ class OrderSummaryViewModel @Inject constructor(
     }
 
     // TODO 1:userID,addressID,restoID (fetch dr firestore) | 2:menuID (fetch dari firestore)
-    fun saveOrderInDatabase(username: String?, onResult: (msg: String) -> Unit) {
+    fun saveOrderInDatabase(user: User?, onResult: (msg: String) -> Unit) {
         val PAYMENT_METHOD = _orders.value.size - 2
         val TOTAL = orders.value.size - 3
 
@@ -163,13 +171,14 @@ class OrderSummaryViewModel @Inject constructor(
         val total = _orders.value[TOTAL] as Pair<Int, Int> ?: null
 
         if (!payment.isNullOrEmpty() && total != null && _orders.value.size > 4
-            && !username.isNullOrEmpty()
+            && user != null
         ) {
             db.runTransaction {
                 USER_ADDRESS?.let {
                     val order = Order(
                         id = getOrderDocumentId(),
-                        userName = username,
+                        userName = user.name,
+                        userId = user.id,
                         fullAddress = it.address,
                         restoID = "NrhoLsLLieXFly9dXj7vu2ETi1T2", // nanti buat singleton
                         date = getCurrentDateTime(),
@@ -178,8 +187,9 @@ class OrderSummaryViewModel @Inject constructor(
                         latitude = it.latitude,
                         longitude = it.longitude
                     )
+                    val orderToFirebase = OrderResponse.toResponse(order)
                     db.collection("orders").document(order.id)
-                        .set(order)
+                        .set(orderToFirebase)
                         .addOnSuccessListener {
                             Log.d(
                                 "TEST",
@@ -197,10 +207,10 @@ class OrderSummaryViewModel @Inject constructor(
                                 quantity = menu.orderCartQuantity,
                                 menuPrice = menu.price
                             )
-
+                            val orderItemResponse = OrderItemResponse.toResponse(orderItem)
                             db.collection("orders").document(order.id)
                                 .collection("order_items").document(orderItem.id)
-                                .set(orderItem)
+                                .set(orderItemResponse)
                                 .addOnSuccessListener {
                                     Log.d(
                                         "TEST",
@@ -222,23 +232,15 @@ class OrderSummaryViewModel @Inject constructor(
         }
     }
 
-    fun getUserFromDB(userId: String, callback: FirestoreCallback) {
-        db.collection("users").document(userId)
-            .get()
-            .addOnSuccessListener { document ->
-                if (document != null && document.exists()) {
-                    val user = document.toObject(User::class.java)
-                    Log.d("test", "SUCCESS FETCH DATA: $user")
-                    callback.onSuccess(user)
-                } else {
-                    Log.d("test", "No such document")
-                    callback.onSuccess(null)
-                }
+    fun getUserFromDB(callback: FirestoreCallback) {
+        viewModelScope.launch {
+            try {
+                val user = userUseCase.getCurrentUser()
+                callback.onSuccess(user.value)
+            } catch (e: Exception) {
+                callback.onFailure(e)
             }
-            .addOnFailureListener { exception ->
-                Log.d("test", "Error fetching data: $exception")
-                callback.onFailure(exception)
-            }
+        }
     }
 
     private fun getCurrentDateTime(): String {
