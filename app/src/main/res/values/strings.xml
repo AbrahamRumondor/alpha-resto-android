@@ -33,4 +33,37 @@
     <string name="_0">0</string>
     <string name="add_to_menu">Add to Menu</string>
     <string name="greetings">Hi, %1$s</string>
+    <string name="checkout">Checkout Order</string>
+    <string name="red_n_hot_taco">Red n Hot Taco</string>
+    <string name="spicy_chicken_beef">Spicy chicken, beef</string>
+    <string name="rp_50_000">Rp 50.000,-</string>
+    <string name="total">Total</string>
+    <string name="_2_items">(2 items)</string>
+    <string name="rp_112_000">Rp 112.000,-</string>
+    <string name="tempat_kerja">Tempat Kerja</string>
+    <string name="dummy_address">Alam Sutera, Jl. Jalur Sutera Bar. No.Kav. 7-9, RT.003/RW.006, Panunggangan Tim., Kec. Pinang, Kota Tangerang, Banten 15143</string>
+    <string name="icon_proceed">Icon_Proceed</string>
+    <string name="select_payment_method">Select payment method</string>
+    <string name="cod">COD</string>
+    <string name="gopay">GOPAY</string>
+    <string name="add_new_address">Add new address</string>
+    <string name="address">Address</string>
+    <string name="marker">marker</string>
+    <string name="go_to_settings">Go to settings</string>
+    <string name="we_re_sorry_we_need_your_location_permission_to_use_this_app">we\'re sorry we need your location permission to use this app</string>
+
+    <string name="dialog_to_settings_message">The app is unavailable because it needs the permissions that you denied</string>
+    <string name="permission_required">Permission Required</string>
+    <string name="settings">Settings</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="dialog_for_permission_message">This app requires location permissions for the apps to work</string>
+    <string name="access_granted">Access Granted</string>
+    <string name="dialog_for_enable_gps_message">Your GPS seems to be disabled. Do you want to enable it?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="address_label">Address Label</string>
+    <string name="address_detail">Address Detail</string>
+    <string name="save">Save</string>
+    <string name="menuimageview">menuImageView</string>
 </resources>

@@ -3,6 +3,7 @@ package com.example.alfaresto_customersapp.domain.usecase.cart
 import androidx.lifecycle.LiveData
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.domain.repository.CartRepository
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class CartUseCaseImpl @Inject constructor(
@@ -12,7 +13,7 @@ class CartUseCaseImpl @Inject constructor(
         repository.insertMenu(cartEntity)
     }
 
-    override fun getCart(): LiveData<List<CartEntity>> {
+    override fun getCart(): Flow<List<CartEntity>> {
         return repository.getCart()
     }
 

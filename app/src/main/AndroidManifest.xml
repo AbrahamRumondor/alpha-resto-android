@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
 
     <application
         android:name=".MainApplication"
@@ -14,7 +17,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AlfaRestoCustomersApp"
-        tools:targetApi="31">
+        tools:targetApi="tiramisu">
+
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyDgi6aV9k0sLJkTsXlbaUBRD2k_jUm6zpo"/>
+
         <activity
             android:name=".ui.components.registerPage.RegisterActivity"
             android:exported="true">
