@@ -1,12 +1,10 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.AllMenuItemBinding
 import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.ui.components.listener.MenuListener

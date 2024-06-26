@@ -2,16 +2,14 @@ package com.example.alfaresto_customersapp.ui.components.restoTab
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.databinding.FragmentRestoBinding
@@ -62,12 +60,17 @@ class RestoFragment : Fragment() {
                 }
                 viewModel.cart.collectLatest {
 
-                    if (it.isEmpty()){ Log.d("test", "NO DATA")
+                    if (it.isEmpty()) {
+                        Log.d("test", "NO DATA")
                         menuRv.adapter = adapter
                         setRestoAdapterButtons(it)
                         adapter.submitMenuList(menus)
                         menuRv.layoutManager =
-                            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                            LinearLayoutManager(
+                                requireContext(),
+                                LinearLayoutManager.HORIZONTAL,
+                                false
+                            )
                         return@collectLatest
                     }
 
@@ -90,7 +93,8 @@ class RestoFragment : Fragment() {
         }
 
         binding.ivIconCart.setOnClickListener {
-            Navigation.findNavController(requireView()).navigate(R.id.action_restoFragment_to_orderSummaryFragment)
+            Navigation.findNavController(requireView())
+                .navigate(R.id.action_restoFragment_to_orderSummaryFragment)
         }
     }
 
@@ -98,7 +102,7 @@ class RestoFragment : Fragment() {
         adapter.setItemListener(object : MenuListener {
             override fun onAddItemClicked(position: Int, menuId: String) {
                 var item: CartEntity? = null
-                    item = cart?.find { it.menuId == menuId }
+                item = cart?.find { it.menuId == menuId }
                 viewModel.addOrderQuantity(menuId, item)
                 adapter.notifyItemChanged(position)
             }

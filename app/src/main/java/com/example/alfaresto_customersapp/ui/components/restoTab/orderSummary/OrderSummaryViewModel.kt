@@ -1,7 +1,6 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary
 
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
@@ -17,12 +16,10 @@ import com.example.alfaresto_customersapp.domain.model.Order
 import com.example.alfaresto_customersapp.domain.model.OrderItem
 import com.example.alfaresto_customersapp.domain.model.Token
 import com.example.alfaresto_customersapp.domain.model.User
-import com.example.alfaresto_customersapp.domain.repository.AuthRepository
 import com.example.alfaresto_customersapp.domain.repository.FcmApiRepository
-import com.example.alfaresto_customersapp.domain.repository.UserRepository
-import com.example.alfaresto_customersapp.domain.usecase.MenuUseCase
 import com.example.alfaresto_customersapp.domain.usecase.auth.AuthUseCase
 import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
+import com.example.alfaresto_customersapp.domain.usecase.menu.MenuUseCase
 import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase
 import com.example.alfaresto_customersapp.utils.getText
 import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_ADDRESS
@@ -42,7 +39,6 @@ class OrderSummaryViewModel @Inject constructor(
     private val menuUseCase: MenuUseCase,
     private val cartUseCase: CartUseCase,
     private val fcmApiRepository: FcmApiRepository,
-    private val authUseCase: AuthUseCase,
     private val userUseCase: UserUseCase
 ) : ViewModel() {
 
@@ -274,7 +270,11 @@ class OrderSummaryViewModel @Inject constructor(
             }
     }
 
-    private fun sendMessageToBackend(message: String, token: String, onResult: (msg: String) -> Unit) {
+    private fun sendMessageToBackend(
+        message: String,
+        token: String,
+        onResult: (msg: String) -> Unit
+    ) {
         viewModelScope.launch {
             val messageDto = SendMessageDto(
                 to = token,
@@ -284,7 +284,7 @@ class OrderSummaryViewModel @Inject constructor(
                 )
             )
 
-            when(val result = fcmApiRepository.sendMessage(messageDto)) {
+            when (val result = fcmApiRepository.sendMessage(messageDto)) {
                 is Result.Success -> {
                     onResult(result.data)
                 }

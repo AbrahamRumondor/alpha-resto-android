@@ -61,4 +61,8 @@
     <string name="add_to_menu">Add to Menu</string>
     <string name="greetings">Hi, %1$s</string>
     <string name="_0">0"</string>
+    <string name="alfaresto">AlfaResto</string>
+    <string name="logo">logo</string>
+    <string name="name">name</string>
+    <string name="no_telp">no telp</string>
 </resources>
