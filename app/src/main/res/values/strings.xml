@@ -67,4 +67,8 @@
     <string name="add_to_menu">Add to Menu</string>
     <string name="greetings">Hi, %1$s</string>
     <string name="_0">0"</string>
+    <string name="chat_title">Chat</string>
+    <string name="message_hint">Type a message</string>
+    <string name="track_order">Track Order</string>
+    <string name="order_status">Order Status</string>
 </resources>
