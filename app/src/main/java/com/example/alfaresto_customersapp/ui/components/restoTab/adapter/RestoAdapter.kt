@@ -1,10 +1,8 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.adapter
 
-import android.util.Log
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.alfaresto_customersapp.domain.model.Menu
-import com.example.alfaresto_customersapp.ui.components.listener.AddressItemListener
 import com.example.alfaresto_customersapp.ui.components.listener.MenuListener
 
 class RestoAdapter : RecyclerView.Adapter<RestoViewHolder>() {

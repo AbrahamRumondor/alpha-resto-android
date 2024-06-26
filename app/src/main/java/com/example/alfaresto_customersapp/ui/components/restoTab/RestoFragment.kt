@@ -58,14 +58,14 @@ class RestoFragment : Fragment() {
                     return@collect
                 }
 
-                menuRv.adapter = adapter
-                adapter.submitMenuList(menus)
-                menuRv.layoutManager =
-                    LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-
                 viewModel.cart.collectLatest {
                     if (it.isEmpty()) {
                         Log.d("test", "NO DATA")
+                        menuRv.adapter = adapter
+                        setRestoAdapterButtons(it)
+                        adapter.submitMenuList(menus)
+                        menuRv.layoutManager =
+                            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                         return@collectLatest
                     }
 
@@ -78,8 +78,11 @@ class RestoFragment : Fragment() {
                         }
                     }
 
-                    adapter.submitMenuList(updatedMenus)
+                    menuRv.adapter = adapter
                     setRestoAdapterButtons(it)
+                    adapter.submitMenuList(updatedMenus)
+                    menuRv.layoutManager =
+                        LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                 }
             }
         }

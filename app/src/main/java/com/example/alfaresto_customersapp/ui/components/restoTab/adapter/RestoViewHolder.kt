@@ -15,24 +15,24 @@ class RestoViewHolder(
 
     fun bind(menu: Menu, position: Int, listener: MenuListener?) {
         binding.run {
-            this.menuNameTv.text = menu.name
-            this.menuPriceTv.text = menu.price.toString()
-            Glide.with(this.root)
+            tvMenuName.text = menu.name
+            tvMenuPrice.text = menu.price.toString()
+            tvOrderQty.text = menu.orderCartQuantity.toString()
+
+            Glide.with(root)
                 .load(menu.image)
                 .placeholder(android.R.drawable.ic_menu_report_image)
-                .into(this.menuImageIv)
-
-            tvOrderQty.text = menu.orderCartQuantity.toString()
+                .into(ivMenuImage)
 
             val isVisible = menu.orderCartQuantity != 0
             clActionButtons.visibility = View.VISIBLE
-            menuAddBtn.visibility = View.INVISIBLE
+            btnAddMenu.visibility = View.INVISIBLE
 //            clActionButtons.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
 //            menuAddBtn.visibility = if (isVisible) View.INVISIBLE else View.VISIBLE
 
             val clickListener = View.OnClickListener { view ->
                 when (view) {
-                    menuAddBtn, btnAddOrder -> listener?.onAddItemClicked(
+                    btnAddMenu, btnAddOrder -> listener?.onAddItemClicked(
                         position,
                         menuId = menu.id
                     )
@@ -41,7 +41,7 @@ class RestoViewHolder(
                 }
             }
 
-            menuAddBtn.setOnClickListener(clickListener)
+            btnAddMenu.setOnClickListener(clickListener)
             btnAddOrder.setOnClickListener(clickListener)
             btnDecreaseOrder.setOnClickListener(clickListener)
         }

@@ -15,7 +15,7 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/menu_image_iv"
+            android:id="@+id/iv_menu_image"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:contentDescription="@string/menuimageview"
@@ -32,33 +32,31 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/menu_image_iv"
+            app:layout_constraintTop_toBottomOf="@id/iv_menu_image"
             android:layout_marginHorizontal="20dp"
             android:padding="10dp">
 
             <TextView
-                android:id="@+id/menu_name_tv"
+                android:id="@+id/tv_menu_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Soft Shell Taco"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/menu_price_tv"
+                android:id="@+id/tv_menu_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Rp 50.000"
                 android:textSize="16sp" />
         </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/menu_add_btn"
+            android:id="@+id/btn_add_menu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/menu_add_button"
             android:padding="16dp"
-            android:text="ADD TO CART"
+            android:text="@string/add_to_cart"
             android:visibility="invisible"
             android:textAllCaps="false"
             android:textColor="@color/white"
@@ -74,8 +72,8 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/menu_add_btn"
-            app:layout_constraintBottom_toBottomOf="@id/menu_add_btn"
+            app:layout_constraintTop_toTopOf="@id/btn_add_menu"
+            app:layout_constraintBottom_toBottomOf="@id/btn_add_menu"
             >
 
             <androidx.appcompat.widget.AppCompatButton
@@ -97,7 +95,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:fontFamily="@font/bold"
-                android:text="1"
+                android:text="@string/_1"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
