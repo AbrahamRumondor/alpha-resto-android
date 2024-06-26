@@ -1,5 +1,6 @@
 package com.example.alfaresto_customersapp.ui.components.orderHistoryTab
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,7 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.FragmentOrderHistoryBinding
+import com.example.alfaresto_customersapp.ui.components.orderHistoryDetailPage.OrderHistoryDetailFragment
 import com.example.alfaresto_customersapp.ui.components.orderHistoryTab.adapter.OrderHistoryAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -47,6 +50,14 @@ class OrderHistoryFragment : Fragment() {
 
             }
         }
+
+        binding.btnOrderHistoryDetail.setOnClickListener {
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragmentContainerView, OrderHistoryDetailFragment())
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
     }
+
 
 }

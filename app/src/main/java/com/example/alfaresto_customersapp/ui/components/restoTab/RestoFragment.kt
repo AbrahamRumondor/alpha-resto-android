@@ -40,7 +40,7 @@ class RestoFragment : Fragment() {
         }
 
         viewModel.username.observe(viewLifecycleOwner) { username ->
-            binding.tvGreetings.setText(getString(R.string.greetings, username))
+            binding.tvGreetings.text = getString(R.string.greetings, username)
         }
 
         viewModel.menus.observe(viewLifecycleOwner) { menus ->
