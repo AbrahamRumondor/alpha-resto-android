@@ -8,4 +8,8 @@
     <color name="grey">#52616B</color>
     <color name="mainblack">#1E2022</color>
     <color name="green">#36EB48</color>
+    <color name="alfa_orange">#FA4A0C</color>
+    <color name="button_light_orange">#FE724C</color>
+    <color name="border_color_gray">#EEEEEE</color>
+    <color name="dark_gray">#9796A1</color>
 </resources>

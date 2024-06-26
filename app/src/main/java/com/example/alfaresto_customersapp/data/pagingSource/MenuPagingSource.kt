@@ -2,16 +2,17 @@ package com.example.alfaresto_customersapp.data.pagingSource
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.data.model.MenuResponse
 import com.example.alfaresto_customersapp.domain.model.Menu
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.QuerySnapshot
-import com.google.firebase.firestore.toObjects
 import kotlinx.coroutines.tasks.await
 import javax.inject.Named
 
 class MenuPagingSource(
-    @Named("menusRef") private val menusRef: CollectionReference
+    @Named("menusRef") private val menusRef: CollectionReference,
+    private val cartItems: List<CartEntity>?
 ) : PagingSource<QuerySnapshot, Menu>() {
 
     override suspend fun load(params: LoadParams<QuerySnapshot>): LoadResult<QuerySnapshot, Menu> {
@@ -20,10 +21,23 @@ class MenuPagingSource(
                 it.toObjects(MenuResponse::class.java)
             }.await()
 
-            val menus = currentPage.toObjects<MenuResponse>().map { MenuResponse.transform(it) }
+            val menus = currentPage.toObjects(MenuResponse::class.java).map {
+                MenuResponse.transform(it)
+            }
+
+            val updatedMenus = cartItems?.let {
+                menus.map { menu ->
+                    val cartItem = it.find { cart -> cart.menuId == menu.id }
+                    if (cartItem != null) {
+                        menu.copy(orderCartQuantity = cartItem.menuQty)
+                    } else {
+                        menu
+                    }
+                }
+            } ?: menus
 
             LoadResult.Page(
-                data = menus,
+                data = updatedMenus,
                 prevKey = null,
                 nextKey = null
             )

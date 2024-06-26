@@ -23,6 +23,10 @@ class OrderRepositoryImpl @Inject constructor(
             val snapshot = ordersRef.get().await()
             val orderList = snapshot.toObjects(OrderResponse::class.java)
             _orders.value = orderList.map { OrderResponse.transform(it) }
+
+            _orders.value?.map {
+                Log.d("test", it.toString())
+            }
         } catch (e: Exception) {
             _orders.value = emptyList()
 

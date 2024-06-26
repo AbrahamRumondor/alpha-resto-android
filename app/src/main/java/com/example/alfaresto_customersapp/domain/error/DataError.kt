@@ -1,6 +1,6 @@
 package com.example.alfaresto_customersapp.domain.error
 
-interface DataError {
+sealed interface DataError : Error {
     enum class Network : DataError {
         REQUEST_TIMEOUT,
         TOO_MANY_REQUESTS,

@@ -30,11 +30,11 @@ data class UserResponse(
     companion object {
         fun transform(userResponse: UserResponse): User {
             return User(
-                userID = userResponse.userID,
-                userName = userResponse.userName,
-                userNoTelp = userResponse.userNoTelp,
-                userEmail = userResponse.userEmail,
-                userAddress = userResponse.userAddress.map { AddressResponse.transform(it) }
+                id = userResponse.userID,
+                name = userResponse.userName,
+                phone = userResponse.userNoTelp,
+                email = userResponse.userEmail,
+                address = userResponse.userAddress.map { AddressResponse.transform(it) }
             )
         }
     }

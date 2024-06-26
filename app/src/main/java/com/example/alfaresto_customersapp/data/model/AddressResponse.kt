@@ -3,27 +3,33 @@ package com.example.alfaresto_customersapp.data.model
 import com.example.alfaresto_customersapp.domain.model.Address
 import com.google.firebase.firestore.PropertyName
 
+
 data class AddressResponse(
     @get:PropertyName("address_id")
     @set:PropertyName("address_id")
-    var addressID: String = "",
+    var id: String = "",
 
     @get:PropertyName("address_label")
     @set:PropertyName("address_label")
-    var addressLabel: String = "",
+    var label: String = "",
 
-    val address: String = "",
-    val latitude: Double = 0.0,
-    val longitude: Double = 0.0,
-) {
-    // Public no-argument constructor required by Firestore
-    constructor() : this("", "", "", 0.0, 0.0)
+    @get:PropertyName("address")
+    @set:PropertyName("address")
+    var address: String = "",
 
+    @get:PropertyName("latitude")
+    @set:PropertyName("latitude")
+    var latitude: Double = 0.0,
+
+    @get:PropertyName("longitude")
+    @set:PropertyName("longitude")
+    var longitude: Double = 0.0,
+){
     companion object {
         fun transform(addressResponse: AddressResponse): Address {
             return Address(
-                addressID = addressResponse.addressID,
-                addressLabel = addressResponse.addressLabel,
+                id = addressResponse.id,
+                label = addressResponse.label,
                 address = addressResponse.address,
                 latitude = addressResponse.latitude,
                 longitude = addressResponse.longitude

@@ -3,7 +3,7 @@ package com.example.alfaresto_customersapp.data.model
 import com.example.alfaresto_customersapp.domain.model.Menu
 import com.google.firebase.firestore.PropertyName
 
-data class MenuResponse(
+data class  MenuResponse(
     val id: String = "",
 
     @get:PropertyName("menu_description")
@@ -36,12 +36,12 @@ data class MenuResponse(
     companion object {
         fun transform(itemResponse: MenuResponse): Menu {
             return Menu(
-                menuId = itemResponse.id,
-                menuDescription = itemResponse.menuDescription,
-                menuImage = itemResponse.menuImage,
-                menuName = itemResponse.menuName,
-                menuPrice = itemResponse.menuPrice,
-                menuStock = itemResponse.menuStock,
+                id = itemResponse.id,
+                description = itemResponse.menuDescription,
+                image = itemResponse.menuImage,
+                name = itemResponse.menuName,
+                price = itemResponse.menuPrice,
+                stock = itemResponse.menuStock,
                 restoId = itemResponse.restoId
             )
         }

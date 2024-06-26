@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -18,6 +20,11 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val properties = Properties()
+        properties.load(project.rootProject.file("local.properties").inputStream())
+        manifestPlaceholders["location.apikey"] = properties.getProperty("MAPS_API_KEY")
+        buildConfigField("String", "MAPS_API_KEY", properties.getProperty("MAPS_API_KEY"))
     }
 
     buildTypes {
@@ -38,6 +45,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 
@@ -46,6 +54,10 @@ kapt {
 }
 
 dependencies {
+
+    implementation("com.google.firebase:firebase-messaging:24.0.0")
+    val coroutinesAndroid = "1.7.1"
+    val coroutinesCore = "1.6.4"
 
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.appcompat:appcompat:1.7.0")
@@ -70,12 +82,21 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.48")
     kapt("com.google.dagger:hilt-android-compiler:2.48")
 
-    // room
+    // glide
+    implementation("com.github.bumptech.glide:glide:4.12.0")
+    kapt("com.github.bumptech.glide:compiler:4.12.0")
+
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation("androidx.activity:activity-ktx:1.9.0")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$coroutinesAndroid")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesAndroid")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesCore")
+
     implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
     kapt("androidx.room:room-compiler:2.6.1")
 
-    // glide
-    implementation("com.github.bumptech.glide:glide:4.12.0")
-    kapt("com.github.bumptech.glide:compiler:4.12.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
 }

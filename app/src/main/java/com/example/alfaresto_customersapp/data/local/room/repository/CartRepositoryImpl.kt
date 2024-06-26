@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import com.example.alfaresto_customersapp.data.local.room.CartDao
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.domain.repository.CartRepository
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -16,7 +17,7 @@ class CartRepositoryImpl @Inject constructor(
         cartDao.insertMenu(cartEntity)
     }
 
-    override fun getCart(): LiveData<List<CartEntity>> {
+    override fun getCart(): Flow<List<CartEntity>> {
         return cartDao.getCart()
     }
 
