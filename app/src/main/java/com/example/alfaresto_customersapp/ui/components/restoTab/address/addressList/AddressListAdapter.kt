@@ -30,7 +30,7 @@ class AddressListAdapter(private var addresses: List<Address>, private val conte
                 }
 
                 cvAddress.setOnClickListener {
-                    UserConstants.USER_ADDRESS = address.id
+                    UserConstants.USER_ADDRESS = address
                     addressItemListener?.onAddressClicked(position, addressId = address.id)
                 }
             }

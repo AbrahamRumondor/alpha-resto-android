@@ -4,13 +4,17 @@ import com.example.alfaresto_customersapp.domain.model.OrderItem
 import com.google.firebase.firestore.PropertyName
 
 data class OrderItemResponse(
-    val id: String,
+    @get:PropertyName("order_item_id")
+    @set:PropertyName("order_item_id")
+    var id: String,
 
-    @get:PropertyName("menu_id")
-    @set:PropertyName("menu_id")
-    var menuID: String = "",
+    @get:PropertyName("menu_name")
+    @set:PropertyName("menu_name")
+    var menuName: String = "",
 
-    val qty: Int = 0,
+    @get:PropertyName("quantity")
+    @set:PropertyName("quantity")
+    var quantity: Int = 0,
 
     @get:PropertyName("menu_price")
     @set:PropertyName("menu_price")
@@ -22,9 +26,19 @@ data class OrderItemResponse(
         fun transform(orderItemResponse: OrderItemResponse): OrderItem {
             return OrderItem(
                 id = orderItemResponse.id,
-                menuID = orderItemResponse.menuID,
-                quantity = orderItemResponse.qty,
+                menuName = orderItemResponse.menuName,
+                quantity = orderItemResponse.quantity,
                 menuPrice = orderItemResponse.menuPrice
+            )
+        }
+
+        fun toResponse(orderItem: OrderItem): OrderItemResponse {
+            val newOrderItem = OrderItemResponse()
+            return newOrderItem.copy(
+                id = orderItem.id,
+                menuName = orderItem.menuName,
+                quantity = orderItem.quantity,
+                menuPrice = orderItem.menuPrice
             )
         }
     }

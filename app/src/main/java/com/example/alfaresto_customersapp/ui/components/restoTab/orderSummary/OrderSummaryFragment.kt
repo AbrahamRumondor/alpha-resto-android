@@ -1,10 +1,12 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
@@ -12,9 +14,12 @@ import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.databinding.FragmentOrderSummaryBinding
 import com.example.alfaresto_customersapp.databinding.OrderPaymentMethodBinding
+import com.example.alfaresto_customersapp.domain.error.FirestoreCallback
 import com.example.alfaresto_customersapp.domain.model.Menu
+import com.example.alfaresto_customersapp.domain.model.User
 import com.example.alfaresto_customersapp.ui.components.listener.OrderSummaryItemListener
 import com.example.alfaresto_customersapp.ui.components.restoTab.address.addressList.AddressListViewModel
+import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_ID
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -130,7 +135,21 @@ class OrderSummaryFragment : Fragment() {
 
             override fun onCheckoutButtonClicked() {
                 // TODO send to firebase
-                orderSummaryViewModel.saveOrderInDatabase()
+                orderSummaryViewModel.getUserFromDB(object : FirestoreCallback {
+                    override fun onSuccess(user: User?) {
+                        if (user != null) {
+                            orderSummaryViewModel.saveOrderInDatabase(user) {
+                                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+                            }
+                        } else {
+                            Log.d("test", "User not found")
+                        }
+                    }
+
+                    override fun onFailure(exception: Exception) {
+                        Log.d("test", "Error fetching user: $exception")
+                    }
+                })
             }
 
         })

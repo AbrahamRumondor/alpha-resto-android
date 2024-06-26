@@ -58,12 +58,12 @@ class LoginActivity : AppCompatActivity()  {
         }
         val registerTextClicked: TextView = binding.registerTextView
         registerTextClicked.setOnClickListener {
-            directToRegister(it)
+            goToRegisterPage(it)
         }
     }
 }
 
-fun directToRegister(view: View) {
+fun goToRegisterPage(view: View) {
     val intent = Intent(view.context.applicationContext, RegisterActivity::class.java)
     view.context.startActivity(intent)
 }

@@ -2,14 +2,16 @@ package com.example.alfaresto_customersapp.ui.components.restoTab
 
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.Navigation
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.navigation.Navigation
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.databinding.FragmentRestoBinding
@@ -22,9 +24,8 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class RestoFragment : Fragment() {
-
     private lateinit var binding: FragmentRestoBinding
-    private val viewModel: RestoViewModel by viewModels()
+    private val viewModel: RestoViewModel by activityViewModels()
     private val adapter by lazy { RestoAdapter() }
 
     override fun onCreateView(
@@ -38,6 +39,10 @@ class RestoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+//        viewModel.getToken()
+
+        val menuRv = binding.rvMenu
+
         binding.allMenuBtn.setOnClickListener {
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
             transaction.replace(R.id.fragmentContainerView, ListAllMenuFragment())
@@ -46,10 +51,8 @@ class RestoFragment : Fragment() {
         }
 
         viewModel.username.observe(viewLifecycleOwner) { username ->
-            binding.tvGreetings.text = getString(R.string.greetings, username)
+            binding.tvGreetings.setText(getString(R.string.greetings, username))
         }
-
-        val menuRv = binding.rvMenu
 
         lifecycleScope.launch {
             viewModel.menus.collect { menus ->
@@ -57,10 +60,9 @@ class RestoFragment : Fragment() {
                     Log.d("MENU", "Menus is empty, waiting for data...")
                     return@collect
                 }
-
                 viewModel.cart.collectLatest {
-                    if (it.isEmpty()) {
-                        Log.d("test", "NO DATA")
+
+                    if (it.isEmpty()){ Log.d("test", "NO DATA")
                         menuRv.adapter = adapter
                         setRestoAdapterButtons(it)
                         adapter.submitMenuList(menus)
@@ -87,9 +89,8 @@ class RestoFragment : Fragment() {
             }
         }
 
-        binding.btnCart.setOnClickListener {
-            Navigation.findNavController(requireView())
-                .navigate(R.id.action_restoFragment_to_orderSummaryFragment)
+        binding.ivIconCart.setOnClickListener {
+            Navigation.findNavController(requireView()).navigate(R.id.action_restoFragment_to_orderSummaryFragment)
         }
     }
 
@@ -97,7 +98,7 @@ class RestoFragment : Fragment() {
         adapter.setItemListener(object : MenuListener {
             override fun onAddItemClicked(position: Int, menuId: String) {
                 var item: CartEntity? = null
-                item = cart?.find { it.menuId == menuId }
+                    item = cart?.find { it.menuId == menuId }
                 viewModel.addOrderQuantity(menuId, item)
                 adapter.notifyItemChanged(position)
             }

@@ -1,5 +1,6 @@
 package com.example.alfaresto_customersapp.ui.components.registerPage
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
@@ -68,14 +69,14 @@ class RegisterActivity : AppCompatActivity() {
         }
         val loginTextClicked: TextView = binding.loginTextView
         loginTextClicked.setOnClickListener {
-            directToLogin(it)
+            goToLoginPage(it.context)
         }
     }
 }
 
-fun directToLogin(view: View) {
-    val intent = Intent(view.context.applicationContext, LoginActivity::class.java)
-    view.context.startActivity(intent)
+fun goToLoginPage(context: Context) {
+    val intent = Intent(context, LoginActivity::class.java)
+    context.startActivity(intent)
 }
 
 fun RegisterActivity.registerAuth(email: String, image: String, name: String, noTelp: String, password: String) {
@@ -86,8 +87,7 @@ fun RegisterActivity.registerAuth(email: String, image: String, name: String, no
                 val id = user?.uid ?: return@addOnCompleteListener
                 addToFirestore(email, id, image, name, noTelp, password)
                 Toast.makeText(this, R.string.register_success, Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, LoginActivity::class.java)
-                startActivity(intent)
+                goToLoginPage(this)
             } else {
                 Toast.makeText(this, R.string.register_failed, Toast.LENGTH_SHORT).show()
             }

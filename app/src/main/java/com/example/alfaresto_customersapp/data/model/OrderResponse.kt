@@ -1,6 +1,7 @@
 package com.example.alfaresto_customersapp.data.model
 
 import com.example.alfaresto_customersapp.domain.model.Order
+import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.PropertyName
 
 data class OrderResponse(
@@ -20,6 +21,10 @@ data class OrderResponse(
     @set:PropertyName("resto_id")
     var restoID: String = "",
 
+    @get:PropertyName("user_id")
+    @set:PropertyName("user_id")
+    var userId: String = "",
+
     @get:PropertyName("order_date")
     @set:PropertyName("order_date")
     var date: String = "",
@@ -34,13 +39,9 @@ data class OrderResponse(
 
     val latitude: Double = 0.0,
     val longitude: Double = 0.0,
-
-    @get:PropertyName("order_items")
-    @set:PropertyName("order_items")
-    var items: List<OrderItemResponse>
 ) {
     // Public no-argument constructor required by Firestore
-    constructor() : this("", "", "", "", "", "", 0, 0.0, 0.0, emptyList())
+    constructor() : this("", "", "", "", "", "", "", 0, 0.0, 0.0)
 
     companion object {
         fun transform(orderResponse: OrderResponse): Order {
@@ -54,7 +55,23 @@ data class OrderResponse(
                 totalPrice = orderResponse.totalPrice,
                 latitude = orderResponse.latitude,
                 longitude = orderResponse.longitude,
-                items = orderResponse.items.map { OrderItemResponse.transform(it) }
+                userId = orderResponse.userId
+            )
+        }
+
+        fun toResponse(order: Order): OrderResponse {
+            val newOrder = OrderResponse()
+            return newOrder.copy(
+                id = order.id,
+                userName = order.userName,
+                fullAddress = order.fullAddress,
+                restoID = order.restoID,
+                date = order.date,
+                paymentMethod = order.paymentMethod,
+                totalPrice = order.totalPrice,
+                latitude = order.latitude,
+                longitude = order.longitude,
+                userId = order.userId
             )
         }
     }

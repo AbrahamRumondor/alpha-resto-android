@@ -22,7 +22,7 @@
             android:id="@+id/img_menu"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"
+            android:scaleType="fitXY"
             android:src="@drawable/food_dummy" />
 
     </androidx.cardview.widget.CardView>

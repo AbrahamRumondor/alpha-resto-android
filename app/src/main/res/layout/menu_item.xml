@@ -17,9 +17,9 @@
         <ImageView
             android:id="@+id/iv_menu_image"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="@dimen/dimen_none"
             android:contentDescription="@string/menuimageview"
-            android:scaleType="centerCrop"
+            android:scaleType="fitXY"
             app:layout_constraintDimensionRatio="9:11"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -34,28 +34,30 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iv_menu_image"
             android:layout_marginHorizontal="20dp"
-            android:padding="10dp">
+            android:padding="@dimen/dimen_10dp">
 
             <TextView
                 android:id="@+id/tv_menu_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
+                android:text="@string/soft_shell_taco"
+                android:textSize="@dimen/dimen_24sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tv_menu_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="16sp" />
+                android:textSize="@dimen/dimen_24sp"
+                android:text="@string/rp_50_000" />
         </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_add_menu"
+            android:id="@+id/btn_menu_add"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/menu_add_button"
-            android:padding="16dp"
+            android:padding="@dimen/dimen_16dp"
             android:text="@string/add_to_cart"
             android:visibility="invisible"
             android:textAllCaps="false"
@@ -64,7 +66,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ll_texts"
-            android:textSize="18sp" />
+            android:textSize="@dimen/dimen_18sp"  />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clActionButtons"
@@ -72,8 +74,8 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/btn_add_menu"
-            app:layout_constraintBottom_toBottomOf="@id/btn_add_menu"
+            app:layout_constraintTop_toTopOf="@id/btn_menu_add"
+            app:layout_constraintBottom_toBottomOf="@id/btn_menu_add"
             >
 
             <androidx.appcompat.widget.AppCompatButton

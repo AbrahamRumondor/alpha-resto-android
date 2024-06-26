@@ -92,7 +92,7 @@
             app:layout_constraintEnd_toEndOf="parent">
 
             <ImageButton
-                android:id="@+id/btn_cart"
+                android:id="@+id/iv_icon_cart"
                 android:layout_width="@dimen/dimen_50dp"
                 android:layout_height="@dimen/dimen_50dp"
                 android:background="@android:color/transparent"
@@ -103,11 +103,11 @@
                 android:id="@+id/tv_cart_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@id/btn_cart"
-                android:layout_alignEnd="@id/btn_cart"
+                android:layout_alignTop="@id/iv_icon_cart"
+                android:layout_alignEnd="@id/iv_icon_cart"
                 android:background="@drawable/badge_circle"
                 android:paddingHorizontal="@dimen/dimen_10dp"
-                android:text="@string/_0"
+                android:text="@string/_1"
                 android:textColor="@color/black"
                 android:textSize="@dimen/dimen_12sp" />
         </RelativeLayout>

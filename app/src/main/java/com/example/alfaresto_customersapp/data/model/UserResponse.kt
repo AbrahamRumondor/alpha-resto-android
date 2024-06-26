@@ -14,7 +14,7 @@ data class UserResponse(
 
     @get:PropertyName("user_no_telp")
     @set:PropertyName("user_no_telp")
-    var noPhone: String = "",
+    var userNoTelp: String = "",
 
     @get:PropertyName("user_email")
     @set:PropertyName("user_email")
@@ -32,7 +32,7 @@ data class UserResponse(
             return User(
                 id = userResponse.userID,
                 name = userResponse.userName,
-                noPhone = userResponse.noPhone,
+                phone = userResponse.userNoTelp,
                 email = userResponse.userEmail,
                 address = userResponse.userAddress.map { AddressResponse.transform(it) }
             )

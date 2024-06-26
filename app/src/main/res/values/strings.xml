@@ -10,13 +10,7 @@
     <string name="user_email">User Email</string>
     <string name="direct_to_login">Already have an account? Login here</string>
     <string name="register_here">Register here</string>
-    <string name="alfaresto">AlfaResto</string>
-    <string name="logo">logo</string>
-    <string name="deliver_to">Deliver to:</string>
-    <string name="hi_bella">Hi, Bella!</string>
-    <string name="add_to_cart">ADD TO CART</string>
-    <string name="no_telp">No. Telp</string>
-    <string name="name">Name</string>
+    <string name="address">Address</string>
     <string name="login_success">Login Success</string>
     <string name="login_failed">Login Failed</string>
     <string name="register_success">Register Success</string>
@@ -25,13 +19,6 @@
     <string name="email_not_valid">Email is not valid</string>
     <string name="password_not_valid">Password is not valid</string>
     <string name="password_not_match">Password is not match</string>
-    <string name="menuimage">menuImage</string>
-    <string name="cartlogo">cartLogo</string>
-    <string name="list_all_menu">List All Menu</string>
-    <string name="_0">0</string>
-    <string name="_1">1</string>
-    <string name="add_to_menu">Add to Menu</string>
-    <string name="greetings">Hi, %1$s</string>
     <string name="checkout">Checkout Order</string>
     <string name="red_n_hot_taco">Red n Hot Taco</string>
     <string name="spicy_chicken_beef">Spicy chicken, beef</string>
@@ -46,7 +33,6 @@
     <string name="cod">COD</string>
     <string name="gopay">GOPAY</string>
     <string name="add_new_address">Add new address</string>
-    <string name="address">Address</string>
     <string name="marker">marker</string>
     <string name="go_to_settings">Go to settings</string>
     <string name="we_re_sorry_we_need_your_location_permission_to_use_this_app">we\'re sorry we need your location permission to use this app</string>
@@ -65,4 +51,14 @@
     <string name="address_detail">Address Detail</string>
     <string name="save">Save</string>
     <string name="menuimageview">menuImageView</string>
+    <string name="menu_image_view">menuImageView</string>
+    <string name="soft_shell_taco">Soft Shell Taco</string>
+    <string name="add_to_cart">Add To Cart</string>
+    <string name="_1">1</string>
+    <string name="menuimage">menuImage</string>
+    <string name="cartlogo">cartLogo</string>
+    <string name="list_all_menu">List All Menu</string>
+    <string name="add_to_menu">Add to Menu</string>
+    <string name="greetings">Hi, %1$s</string>
+    <string name="_0">0"</string>
 </resources>

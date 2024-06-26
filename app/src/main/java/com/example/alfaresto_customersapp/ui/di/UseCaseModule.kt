@@ -4,8 +4,6 @@ import com.example.alfaresto_customersapp.domain.usecase.menu.MenuUseCase
 import com.example.alfaresto_customersapp.domain.usecase.menu.MenuUseCaseImpl
 import com.example.alfaresto_customersapp.domain.usecase.auth.AuthUseCase
 import com.example.alfaresto_customersapp.domain.usecase.auth.AuthUseCaseImpl
-import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
-import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCaseImpl
 import com.example.alfaresto_customersapp.domain.usecase.order.OrderUseCase
 import com.example.alfaresto_customersapp.domain.usecase.order.OrderUseCaseImpl
 import com.example.alfaresto_customersapp.domain.usecase.orderHistory.OrderHistoryUseCase
@@ -14,6 +12,8 @@ import com.example.alfaresto_customersapp.domain.usecase.shipment.ShipmentUseCas
 import com.example.alfaresto_customersapp.domain.usecase.shipment.ShipmentUseCaseImpl
 import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase
 import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCaseImpl
+import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
+import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCaseImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
