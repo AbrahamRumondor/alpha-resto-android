@@ -6,7 +6,7 @@ import com.google.firebase.firestore.PropertyName
 data class OrderResponse(
     @get:PropertyName("order_id")
     @set:PropertyName("order_id")
-    var orderID: String = "",
+    var id: String = "",
 
     @get:PropertyName("user_name")
     @set:PropertyName("user_name")
@@ -22,7 +22,7 @@ data class OrderResponse(
 
     @get:PropertyName("order_date")
     @set:PropertyName("order_date")
-    var orderDate: String = "",
+    var date: String = "",
 
     @get:PropertyName("payment_method")
     @set:PropertyName("payment_method")
@@ -37,7 +37,7 @@ data class OrderResponse(
 
     @get:PropertyName("order_items")
     @set:PropertyName("order_items")
-    var orderItems: List<OrderItemResponse>
+    var items: List<OrderItemResponse>
 ) {
     // Public no-argument constructor required by Firestore
     constructor() : this("", "", "", "", "", "", 0, 0.0, 0.0, emptyList())
@@ -45,16 +45,16 @@ data class OrderResponse(
     companion object {
         fun transform(orderResponse: OrderResponse): Order {
             return Order(
-                orderID = orderResponse.orderID,
+                id = orderResponse.id,
                 userName = orderResponse.userName,
                 fullAddress = orderResponse.fullAddress,
                 restoID = orderResponse.restoID,
-                orderDate = orderResponse.orderDate,
+                date = orderResponse.date,
                 paymentMethod = orderResponse.paymentMethod,
                 totalPrice = orderResponse.totalPrice,
                 latitude = orderResponse.latitude,
                 longitude = orderResponse.longitude,
-                orderItems = orderResponse.orderItems.map { OrderItemResponse.transform(it) }
+                items = orderResponse.items.map { OrderItemResponse.transform(it) }
             )
         }
     }

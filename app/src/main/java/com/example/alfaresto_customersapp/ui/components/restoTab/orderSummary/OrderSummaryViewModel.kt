@@ -8,8 +8,8 @@ import com.example.alfaresto_customersapp.domain.model.Address
 import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.domain.model.Order
 import com.example.alfaresto_customersapp.domain.model.OrderItem
-import com.example.alfaresto_customersapp.domain.usecase.MenuUseCase
 import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
+import com.example.alfaresto_customersapp.domain.usecase.menu.MenuUseCase
 import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_ADDRESS
 import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_ID
 import com.google.firebase.Firebase
@@ -84,7 +84,9 @@ class OrderSummaryViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val fetchedMenus = menuUseCase.getMenus().value
-                _menus.value = fetchedMenus
+                if (fetchedMenus != null) {
+                    _menus.value = fetchedMenus
+                }
             } catch (e: Exception) {
                 Log.e("MENU", "Error fetching menus: ${e.message}")
             }
@@ -158,8 +160,9 @@ class OrderSummaryViewModel @Inject constructor(
                 USER_ADDRESS?.let { addressId ->
                     val order = Order(
                         id = getOrderDocumentId(),
-                        userID = USER_ID,
-                        addressID = addressId,
+//                        fetch user & address
+                        userName = USER_ID ?: "",
+                        fullAddress = addressId,
                         restoID = "NrhoLsLLieXFly9dXj7vu2ETi1T2", // nanti buat singleton
                         date = getCurrentDateTime(),
                         paymentMethod = payment,

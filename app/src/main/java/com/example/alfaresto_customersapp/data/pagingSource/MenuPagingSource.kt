@@ -6,7 +6,6 @@ import com.example.alfaresto_customersapp.data.model.MenuResponse
 import com.example.alfaresto_customersapp.domain.model.Menu
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.QuerySnapshot
-import com.google.firebase.firestore.toObjects
 import kotlinx.coroutines.tasks.await
 import javax.inject.Named
 
@@ -20,7 +19,9 @@ class MenuPagingSource(
                 it.toObjects(MenuResponse::class.java)
             }.await()
 
-            val menus = currentPage.toObjects<MenuResponse>().map { MenuResponse.transform(it) }
+            val menus = currentPage.toObjects(MenuResponse::class.java).map {
+                MenuResponse.transform(it)
+            }
 
             LoadResult.Page(
                 data = menus,

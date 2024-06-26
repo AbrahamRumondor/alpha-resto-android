@@ -21,7 +21,7 @@ data class OrderItemResponse(
     companion object {
         fun transform(orderItemResponse: OrderItemResponse): OrderItem {
             return OrderItem(
-                orderItemId = orderItemResponse.id,
+                id = orderItemResponse.id,
                 menuID = orderItemResponse.menuID,
                 quantity = orderItemResponse.qty,
                 menuPrice = orderItemResponse.menuPrice

@@ -10,7 +10,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.alfaresto_customersapp.databinding.FragmentListAllMenuBinding
 import com.example.alfaresto_customersapp.ui.components.listener.MenuListener
-import com.example.alfaresto_customersapp.ui.components.restoTab.adapter.RestoAdapter
 import com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu.adapter.ListAllMenuAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -50,7 +49,7 @@ class ListAllMenuFragment : Fragment() {
 
     private fun setMenusAdapterButtons() {
         adapter.setItemListener(object : MenuListener {
-            override fun onAddItemClicked(position: Int,  menuId: String) {
+            override fun onAddItemClicked(position: Int, menuId: String) {
 
             }
 

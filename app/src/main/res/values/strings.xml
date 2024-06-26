@@ -14,11 +14,9 @@
     <string name="logo">logo</string>
     <string name="deliver_to">Deliver to:</string>
     <string name="hi_bella">Hi, Bella!</string>
-    <string name="menuimageview">menuImageView</string>
     <string name="add_to_cart">ADD TO CART</string>
     <string name="no_telp">No. Telp</string>
     <string name="name">Name</string>
-    <string name="address">Address</string>
     <string name="login_success">Login Success</string>
     <string name="login_failed">Login Failed</string>
     <string name="register_success">Register Success</string>
@@ -41,7 +39,7 @@
     <string name="_2_items">(2 items)</string>
     <string name="rp_112_000">Rp 112.000,-</string>
     <string name="tempat_kerja">Tempat Kerja</string>
-    <string name="dummy_address">Alam Sutera, Jl. Jalur Sutera Bar. No.Kav. 7-9, RT.003/RW.006, Panunggangan Tim., Kec. Pinang, Kota Tangerang, Banten 15143</string>
+    <string name="dummy_address">Alam Sutera, Jl. Jalur Sutera Bar. No.Kav. 7–9, RT.003/RW.006, Panunggangan Tim., Kec. Pinang, Kota Tangerang, Banten 15143</string>
     <string name="icon_proceed">Icon_Proceed</string>
     <string name="select_payment_method">Select payment method</string>
     <string name="cod">COD</string>

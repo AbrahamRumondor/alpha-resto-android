@@ -27,7 +27,6 @@ class OrderSummaryFragment : Fragment() {
     private val addressListViewModel: AddressListViewModel by activityViewModels()
     private val orderAdapter by lazy { OrderSummaryAdapter() }
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

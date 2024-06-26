@@ -30,18 +30,18 @@ class OrderHistoryUseCaseImpl @Inject constructor(
         val userAddresses = fetchUserAddresses(uid)
 
         // Filter orders and shipments based on user ID and order IDs
-        val myOrders = orders.filter { it.userName == user.value?.userName }
+        val myOrders = orders.filter { it.userName == user.value?.name }
         val myShipments = shipments.filter { shipment ->
-            myOrders.any { it.orderID == shipment.orderID }
+            myOrders.any { it.id == shipment.orderID }
         }
 
         // Map to order history
         val orderHistories = myOrders.map { order ->
-            val shipment = myShipments.find { it.orderID == order.orderID }
+            val shipment = myShipments.find { it.orderID == order.id }
             OrderHistory(
-                orderDate = order.orderDate,
+                orderDate = order.date,
                 orderTotalPrice = order.totalPrice,
-                addressLabel = userAddresses.find { it.address == order.fullAddress }?.addressLabel
+                addressLabel = userAddresses.find { it.address == order.fullAddress }?.label
                     ?: "Unknown",
                 orderStatus = when (shipment?.statusDelivery) {
                     "delivered" -> OrderStatus.DELIVERED

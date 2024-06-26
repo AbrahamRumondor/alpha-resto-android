@@ -14,7 +14,7 @@ data class UserResponse(
 
     @get:PropertyName("user_no_telp")
     @set:PropertyName("user_no_telp")
-    var userNoTelp: String = "",
+    var noPhone: String = "",
 
     @get:PropertyName("user_email")
     @set:PropertyName("user_email")
@@ -30,11 +30,11 @@ data class UserResponse(
     companion object {
         fun transform(userResponse: UserResponse): User {
             return User(
-                userID = userResponse.userID,
-                userName = userResponse.userName,
-                userNoTelp = userResponse.userNoTelp,
-                userEmail = userResponse.userEmail,
-                userAddress = userResponse.userAddress.map { AddressResponse.transform(it) }
+                id = userResponse.userID,
+                name = userResponse.userName,
+                noPhone = userResponse.noPhone,
+                email = userResponse.userEmail,
+                address = userResponse.userAddress.map { AddressResponse.transform(it) }
             )
         }
     }

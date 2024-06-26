@@ -5,17 +5,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.domain.model.Menu
-import com.example.alfaresto_customersapp.domain.usecase.MenuUseCase
+import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
+import com.example.alfaresto_customersapp.domain.usecase.menu.MenuUseCase
 import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import androidx.lifecycle.LiveData
-import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
-import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,6 +29,9 @@ class RestoViewModel @Inject constructor(
 
     private val _cart: MutableStateFlow<List<CartEntity>> = MutableStateFlow(emptyList())
     val cart: StateFlow<List<CartEntity>> = _cart
+
+    private val _username = MutableLiveData<String>()
+    val username: LiveData<String> = _username
 
     // ganti cart ke stateflow
 
@@ -63,8 +64,8 @@ class RestoViewModel @Inject constructor(
                     // Optionally, you can show a loading state or handle the null case
                     return@observeForever
                 }
-                Log.d("Resto viewmodel", "User: ${user.userName}")
-                _username.value = user.userName
+
+                _username.value = user.name
             }
         }
     }
@@ -73,7 +74,7 @@ class RestoViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 // Assuming cartUseCase returns Flow<List<CartEntity>>
-                cartUseCase.getCart().collect {
+                cartUseCase.getCart().collect { it ->
                     it.map {
                         Log.e("CART", "Error fetching cart: ${it.menuId}")
                     }
@@ -97,7 +98,7 @@ class RestoViewModel @Inject constructor(
     }
 
     fun getOrderByMenuId(list: List<CartEntity>, menuId: String): CartEntity? {
-        return list.firstOrNull() { cart ->
+        return list.firstOrNull { cart ->
             cart.menuId == menuId
         }
     }

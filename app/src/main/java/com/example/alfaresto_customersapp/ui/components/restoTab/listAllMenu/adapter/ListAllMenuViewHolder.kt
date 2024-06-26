@@ -1,5 +1,6 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,14 +13,16 @@ import com.example.alfaresto_customersapp.ui.components.listener.MenuListener
 class ListAllMenuViewHolder(
     private var binding: AllMenuItemBinding
 ) : RecyclerView.ViewHolder(binding.root) {
+
     fun bind(menu: Menu, position: Int, listener: MenuListener?) {
         binding.run {
-            it.tvMenuName.text = menu.menuName
-            it.tvMenuPrice.text = menu.menuPrice.toString()
-            Glide.with(it.root)
-                .load(menu.menuImage)
+            menuNameTv.text = menu.name
+            menuPriceTv.text = menu.price.toString()
+            Log.d("ListAllMenuViewHolder", "bind: ${menu.image}")
+            Glide.with(root)
+                .load(menu.image)
                 .placeholder(android.R.drawable.ic_menu_report_image)
-                .into(it.ivMenuImage)
+                .into(menuImageIv)
 
             val isVisible = menu.orderCartQuantity != 0
             clActionButtons.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE

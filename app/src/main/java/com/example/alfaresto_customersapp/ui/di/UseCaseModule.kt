@@ -1,7 +1,7 @@
 package com.example.alfaresto_customersapp.ui.di
 
-import com.example.alfaresto_customersapp.domain.usecase.MenuUseCase
-import com.example.alfaresto_customersapp.domain.usecase.MenuUseCaseImpl
+import com.example.alfaresto_customersapp.domain.usecase.menu.MenuUseCase
+import com.example.alfaresto_customersapp.domain.usecase.menu.MenuUseCaseImpl
 import com.example.alfaresto_customersapp.domain.usecase.auth.AuthUseCase
 import com.example.alfaresto_customersapp.domain.usecase.auth.AuthUseCaseImpl
 import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
