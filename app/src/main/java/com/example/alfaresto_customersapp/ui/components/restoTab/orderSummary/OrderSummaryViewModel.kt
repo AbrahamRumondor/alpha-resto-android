@@ -170,7 +170,7 @@ class OrderSummaryViewModel @Inject constructor(
                         userId = user.id,
                         fullAddress = it.address,
                         restoID = "NrhoLsLLieXFly9dXj7vu2ETi1T2", // nanti buat singleton
-                        date = getCurrentDateTime(),
+                        date = Date(),
                         paymentMethod = payment,
                         totalPrice = total.second ?: -1,
                         latitude = it.latitude,

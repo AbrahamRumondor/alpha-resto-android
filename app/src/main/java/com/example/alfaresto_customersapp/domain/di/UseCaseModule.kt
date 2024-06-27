@@ -1,4 +1,4 @@
-package com.example.alfaresto_customersapp.ui.di
+package com.example.alfaresto_customersapp.domain.di
 
 import com.example.alfaresto_customersapp.domain.usecase.auth.AuthUseCase
 import com.example.alfaresto_customersapp.domain.usecase.auth.AuthUseCaseImpl
