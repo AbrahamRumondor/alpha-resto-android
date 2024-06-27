@@ -1,30 +1,33 @@
 package com.example.alfaresto_customersapp.ui.components.trackOrder
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.data.remote.response.RouteResponse
-import com.example.alfaresto_customersapp.databinding.ActivityTrackBinding
-import com.example.alfaresto_customersapp.databinding.FragmentOrderHistoryBinding
 import com.example.alfaresto_customersapp.databinding.FragmentTrackOrderBinding
 import com.example.alfaresto_customersapp.domain.error.OsrmCallback
-import com.example.alfaresto_customersapp.ui.components.restoTab.address.addNewAddress.AddNewAddressFragment
-import com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.OrderSummaryViewModel
+import com.example.alfaresto_customersapp.ui.components.restoTab.address.addNewAddress.AddNewAddressFragment.Companion.markersHeight
+import com.example.alfaresto_customersapp.ui.components.restoTab.address.addNewAddress.AddNewAddressFragment.Companion.markersWidth
 import com.example.alfaresto_customersapp.ui.components.trackOrder.chat.ChatActivity
-import com.example.alfaresto_customersapp.utils.location.LocationPermissions
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.maps.android.PolyUtil
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TrackOrderFragment : Fragment() {
 
     private lateinit var binding: FragmentTrackOrderBinding
@@ -50,6 +53,7 @@ class TrackOrderFragment : Fragment() {
                 setMapIdleListener()
                 enableMyLocation()
                 setRouting()
+                setOrderMarker()
             }
 
             btnChat.setOnClickListener {
@@ -60,6 +64,13 @@ class TrackOrderFragment : Fragment() {
         }
 
 
+    }
+
+    private fun setOrderMarker() {
+        val driver = trackOrderViewModel.getDriverLatLng()
+        val user = trackOrderViewModel.getUserAddressLatLng()
+        setMarkerOnMap(title = driver.first, latLng = driver.second, icon = R.drawable.ic_delivery_truck_24)
+        setMarkerOnMap(title = user.first, latLng = user.second, icon = R.drawable.ic_house_24)
     }
 
     private fun setRouting() {
@@ -94,17 +105,43 @@ class TrackOrderFragment : Fragment() {
         map.uiSettings.isMyLocationButtonEnabled = true
     }
 
-    private fun zoomToLatLng(latLng: LatLng) {
-        val cameraUpdate = CameraUpdateFactory.newLatLngZoom(
-            latLng,
-            AddNewAddressFragment.zoomLevel
-        )
+    private fun zoomToLatLng() {
+        val focusBounds = trackOrderViewModel.getRouteFocusBounds()
+        val padding = 100
+        val cameraUpdate = CameraUpdateFactory.newLatLngBounds(focusBounds, padding)
+        map.moveCamera(cameraUpdate)
         map.animateCamera(cameraUpdate)
     }
 
     private fun setOnFocusLocationButtonClickListener() {
         binding.ivFocus.setOnClickListener {
-            zoomToLatLng(LatLng(-6.200000, 106.816666))
+            zoomToLatLng()
+        }
+    }
+
+    private fun setMarkerOnMap(title: String, latLng: LatLng, icon: Int) {
+        val iconDrawable = ContextCompat.getDrawable(requireContext(), icon)
+
+        iconDrawable?.let { theIcon ->
+
+            val bitmap = Bitmap.createBitmap(
+                theIcon.intrinsicWidth,
+                theIcon.intrinsicHeight,
+                Bitmap.Config.ARGB_8888
+            )
+
+            val canvas = Canvas(bitmap)
+            theIcon.setBounds(0, 0, canvas.width, canvas.height)
+            theIcon.draw(canvas)
+
+            val newIcon = Bitmap.createScaledBitmap(bitmap, markersWidth, markersHeight, true)
+
+            val markerOptions = MarkerOptions()
+                .position(latLng)
+                .title(title)
+                .icon(BitmapDescriptorFactory.fromBitmap(newIcon))
+
+            map.addMarker(markerOptions)
         }
     }
 

@@ -9,10 +9,14 @@ import com.example.alfaresto_customersapp.domain.usecase.MenuUseCase
 import com.example.alfaresto_customersapp.domain.usecase.auth.AuthUseCase
 import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
 import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
+import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.Call
 import retrofit2.Response
 import javax.inject.Inject
 
+@HiltViewModel
 class TrackOrderViewModel @Inject constructor(
     private val osrmApiRepository: OsrmApiRepository
 ) : ViewModel() {
@@ -40,4 +44,23 @@ class TrackOrderViewModel @Inject constructor(
         })
     }
 
+    fun getRouteFocusBounds(): LatLngBounds {
+        val boundsBuilder = LatLngBounds.Builder()
+        boundsBuilder.include(
+            LatLng(-6.200000,106.816666)
+        )
+        boundsBuilder.include(
+            LatLng(-6.914744,107.609810)
+        )
+
+        return boundsBuilder.build()
+    }
+
+    fun getDriverLatLng(): Pair<String, LatLng> {
+        return Pair("Driver", LatLng(-6.200000, 106.816666))
+    }
+
+    fun getUserAddressLatLng(): Pair<String, LatLng>  {
+        return Pair("Me",LatLng(-6.914744,107.609810))
+    }
 }
