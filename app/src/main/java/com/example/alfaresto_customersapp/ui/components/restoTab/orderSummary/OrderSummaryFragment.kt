@@ -2,11 +2,11 @@ package com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
@@ -19,7 +19,6 @@ import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.domain.model.User
 import com.example.alfaresto_customersapp.ui.components.listener.OrderSummaryItemListener
 import com.example.alfaresto_customersapp.ui.components.restoTab.address.addressList.AddressListViewModel
-import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_ID
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -76,7 +75,7 @@ class OrderSummaryFragment : Fragment() {
                     .navigate(R.id.action_orderSummaryFragment_to_addressList)
             }
 
-            override fun onAddItemClicked(position: Int,  menuId: String) {
+            override fun onAddItemClicked(position: Int, menuId: String) {
                 val addMenu = orderSummaryViewModel.orders.value[position] as? Menu
                 addMenu?.let {
                     var item: CartEntity? = null
@@ -89,7 +88,7 @@ class OrderSummaryFragment : Fragment() {
                 }
             }
 
-            override fun onDecreaseItemClicked(position: Int,  menuId: String) {
+            override fun onDecreaseItemClicked(position: Int, menuId: String) {
                 val addMenu = orderSummaryViewModel.orders.value[position] as? Menu
                 addMenu?.let {
                     if (it.orderCartQuantity > 0) {

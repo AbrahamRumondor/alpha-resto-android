@@ -45,7 +45,7 @@ data class OrderResponse(
     val longitude: Double = 0.0,
 ) {
     // Public no-argument constructor required by Firestore
-    constructor() : this("", "", "", "", "", "", Date(), "", 0, 0.0, 0.0)
+    constructor() : this("", "", "", "", "", Date(), "", 0, 0.0, 0.0)
 
     companion object {
         fun transform(orderResponse: OrderResponse): Order {
@@ -72,7 +72,7 @@ data class OrderResponse(
                 userPhone = order.userPhone,
                 fullAddress = order.fullAddress,
                 restoID = order.restoID,
-                date = Date(),
+                date = order.date,
                 paymentMethod = order.paymentMethod,
                 totalPrice = order.totalPrice,
                 latitude = order.latitude,

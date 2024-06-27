@@ -15,7 +15,11 @@
         <action
             android:id="@+id/action_restoFragment_to_orderSummaryFragment"
             app:destination="@id/orderSummaryFragment" />
+        <action
+            android:id="@+id/action_restoFragment_to_listAllMenuFragment"
+            app:destination="@id/listAllMenuFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/orderHistoryFragment"
         android:name="com.example.alfaresto_customersapp.ui.components.orderHistoryTab.OrderHistoryFragment"
@@ -34,6 +38,8 @@
             android:name="orderId"
             app:argType="string" />
     </fragment>
+        tools:layout="@layout/fragment_order_history" />
+
     <fragment
         android:id="@+id/orderSummaryFragment"
         android:name="com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.OrderSummaryFragment"
@@ -45,7 +51,11 @@
         <action
             android:id="@+id/action_orderSummaryFragment_to_addressList"
             app:destination="@id/addressList" />
+        <action
+            android:id="@+id/action_orderSummaryFragment_to_listAllMenuFragment"
+            app:destination="@id/listAllMenuFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/addressList"
         android:name="com.example.alfaresto_customersapp.ui.components.restoTab.address.addressList.AddressList"
@@ -55,14 +65,23 @@
             android:id="@+id/action_addressList_to_addNewAddressFragment"
             app:destination="@id/addNewAddressFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/addNewAddressFragment"
         android:name="com.example.alfaresto_customersapp.ui.components.restoTab.address.addNewAddress.AddNewAddressFragment"
         android:label="fragment_add_new_address"
         tools:layout="@layout/fragment_add_new_address" />
+
     <fragment
         android:id="@+id/listAllMenuFragment"
         android:name="com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu.ListAllMenuFragment"
         android:label="fragment_list_all_menu"
-        tools:layout="@layout/fragment_list_all_menu" />
+        tools:layout="@layout/fragment_list_all_menu" >
+        <action
+            android:id="@+id/action_listAllMenuFragment_to_orderSummaryFragment"
+            app:destination="@id/orderSummaryFragment" />
+        <action
+            android:id="@+id/action_listAllMenuFragment_to_restoFragment"
+            app:destination="@id/restoFragment" />
+    </fragment>
 </navigation>

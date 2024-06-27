@@ -15,7 +15,6 @@ import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.databinding.FragmentRestoBinding
 import com.example.alfaresto_customersapp.ui.components.listener.MenuListener
 import com.example.alfaresto_customersapp.ui.components.restoTab.adapter.RestoAdapter
-import com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu.ListAllMenuFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -39,13 +38,10 @@ class RestoFragment : Fragment() {
 
 //        viewModel.getToken()
 
-        val menuRv = binding.rvMenu
-
-        binding.allMenuBtn.setOnClickListener {
-            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragmentContainerView, ListAllMenuFragment())
-            transaction.addToBackStack(null)
-            transaction.commit()
+        binding.rvMenu.let {
+            it.adapter = adapter
+            it.layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         }
 
         viewModel.username.observe(viewLifecycleOwner) { username ->
@@ -62,15 +58,8 @@ class RestoFragment : Fragment() {
 
                     if (it.isEmpty()) {
                         Log.d("test", "NO DATA")
-                        menuRv.adapter = adapter
                         setRestoAdapterButtons(it)
                         adapter.submitMenuList(menus)
-                        menuRv.layoutManager =
-                            LinearLayoutManager(
-                                requireContext(),
-                                LinearLayoutManager.HORIZONTAL,
-                                false
-                            )
                         return@collectLatest
                     }
 
@@ -83,13 +72,15 @@ class RestoFragment : Fragment() {
                         }
                     }
 
-                    menuRv.adapter = adapter
                     setRestoAdapterButtons(it)
                     adapter.submitMenuList(updatedMenus)
-                    menuRv.layoutManager =
-                        LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                 }
             }
+        }
+
+        binding.allMenuBtn.setOnClickListener {
+            Navigation.findNavController(requireView())
+                .navigate(R.id.action_restoFragment_to_listAllMenuFragment)
         }
 
         binding.ivIconCart.setOnClickListener {
