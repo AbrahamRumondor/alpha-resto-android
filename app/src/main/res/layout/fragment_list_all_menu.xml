@@ -35,7 +35,7 @@
                 android:layout_height="@dimen/dimen_50dp"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/cartlogo"
-                android:src="@drawable/shopping_bag" />
+                android:src="@drawable/ic_shopping_bag" />
 
             <TextView
                 android:id="@+id/tv_cart_count"
