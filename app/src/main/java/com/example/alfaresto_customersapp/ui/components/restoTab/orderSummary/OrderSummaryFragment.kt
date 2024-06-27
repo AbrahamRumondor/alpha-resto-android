@@ -19,7 +19,7 @@ import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.domain.model.User
 import com.example.alfaresto_customersapp.ui.components.listener.OrderSummaryItemListener
 import com.example.alfaresto_customersapp.ui.components.restoTab.address.addressList.AddressListViewModel
-import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_ID
+import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_ADDRESS
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -44,6 +44,7 @@ class OrderSummaryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         populateOrderSummaryAdapter()
+        Log.d("test", USER_ADDRESS?.address ?: "KOSONG")
     }
 
     private fun populateOrderSummaryAdapter() {
@@ -60,7 +61,7 @@ class OrderSummaryFragment : Fragment() {
                         orderSummaryViewModel.makeOrders(
                             orders = orders,
                             total = countTotalItemAndPrice(orders),
-                            address = addressListViewModel.selectedAddress.value
+                            address = USER_ADDRESS
                         )
                     )
                     setOrderSummaryListener(orders, carts)
@@ -77,7 +78,7 @@ class OrderSummaryFragment : Fragment() {
                     .navigate(R.id.action_orderSummaryFragment_to_addressList)
             }
 
-            override fun onAddItemClicked(position: Int,  menuId: String) {
+            override fun onAddItemClicked(position: Int, menuId: String) {
                 val addMenu = orderSummaryViewModel.orders.value[position] as? Menu
                 addMenu?.let {
                     var item: CartEntity? = null
@@ -90,7 +91,7 @@ class OrderSummaryFragment : Fragment() {
                 }
             }
 
-            override fun onDecreaseItemClicked(position: Int,  menuId: String) {
+            override fun onDecreaseItemClicked(position: Int, menuId: String) {
                 val addMenu = orderSummaryViewModel.orders.value[position] as? Menu
                 addMenu?.let {
                     if (it.orderCartQuantity > 0) {
@@ -136,21 +137,9 @@ class OrderSummaryFragment : Fragment() {
 
             override fun onCheckoutButtonClicked() {
                 // TODO send to firebase
-                orderSummaryViewModel.getUserFromDB(object : FirestoreCallback {
-                    override fun onSuccess(user: User?) {
-                        if (user != null) {
-                            orderSummaryViewModel.saveOrderInDatabase(user) {
-                                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
-                            }
-                        } else {
-                            Log.d("test", "User not found")
-                        }
-                    }
-
-                    override fun onFailure(exception: Exception) {
-                        Log.d("test", "Error fetching user: $exception")
-                    }
-                })
+                orderSummaryViewModel.saveOrderInDatabase {
+                    Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+                }
             }
 
         })

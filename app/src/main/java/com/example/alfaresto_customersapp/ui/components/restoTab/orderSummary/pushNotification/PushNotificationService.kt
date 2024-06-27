@@ -2,6 +2,7 @@ package com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.p
 
 import android.util.Log
 import com.example.alfaresto_customersapp.domain.model.Token
+import com.example.alfaresto_customersapp.utils.user.UserConstants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -15,6 +16,7 @@ class PushNotificationService : FirebaseMessagingService() {
             "On new token"
         )
         sendTokenToFirestore(token)
+        UserConstants.USER_TOKEN = token
     }
 
     private fun sendTokenToFirestore(token: String) {

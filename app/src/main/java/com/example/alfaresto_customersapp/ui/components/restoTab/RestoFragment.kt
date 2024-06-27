@@ -15,6 +15,8 @@ import androidx.navigation.Navigation
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.databinding.FragmentRestoBinding
+import com.example.alfaresto_customersapp.domain.error.FirestoreCallback
+import com.example.alfaresto_customersapp.domain.model.User
 import com.example.alfaresto_customersapp.ui.components.listener.MenuListener
 import com.example.alfaresto_customersapp.ui.components.restoTab.adapter.RestoAdapter
 import com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu.ListAllMenuFragment
@@ -39,8 +41,6 @@ class RestoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        viewModel.getToken()
-
         val menuRv = binding.rvMenu
 
         binding.allMenuBtn.setOnClickListener {
@@ -50,9 +50,20 @@ class RestoFragment : Fragment() {
             transaction.commit()
         }
 
-        viewModel.username.observe(viewLifecycleOwner) { username ->
-            binding.tvGreetings.setText(getString(R.string.greetings, username))
-        }
+        viewModel.getUserFromDB(object : FirestoreCallback {
+            override fun onSuccess(user: User?) {
+                if (user != null) {
+                    binding.tvGreetings.text = getString(R.string.greetings, user.name)
+                }
+            }
+
+            override fun onFailure(exception: Exception) {
+                val greetingsGuest =
+                    "${getString(R.string.greetings)}, ${getString(R.string.guest)}"
+                binding.tvGreetings.text = greetingsGuest
+            }
+
+        })
 
         lifecycleScope.launch {
             viewModel.menus.collect { menus ->
@@ -62,12 +73,17 @@ class RestoFragment : Fragment() {
                 }
                 viewModel.cart.collectLatest {
 
-                    if (it.isEmpty()){ Log.d("test", "NO DATA")
+                    if (it.isEmpty()) {
+                        Log.d("test", "NO DATA")
                         menuRv.adapter = adapter
                         setRestoAdapterButtons(it)
                         adapter.submitMenuList(menus)
                         menuRv.layoutManager =
-                            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                            LinearLayoutManager(
+                                requireContext(),
+                                LinearLayoutManager.HORIZONTAL,
+                                false
+                            )
                         return@collectLatest
                     }
 
@@ -90,7 +106,8 @@ class RestoFragment : Fragment() {
         }
 
         binding.ivIconCart.setOnClickListener {
-            Navigation.findNavController(requireView()).navigate(R.id.action_restoFragment_to_orderSummaryFragment)
+            Navigation.findNavController(requireView())
+                .navigate(R.id.action_restoFragment_to_orderSummaryFragment)
         }
     }
 
@@ -98,7 +115,7 @@ class RestoFragment : Fragment() {
         adapter.setItemListener(object : MenuListener {
             override fun onAddItemClicked(position: Int, menuId: String) {
                 var item: CartEntity? = null
-                    item = cart?.find { it.menuId == menuId }
+                item = cart?.find { it.menuId == menuId }
                 viewModel.addOrderQuantity(menuId, item)
                 adapter.notifyItemChanged(position)
             }

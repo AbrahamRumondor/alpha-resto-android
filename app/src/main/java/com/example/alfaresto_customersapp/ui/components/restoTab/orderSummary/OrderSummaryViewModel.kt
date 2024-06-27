@@ -26,6 +26,7 @@ import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
 import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase
 import com.example.alfaresto_customersapp.utils.getText
 import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_ADDRESS
+import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_TOKEN
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -41,8 +42,6 @@ import javax.inject.Inject
 class OrderSummaryViewModel @Inject constructor(
     private val menuUseCase: MenuUseCase,
     private val cartUseCase: CartUseCase,
-    private val fcmApiRepository: FcmApiRepository,
-    private val authUseCase: AuthUseCase,
     private val userUseCase: UserUseCase
 ) : ViewModel() {
 
@@ -160,76 +159,99 @@ class OrderSummaryViewModel @Inject constructor(
     }
 
     // TODO 1:userID,addressID,restoID (fetch dr firestore) | 2:menuID (fetch dari firestore)
-    fun saveOrderInDatabase(user: User?, onResult: (msg: String) -> Unit) {
-        val PAYMENT_METHOD = _orders.value.size - 2
-        val TOTAL = orders.value.size - 3
+    fun saveOrderInDatabase(onResult: (msg: String) -> Unit) {
+        getUserFromDB(object : FirestoreCallback {
+            override fun onSuccess(user: User?) {
 
-        val payment =
-            if (_orders.value[PAYMENT_METHOD].toString() == "COD" || _orders.value[PAYMENT_METHOD].toString() == "GOPAY")
-                _orders.value[PAYMENT_METHOD].toString() else null
+                val PAYMENT_METHOD = _orders.value.size - 2
+                val TOTAL = orders.value.size - 3
 
-        val total = _orders.value[TOTAL] as Pair<Int, Int> ?: null
+                val payment =
+                    if (_orders.value[PAYMENT_METHOD].toString() == "COD" || _orders.value[PAYMENT_METHOD].toString() == "GOPAY")
+                        _orders.value[PAYMENT_METHOD].toString() else null
 
-        if (!payment.isNullOrEmpty() && total != null && _orders.value.size > 4
-            && user != null
-        ) {
-            db.runTransaction {
-                USER_ADDRESS?.let {
-                    val order = Order(
-                        id = getOrderDocumentId(),
-                        userName = user.name,
-                        userId = user.id,
-                        fullAddress = it.address,
-                        restoID = "NrhoLsLLieXFly9dXj7vu2ETi1T2", // nanti buat singleton
-                        date = getCurrentDateTime(),
-                        paymentMethod = payment,
-                        totalPrice = total.second ?: -1,
-                        latitude = it.latitude,
-                        longitude = it.longitude
-                    )
-                    val orderToFirebase = OrderResponse.toResponse(order)
-                    db.collection("orders").document(order.id)
-                        .set(orderToFirebase)
-                        .addOnSuccessListener {
-                            Log.d(
-                                "TEST",
-                                "SUCCESS ON ORDER INSERTION"
-                            )
-                        }
-                        .addOnFailureListener { Log.d("TEST", "ERROR ON ORDER INSERTION") }
+                val total = _orders.value[TOTAL] as Pair<Int, Int> ?: null
 
-                    for (i in 1..<TOTAL) {
-                        val menu = _orders.value[i] as Menu ?: null
-                        menu?.let {
-                            val orderItem = OrderItem(
-                                id = getOrderItemDocumentId(order.id),
-                                menuName = menu.name,
-                                quantity = menu.orderCartQuantity,
-                                menuPrice = menu.price
-                            )
-                            val orderItemResponse = OrderItemResponse.toResponse(orderItem)
-                            db.collection("orders").document(order.id)
-                                .collection("order_items").document(orderItem.id)
-                                .set(orderItemResponse)
-                                .addOnSuccessListener {
-                                    Log.d(
-                                        "TEST",
-                                        "SUCCESS ON ORDER ITEM INSERTION"
-                                    )
+                if (!payment.isNullOrEmpty() && total != null && _orders.value.size > 4
+                    && user != null
+                ) {
+                    db.runTransaction {
+                        USER_ADDRESS?.let { address ->
+                            USER_TOKEN?.let { token ->
+                                val order = Order(
+                                    id = getOrderDocumentId(),
+                                    userName = user.name,
+                                    userId = user.id,
+                                    fullAddress = address.address,
+                                    restoID = "NrhoLsLLieXFly9dXj7vu2ETi1T2", // nanti buat singleton
+                                    date = getCurrentDateTime(),
+                                    paymentMethod = payment,
+                                    totalPrice = total.second ?: -1,
+                                    latitude = address.latitude,
+                                    longitude = address.longitude,
+                                    token = token
+                                )
+                                val orderToFirebase = OrderResponse.toResponse(order)
+                                db.collection("orders").document(order.id)
+                                    .set(orderToFirebase)
+                                    .addOnSuccessListener {
+                                        Log.d(
+                                            "TEST",
+                                            "SUCCESS ON ORDER INSERTION"
+                                        )
+                                    }
+                                    .addOnFailureListener {
+                                        Log.d(
+                                            "TEST",
+                                            "ERROR ON ORDER INSERTION"
+                                        )
+                                    }
+
+                                for (i in 1..<TOTAL) {
+                                    val menu = _orders.value[i] as Menu ?: null
+                                    menu?.let {
+                                        val orderItem = OrderItem(
+                                            id = getOrderItemDocumentId(order.id),
+                                            menuName = menu.name,
+                                            quantity = menu.orderCartQuantity,
+                                            menuPrice = menu.price
+                                        )
+                                        val orderItemResponse =
+                                            OrderItemResponse.toResponse(orderItem)
+                                        db.collection("orders").document(order.id)
+                                            .collection("order_items").document(orderItem.id)
+                                            .set(orderItemResponse)
+                                            .addOnSuccessListener {
+                                                Log.d(
+                                                    "TEST",
+                                                    "SUCCESS ON ORDER ITEM INSERTION"
+                                                )
+                                            }
+                                            .addOnFailureListener {
+                                                Log.d(
+                                                    "TEST",
+                                                    "ERROR ON ORDER INSERTION"
+                                                )
+                                            }
+                                    }
                                 }
-                                .addOnFailureListener {
-                                    Log.d(
-                                        "TEST",
-                                        "ERROR ON ORDER INSERTION"
-                                    )
-                                }
+                            }
                         }
+//                        sendNotificationToResto(onResult)
+                        onResult("Success")
                     }
                 }
-
-                sendNotificationToResto(onResult)
             }
-        }
+
+            override fun onFailure(exception: Exception) {
+                Log.d(
+                    "test",
+                    "ERROR failure ON ORDER INSERTION"
+                )
+                onResult("Error saving data in database")
+            }
+
+        })
     }
 
     fun getUserFromDB(callback: FirestoreCallback) {
@@ -248,54 +270,58 @@ class OrderSummaryViewModel @Inject constructor(
         val dateFormat = SimpleDateFormat("dd MMMM yyyy, HH:mm", Locale.getDefault())
         return dateFormat.format(currentDate)
     }
-
-    private fun sendNotificationToResto(onResult: (msg: String) -> Unit) {
-        db.collection("users").document("amnRLCt7iYGogz6JRxi5")
-            .collection("tokens")
-            .get()
-            .addOnSuccessListener { documents ->
-                Log.d("test", "SUCCESS FETCH DATA: $documents")
-                val tokenList = mutableListOf<Token>()
-                for (document in documents) {
-                    val token = document.toObject(Token::class.java)
-                    tokenList.add(token)
-                    Log.d("test", "SUCCESS FETCH DATA: ${token.userToken}")
-                }
-                val latestToken = tokenList[tokenList.size - 1]
-
-                sendMessageToBackend(
-                    message = "There's new order. Check your Resto App",
-                    token = latestToken.userToken,
-                    onResult
-                )
-            }
-            .addOnFailureListener {
-                Log.d("test", "GAGAL FETCH DATA: $it")
-            }
-    }
-
-    private fun sendMessageToBackend(message: String, token: String, onResult: (msg: String) -> Unit) {
-        viewModelScope.launch {
-            val messageDto = SendMessageDto(
-                to = token,
-                notification = NotificationBody(
-                    title = "New Message",
-                    body = message
-                )
-            )
-
-            when(val result = fcmApiRepository.sendMessage(messageDto)) {
-                is Result.Success -> {
-                    onResult(result.data)
-                }
-
-                is Result.Error -> {
-                    onResult(result.error.getText())
-                }
-            }
-
-        }
-    }
+//
+//    private fun sendNotificationToResto(onResult: (msg: String) -> Unit) {
+//        db.collection("users").document("amnRLCt7iYGogz6JRxi5")
+//            .collection("tokens")
+//            .get()
+//            .addOnSuccessListener { documents ->
+//                Log.d("test", "SUCCESS FETCH DATA: $documents")
+//                val tokenList = mutableListOf<Token>()
+//                for (document in documents) {
+//                    val token = document.toObject(Token::class.java)
+//                    tokenList.add(token)
+//                    Log.d("test", "SUCCESS FETCH DATA: ${token.userToken}")
+//                }
+//                val latestToken = tokenList[tokenList.size - 1]
+//
+//                sendMessageToBackend(
+//                    message = "There's new order. Check your Resto App",
+//                    token = latestToken.userToken,
+//                    onResult
+//                )
+//            }
+//            .addOnFailureListener {
+//                Log.d("test", "GAGAL FETCH DATA: $it")
+//            }
+//    }
+//
+//    private fun sendMessageToBackend(
+//        message: String,
+//        token: String,
+//        onResult: (msg: String) -> Unit
+//    ) {
+//        viewModelScope.launch {
+//            val messageDto = SendMessageDto(
+//                to = token,
+//                notification = NotificationBody(
+//                    title = "New Message",
+//                    body = message
+//                )
+//            )
+//
+//            when (val result = fcmApiRepository.sendMessage(messageDto)) {
+//                is Result.Success -> {
+//                    onResult(result.data)
+//                }
+//
+//                is Result.Error -> {
+//                    onResult(result.error.getText())
+//                }
+//            }
+//
+//        }
+//    }
 
 
 }

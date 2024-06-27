@@ -18,7 +18,11 @@
         android:id="@+id/orderHistoryFragment"
         android:name="com.example.alfaresto_customersapp.ui.components.orderHistoryTab.OrderHistoryFragment"
         android:label="fragment_order_history"
-        tools:layout="@layout/fragment_order_history" />
+        tools:layout="@layout/fragment_order_history" >
+        <action
+            android:id="@+id/action_orderHistoryFragment_to_trackOrderFragment"
+            app:destination="@id/trackOrderFragment" />
+    </fragment>
     <fragment
         android:id="@+id/orderSummaryFragment"
         android:name="com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.OrderSummaryFragment"
@@ -50,4 +54,9 @@
         android:name="com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu.ListAllMenuFragment"
         android:label="fragment_list_all_menu"
         tools:layout="@layout/fragment_list_all_menu" />
+    <fragment
+        android:id="@+id/trackOrderFragment"
+        android:name="com.example.alfaresto_customersapp.ui.components.trackOrder.TrackOrderFragment"
+        android:label="fragment_track_order"
+        tools:layout="@layout/fragment_track_order" />
 </navigation>

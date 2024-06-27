@@ -8,8 +8,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.FragmentOrderHistoryBinding
+import com.example.alfaresto_customersapp.domain.model.OrderHistory
+import com.example.alfaresto_customersapp.ui.components.listener.OrderHistoryListener
 import com.example.alfaresto_customersapp.ui.components.orderHistoryTab.adapter.OrderHistoryAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -44,9 +48,18 @@ class OrderHistoryFragment : Fragment() {
                 binding.rvOrderHistory.adapter = adapter
                 binding.rvOrderHistory.layoutManager =
                     LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-
+                setOnOrderClickListener()
             }
         }
+    }
+
+    private fun setOnOrderClickListener() {
+        adapter.setItemListener(object : OrderHistoryListener {
+            override fun onOrderClicked(orderHistory: OrderHistory) {
+                Navigation.findNavController(binding.root)
+                    .navigate(R.id.action_orderHistoryFragment_to_trackOrderFragment)
+            }
+        })
     }
 
 }
