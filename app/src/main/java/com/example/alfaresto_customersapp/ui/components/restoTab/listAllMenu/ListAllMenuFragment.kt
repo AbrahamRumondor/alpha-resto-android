@@ -6,15 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
+import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.FragmentListAllMenuBinding
 import com.example.alfaresto_customersapp.ui.components.listener.MenuListener
-import com.example.alfaresto_customersapp.ui.components.restoTab.RestoViewModel
-import com.example.alfaresto_customersapp.ui.components.restoTab.adapter.RestoAdapter
 import com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu.adapter.ListAllMenuAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -50,7 +48,11 @@ class ListAllMenuFragment : Fragment() {
         binding.rvListAllMenu.adapter = adapter
         setMenusAdapterButtons()
 
-
+        binding.btnCart.setOnClickListener {
+            Log.d("listall", "cart clicked")
+            Navigation.findNavController(requireView())
+                .navigate(R.id.action_listAllMenuFragment_to_orderSummaryFragment)
+        }
     }
 
     private fun setMenusAdapterButtons() {
