@@ -1,8 +1,8 @@
 package com.example.alfaresto_customersapp.data.model
 
 import com.example.alfaresto_customersapp.domain.model.Order
-import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.PropertyName
+import java.util.Date
 
 data class OrderResponse(
     @get:PropertyName("order_id")
@@ -12,6 +12,10 @@ data class OrderResponse(
     @get:PropertyName("user_name")
     @set:PropertyName("user_name")
     var userName: String = "",
+
+    @get:PropertyName("user_phone")
+    @set:PropertyName("user_phone")
+    var userPhone: String = "",
 
     @get:PropertyName("full_address")
     @set:PropertyName("full_address")
@@ -27,7 +31,7 @@ data class OrderResponse(
 
     @get:PropertyName("order_date")
     @set:PropertyName("order_date")
-    var date: String = "",
+    var date: Date = Date(),
 
     @get:PropertyName("payment_method")
     @set:PropertyName("payment_method")
@@ -41,13 +45,14 @@ data class OrderResponse(
     val longitude: Double = 0.0,
 ) {
     // Public no-argument constructor required by Firestore
-    constructor() : this("", "", "", "", "", "", "", 0, 0.0, 0.0)
+    constructor() : this("", "", "", "", "", "", Date(), "", 0, 0.0, 0.0)
 
     companion object {
         fun transform(orderResponse: OrderResponse): Order {
             return Order(
                 id = orderResponse.id,
                 userName = orderResponse.userName,
+                userPhone = orderResponse.userPhone,
                 fullAddress = orderResponse.fullAddress,
                 restoID = orderResponse.restoID,
                 date = orderResponse.date,
@@ -64,9 +69,10 @@ data class OrderResponse(
             return newOrder.copy(
                 id = order.id,
                 userName = order.userName,
+                userPhone = order.userPhone,
                 fullAddress = order.fullAddress,
                 restoID = order.restoID,
-                date = order.date,
+                date = Date(),
                 paymentMethod = order.paymentMethod,
                 totalPrice = order.totalPrice,
                 latitude = order.latitude,

@@ -65,4 +65,5 @@ abstract class UseCaseModule {
     abstract fun provideCartUseCase(
         cartUseCaseImpl: CartUseCaseImpl
     ): CartUseCase
+
 }

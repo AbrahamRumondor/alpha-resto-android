@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -18,7 +19,20 @@
         android:id="@+id/orderHistoryFragment"
         android:name="com.example.alfaresto_customersapp.ui.components.orderHistoryTab.OrderHistoryFragment"
         android:label="fragment_order_history"
-        tools:layout="@layout/fragment_order_history" />
+        tools:layout="@layout/fragment_order_history">
+        <action
+            android:id="@+id/action_orderHistoryFragment_to_orderHistoryDetailFragment"
+            app:destination="@id/orderHistoryDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/orderHistoryDetailFragment"
+        android:name="com.example.alfaresto_customersapp.ui.components.orderHistoryDetailPage.OrderHistoryDetailFragment"
+        android:label="fragment_order_history_detail"
+        tools:layout="@layout/order_history_detail">
+        <argument
+            android:name="orderId"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/orderSummaryFragment"
         android:name="com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.OrderSummaryFragment"

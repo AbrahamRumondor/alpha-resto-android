@@ -5,7 +5,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.example.alfaresto_customersapp.domain.model.OrderHistory
 
-class OrderHistoryAdapter : ListAdapter<OrderHistory, OrderHistoryViewHolder>(diffUtil) {
+class OrderHistoryAdapter(
+    private val itemClickListener: (OrderHistory) -> Unit
+) : ListAdapter<OrderHistory, OrderHistoryViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderHistoryViewHolder {
         return OrderHistoryViewHolder.create(parent)
@@ -14,12 +16,15 @@ class OrderHistoryAdapter : ListAdapter<OrderHistory, OrderHistoryViewHolder>(di
     override fun onBindViewHolder(holder: OrderHistoryViewHolder, position: Int) {
         val order = getItem(position)
         holder.bind(order)
+        holder.itemView.setOnClickListener {
+            itemClickListener(order)
+        }
     }
 
     companion object {
         val diffUtil = object : DiffUtil.ItemCallback<OrderHistory>() {
             override fun areItemsTheSame(oldItem: OrderHistory, newItem: OrderHistory): Boolean {
-                return oldItem.id == newItem.id
+                return oldItem.orderID == newItem.orderID
             }
 
             override fun areContentsTheSame(oldItem: OrderHistory, newItem: OrderHistory): Boolean {

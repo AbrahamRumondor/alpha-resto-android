@@ -8,10 +8,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.FragmentOrderHistoryBinding
-import com.example.alfaresto_customersapp.ui.components.orderHistoryDetailPage.OrderHistoryDetailFragment
+import com.example.alfaresto_customersapp.domain.model.OrderHistory
+import com.example.alfaresto_customersapp.domain.model.OrderStatus
 import com.example.alfaresto_customersapp.ui.components.orderHistoryTab.adapter.OrderHistoryAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -21,7 +22,7 @@ class OrderHistoryFragment : Fragment() {
 
     private lateinit var binding: FragmentOrderHistoryBinding
     private val viewModel: OrderHistoryViewModel by viewModels()
-    private val adapter by lazy { OrderHistoryAdapter() }
+    private val adapter by lazy { OrderHistoryAdapter(::onOrderItemClicked) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,6 +35,10 @@ class OrderHistoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.rvOrderHistory.adapter = adapter
+        binding.rvOrderHistory.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+
         lifecycleScope.launch {
             viewModel.orderHistories.observe(viewLifecycleOwner) { orderHistories ->
                 if (orderHistories.isEmpty()) {
@@ -43,20 +48,16 @@ class OrderHistoryFragment : Fragment() {
                 }
 
                 adapter.submitList(orderHistories)
-                binding.rvOrderHistory.adapter = adapter
-                binding.rvOrderHistory.layoutManager =
-                    LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-
             }
         }
-
-        binding.btnOrderHistoryDetail.setOnClickListener {
-            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragmentContainerView, OrderHistoryDetailFragment())
-            transaction.addToBackStack(null)
-            transaction.commit()
+    }
+    private fun onOrderItemClicked(orderHistory: OrderHistory) {
+        if (orderHistory.orderStatus == OrderStatus.DELIVERED) {
+            val action = OrderHistoryFragmentDirections.actionOrderHistoryFragmentToOrderHistoryDetailFragment(
+                orderHistory.orderID
+            )
+            Navigation.findNavController(binding.root)
+                .navigate(action)
         }
     }
-
-
 }
