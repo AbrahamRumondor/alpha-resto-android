@@ -91,6 +91,7 @@ class ListAllMenuViewModel @Inject constructor(
                 }
             }
             result(null)
+
         }
     }
 }
