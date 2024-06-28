@@ -9,4 +9,9 @@
     <string name="add_to_menu">Add to Menu</string>
     <string name="alfaresto">AlfaResto</string>
     <string name="menu_image">menu image</string>
+    <string name="logo">logo</string>
+    <string name="deliver_to">Deliver to:</string>
+    <string name="hi_bella">Hi, Bella!</string>
+    <string name="menuimageview">menuImageView</string>
+    <string name="add_to_cart">ADD TO CART</string>
 </resources>
