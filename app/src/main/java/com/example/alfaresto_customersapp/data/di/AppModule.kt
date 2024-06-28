@@ -58,6 +58,13 @@ object AppModule {
 
     @Provides
     @Singleton
+    @Named("restosRef")
+    fun provideRestosRef(): CollectionReference {
+        return Firebase.firestore.collection("restaurants")
+    }
+
+    @Provides
+    @Singleton
     fun provideRoomDatabase(@ApplicationContext context: Context): CartDatabase {
         return Room.databaseBuilder(
             context,
