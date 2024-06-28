@@ -1,5 +1,6 @@
 package com.example.alfaresto_customersapp.ui.components.trackOrder
 
+import android.location.Location
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -120,4 +121,21 @@ class TrackOrderViewModel @Inject constructor(
             }
         })
     }
+
+    fun calculateDistanceBetween(location1: LatLng, location2: LatLng): Float {
+        val results = FloatArray(1)
+        Location.distanceBetween(
+            location1.latitude,
+            location1.longitude,
+            location2.latitude,
+            location2.longitude,
+            results
+        )
+        return results[0] // The distance in meters
+    }
+
+    fun getProgressPercentage(home: LatLng, driver: LatLng) {
+
+    }
+
 }
