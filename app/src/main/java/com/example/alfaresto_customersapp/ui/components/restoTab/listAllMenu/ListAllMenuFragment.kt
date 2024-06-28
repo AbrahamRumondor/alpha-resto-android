@@ -33,10 +33,7 @@ class ListAllMenuFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.rvListAllMenu.let {
-            it.adapter = adapter
-            it.layoutManager = GridLayoutManager(requireContext(), 2)
-        }
+        setupView()
 
         binding.apply {
             svSearchMenu.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -62,6 +59,17 @@ class ListAllMenuFragment : Fragment() {
             }
         }
 
+        loadData()
+    }
+
+    private fun setupView() {
+        binding.rvListAllMenu.let {
+            it.adapter = adapter
+            it.layoutManager = GridLayoutManager(requireContext(), 2)
+        }
+    }
+
+    private fun loadData() {
         lifecycleScope.launch {
             viewModel.menuList.collectLatest {
                 adapter.submitData(it)
