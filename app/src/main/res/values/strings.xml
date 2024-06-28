@@ -7,4 +7,6 @@
     <string name="list_all_menu">List All Menu</string>
     <string name="_0">0</string>
     <string name="add_to_menu">Add to Menu</string>
+    <string name="alfaresto">AlfaResto</string>
+    <string name="menu_image">menu image</string>
 </resources>
