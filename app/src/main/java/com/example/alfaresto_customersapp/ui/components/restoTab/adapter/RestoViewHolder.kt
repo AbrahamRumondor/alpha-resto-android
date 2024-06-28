@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.MenuItemBinding
 import com.example.alfaresto_customersapp.domain.model.Menu
 
@@ -14,10 +13,10 @@ class RestoViewHolder(
 
     fun bind(menu: Menu) {
         binding.let {
-            it.tvMenuName.text = menu.menuName
-            it.tvMenuPrice.text = menu.menuPrice.toString()
+            it.tvMenuName.text = menu.name
+            it.tvMenuPrice.text = menu.price.toString()
             Glide.with(it.root)
-                .load(menu.menuImage)
+                .load(menu.image)
                 .placeholder(android.R.drawable.ic_menu_report_image)
                 .into(it.ivMenuImage)
         }

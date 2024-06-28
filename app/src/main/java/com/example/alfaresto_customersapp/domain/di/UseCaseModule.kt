@@ -20,6 +20,8 @@ abstract class UseCaseModule {
         cartUseCaseImpl: CartUseCaseImpl
     ): CartUseCase
 
+    @Binds
+    @ViewModelScoped
     abstract fun provideMenuUseCase(
         menuUseCaseImpl: MenuUseCaseImpl
     ): MenuUseCase
