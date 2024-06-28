@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import com.example.alfaresto_customersapp.domain.model.OrderHistory
 
 class OrderHistoryAdapter(
-    private val itemClickListener: (OrderHistory) -> Unit
+    private val onItemClick: (OrderHistory) -> Unit
 ) : ListAdapter<OrderHistory, OrderHistoryViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderHistoryViewHolder {
@@ -17,7 +17,7 @@ class OrderHistoryAdapter(
         val order = getItem(position)
         holder.bind(order)
         holder.itemView.setOnClickListener {
-            itemClickListener(order)
+            onItemClick(order)
         }
     }
 

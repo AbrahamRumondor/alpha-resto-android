@@ -59,5 +59,6 @@ class OrderHistoryFragment : Fragment() {
             Navigation.findNavController(binding.root)
                 .navigate(action)
         }
+        Log.d("OrderHistory", "Order item clicked: ${orderHistory.orderID}")
     }
 }

@@ -15,6 +15,7 @@
     <dimen name="dimen_250dp">250dp</dimen>
     <dimen name="dimen_500dp">500dp</dimen>
 
+
     <dimen name="dimen_20">20dp</dimen>
     <dimen name="dimen_110">110dp</dimen>
     <dimen name="dimen_24">24sp</dimen>

@@ -38,7 +38,6 @@
             android:name="orderId"
             app:argType="string" />
     </fragment>
-        tools:layout="@layout/fragment_order_history" />
 
     <fragment
         android:id="@+id/orderSummaryFragment"

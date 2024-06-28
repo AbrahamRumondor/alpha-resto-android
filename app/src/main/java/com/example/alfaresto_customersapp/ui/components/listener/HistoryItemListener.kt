@@ -1,5 +1,5 @@
 package com.example.alfaresto_customersapp.ui.components.listener
 
 interface HistoryItemListener {
-    fun onItemClicked(position: Int)
+    fun onItemClicked(position: String)
 }

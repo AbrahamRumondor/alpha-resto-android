@@ -35,13 +35,13 @@
         android:id="@+id/tv_history_detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="33dp"
         android:fontFamily="@font/bold"
         android:text="Order Success"
         android:textColor="@color/black"
         android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.35"
+        app:layout_constraintHorizontal_bias="0.232"
         app:layout_constraintStart_toEndOf="@+id/buttonLayout"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -83,13 +83,16 @@
 
             <TextView
                 android:id="@+id/tv_user_address"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/semibold"
                 android:text="@string/address"
+                android:layout_marginHorizontal="30dp"
                 android:textColor="@color/mainblack"
                 android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="@+id/tv_user_name"
+                app:layout_constraintEnd_toEndOf="@+id/divider1"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/tv_user_phone"
                 app:layout_constraintTop_toBottomOf="@+id/tv_user_phone" />
 
             <View
@@ -114,76 +117,21 @@
             app:layout_constraintStart_toStartOf="@+id/divider1"
             app:layout_constraintTop_toBottomOf="@+id/divider1">
 
-            <ImageView
-                android:id="@+id/iv_menu_image"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginEnd="10dp"
-                android:src="@drawable/cart"
-                tools:ignore="ContentDescription" />
-
-            <LinearLayout
-                android:layout_width="0dp"
+            <ScrollView
+                android:id="@+id/sv_order_items"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                app:layout_constraintTop_toBottomOf="@+id/divider1"
+                app:layout_constraintBottom_toBottomOf="parent">
 
-                <TextView
-                    android:id="@+id/tv_menu_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/bold"
-                    android:text="Red n hot pizza"
-                    android:textColor="@color/mainblack"
-                    android:textSize="16sp" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tv_menu_desc"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/semibold"
-                        android:text="Spicy chicken, beef"
-                        android:textColor="@color/mainblack"
-                        android:textSize="16sp" />
-
-                </LinearLayout>
-
-                <LinearLayout
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_order_items"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_margin="5dp"
+                    tools:listitem="@layout/item_order_detail" />
 
-                    <TextView
-                        android:id="@+id/tv_menu_price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:fontFamily="@font/semibold"
-                        android:text="Rp 50.000,-"
-                        android:textColor="@color/mainblack"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:id="@+id/tv_menu_qty"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="120dp"
-                        android:fontFamily="@font/bold"
-                        android:text="2 pcs"
-                        android:textColor="@color/mainblack"
-                        android:textSize="16sp" />
-
-                </LinearLayout>
-
-            </LinearLayout>
+            </ScrollView>
 
         </LinearLayout>
 
@@ -222,6 +170,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
             <TextView
+                android:id="@+id/tv_total_price"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="170dp"
@@ -301,7 +250,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/ll_order_time"
+            android:id="@+id/ll_order_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="30dp"
@@ -342,7 +291,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/tv_order_status" />
 
                     <TextView
-                        android:id="@+id/tv_order_time"
+                        android:id="@+id/tv_order_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
@@ -356,59 +305,6 @@
                         app:layout_constraintTop_toBottomOf="@+id/tv_order_status" />
 
                 </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="30dp"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="@+id/ll_order_time"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/ll_order_time"
-            app:layout_constraintTop_toBottomOf="@+id/ll_order_time">
-
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_place"
-                tools:ignore="ContentDescription" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/semibold"
-                    android:text="Delivery Address"
-                    android:textColor="@color/mainblack"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/tv_order_status"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_order_status" />
-
-                <TextView
-                    android:id="@+id/tv_order_address"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:fontFamily="@font/bold"
-                    android:text="37 New line, Sunamganj"
-                    android:textColor="@color/mainblack"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/tv_order_status"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_order_status" />
-
             </LinearLayout>
         </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

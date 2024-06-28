@@ -39,12 +39,13 @@ class OrderHistoryUseCaseImpl @Inject constructor(
         val orderHistories = myOrders.map { order ->
             val shipment = myShipments.find { it.orderID == order.id }
             OrderHistory(
+                orderID = order.id,
                 orderDate = order.date.toString(),
                 orderTotalPrice = order.totalPrice,
                 addressLabel = userAddresses.find { it.address == order.fullAddress }?.label
                     ?: "Unknown",
                 orderStatus = when (shipment?.statusDelivery) {
-                    "delivered" -> OrderStatus.DELIVERED
+                    "Delivered" -> OrderStatus.DELIVERED
                     "onDelivery" -> OrderStatus.ON_DELIVERY
                     else -> OrderStatus.ON_PROCESS
                 }
