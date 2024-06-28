@@ -6,17 +6,23 @@ import androidx.lifecycle.viewModelScope
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.data.model.OrderItemResponse
 import com.example.alfaresto_customersapp.data.model.OrderResponse
+import com.example.alfaresto_customersapp.data.remote.pushNotification.NotificationBody
+import com.example.alfaresto_customersapp.data.remote.pushNotification.SendMessageDto
 import com.example.alfaresto_customersapp.domain.error.FirestoreCallback
+import com.example.alfaresto_customersapp.domain.error.Result.Error
+import com.example.alfaresto_customersapp.domain.error.Result.Success
 import com.example.alfaresto_customersapp.domain.model.Address
 import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.domain.model.Order
 import com.example.alfaresto_customersapp.domain.model.OrderItem
 import com.example.alfaresto_customersapp.domain.model.User
+import com.example.alfaresto_customersapp.domain.repository.FcmApiRepository
 import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
 import com.example.alfaresto_customersapp.domain.usecase.menu.MenuUseCase
 import com.example.alfaresto_customersapp.domain.usecase.order.OrderUseCase
 import com.example.alfaresto_customersapp.domain.usecase.resto.RestaurantUseCase
 import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase
+import com.example.alfaresto_customersapp.utils.getText
 import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_ADDRESS
 import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_TOKEN
 import com.google.firebase.firestore.FirebaseFirestore
@@ -24,9 +30,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -37,7 +41,8 @@ class OrderSummaryViewModel @Inject constructor(
     private val cartUseCase: CartUseCase,
     private val userUseCase: UserUseCase,
     private val orderUseCase: OrderUseCase,
-    private val restaurantUseCase: RestaurantUseCase
+    private val restaurantUseCase: RestaurantUseCase,
+    private val fcmApiRepository: FcmApiRepository
 ) : ViewModel() {
 
     private val _menus: MutableStateFlow<List<Menu>> = MutableStateFlow(emptyList())
@@ -228,9 +233,11 @@ class OrderSummaryViewModel @Inject constructor(
                                         )
                                     }
                                 }
-
-                                //                sendNotificationToResto(onResult)
-                                onResult("Success")
+//                                sendNotificationToResto(onResult)
+//                                onResult("Success")
+                                sendNotificationToResto(
+                                    onResult
+                                )
                             }
                         }
                     }
@@ -243,7 +250,7 @@ class OrderSummaryViewModel @Inject constructor(
         })
     }
 
-    fun getUserFromDB(callback: FirestoreCallback) {
+    private fun getUserFromDB(callback: FirestoreCallback) {
         viewModelScope.launch {
             try {
                 val user = userUseCase.getCurrentUser()
@@ -254,29 +261,20 @@ class OrderSummaryViewModel @Inject constructor(
         }
     }
 
-    private fun getCurrentDateTime(): String {
-        val currentDate = Date()
-        val dateFormat = SimpleDateFormat("dd MMMM yyyy, HH:mm", Locale.getDefault())
-        return dateFormat.format(currentDate)
-    }
+//    private fun getCurrentDateTime(): String {
+//        val currentDate = Date()
+//        val dateFormat = SimpleDateFormat("dd MMMM yyyy, HH:mm", Locale.getDefault())
+//        return dateFormat.format(currentDate)
+//    }
 
 //    private fun sendNotificationToResto(onResult: (msg: String) -> Unit) {
 //        db.collection("users").document("amnRLCt7iYGogz6JRxi5")
 //            .collection("tokens")
 //            .get()
 //            .addOnSuccessListener { documents ->
-//                Log.d("test", "SUCCESS FETCH DATA: $documents")
-//                val tokenList = mutableListOf<Token>()
-//                for (document in documents) {
-//                    val token = document.toObject(Token::class.java)
-//                    tokenList.add(token)
-//                    Log.d("test", "SUCCESS FETCH DATA: ${token.userToken}")
-//                }
-//                val latestToken = tokenList[tokenList.size - 1]
-//
 //                sendMessageToBackend(
 //                    message = "There's new order. Check your Resto App",
-//                    token = latestToken.userToken,
+//                    token = USER_TOKEN,
 //                    onResult
 //                )
 //            }
@@ -285,31 +283,29 @@ class OrderSummaryViewModel @Inject constructor(
 //            }
 //    }
 
-//    private fun sendMessageToBackend(
-//        message: String,
-//        token: String,
-//        onResult: (msg: String) -> Unit
-//    ) {
-//        viewModelScope.launch {
-//            val messageDto = SendMessageDto(
-//                to = token,
-//                notification = NotificationBody(
-//                    title = "New Message",
-//                    body = message
-//                )
-//            )
-//
-//            when (val result = fcmApiRepository.sendMessage(messageDto)) {
-//                is Result.Success -> {
-//                    onResult(result.data)
-//                }
-//
-//                is Result.Error -> {
-//                    onResult(result.error.getText())
-//                }
-//            }
-//
-//        }
-//    }
+    private fun sendNotificationToResto(
+        onResult: (msg: String) -> Unit
+    ) {
+        viewModelScope.launch {
+            val messageDto = SendMessageDto(
+                to = restoToken.value,
+                notification = NotificationBody(
+                    title = "New Message",
+                    body = "There's new order. Check your Resto App"
+                )
+            )
+
+            when (val result = fcmApiRepository.sendMessage(messageDto)) {
+                is Success -> {
+                    onResult(result.data)
+                }
+
+                is Error -> {
+                    onResult(result.error.getText())
+                }
+            }
+
+        }
+    }
 
 }
