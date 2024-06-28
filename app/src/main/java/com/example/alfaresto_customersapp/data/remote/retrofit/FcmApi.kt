@@ -5,7 +5,7 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface FcmApi {
-    @POST("/send")
+    @POST("/send-android")
     suspend fun sendMessage(
         @Body body: SendMessageDto
     )

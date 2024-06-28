@@ -90,11 +90,9 @@ class TrackOrderViewModel @Inject constructor(
 
         database.reference.child("driver_location").setValue(locationMap)
             .addOnSuccessListener {
-                // Handle success
                 Log.d("Firebase", "Location daxwta set successfully")
             }
             .addOnFailureListener { exception ->
-                // Handle failure
                 Log.e("Firebase", "Failed to set location data", exception)
             }
 

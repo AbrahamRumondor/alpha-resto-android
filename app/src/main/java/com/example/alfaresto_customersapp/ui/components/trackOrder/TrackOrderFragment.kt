@@ -1,20 +1,35 @@
 package com.example.alfaresto_customersapp.ui.components.trackOrder
 
+import android.Manifest
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.data.remote.response.RouteResponse
+import com.example.alfaresto_customersapp.databinding.BsdLocationPermissionBinding
 import com.example.alfaresto_customersapp.databinding.FragmentTrackOrderBinding
 import com.example.alfaresto_customersapp.domain.error.OsrmCallback
 import com.example.alfaresto_customersapp.domain.error.RealtimeLocationCallback
@@ -29,6 +44,7 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.maps.android.PolyUtil
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -42,6 +58,15 @@ class TrackOrderFragment : Fragment() {
     private var polylines: Polyline? = null
     private var driverMarker: Marker? = null
     private var myMarker: Marker? = null
+
+    private lateinit var notificationChannel: NotificationChannel
+    private val channelId = "i.apps.notifications"
+    private val description = "Test notification"
+    private lateinit var notificationManagerCompat: NotificationManagerCompat
+
+    private lateinit var bottomSheetBinding: BsdLocationPermissionBinding
+    private lateinit var bottomSheetDialog: BottomSheetDialog
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -78,6 +103,8 @@ class TrackOrderFragment : Fragment() {
                     val intent = Intent(requireContext(), ChatActivity::class.java)
                     startActivity(intent)
                 }
+
+                createNotificationChannel()
             }
         }
     }
@@ -205,6 +232,159 @@ class TrackOrderFragment : Fragment() {
     private fun setMapIdleListener() {
         map.setOnCameraIdleListener {
             val newLocation = map.cameraPosition.target
+        }
+    }
+
+    private fun createNotificationChannel() {
+        lateinit var builder: Notification.Builder
+
+        notificationManagerCompat =
+            NotificationManagerCompat.from(requireContext().applicationContext)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            notificationChannel =
+                NotificationChannel(channelId, description, NotificationManager.IMPORTANCE_HIGH)
+            notificationChannel.enableLights(true)
+            notificationChannel.lightColor = Color.GREEN
+            notificationChannel.enableVibration(false)
+            notificationManagerCompat.createNotificationChannel(notificationChannel)
+
+            builder = Notification.Builder(requireContext(), channelId)
+                .setContentTitle("On Delivery")
+                .setContentText("Current progress")
+                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.ic_logo))
+        } else {
+
+            builder = Notification.Builder(requireContext())
+                .setContentTitle("On Delivery")
+                .setContentText("Current progress")
+                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.ic_logo))
+        }
+
+        val progressMax = 100
+        var progressCurrent = 0
+        builder.setProgress(progressMax, progressCurrent, false)
+        checkNotificationPermission(true)
+        notificationManagerCompat.notify(1234, builder.build())
+
+        val handler = android.os.Handler()
+        val updateRunnable = object : Runnable {
+            override fun run() {
+                checkNotificationPermission(false)
+                if (progressCurrent <= progressMax) {
+                    progressCurrent += 10
+                    builder.setProgress(progressMax, progressCurrent, false)
+                    notificationManagerCompat.notify(1234, builder.build())
+                    handler.postDelayed(this, 1000) // Update every 1 second
+                } else {
+                    builder.setContentText("Download complete")
+                        .setProgress(0, 0, false)
+                    notificationManagerCompat.notify(1234, builder.build())
+                }
+            }
+        }
+
+        // Start the initial update
+        handler.post(updateRunnable)
+    }
+
+    private fun checkNotificationPermission(firstTime: Boolean) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && firstTime) {
+            if (ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                requestNotificationPermissions()
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private val requestMultiplePermissionsLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            val notificationGranted = permissions[Manifest.permission.POST_NOTIFICATIONS] ?: false
+
+            when {
+                notificationGranted -> {
+                    // notification access granted
+                }
+
+                else -> {
+                    // No location access granted
+                    if (!shouldShowLocationPermissionRationale()) {
+                        showBottomSheetLocationPermission()
+                    } else {
+                        showDialogForPermission()
+                    }
+                }
+            }
+        }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun shouldShowLocationPermissionRationale(): Boolean {
+        return ActivityCompat.shouldShowRequestPermissionRationale(
+            requireActivity(),
+            Manifest.permission.POST_NOTIFICATIONS
+        )
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun requestNotificationPermissions() {
+        when (PackageManager.PERMISSION_GRANTED) {
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.POST_NOTIFICATIONS
+            ) -> {
+                // You can use the API that requires the permission.
+            }
+
+            else -> {
+                requestMultiplePermissionsLauncher.launch(
+                    arrayOf(
+                        Manifest.permission.POST_NOTIFICATIONS
+                    )
+                )
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun showDialogForPermission() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setMessage(getString(R.string.dialog_for_permission_message_notification))
+            .setTitle(getString(R.string.permission_required))
+            .setCancelable(false)
+            .setPositiveButton(
+                getString(R.string.ok)
+            ) { dialog, _ ->
+                requestMultiplePermissionsLauncher.launch(
+                    arrayOf(
+                        Manifest.permission.POST_NOTIFICATIONS
+                    )
+                )
+                dialog.dismiss()
+            }
+        builder.show()
+    }
+
+    private fun showBottomSheetLocationPermission() {
+        bottomSheetBinding = BsdLocationPermissionBinding.inflate(layoutInflater)
+
+        bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme)
+        bottomSheetDialog.setContentView(bottomSheetBinding.root) // Use the binding's root view
+        bottomSheetDialog.setOnCancelListener {
+            it.dismiss()
+        }
+        bottomSheetDialog.show()
+
+        bottomSheetBinding.btnToSettings.setOnClickListener {
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+            val uri = Uri.fromParts("package", requireActivity().packageName, null)
+            intent.setData(uri)
+            startActivity(intent)
         }
     }
 

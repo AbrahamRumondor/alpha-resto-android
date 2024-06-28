@@ -73,4 +73,5 @@
     <string name="guest">Guest</string>
     <string name="driver">Driver</string>
     <string name="me">Me</string>
+    <string name="dialog_for_permission_message_notification">This app requires notification permissions for the apps to work</string>
 </resources>
