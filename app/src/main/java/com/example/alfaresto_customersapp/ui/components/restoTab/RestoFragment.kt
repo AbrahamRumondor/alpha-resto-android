@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.FragmentRestoBinding
 import com.example.alfaresto_customersapp.ui.components.restoTab.adapter.RestoAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,6 +45,11 @@ class RestoFragment : Fragment() {
             }
 
             adapter.submitMenuList(menus)
+        }
+
+        binding.btnAllMenu.setOnClickListener {
+            Navigation.findNavController(view)
+                .navigate(R.id.action_resto_fragment_to_list_all_menu_fragment)
         }
     }
 }

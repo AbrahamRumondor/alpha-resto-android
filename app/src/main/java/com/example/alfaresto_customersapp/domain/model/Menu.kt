@@ -2,13 +2,13 @@ package com.example.alfaresto_customersapp.domain.model
 
 data class Menu(
     // default by database
-    val menuId: String = "",
+    val id: String = "",
     val restoId:String = "",
-    val menuName: String = "",
-    val menuDescription: String = "",
-    val menuPrice: Int = -1,
-    val menuStock: Int = -1,
-    val menuImage: String = "",
+    val name: String = "",
+    val description: String = "",
+    val price: Int = 0,
+    val stock: Int = 0,
+    val image: String = "",
 
     // specific application use
     val isSelected: Boolean = false,

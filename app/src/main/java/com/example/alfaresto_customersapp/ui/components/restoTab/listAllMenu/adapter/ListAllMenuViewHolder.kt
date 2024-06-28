@@ -1,16 +1,15 @@
-package com.example.alfaresto_customersapp.ui.components.restoTab.adapter
+package com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.alfaresto_customersapp.databinding.MenuItemBinding
+import com.example.alfaresto_customersapp.databinding.AllMenuItemBinding
 import com.example.alfaresto_customersapp.domain.model.Menu
 
-class RestoViewHolder(
-    private var binding: MenuItemBinding
+class ListAllMenuViewHolder(
+    private var binding: AllMenuItemBinding
 ) : RecyclerView.ViewHolder(binding.root) {
-
     fun bind(menu: Menu) {
         binding.let {
             it.tvMenuName.text = menu.name
@@ -23,10 +22,10 @@ class RestoViewHolder(
     }
 
     companion object {
-        fun create(view: ViewGroup): RestoViewHolder {
+        fun create(view: ViewGroup): ListAllMenuViewHolder {
             val inflater = LayoutInflater.from(view.context)
-            val binding = MenuItemBinding.inflate(inflater, view, false)
-            return RestoViewHolder(binding)
+            val binding = AllMenuItemBinding.inflate(inflater, view, false)
+            return ListAllMenuViewHolder(binding)
         }
     }
 }

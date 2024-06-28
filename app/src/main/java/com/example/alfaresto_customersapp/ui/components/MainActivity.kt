@@ -1,11 +1,11 @@
 package com.example.alfaresto_customersapp.ui.components
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.alfaresto_customersapp.databinding.ActivityMainBinding
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.alfaresto_customersapp.R
+import com.example.alfaresto_customersapp.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
