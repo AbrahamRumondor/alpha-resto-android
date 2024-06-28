@@ -12,10 +12,10 @@ class ListAllMenuViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(menu: Menu) {
         binding.let {
-            it.tvMenuName.text = menu.menuName
-            it.tvMenuPrice.text = menu.menuPrice.toString()
+            it.tvMenuName.text = menu.name
+            it.tvMenuPrice.text = menu.price.toString()
             Glide.with(it.root)
-                .load(menu.menuImage)
+                .load(menu.image)
                 .placeholder(android.R.drawable.ic_menu_report_image)
                 .into(it.ivMenuImage)
         }

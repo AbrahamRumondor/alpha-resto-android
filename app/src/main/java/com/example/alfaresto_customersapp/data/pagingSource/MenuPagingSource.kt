@@ -25,7 +25,7 @@ class MenuPagingSource(
 
             val menus = currentPage.toObjects<MenuResponse>().map { MenuResponse.transform(it) }
             val queriedMenu = currentPage.toObjects(MenuResponse::class.java)
-                .filter { it.menuName.contains(query ?: "", ignoreCase = true) }
+                .filter { it.name.contains(query ?: "", ignoreCase = true) }
                 .map { MenuResponse.transform(it) }
 
             LoadResult.Page(

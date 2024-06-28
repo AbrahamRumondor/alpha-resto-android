@@ -20,7 +20,7 @@ class ListAllMenuAdapter : PagingDataAdapter<Menu, ListAllMenuViewHolder>(MenuCo
     companion object {
         val MenuComparator = object : DiffUtil.ItemCallback<Menu>() {
             override fun areItemsTheSame(oldItem: Menu, newItem: Menu): Boolean {
-                return oldItem.menuId == newItem.menuId
+                return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(oldItem: Menu, newItem: Menu): Boolean {

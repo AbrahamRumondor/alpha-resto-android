@@ -3,22 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/customer_nav"
-    app:startDestination="@id/restoFragment">
+    app:startDestination="@id/resto_fragment">
 
     <fragment
-        android:id="@+id/restoFragment"
+        android:id="@+id/resto_fragment"
         android:name="com.example.alfaresto_customersapp.ui.components.restoTab.RestoFragment"
         android:label="fragment_resto"
-        tools:layout="@layout/fragment_resto" />
+        tools:layout="@layout/fragment_resto" >
+        <action
+            android:id="@+id/action_resto_fragment_to_list_all_menu_fragment"
+            app:destination="@id/list_all_menu_fragment" />
+    </fragment>
     <fragment
-        android:id="@+id/orderHistoryFragment"
+        android:id="@+id/order_history_fragment"
         android:name="com.example.alfaresto_customersapp.ui.components.orderHistoryTab.OrderHistoryFragment"
         android:label="fragment_order_history"
         tools:layout="@layout/fragment_order_history" />
 
     <fragment
-        android:id="@+id/listAllMenuFragment"
+        android:id="@+id/list_all_menu_fragment"
         android:name="com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu.ListAllMenuFragment"
         android:label="fragment_list_all_menu"
-        tools:layout="@layout/fragment_list_all_menu" />
+        tools:layout="@layout/fragment_list_all_menu" >
+        <action
+            android:id="@+id/action_list_all_menu_fragment_to_resto_fragment"
+            app:destination="@id/resto_fragment" />
+    </fragment>
 </navigation>

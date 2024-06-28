@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.FragmentRestoBinding
-import com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu.ListAllMenuFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -27,10 +27,8 @@ class RestoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnAllMenu.setOnClickListener {
-            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragmentContainerView, ListAllMenuFragment())
-            transaction.addToBackStack(null)
-            transaction.commit()
+            Navigation.findNavController(view)
+                .navigate(R.id.action_resto_fragment_to_list_all_menu_fragment)
         }
     }
 

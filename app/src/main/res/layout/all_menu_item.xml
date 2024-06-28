@@ -2,10 +2,10 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="@dimen/dimen_200dp"
-    android:layout_height="@dimen/dimen_300dp"
-    app:cardCornerRadius="@dimen/dimen_24dp"
-    app:cardElevation="@dimen/dimen_5dp"
+    android:layout_width="@dimen/dimen_200"
+    android:layout_height="@dimen/dimen_300"
+    app:cardCornerRadius="@dimen/dimen_24"
+    app:cardElevation="@dimen/dimen_5"
     app:cardUseCompatPadding="true">
 
     <LinearLayout
@@ -26,20 +26,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/dimen_10dp">
+            android:padding="@dimen/dimen_10">
 
             <TextView
                 android:id="@+id/tv_menu_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/dimen_24sp"
+                android:textSize="@dimen/font_24"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tv_menu_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/dimen_24sp" />
+                android:textSize="@dimen/font_24" />
         </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatButton
@@ -48,18 +48,18 @@
             android:layout_height="wrap_content"
             android:background="@drawable/menu_add_button"
             android:fontFamily="@font/bold"
-            android:padding="@dimen/dimen_16dp"
+            android:padding="@dimen/dimen_16"
             android:text="@string/add_to_menu"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="@dimen/dimen_18sp"
+            android:textSize="@dimen/font_18"
             android:visibility="visible" />
 
         <LinearLayout
             android:id="@+id/ll_quantity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/dimen_16dp"
+            android:layout_marginHorizontal="@dimen/dimen_16"
             android:orientation="horizontal"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
@@ -68,32 +68,32 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_minus"
-                android:layout_width="@dimen/dimen_50dp"
-                android:layout_height="@dimen/dimen_50dp"
+                android:layout_width="@dimen/dimen_50"
+                android:layout_height="@dimen/dimen_50"
                 android:background="@drawable/ic_minus"
                 android:fontFamily="@font/bold"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="@dimen/dimen_20sp" />
+                android:textSize="@dimen/font_20" />
 
             <TextView
                 android:id="@+id/tv_quantity_per_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/dimen_16dp"
+                android:layout_marginHorizontal="@dimen/dimen_16"
                 android:fontFamily="@font/bold"
                 android:textColor="@color/black"
-                android:textSize="@dimen/dimen_20sp" />
+                android:textSize="@dimen/font_20" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_plus"
-                android:layout_width="@dimen/dimen_50dp"
-                android:layout_height="@dimen/dimen_50dp"
+                android:layout_width="@dimen/dimen_50"
+                android:layout_height="@dimen/dimen_50"
                 android:background="@drawable/ic_plus"
                 android:fontFamily="@font/bold"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="@dimen/dimen_24sp" />
+                android:textSize="@dimen/font_24" />
         </LinearLayout>
 
     </LinearLayout>
