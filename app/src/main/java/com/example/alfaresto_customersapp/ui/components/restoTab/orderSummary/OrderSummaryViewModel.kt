@@ -12,17 +12,14 @@ import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.domain.model.Order
 import com.example.alfaresto_customersapp.domain.model.OrderItem
 import com.example.alfaresto_customersapp.domain.model.User
-import com.example.alfaresto_customersapp.domain.repository.FcmApiRepository
 import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
 import com.example.alfaresto_customersapp.domain.usecase.menu.MenuUseCase
-import com.example.alfaresto_customersapp.domain.usecase.notification.NotificationUseCase
 import com.example.alfaresto_customersapp.domain.usecase.order.OrderUseCase
+import com.example.alfaresto_customersapp.domain.usecase.resto.RestaurantUseCase
 import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase
 import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_ADDRESS
 import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_TOKEN
-import com.google.firebase.Firebase
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.firestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -38,10 +35,9 @@ class OrderSummaryViewModel @Inject constructor(
     @Named("db") private val db: FirebaseFirestore,
     private val menuUseCase: MenuUseCase,
     private val cartUseCase: CartUseCase,
-    private val fcmApiRepository: FcmApiRepository,
     private val userUseCase: UserUseCase,
     private val orderUseCase: OrderUseCase,
-    private val notificationUseCase: NotificationUseCase
+    private val restaurantUseCase: RestaurantUseCase
 ) : ViewModel() {
 
     private val _menus: MutableStateFlow<List<Menu>> = MutableStateFlow(emptyList())
@@ -52,6 +48,12 @@ class OrderSummaryViewModel @Inject constructor(
 
     private val _orders: MutableStateFlow<MutableList<Any?>> = MutableStateFlow(mutableListOf())
     val orders: StateFlow<List<Any?>> = _orders
+
+    private val _restoID: MutableStateFlow<String> = MutableStateFlow("")
+    val restoID: StateFlow<String> = _restoID
+
+    private val _restoToken: MutableStateFlow<String> = MutableStateFlow("")
+    val restoToken: StateFlow<String> = _restoToken
 
     init {
         fetchMenus()
@@ -95,6 +97,21 @@ class OrderSummaryViewModel @Inject constructor(
     init {
         fetchMenus()
         fetchCart()
+        fetchResto()
+    }
+
+    private fun fetchResto() {
+        viewModelScope.launch {
+            try {
+                val restoID = restaurantUseCase.getRestaurantId()
+                _restoID.value = restoID
+
+                val restoToken = restaurantUseCase.getRestaurantToken()
+                _restoToken.value = restoToken
+            } catch (e: Exception) {
+                Log.e("RESTO", "Error fetching resto: ${e.message}")
+            }
+        }
     }
 
     private fun fetchMenus() {
@@ -181,13 +198,14 @@ class OrderSummaryViewModel @Inject constructor(
                                     userName = user.name,
                                     userId = user.id,
                                     fullAddress = address.address,
-                                    restoID = "NrhoLsLLieXFly9dXj7vu2ETi1T2", // nanti buat singleton
+                                    restoID = restoID.value,
                                     date = Date(),
                                     paymentMethod = payment,
                                     totalPrice = total.second ?: -1,
                                     latitude = address.latitude,
                                     longitude = address.longitude,
-                                    token = token
+                                    userToken = token,
+                                    restoToken = restoToken.value
                                 )
                                 val orderToFirebase = OrderResponse.toResponse(order)
                                 orderUseCase.setOrder(order.id, orderToFirebase)
@@ -211,7 +229,7 @@ class OrderSummaryViewModel @Inject constructor(
                                     }
                                 }
 
-//                sendNotificationToResto(onResult)
+                                //                sendNotificationToResto(onResult)
                                 onResult("Success")
                             }
                         }

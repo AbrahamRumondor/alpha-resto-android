@@ -25,4 +25,8 @@ class UserUseCaseImpl @Inject constructor(
 //    override suspend fun getUserTokens(): StateFlow<List<Token>> {
 //        return userRepository.getUserToken(authRepository.getCurrentUserID())
 //    }
+
+    override fun saveTokenToDB(uid: String, token: String) {
+        userRepository.saveTokenToDB(uid, token)
+    }
 }

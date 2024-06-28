@@ -1,6 +1,5 @@
 package com.example.alfaresto_customersapp.domain.model
 
-import com.google.firebase.Timestamp
 import java.util.Date
 
 data class Order(
@@ -9,10 +8,11 @@ data class Order(
     val userName: String = "",
     val fullAddress: String = "",
     val restoID: String = "",
-    val token: String = "",
-    val date : Date = Date(),
-    val paymentMethod : String = "",
-    val totalPrice : Int = 0,
-    val latitude : Double = 0.0,
-    val longitude : Double = 0.0,
+    val userToken: String = "",
+    val restoToken: String = "",
+    val date: Date = Date(),
+    val paymentMethod: String = "",
+    val totalPrice: Int = 0,
+    val latitude: Double = 0.0,
+    val longitude: Double = 0.0,
 )

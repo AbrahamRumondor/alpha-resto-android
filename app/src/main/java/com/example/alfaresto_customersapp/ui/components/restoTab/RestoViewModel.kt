@@ -3,23 +3,19 @@ package com.example.alfaresto_customersapp.ui.components.restoTab
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.alfaresto_customersapp.domain.model.Menu
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.domain.error.FirestoreCallback
-import com.example.alfaresto_customersapp.domain.model.Token
+import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.domain.model.User
 import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
 import com.example.alfaresto_customersapp.domain.usecase.menu.MenuUseCase
 import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase
 import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_TOKEN
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessaging
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -120,36 +116,14 @@ class RestoViewModel @Inject constructor(
     }
 
     private fun saveToken(token: String) {
-
         getUserFromDB(object : FirestoreCallback {
             override fun onSuccess(user: User?) {
-                val db = FirebaseFirestore.getInstance()
-
-                if (user != null) {
-                    val documentId = db.collection("users").document(user.id)
-                        .collection("tokens").document().id
-
-                    val userToken = Token(userToken = token)
-                    db.collection("users").document(user.id)
-                        .collection("tokens").document(documentId)
-                        .set(userToken)
-                        .addOnSuccessListener {
-                            Log.d("PushNotificationService", "FCM token added to Firestore")
-                        }
-                        .addOnFailureListener { e ->
-                            Log.w(
-                                "PushNotificationService",
-                                "Error adding FCM token to Firestore",
-                                e
-                            )
-                        }
-                }
+                userUseCase.saveTokenToDB(user?.id ?: "", token)
             }
 
             override fun onFailure(exception: Exception) {
                 Log.d("PushNotificationService", "Error adding FCM token to Firestore", exception)
             }
-
         })
     }
 

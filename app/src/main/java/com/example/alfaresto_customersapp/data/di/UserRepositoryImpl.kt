@@ -59,4 +59,16 @@ class UserRepositoryImpl @Inject constructor(
             .collection("tokens")
             .get()
     }
+
+    override fun saveTokenToDB(uid: String, token: String) {
+        val currentUser = usersRef.document(uid)
+
+        currentUser.update("token", token)
+            .addOnSuccessListener {
+                Log.d("UserRepositoryImpl", "Token saved to DB")
+            }
+            .addOnFailureListener {
+                Log.e("UserRepositoryImpl", "Error saving token to DB", it)
+            }
+    }
 }

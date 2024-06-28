@@ -10,4 +10,5 @@ interface UserRepository {
     suspend fun getCurrentUser(uid: String): LiveData<User>
     suspend fun getUserAddresses(uid: String): LiveData<List<Address>>
     suspend fun getUserToken(uid: String): Task<QuerySnapshot>
+    fun saveTokenToDB(uid: String, token: String)
 }

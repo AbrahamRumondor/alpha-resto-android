@@ -37,15 +37,19 @@ data class OrderResponse(
     @set:PropertyName("total_price")
     var totalPrice: Int = 0,
 
-    @get:PropertyName("token")
-    @set:PropertyName("token")
-    var token: String = "",
+    @get:PropertyName("user_token")
+    @set:PropertyName("user_token")
+    var userToken: String = "",
+
+    @get:PropertyName("resto_token")
+    @set:PropertyName("resto_token")
+    var restoToken: String = "",
 
     val latitude: Double = 0.0,
     val longitude: Double = 0.0,
 ) {
     // Public no-argument constructor required by Firestore
-    constructor() : this("", "", "", "", "", Date(), "", 0, "",0.0, 0.0)
+    constructor() : this("", "", "", "", "", Date(), "", 0, "", "", 0.0, 0.0)
 
     companion object {
         fun transform(orderResponse: OrderResponse): Order {
@@ -60,7 +64,8 @@ data class OrderResponse(
                 latitude = orderResponse.latitude,
                 longitude = orderResponse.longitude,
                 userId = orderResponse.userId,
-                token = orderResponse.token
+                userToken = orderResponse.userToken,
+                restoToken = orderResponse.restoToken
             )
         }
 
@@ -77,7 +82,8 @@ data class OrderResponse(
                 latitude = order.latitude,
                 longitude = order.longitude,
                 userId = order.userId,
-                token = order.token
+                userToken = order.userToken,
+                restoToken = order.restoToken
             )
         }
     }
