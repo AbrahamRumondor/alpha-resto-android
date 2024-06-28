@@ -10,13 +10,6 @@
     <string name="user_email">User Email</string>
     <string name="direct_to_login">Already have an account? Login here</string>
     <string name="register_here">Register here</string>
-    <string name="alfaresto">AlfaResto</string>
-    <string name="logo">logo</string>
-    <string name="deliver_to">Deliver to:</string>
-    <string name="hi_bella">Hi, Bella!</string>
-    <string name="menuimageview">menuImageView</string>
-    <string name="no_telp">No. Telp</string>
-    <string name="name">Name</string>
     <string name="address">Address</string>
     <string name="login_success">Login Success</string>
     <string name="login_failed">Login Failed</string>
@@ -34,7 +27,7 @@
     <string name="_2_items">(2 items)</string>
     <string name="rp_112_000">Rp 112.000,-</string>
     <string name="tempat_kerja">Tempat Kerja</string>
-    <string name="dummy_address">Alam Sutera, Jl. Jalur Sutera Bar. No.Kav. 7-9, RT.003/RW.006, Panunggangan Tim., Kec. Pinang, Kota Tangerang, Banten 15143</string>
+    <string name="dummy_address">Alam Sutera, Jl. Jalur Sutera Bar. No.Kav. 7–9, RT.003/RW.006, Panunggangan Tim., Kec. Pinang, Kota Tangerang, Banten 15143</string>
     <string name="icon_proceed">Icon_Proceed</string>
     <string name="select_payment_method">Select payment method</string>
     <string name="cod">COD</string>
@@ -57,6 +50,7 @@
     <string name="address_label">Address Label</string>
     <string name="address_detail">Address Detail</string>
     <string name="save">Save</string>
+    <string name="menuimageview">menuImageView</string>
     <string name="menu_image_view">menuImageView</string>
     <string name="soft_shell_taco">Soft Shell Taco</string>
     <string name="add_to_cart">Add To Cart</string>
@@ -67,6 +61,10 @@
     <string name="add_to_menu">Add to Menu</string>
     <string name="greetings">Hi, %1$s</string>
     <string name="_0">0"</string>
+    <string name="alfaresto">AlfaResto</string>
+    <string name="logo">logo</string>
+    <string name="name">name</string>
+    <string name="no_telp">no telp</string>
     <string name="chat_title">Chat</string>
     <string name="message_hint">Type a message</string>
     <string name="track_order">Track Order</string>

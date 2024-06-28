@@ -8,7 +8,9 @@ import com.example.alfaresto_customersapp.data.model.UserResponse
 import com.example.alfaresto_customersapp.domain.model.Address
 import com.example.alfaresto_customersapp.domain.model.User
 import com.example.alfaresto_customersapp.domain.repository.UserRepository
+import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import javax.inject.Named
@@ -50,5 +52,11 @@ class UserRepositoryImpl @Inject constructor(
             _addresses.value = emptyList()
         }
         return addresses
+    }
+
+    override suspend fun getUserToken(uid: String): Task<QuerySnapshot> {
+        return usersRef.document(uid)
+            .collection("tokens")
+            .get()
     }
 }

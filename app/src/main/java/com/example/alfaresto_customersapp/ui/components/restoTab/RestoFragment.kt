@@ -2,16 +2,15 @@ package com.example.alfaresto_customersapp.ui.components.restoTab
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.databinding.FragmentRestoBinding
@@ -41,13 +40,12 @@ class RestoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val menuRv = binding.rvMenu
+//        viewModel.getToken()
 
-        binding.allMenuBtn.setOnClickListener {
-            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragmentContainerView, ListAllMenuFragment())
-            transaction.addToBackStack(null)
-            transaction.commit()
+        binding.rvMenu.let {
+            it.adapter = adapter
+            it.layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         }
 
         viewModel.getUserFromDB(object : FirestoreCallback {
@@ -75,15 +73,9 @@ class RestoFragment : Fragment() {
 
                     if (it.isEmpty()) {
                         Log.d("test", "NO DATA")
-                        menuRv.adapter = adapter
+                        binding.rvMenu.adapter = adapter
                         setRestoAdapterButtons(it)
                         adapter.submitMenuList(menus)
-                        menuRv.layoutManager =
-                            LinearLayoutManager(
-                                requireContext(),
-                                LinearLayoutManager.HORIZONTAL,
-                                false
-                            )
                         return@collectLatest
                     }
 
@@ -96,13 +88,16 @@ class RestoFragment : Fragment() {
                         }
                     }
 
-                    menuRv.adapter = adapter
                     setRestoAdapterButtons(it)
+                    binding.rvMenu.adapter = adapter
                     adapter.submitMenuList(updatedMenus)
-                    menuRv.layoutManager =
-                        LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                 }
             }
+        }
+
+        binding.allMenuBtn.setOnClickListener {
+            Navigation.findNavController(requireView())
+                .navigate(R.id.action_restoFragment_to_listAllMenuFragment)
         }
 
         binding.ivIconCart.setOnClickListener {

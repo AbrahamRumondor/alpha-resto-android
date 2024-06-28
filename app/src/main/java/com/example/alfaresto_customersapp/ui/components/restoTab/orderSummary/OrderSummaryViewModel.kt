@@ -1,33 +1,27 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary
 
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.data.model.OrderItemResponse
 import com.example.alfaresto_customersapp.data.model.OrderResponse
-import com.example.alfaresto_customersapp.data.remote.pushNotification.NotificationBody
-import com.example.alfaresto_customersapp.data.remote.pushNotification.SendMessageDto
 import com.example.alfaresto_customersapp.domain.error.FirestoreCallback
-import com.example.alfaresto_customersapp.domain.error.Result
 import com.example.alfaresto_customersapp.domain.model.Address
 import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.domain.model.Order
 import com.example.alfaresto_customersapp.domain.model.OrderItem
-import com.example.alfaresto_customersapp.domain.model.Token
 import com.example.alfaresto_customersapp.domain.model.User
-import com.example.alfaresto_customersapp.domain.repository.AuthRepository
 import com.example.alfaresto_customersapp.domain.repository.FcmApiRepository
-import com.example.alfaresto_customersapp.domain.repository.UserRepository
-import com.example.alfaresto_customersapp.domain.usecase.MenuUseCase
-import com.example.alfaresto_customersapp.domain.usecase.auth.AuthUseCase
 import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
+import com.example.alfaresto_customersapp.domain.usecase.menu.MenuUseCase
+import com.example.alfaresto_customersapp.domain.usecase.notification.NotificationUseCase
+import com.example.alfaresto_customersapp.domain.usecase.order.OrderUseCase
 import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase
-import com.example.alfaresto_customersapp.utils.getText
 import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_ADDRESS
 import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_TOKEN
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,15 +31,18 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
+import javax.inject.Named
 
 @HiltViewModel
 class OrderSummaryViewModel @Inject constructor(
+    @Named("db") private val db: FirebaseFirestore,
     private val menuUseCase: MenuUseCase,
     private val cartUseCase: CartUseCase,
-    private val userUseCase: UserUseCase
+    private val fcmApiRepository: FcmApiRepository,
+    private val userUseCase: UserUseCase,
+    private val orderUseCase: OrderUseCase,
+    private val notificationUseCase: NotificationUseCase
 ) : ViewModel() {
-
-    val db = Firebase.firestore
 
     private val _menus: MutableStateFlow<List<Menu>> = MutableStateFlow(emptyList())
     val menus: StateFlow<List<Menu>> = _menus
@@ -56,6 +53,10 @@ class OrderSummaryViewModel @Inject constructor(
     private val _orders: MutableStateFlow<MutableList<Any?>> = MutableStateFlow(mutableListOf())
     val orders: StateFlow<List<Any?>> = _orders
 
+    init {
+        fetchMenus()
+        fetchCart()
+    }
 
     fun setPayment(method: String) {
         _orders.value[orders.value.size - 2] = method
@@ -148,14 +149,11 @@ class OrderSummaryViewModel @Inject constructor(
     }
 
     private fun getOrderDocumentId(): String {
-        val item = db.collection("orders").document()
-        return item.id
+        return orderUseCase.getOrderDocID()
     }
 
     private fun getOrderItemDocumentId(orderId: String): String {
-        val item = db.collection("orders").document(orderId)
-            .collection("order_items").document()
-        return item.id
+        return orderUseCase.getOrderItemDocID(orderId)
     }
 
     // TODO 1:userID,addressID,restoID (fetch dr firestore) | 2:menuID (fetch dari firestore)
@@ -192,20 +190,7 @@ class OrderSummaryViewModel @Inject constructor(
                                     token = token
                                 )
                                 val orderToFirebase = OrderResponse.toResponse(order)
-                                db.collection("orders").document(order.id)
-                                    .set(orderToFirebase)
-                                    .addOnSuccessListener {
-                                        Log.d(
-                                            "TEST",
-                                            "SUCCESS ON ORDER INSERTION"
-                                        )
-                                    }
-                                    .addOnFailureListener {
-                                        Log.d(
-                                            "TEST",
-                                            "ERROR ON ORDER INSERTION"
-                                        )
-                                    }
+                                orderUseCase.setOrder(order.id, orderToFirebase)
 
                                 for (i in 1..<TOTAL) {
                                     val menu = _orders.value[i] as Menu ?: null
@@ -218,39 +203,25 @@ class OrderSummaryViewModel @Inject constructor(
                                         )
                                         val orderItemResponse =
                                             OrderItemResponse.toResponse(orderItem)
-                                        db.collection("orders").document(order.id)
-                                            .collection("order_items").document(orderItem.id)
-                                            .set(orderItemResponse)
-                                            .addOnSuccessListener {
-                                                Log.d(
-                                                    "TEST",
-                                                    "SUCCESS ON ORDER ITEM INSERTION"
-                                                )
-                                            }
-                                            .addOnFailureListener {
-                                                Log.d(
-                                                    "TEST",
-                                                    "ERROR ON ORDER INSERTION"
-                                                )
-                                            }
+                                        orderUseCase.setOrderItem(
+                                            order.id,
+                                            orderItem.id,
+                                            orderItemResponse
+                                        )
                                     }
                                 }
+
+//                sendNotificationToResto(onResult)
+                                onResult("Success")
                             }
                         }
-//                        sendNotificationToResto(onResult)
-                        onResult("Success")
                     }
                 }
             }
 
             override fun onFailure(exception: Exception) {
-                Log.d(
-                    "test",
-                    "ERROR failure ON ORDER INSERTION"
-                )
-                onResult("Error saving data in database")
+                onResult("Failed to fetch user")
             }
-
         })
     }
 
@@ -270,7 +241,7 @@ class OrderSummaryViewModel @Inject constructor(
         val dateFormat = SimpleDateFormat("dd MMMM yyyy, HH:mm", Locale.getDefault())
         return dateFormat.format(currentDate)
     }
-//
+
 //    private fun sendNotificationToResto(onResult: (msg: String) -> Unit) {
 //        db.collection("users").document("amnRLCt7iYGogz6JRxi5")
 //            .collection("tokens")
@@ -295,7 +266,7 @@ class OrderSummaryViewModel @Inject constructor(
 //                Log.d("test", "GAGAL FETCH DATA: $it")
 //            }
 //    }
-//
+
 //    private fun sendMessageToBackend(
 //        message: String,
 //        token: String,
@@ -322,6 +293,5 @@ class OrderSummaryViewModel @Inject constructor(
 //
 //        }
 //    }
-
 
 }

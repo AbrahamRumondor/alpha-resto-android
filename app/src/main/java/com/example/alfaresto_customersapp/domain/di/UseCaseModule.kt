@@ -1,9 +1,13 @@
-package com.example.alfaresto_customersapp.ui.di
+package com.example.alfaresto_customersapp.domain.di
 
-import com.example.alfaresto_customersapp.domain.usecase.MenuUseCase
-import com.example.alfaresto_customersapp.domain.usecase.MenuUseCaseImpl
 import com.example.alfaresto_customersapp.domain.usecase.auth.AuthUseCase
 import com.example.alfaresto_customersapp.domain.usecase.auth.AuthUseCaseImpl
+import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
+import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCaseImpl
+import com.example.alfaresto_customersapp.domain.usecase.menu.MenuUseCase
+import com.example.alfaresto_customersapp.domain.usecase.menu.MenuUseCaseImpl
+import com.example.alfaresto_customersapp.domain.usecase.notification.NotificationUseCase
+import com.example.alfaresto_customersapp.domain.usecase.notification.NotificationUseCaseImpl
 import com.example.alfaresto_customersapp.domain.usecase.order.OrderUseCase
 import com.example.alfaresto_customersapp.domain.usecase.order.OrderUseCaseImpl
 import com.example.alfaresto_customersapp.domain.usecase.orderHistory.OrderHistoryUseCase
@@ -12,8 +16,6 @@ import com.example.alfaresto_customersapp.domain.usecase.shipment.ShipmentUseCas
 import com.example.alfaresto_customersapp.domain.usecase.shipment.ShipmentUseCaseImpl
 import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase
 import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCaseImpl
-import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
-import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCaseImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -65,4 +67,10 @@ abstract class UseCaseModule {
     abstract fun provideCartUseCase(
         cartUseCaseImpl: CartUseCaseImpl
     ): CartUseCase
+
+    @Binds
+    @ViewModelScoped
+    abstract fun provideNotificationUseCase(
+        notificationUseCaseImpl: NotificationUseCaseImpl
+    ): NotificationUseCase
 }

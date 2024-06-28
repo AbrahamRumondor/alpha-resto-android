@@ -32,7 +32,6 @@ class OrderSummaryFragment : Fragment() {
     private val addressListViewModel: AddressListViewModel by activityViewModels()
     private val orderAdapter by lazy { OrderSummaryAdapter() }
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -44,7 +43,6 @@ class OrderSummaryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         populateOrderSummaryAdapter()
-        Log.d("test", USER_ADDRESS?.address ?: "KOSONG")
     }
 
     private fun populateOrderSummaryAdapter() {

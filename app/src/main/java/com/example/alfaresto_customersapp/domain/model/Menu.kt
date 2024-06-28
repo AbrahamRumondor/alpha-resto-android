@@ -11,6 +11,6 @@ data class Menu(
     val image: String = "",
 
     // specific application use
-    var isSelected: Boolean = false,
+    val isSelected: Boolean = false,
     var orderCartQuantity: Int = 0,
 )
