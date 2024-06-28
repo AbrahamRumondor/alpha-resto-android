@@ -44,8 +44,8 @@ class OrderHistoryUseCaseImpl @Inject constructor(
                 addressLabel = userAddresses.find { it.address == order.fullAddress }?.label
                     ?: "Unknown",
                 orderStatus = when (shipment?.statusDelivery) {
-                    "delivered" -> OrderStatus.DELIVERED
-                    "onDelivery" -> OrderStatus.ON_DELIVERY
+                    "Delivered" -> OrderStatus.DELIVERED
+                    "On Delivery" -> OrderStatus.ON_DELIVERY
                     else -> OrderStatus.ON_PROCESS
                 }
             )
