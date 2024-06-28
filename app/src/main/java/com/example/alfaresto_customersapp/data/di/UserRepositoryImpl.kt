@@ -29,7 +29,7 @@ class UserRepositoryImpl @Inject constructor(
         try {
             val snapshot = usersRef.get().await()
             val user = snapshot.toObjects(UserResponse::class.java)
-                .find { it.userID == uid }
+                .find { it.id == uid }
 
             _currentUser.value = user?.let { UserResponse.transform(it) }
         } catch (e: Exception) {

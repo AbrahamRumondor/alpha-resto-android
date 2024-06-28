@@ -1,14 +1,14 @@
 package com.example.alfaresto_customersapp.data.model
 
 data class RestaurantResponse(
-    val restoID: String = "",
-    val restoName: String = "",
-    val restoAddress: String = "",
-    val restoNoTelp: String = "",
-    val restoDescription: String = "",
+    val id: String = "",
+    val name: String = "",
+    val address: String = "",
+    val noTelp: String = "",
+    val description: String = "",
     val openingTime: String = "",
     val closingTime: String = "",
-    val restoImage: String = "",
+    val image: String = "",
 
     val isShown: Boolean = false
 )
