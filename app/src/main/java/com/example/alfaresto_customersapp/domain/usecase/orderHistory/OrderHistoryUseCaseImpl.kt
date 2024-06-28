@@ -39,7 +39,7 @@ class OrderHistoryUseCaseImpl @Inject constructor(
         val orderHistories = myOrders.map { order ->
             val shipment = myShipments.find { it.orderID == order.id }
             OrderHistory(
-                orderDate = order.date,
+                orderDate = order.date.toString(),
                 orderTotalPrice = order.totalPrice,
                 addressLabel = userAddresses.find { it.address == order.fullAddress }?.label
                     ?: "Unknown",

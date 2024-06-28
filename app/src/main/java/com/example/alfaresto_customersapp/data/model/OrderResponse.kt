@@ -3,6 +3,7 @@ package com.example.alfaresto_customersapp.data.model
 import com.example.alfaresto_customersapp.domain.model.Order
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.PropertyName
+import java.util.Date
 
 data class OrderResponse(
     @get:PropertyName("order_id")
@@ -27,7 +28,7 @@ data class OrderResponse(
 
     @get:PropertyName("order_date")
     @set:PropertyName("order_date")
-    var date: String = "",
+    var date: Date = Date(),
 
     @get:PropertyName("payment_method")
     @set:PropertyName("payment_method")
@@ -45,7 +46,7 @@ data class OrderResponse(
     val longitude: Double = 0.0,
 ) {
     // Public no-argument constructor required by Firestore
-    constructor() : this("", "", "", "", "", "", "", 0, "",0.0, 0.0)
+    constructor() : this("", "", "", "", "", Date(), "", 0, "",0.0, 0.0)
 
     companion object {
         fun transform(orderResponse: OrderResponse): Order {

@@ -73,4 +73,6 @@
     <string name="order_status">Order Status</string>
     <string name="focus_button">Focus Button</string>
     <string name="guest">Guest</string>
+    <string name="driver">Driver</string>
+    <string name="me">Me</string>
 </resources>

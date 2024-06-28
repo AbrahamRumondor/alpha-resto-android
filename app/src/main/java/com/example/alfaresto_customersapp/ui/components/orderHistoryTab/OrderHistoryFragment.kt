@@ -56,8 +56,12 @@ class OrderHistoryFragment : Fragment() {
     private fun setOnOrderClickListener() {
         adapter.setItemListener(object : OrderHistoryListener {
             override fun onOrderClicked(orderHistory: OrderHistory) {
+                val action =
+                    OrderHistoryFragmentDirections.actionOrderHistoryFragmentToTrackOrderFragment(
+                        orderHistory.orderId
+                    )
                 Navigation.findNavController(binding.root)
-                    .navigate(R.id.action_orderHistoryFragment_to_trackOrderFragment)
+                    .navigate(action)
             }
         })
     }

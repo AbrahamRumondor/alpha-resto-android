@@ -6,6 +6,7 @@ plugins {
     id("com.google.gms.google-services")
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -108,4 +109,6 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.google.maps.android:android-maps-utils:2.2.0")
+    implementation("com.google.firebase:firebase-database:21.0.0")
+
 }
