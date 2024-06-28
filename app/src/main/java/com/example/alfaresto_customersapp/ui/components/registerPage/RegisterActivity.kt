@@ -35,10 +35,9 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun storeAndValidation() {
         val email = binding.etEmail.text.toString()
-        val image = "-"
         val password = binding.etPassword.text.toString()
         val name = binding.etName.text.toString()
-        val noTelp = binding.etPhone.text.toString()
+        val phone = binding.etPhone.text.toString()
         val reEnterPassword = binding.etReeenterPassword.text.toString()
 
         if (email.isEmpty() || password.isEmpty() || reEnterPassword.isEmpty()) {
@@ -61,7 +60,7 @@ class RegisterActivity : AppCompatActivity() {
             return
         }
 
-        viewModel.registerUser(email, image, name, noTelp, password) { success ->
+        viewModel.registerUser(email, name, phone, password) { success ->
             if (success) {
                 Toast.makeText(this, R.string.register_success, Toast.LENGTH_SHORT).show()
                 goToLoginPage()

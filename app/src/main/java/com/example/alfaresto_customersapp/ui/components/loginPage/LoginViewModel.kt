@@ -13,7 +13,11 @@ class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
 
     fun login(email: String, password: String) {
         authRepository.login(email, password) { success ->
-            _loginResult.postValue(success)
+            if (success) {
+                _loginResult.postValue(true)
+            } else {
+                _loginResult.postValue(false)
+            }
         }
-    }
+}
 }
