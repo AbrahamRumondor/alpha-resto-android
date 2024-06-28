@@ -7,19 +7,19 @@
     tools:context=".ui.components.MainActivity">
 
     <TextView
-        android:id="@+id/email"
+        android:id="@+id/tv_email"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="@string/user_email"
         android:gravity="center"
-        android:textSize="24sp"
+        android:textSize="@dimen/font_24"
         />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView"
         android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="@dimen/dimen_none"
+        android:layout_height="@dimen/dimen_none"
         app:defaultNavHost="true"
         app:layout_constraintBottom_toTopOf="@id/bnv_customer_navigation"
         app:layout_constraintEnd_toEndOf="parent"

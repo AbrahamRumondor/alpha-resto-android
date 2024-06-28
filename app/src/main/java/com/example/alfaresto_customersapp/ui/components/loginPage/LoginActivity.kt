@@ -23,11 +23,8 @@ class LoginActivity : AppCompatActivity() {
         val authRepository = AuthRepositoryImpl()
         viewModel = LoginViewModel(authRepository)
 
-        binding.loginButton.setOnClickListener {
-            val email = binding.emailTextInput.text.toString()
-            val password = binding.passwordTextInput.text.toString()
-
-            viewModel.login(email, password)
+        binding.btnLogin.setOnClickListener {
+           validateLogin()
         }
 
         viewModel.loginResult.observe(this) { success ->
@@ -40,12 +37,19 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        binding.registerTextView.setOnClickListener {
-            directToRegister(it)
+        binding.tvRegister.setOnClickListener {
+            goToRegisterPage(it)
         }
     }
 
-    private fun directToRegister(view: android.view.View) {
+    private fun validateLogin() {
+        val email = binding.tvEmail.text.toString()
+        val password = binding.tvPassword.text.toString()
+
+        viewModel.login(email, password)
+    }
+
+    private fun goToRegisterPage(view: android.view.View) {
         val intent = Intent(view.context.applicationContext, RegisterActivity::class.java)
         view.context.startActivity(intent)
     }

@@ -24,46 +24,50 @@ class RegisterActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this)[RegisterViewModel::class.java]
 
-        binding.registerButton.setOnClickListener {
-            val email = binding.emailTextInput.text.toString()
-            val image = "-"
-            val password = binding.passwordTextInput.text.toString()
-            val name = binding.nameTextInput.text.toString()
-            val noTelp = binding.noTelpTextInput.text.toString()
-            val reEnterPassword = binding.reEnterPasswordTextInput.text.toString()
-
-            if (email.isEmpty() || password.isEmpty() || reEnterPassword.isEmpty()) {
-                showValidationError(getString(R.string.email_pass_empty))
-                return@setOnClickListener
-            }
-
-            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                showValidationError(getString(R.string.email_not_valid))
-                return@setOnClickListener
-            }
-
-            if (!passwordPatterns.matcher(password).matches()) {
-                showValidationError(getString(R.string.password_not_valid))
-                return@setOnClickListener
-            }
-
-            if (password != reEnterPassword) {
-                showValidationError(getString(R.string.password_not_match))
-                return@setOnClickListener
-            }
-
-            viewModel.registerUser(email, image, name, noTelp, password) { success ->
-                if (success) {
-                    Toast.makeText(this, R.string.register_success, Toast.LENGTH_SHORT).show()
-                    directToLogin()
-                } else {
-                    Toast.makeText(this, R.string.register_failed, Toast.LENGTH_SHORT).show()
-                }
-            }
+        binding.btnRegister.setOnClickListener {
+            storeAndValidation()
         }
 
         binding.loginTextView.setOnClickListener {
-            directToLogin()
+            goToLoginPage()
+        }
+    }
+
+    private fun storeAndValidation() {
+        val email = binding.etEmail.text.toString()
+        val image = "-"
+        val password = binding.etPassword.text.toString()
+        val name = binding.etName.text.toString()
+        val noTelp = binding.etPhone.text.toString()
+        val reEnterPassword = binding.etReeenterPassword.text.toString()
+
+        if (email.isEmpty() || password.isEmpty() || reEnterPassword.isEmpty()) {
+            showValidationError(getString(R.string.email_pass_empty))
+            return
+        }
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            showValidationError(getString(R.string.email_not_valid))
+            return
+        }
+
+        if (!passwordPatterns.matcher(password).matches()) {
+            showValidationError(getString(R.string.password_not_valid))
+            return
+        }
+
+        if (password != reEnterPassword) {
+            showValidationError(getString(R.string.password_not_match))
+            return
+        }
+
+        viewModel.registerUser(email, image, name, noTelp, password) { success ->
+            if (success) {
+                Toast.makeText(this, R.string.register_success, Toast.LENGTH_SHORT).show()
+                goToLoginPage()
+            } else {
+                Toast.makeText(this, R.string.register_failed, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -71,7 +75,7 @@ class RegisterActivity : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun directToLogin() {
+    private fun goToLoginPage() {
         startActivity(Intent(this, LoginActivity::class.java))
         finish()
     }
