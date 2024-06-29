@@ -26,4 +26,13 @@ class MenuRepositoryImpl @Inject constructor(
         }
         return menus
     }
+
+    override suspend fun getMenuDetail(menuId: String): Menu? {
+        return try {
+            val document = menusRef.document(menuId).get().await()
+            document.toObject(MenuResponse::class.java)?.let { MenuResponse.transform(it) }
+        } catch (e: Exception) {
+            null
+        }
+    }
 }

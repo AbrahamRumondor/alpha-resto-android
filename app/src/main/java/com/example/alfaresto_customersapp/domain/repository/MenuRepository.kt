@@ -5,4 +5,5 @@ import com.example.alfaresto_customersapp.domain.model.Menu
 
 interface MenuRepository {
     suspend fun getMenus(): LiveData<List<Menu>>
+    suspend fun getMenuDetail(menuId: String): Menu?
 }

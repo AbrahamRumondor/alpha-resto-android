@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_resto_fragment_to_list_all_menu_fragment"
             app:destination="@id/list_all_menu_fragment" />
+        <action
+            android:id="@+id/action_resto_fragment_menu_to_detail_fragment"
+            app:destination="@id/detail_fragment" />
     </fragment>
     <fragment
         android:id="@+id/order_history_fragment"
@@ -28,5 +31,30 @@
         <action
             android:id="@+id/action_list_all_menu_fragment_to_resto_fragment"
             app:destination="@id/resto_fragment" />
+        <action
+            android:id="@+id/action_list_all_menu_fragment_to_food_detail_fragment"
+            app:destination="@id/detail_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detail_fragment"
+        android:name="com.example.alfaresto_customersapp.ui.components.detailPage.DetailFragment"
+        android:label="fragment_food_detail"
+        tools:layout="@layout/fragment_detail" >
+        <argument
+            android:name="menuId"
+            app:argType="string" />
+        <argument
+            android:name="name"
+            app:argType="string" />
+        <argument
+            android:name="description"
+            app:argType="string" />
+        <argument
+            android:name="price"
+            app:argType="integer" />
+        <argument
+            android:name="image"
+            app:argType="string" />
     </fragment>
 </navigation>

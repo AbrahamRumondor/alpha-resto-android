@@ -8,6 +8,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.alfaresto_customersapp.databinding.FragmentListAllMenuBinding
 import com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu.adapter.ListAllMenuAdapter
@@ -52,6 +53,17 @@ class ListAllMenuFragment : Fragment() {
                     return true
                 }
             })
+
+            adapter.setItemClickListener {menu ->
+                val action = ListAllMenuFragmentDirections.actionListAllMenuFragmentToFoodDetailFragment (
+                    menuId = menu.id,
+                    name = menu.name,
+                    price = menu.price,
+                    description = menu.description,
+                    image = menu.image
+                )
+                Navigation.findNavController(requireView()).navigate(action)
+            }
 
             svSearchMenu.setOnCloseListener {
                 viewModel.setSearchQuery(null)
