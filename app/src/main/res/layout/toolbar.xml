@@ -5,15 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
+    <ImageView
         android:id="@+id/tv_toolbar_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="@string/alfaresto"
-        android:textColor="@color/black"
-        android:textSize="@dimen/font_24"
-        android:textStyle="bold" />
+        android:contentDescription="@string/alfaresto_logo"
+        android:src="@drawable/ic_logo"/>
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -22,24 +20,12 @@
         android:layout_marginEnd="@dimen/dimen_12">
 
         <ImageButton
-            android:id="@+id/btn_cart"
+            android:id="@+id/btn_logout"
             android:layout_width="@dimen/dimen_50"
             android:layout_height="@dimen/dimen_50"
             android:background="@android:color/transparent"
-            android:contentDescription="@string/cart_logo"
-            android:src="@drawable/ic_shopping_bag" />
-
-        <TextView
-            android:id="@+id/tv_cart_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@id/btn_cart"
-            android:layout_alignEnd="@id/btn_cart"
-            android:background="@drawable/badge_circle"
-            android:paddingHorizontal="@dimen/dimen_10"
-            android:text="@string/_0"
-            android:textColor="@color/black"
-            android:textSize="@dimen/font_12" />
+            android:contentDescription="@string/logout_logo"
+            android:src="@drawable/ic_logout" />
 
     </RelativeLayout>
 
