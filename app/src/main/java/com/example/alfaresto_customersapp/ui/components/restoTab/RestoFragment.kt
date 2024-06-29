@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.databinding.FragmentRestoBinding
+import com.example.alfaresto_customersapp.domain.error.FirestoreCallback
+import com.example.alfaresto_customersapp.domain.model.User
 import com.example.alfaresto_customersapp.ui.components.listener.MenuListener
 import com.example.alfaresto_customersapp.ui.components.loginPage.LoginActivity
 import com.example.alfaresto_customersapp.ui.components.restoTab.adapter.RestoAdapter
@@ -49,6 +51,21 @@ class RestoFragment : Fragment() {
         viewModel.username.observe(viewLifecycleOwner) { username ->
             binding.tvGreetings.setText(getString(R.string.greetings, username))
         }
+
+        viewModel.getUserFromDB(object : FirestoreCallback {
+            override fun onSuccess(user: User?) {
+                if (user != null) {
+                    binding.tvGreetings.text = getString(R.string.greetings, user.name)
+                }
+            }
+
+            override fun onFailure(exception: Exception) {
+                val greetingsGuest =
+                    "${getString(R.string.greetings)}, ${getString(R.string.guest)}"
+                binding.tvGreetings.text = greetingsGuest
+            }
+
+        })
 
         lifecycleScope.launch {
             viewModel.menus.collect { menus ->

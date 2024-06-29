@@ -1,12 +1,13 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
@@ -19,6 +20,8 @@ import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.domain.model.User
 import com.example.alfaresto_customersapp.ui.components.listener.OrderSummaryItemListener
 import com.example.alfaresto_customersapp.ui.components.restoTab.address.addressList.AddressListViewModel
+import com.example.alfaresto_customersapp.ui.components.trackOrder.TrackOrderActivity
+import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_ADDRESS
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -58,7 +61,7 @@ class OrderSummaryFragment : Fragment() {
                         orderSummaryViewModel.makeOrders(
                             orders = orders,
                             total = countTotalItemAndPrice(orders),
-                            address = addressListViewModel.selectedAddress.value
+                            address = USER_ADDRESS
                         )
                     )
                     setOrderSummaryListener(orders, carts)
@@ -134,21 +137,12 @@ class OrderSummaryFragment : Fragment() {
 
             override fun onCheckoutButtonClicked() {
                 // TODO send to firebase
-                orderSummaryViewModel.getUserFromDB(object : FirestoreCallback {
-                    override fun onSuccess(user: User?) {
-                        if (user != null) {
-                            orderSummaryViewModel.saveOrderInDatabase(user) {
-                                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
-                            }
-                        } else {
-                            Log.d("test", "User not found")
-                        }
-                    }
+                orderSummaryViewModel.saveOrderInDatabase {
+                    Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+                }
 
-                    override fun onFailure(exception: Exception) {
-                        Log.d("test", "Error fetching user: $exception")
-                    }
-                })
+                val intent = Intent(requireContext(), TrackOrderActivity::class.java)
+                startActivity(intent)
             }
 
         })

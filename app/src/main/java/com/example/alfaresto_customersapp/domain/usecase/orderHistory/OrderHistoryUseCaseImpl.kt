@@ -47,7 +47,8 @@ class OrderHistoryUseCaseImpl @Inject constructor(
                     "Delivered" -> OrderStatus.DELIVERED
                     "On Delivery" -> OrderStatus.ON_DELIVERY
                     else -> OrderStatus.ON_PROCESS
-                }
+                },
+                orderId = shipment?.orderID ?: ""
             )
         }
 

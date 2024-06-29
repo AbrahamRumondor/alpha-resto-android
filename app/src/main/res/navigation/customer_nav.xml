@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--suppress NavigationFile -->
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -22,8 +23,11 @@
         android:id="@+id/orderHistoryFragment"
         android:name="com.example.alfaresto_customersapp.ui.components.orderHistoryTab.OrderHistoryFragment"
         android:label="fragment_order_history"
-        tools:layout="@layout/fragment_order_history" />
-
+        tools:layout="@layout/fragment_order_history" >
+        <action
+            android:id="@+id/action_orderHistoryFragment_to_trackOrderFragment"
+            app:destination="@id/trackOrderFragment" />
+    </fragment>
     <fragment
         android:id="@+id/orderSummaryFragment"
         android:name="com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.OrderSummaryFragment"
@@ -80,5 +84,21 @@
         <action
             android:id="@+id/action_foodItem_to_foodDetailFragment"
             app:destination="@id/listAllMenuFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/trackOrderFragment"
+        android:name="com.example.alfaresto_customersapp.ui.components.trackOrder.TrackOrderFragment"
+        android:label="fragment_track_order"
+        tools:layout="@layout/fragment_track_order" >
+        <action
+            android:id="@+id/action_listAllMenuFragment_to_orderSummaryFragment"
+            app:destination="@id/orderSummaryFragment" />
+        <action
+            android:id="@+id/action_listAllMenuFragment_to_restoFragment"
+            app:destination="@id/restoFragment" />
+        <argument
+            android:name="orderId"
+            app:argType="string" />
     </fragment>
 </navigation>

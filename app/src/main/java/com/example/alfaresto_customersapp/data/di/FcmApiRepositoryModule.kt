@@ -7,7 +7,7 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 
-@Module(includes = [FcmApiModule::class])
+@Module(includes = [RetrofitModule::class])
 @InstallIn(SingletonComponent::class)
 abstract class FcmApiRepositoryModule {
     @Binds

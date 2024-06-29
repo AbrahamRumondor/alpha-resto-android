@@ -66,16 +66,18 @@ class ListAllMenuViewModel @Inject constructor(
     fun addOrderQuantity(menuId: String, cart: CartEntity?) {
         viewModelScope.launch {
             Log.d("test", "${cart?.menuId} dan ${cart?.menuQty}")
-            cart?.let {
-                cartUseCase.insertMenu(it.copy(menuQty = cart.menuQty+1))
-            } ?: insertMenu(menuId = menuId, menuQty = 1)
+            if (cart != null) {
+                cartUseCase.insertMenu(cart.copy(menuQty = cart.menuQty + 1))
+            } else {
+                insertMenu(menuId = menuId, menuQty = 1)
+            }
         }
     }
 
     fun decreaseOrderQuantity(menuId: String, cart: CartEntity?) {
         viewModelScope.launch {
             cart?.let {
-                if (cart.menuQty > 0) cartUseCase.insertMenu(it.copy(menuQty = cart.menuQty-1))
+                if (cart.menuQty > 0) cartUseCase.insertMenu(it.copy(menuQty = cart.menuQty - 1))
             }
         }
     }
@@ -83,8 +85,9 @@ class ListAllMenuViewModel @Inject constructor(
     fun getCartByMenuId(menuId: String, result: (CartEntity?) -> Unit) {
         viewModelScope.launch {
             cartUseCase.getCart().firstOrNull()?.map {
-                if (it.menuId == menuId){
+                if (it.menuId == menuId) {
                     result(it)
+                    return@launch
                 }
             }
             result(null)

@@ -29,7 +29,7 @@ class UserRepositoryImpl @Inject constructor(
         try {
             val snapshot = usersRef.get().await()
             val user = snapshot.toObjects(UserResponse::class.java)
-                .find { it.id == uid }
+                .find { it.userID == uid }
 
             _currentUser.value = user?.let { UserResponse.transform(it) }
         } catch (e: Exception) {
@@ -58,5 +58,17 @@ class UserRepositoryImpl @Inject constructor(
         return usersRef.document(uid)
             .collection("tokens")
             .get()
+    }
+
+    override fun saveTokenToDB(uid: String, token: String) {
+        val currentUser = usersRef.document(uid)
+
+        currentUser.update("token", token)
+            .addOnSuccessListener {
+                Log.d("UserRepositoryImpl", "Token saved to DB")
+            }
+            .addOnFailureListener {
+                Log.e("UserRepositoryImpl", "Error saving token to DB", it)
+            }
     }
 }

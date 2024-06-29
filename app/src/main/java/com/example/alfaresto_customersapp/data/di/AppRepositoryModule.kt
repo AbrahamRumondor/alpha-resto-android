@@ -5,6 +5,7 @@ import com.example.alfaresto_customersapp.domain.repository.AuthRepository
 import com.example.alfaresto_customersapp.domain.repository.CartRepository
 import com.example.alfaresto_customersapp.domain.repository.MenuRepository
 import com.example.alfaresto_customersapp.domain.repository.OrderRepository
+import com.example.alfaresto_customersapp.domain.repository.RestaurantRepository
 import com.example.alfaresto_customersapp.domain.repository.ShipmentRepository
 import com.example.alfaresto_customersapp.domain.repository.UserRepository
 import dagger.Binds
@@ -45,4 +46,9 @@ abstract class AppRepositoryModule {
     abstract fun provideUserRepository(
         userRepositoryImpl: UserRepositoryImpl
     ): UserRepository
+
+    @Binds
+    abstract fun provideRestaurantRepository(
+        restaurantRepositoryImpl: RestaurantRepositoryImpl
+    ): RestaurantRepository
 }
