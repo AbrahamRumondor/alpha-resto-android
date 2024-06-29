@@ -68,10 +68,14 @@
     <string name="add">+</string>
     <string name="minus">-</string>
     <string name="email_resto">alfaresto@gmail.com</string>
-    <string name="address_resto">Alam Sutera, Jl. Jalur Sutera Bar. No.Kav. 7-9</string>
+    <string name="address_resto">Alam Sutera, Jl. Jalur Sutera Bar. No.Kav. 7–9</string>
     <string name="phone_resto">81234499999</string>
     <string name="food_description">Food Description</string>
     <string name="food_desc_title">Description</string>
     <string name="food_price">Rp 50.000,-</string>
     <string name="food_name">Soft Shell Taco</string>
+    <string name="hi_bella">Hi Bella!</string>
+    <string name="deliver_to">Deliver to</string>
+    <string name="logout_logo">Logout Logo</string>
+    <string name="alfaresto_logo">Alfaresto Logo</string>
 </resources>

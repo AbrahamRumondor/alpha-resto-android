@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alfaresto_customersapp.R
@@ -17,6 +18,7 @@ import com.example.alfaresto_customersapp.databinding.FragmentRestoBinding
 import com.example.alfaresto_customersapp.ui.components.loginPage.LoginActivity
 import com.example.alfaresto_customersapp.ui.components.restoTab.adapter.RestoAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class RestoFragment : Fragment() {
@@ -41,19 +43,20 @@ class RestoFragment : Fragment() {
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         }
 
-        viewModel.menus.observe(viewLifecycleOwner) { menus ->
-            if (menus.isEmpty()) {
-                Log.d("RestoFragment", "Menus is empty, waiting for data...")
-                // Optionally, you can show a loading state or handle the empty case
-                return@observe
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.menus.collect { menus ->
+                if (menus.isEmpty()) {
+                    Log.d("RestoFragment", "Menus is empty, waiting for data...")
+                    // Optionally, you can show a loading state or handle the empty case
+                } else {
+                    adapter.submitMenuList(menus)
+                }
             }
-
-            adapter.submitMenuList(menus)
         }
 
         binding.btnAllMenu.setOnClickListener {
             Navigation.findNavController(view)
-                .navigate(R.id.action_resto_fragment_to_list_all_menu_fragment)
+                .navigate(R.id.action_restoFragment_to_listAllMenuFragment)
         }
 
         binding.toolbar.btnLogout.setOnClickListener {

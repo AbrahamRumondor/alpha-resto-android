@@ -6,4 +6,5 @@ data class User(
     val phone: String = "",
     val email: String = "",
     val address: List<Address> = mutableListOf(),
+    val password: String = ""
 )
