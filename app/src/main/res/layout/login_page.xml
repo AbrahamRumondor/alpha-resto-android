@@ -8,7 +8,6 @@
     <ImageView
         android:id="@+id/iv_logo"
         style="@style/Logo"
-        app:layout_constraintBottom_toTopOf="@+id/tv_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@id/til_email"
@@ -17,18 +16,43 @@
         tools:ignore="MissingConstraints"
         android:importantForAccessibility="no" />
 
+    <ImageView
+        android:id="@+id/iv_login_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_35"
+        android:contentDescription="@string/login_image"
+        android:src="@drawable/login_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_logo" />
+
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimen_110"
+        android:layout_marginTop="@dimen/dimen_20"
         android:fontFamily="@font/bold"
-        android:text="@string/login"
-        android:textSize="@dimen/font_24"
+        android:textColor="@color/mainblack"
+        android:letterSpacing="0.025"
+        android:text="@string/welcome_back"
+        android:textSize="@dimen/font_26"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/iv_login_image" />
 
+
+    <TextView
+        android:id="@+id/tv_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_5"
+        android:fontFamily="@font/semibold"
+        android:text="@string/please_sign_in_to_continue"
+        android:textColor="@color/grey"
+        app:layout_constraintEnd_toEndOf="@id/tv_title"
+        app:layout_constraintStart_toStartOf="@id/tv_title"
+        app:layout_constraintTop_toBottomOf="@id/tv_title" />
 
     <TextView
         android:id="@+id/tv_email"
@@ -39,7 +63,7 @@
         android:gravity="center"
         android:text="@string/email"
         app:layout_constraintStart_toStartOf="@id/til_email"
-        app:layout_constraintTop_toBottomOf="@id/tv_title" />
+        app:layout_constraintTop_toBottomOf="@id/tv_subtitle" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_email"
@@ -50,7 +74,7 @@
         android:layout_marginTop="@dimen/dimen_35"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_title">
+        app:layout_constraintTop_toBottomOf="@id/tv_subtitle">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_email"
@@ -95,7 +119,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/dimen_20"
-        android:layout_marginTop="@dimen/dimen_120"
+        android:layout_marginTop="@dimen/dimen_30"
         android:background="@drawable/button_shape"
         android:fontFamily="@font/extrabold"
         android:text="@string/login"
@@ -109,7 +133,7 @@
         android:id="@+id/tv_register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimen_12"
+        android:layout_marginTop="@dimen/dimen_15"
         android:clickable="true"
         android:focusable="true"
         android:fontFamily="@font/regular"
