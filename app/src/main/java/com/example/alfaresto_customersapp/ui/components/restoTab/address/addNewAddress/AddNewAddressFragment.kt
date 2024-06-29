@@ -31,7 +31,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 class AddNewAddressFragment : Fragment() {
 
     private lateinit var binding: FragmentAddNewAddressBinding
-    private val addNewAddressViewModel: AddNewAddressViewModel by viewModels()
+    private val addNewAddressViewModel: AddNewAddressViewModel by activityViewModels()
 
     private lateinit var map: GoogleMap
     private lateinit var bottomSheetBinding: BsdLocationPermissionBinding

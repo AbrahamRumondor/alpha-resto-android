@@ -1,10 +1,13 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.address.addNewAddress
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.alfaresto_customersapp.data.model.AddressResponse
 import com.example.alfaresto_customersapp.domain.model.Address
 import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
 import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase
@@ -19,7 +22,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AddNewAddressViewModel @Inject constructor(
     private val cartUseCase: CartUseCase,
-    private val userUseCase: UserUseCase
+    private val userUseCase: UserUseCase,
+    private val context: Context
 ) : ViewModel() {
     private val _chosenLatLng = MutableLiveData<LatLng?>()
 
@@ -45,8 +49,8 @@ class AddNewAddressViewModel @Inject constructor(
     }
 
     private val db = Firebase.firestore
-    private val addressCollection = db.collection("users").document(USER_ID?:"")
-        .collection("addresses")
+//    private val addressCollection = db.collection("users").document(USER_ID?:"")
+//        .collection("addresses")
 
     fun setChosenLatLng(latlng: LatLng?) {
         _chosenLatLng.value = latlng
@@ -54,18 +58,20 @@ class AddNewAddressViewModel @Inject constructor(
 
     fun saveAddressInDatabase(addressLabel: String?, addressDetail: String?) {
         if (!addressLabel.isNullOrEmpty() && !addressDetail.isNullOrEmpty()) {
-            _chosenLatLng.value?.let { latlng->
+            _chosenLatLng.value?.let { latlng ->
                 val newId = getAddressDocumentId()
                 try {
-                    addressCollection.document(newId).set(
-                        Address(
-                            id = newId,
-                            label = addressLabel,
-                            address = addressDetail,
-                            latitude = latlng.latitude,
-                            longitude = latlng.longitude
+                    db.collection("users").document(USER_ID ?: "")
+                        .collection("addresses").document(newId).set(
+                            AddressResponse.transform(Address(
+                                id = newId,
+                                label = addressLabel,
+                                address = addressDetail,
+                                latitude = latlng.latitude,
+                                longitude = latlng.longitude
+                            ))
                         )
-                    )
+                    Toast.makeText(context, "New Address Successfully Added", Toast.LENGTH_LONG).show()
                 } catch (e: Exception) {
                     Log.d("test", e.toString())
                 }
@@ -74,7 +80,7 @@ class AddNewAddressViewModel @Inject constructor(
     }
 
     private fun getAddressDocumentId(): String {
-        val item = db.collection("users").document(USER_ID?:"")
+        val item = db.collection("users").document(USER_ID ?: "")
             .collection("addresses").document()
         return item.id
     }
