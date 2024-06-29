@@ -1,28 +1,20 @@
 package com.example.alfaresto_customersapp.ui.components.registerPage
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
-import android.view.View
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.RegisterPageBinding
 import com.example.alfaresto_customersapp.ui.components.loginPage.LoginActivity
 import com.example.alfaresto_customersapp.ui.util.Constants
-import com.google.firebase.auth.FirebaseAuth
-import dagger.hilt.android.AndroidEntryPoint
-import com.google.firebase.firestore.FirebaseFirestore
-import java.security.MessageDigest
 
-@AndroidEntryPoint
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding: RegisterPageBinding
-    lateinit var auth: FirebaseAuth
-    private lateinit var firebaseFirestore: FirebaseFirestore
+    private lateinit var viewModel: RegisterViewModel
     private val passwordPatterns = Constants.passwordPatterns
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,82 +22,60 @@ class RegisterActivity : AppCompatActivity() {
         binding = RegisterPageBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        auth = FirebaseAuth.getInstance()
-        firebaseFirestore = FirebaseFirestore.getInstance()
+        viewModel = ViewModelProvider(this)[RegisterViewModel::class.java]
 
-        binding.registerButton.setOnClickListener {
-            val email = binding.emailTextInput.text.toString()
-            val image = "-"
-            val password = binding.passwordTextInput.text.toString()
-            val name = binding.nameTextInput.text.toString()
-            val noTelp = binding.noTelpTextInput.text.toString()
-            val reEnterPassword = binding.reEnterPasswordTextInput.text.toString()
-
-            if (email.isEmpty() || password.isEmpty() || reEnterPassword.isEmpty()) {
-                binding.emailTextInput.error = getString(R.string.email_pass_empty)
-                binding.passwordTextInput.error = getString(R.string.email_pass_empty)
-                return@setOnClickListener
-            }
-
-            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                binding.emailTextInput.error = getString(R.string.email_not_valid)
-                binding.emailTextInput.requestFocus()
-                return@setOnClickListener
-            }
-
-            if (!passwordPatterns.matcher(password).matches()) {
-                binding.passwordTextInput.error = getString(R.string.password_not_valid)
-                binding.passwordTextInput.requestFocus()
-                return@setOnClickListener
-            }
-
-            if (password != reEnterPassword) {
-                binding.reEnterPasswordTextInput.error = getString(R.string.password_not_match)
-                binding.reEnterPasswordTextInput.requestFocus()
-                return@setOnClickListener
-            }
-
-            registerAuth(email, image, name, noTelp, password)
+        binding.btnRegister.setOnClickListener {
+            storeAndValidation()
         }
-        val loginTextClicked: TextView = binding.loginTextView
-        loginTextClicked.setOnClickListener {
-            goToLoginPage(it.context)
+
+        binding.loginTextView.setOnClickListener {
+            goToLoginPage()
         }
     }
-}
 
-fun goToLoginPage(context: Context) {
-    val intent = Intent(context, LoginActivity::class.java)
-    context.startActivity(intent)
-}
+    private fun storeAndValidation() {
+        val email = binding.etEmail.text.toString()
+        val password = binding.etPassword.text.toString()
+        val name = binding.etName.text.toString()
+        val phone = binding.etPhone.text.toString()
+        val reEnterPassword = binding.etReeenterPassword.text.toString()
 
-fun RegisterActivity.registerAuth(email: String, image: String, name: String, noTelp: String, password: String) {
-    auth.createUserWithEmailAndPassword(email, password)
-        .addOnCompleteListener(this) { register ->
-            if (register.isSuccessful) {
-                val user = auth.currentUser
-                val id = user?.uid ?: return@addOnCompleteListener
-                addToFirestore(email, id, image, name, noTelp, password)
+        if (email.isEmpty() || password.isEmpty() || reEnterPassword.isEmpty()) {
+            showValidationError(getString(R.string.email_pass_empty))
+            return
+        }
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            showValidationError(getString(R.string.email_not_valid))
+            return
+        }
+
+        if (!passwordPatterns.matcher(password).matches()) {
+            showValidationError(getString(R.string.password_not_valid))
+            return
+        }
+
+        if (password != reEnterPassword) {
+            showValidationError(getString(R.string.password_not_match))
+            return
+        }
+
+        viewModel.registerUser(email, name, phone, password) { success ->
+            if (success) {
                 Toast.makeText(this, R.string.register_success, Toast.LENGTH_SHORT).show()
-                goToLoginPage(this)
+                goToLoginPage()
             } else {
                 Toast.makeText(this, R.string.register_failed, Toast.LENGTH_SHORT).show()
             }
         }
-}
-
-fun addToFirestore(email: String, id: String, image: String, name: String, noTelp: String, password: String) {
-    val hashedPassword = MessageDigest.getInstance("SHA-256").digest(password.toByteArray()).joinToString("") {
-        "%02x".format(it)
     }
-    val user = hashMapOf(
-        "user_email" to email,
-        "user_id" to id,
-        "user_image" to image,
-        "user_name" to name,
-        "user_no_telp" to noTelp,
-        "user_password" to hashedPassword
-    )
-    FirebaseFirestore.getInstance().collection("users").document(id).set(user)
-}
 
+    private fun showValidationError(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun goToLoginPage() {
+        startActivity(Intent(this, LoginActivity::class.java))
+        finish()
+    }
+}
