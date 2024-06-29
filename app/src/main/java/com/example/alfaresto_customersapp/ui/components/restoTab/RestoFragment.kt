@@ -87,6 +87,11 @@ class RestoFragment : Fragment() {
             Navigation.findNavController(requireView())
                 .navigate(R.id.action_restoFragment_to_orderSummaryFragment)
         }
+
+        binding.rvMenu.setOnClickListener {
+            Navigation.findNavController(requireView())
+                .navigate(R.id.action_foodItem_to_foodDetailFragment)
+        }
     }
 
     private fun setRestoAdapterButtons(cart: List<CartEntity>?) {
