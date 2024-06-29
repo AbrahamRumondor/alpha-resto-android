@@ -56,6 +56,7 @@ class OrderHistoryFragment : Fragment() {
     private fun setOnOrderClickListener() {
         adapter.setItemListener(object : OrderHistoryListener {
             override fun onOrderClicked(orderHistory: OrderHistory) {
+                Log.d("test", orderHistory.toString())
                 val action =
                     OrderHistoryFragmentDirections.actionOrderHistoryFragmentToTrackOrderFragment(
                         orderHistory.orderId

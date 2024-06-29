@@ -47,9 +47,10 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/mapCard"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="@dimen/dimen_15"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="15dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -72,8 +73,8 @@
 
             <ImageView
                 android:id="@+id/iv_focus"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="@id/mv_track"
@@ -151,7 +152,7 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toStartOf="@id/mapCard"
+        app:layout_constraintStart_toEndOf="@id/buttonLayout"
         app:layout_constraintTop_toBottomOf="@+id/mapCard" />
 
     <LinearLayout

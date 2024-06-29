@@ -74,4 +74,9 @@
     <string name="driver">Driver</string>
     <string name="me">Me</string>
     <string name="dialog_for_permission_message_notification">This app requires notification permissions for the apps to work</string>
+    <string name="your_driver_is_on_the_way">your driver is on the way</string>
+    <string name="hello">Hello,</string>
+    <string name="on_process">Your order is currently on process, waiting for Admin to accept…</string>
+    <string name="on_delivery">Your order is currently on delivery, track the driver in App</string>
+    <string name="delivered">Your order has arrived, Thank you for using AlfaResto</string>
 </resources>

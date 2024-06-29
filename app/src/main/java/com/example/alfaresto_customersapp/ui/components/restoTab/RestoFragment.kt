@@ -87,6 +87,7 @@ class RestoFragment : Fragment() {
                 }
                 viewModel.cart.collectLatest {
 
+
                     if (it.isEmpty()) {
                         Log.d("test", "NO DATA")
                         binding.rvMenu.adapter = adapter

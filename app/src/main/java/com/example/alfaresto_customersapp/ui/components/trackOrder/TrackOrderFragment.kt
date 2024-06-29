@@ -10,6 +10,9 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.ColorFilter
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -19,13 +22,21 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.RelativeLayout
+import android.widget.RemoteViews
+import android.widget.RemoteViews.RemoteView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.data.remote.response.RouteResponse
@@ -33,6 +44,8 @@ import com.example.alfaresto_customersapp.databinding.BsdLocationPermissionBindi
 import com.example.alfaresto_customersapp.databinding.FragmentTrackOrderBinding
 import com.example.alfaresto_customersapp.domain.error.OsrmCallback
 import com.example.alfaresto_customersapp.domain.error.RealtimeLocationCallback
+import com.example.alfaresto_customersapp.domain.error.TrackDistanceCallback
+import com.example.alfaresto_customersapp.domain.model.Shipment
 import com.example.alfaresto_customersapp.ui.components.restoTab.address.addNewAddress.AddNewAddressFragment.Companion.markersHeight
 import com.example.alfaresto_customersapp.ui.components.restoTab.address.addNewAddress.AddNewAddressFragment.Companion.markersWidth
 import com.example.alfaresto_customersapp.ui.components.trackOrder.chat.ChatActivity
@@ -47,6 +60,7 @@ import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.maps.android.PolyUtil
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class TrackOrderFragment : Fragment() {
@@ -63,6 +77,10 @@ class TrackOrderFragment : Fragment() {
     private val channelId = "i.apps.notifications"
     private val description = "Test notification"
     private lateinit var notificationManagerCompat: NotificationManagerCompat
+    lateinit var builder: NotificationCompat.Builder
+    private var customView: RemoteViews? = null
+    private val progressMax = 100
+    private var progressCurrent = 0
 
     private lateinit var bottomSheetBinding: BsdLocationPermissionBinding
     private lateinit var bottomSheetDialog: BottomSheetDialog
@@ -80,7 +98,6 @@ class TrackOrderFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.run {
             trackOrderViewModel.order.observe(viewLifecycleOwner) { orderList ->
-
                 Log.d("test", args.orderId)
 
                 val order = orderList.find { it.id == args.orderId }
@@ -89,6 +106,17 @@ class TrackOrderFragment : Fragment() {
 
                 order?.let { myOrder ->
                     val home = LatLng(myOrder.latitude, myOrder.longitude)
+
+                    trackOrderViewModel.getShipmentById(myOrder.id)
+                    lifecycleScope.launch {
+                        trackOrderViewModel.shipment
+                            .observe(viewLifecycleOwner) {
+                                it?.let {
+                                    createNotification()
+                                    updateNotificationCustomView(it)
+                                }
+                            }
+                    }
 
                     mvTrack.onCreate(savedInstanceState)
                     mvTrack.getMapAsync {
@@ -103,8 +131,6 @@ class TrackOrderFragment : Fragment() {
                     val intent = Intent(requireContext(), ChatActivity::class.java)
                     startActivity(intent)
                 }
-
-                createNotificationChannel()
             }
         }
     }
@@ -112,7 +138,7 @@ class TrackOrderFragment : Fragment() {
     private fun setLocationUpdatesListener(home: LatLng) {
         trackOrderViewModel.getLocationUpdates(object : RealtimeLocationCallback {
             override fun onSuccess(driverLatLng: LatLng) {
-                Log.d("test", driverLatLng.toString())
+                Log.d("test", "driver lat lng = ${driverLatLng.toString()}")
                 setOnFocusLocationButtonClickListener(home, driverLatLng)
                 setRouting(home = home, driver = driverLatLng)
             }
@@ -139,6 +165,7 @@ class TrackOrderFragment : Fragment() {
                     polylineOptions.addAll(decodedPath)
 
                     polylines = map.addPolyline(polylineOptions)
+//                    observeNotificationLocationDistance(home, it.routes[0].distance)
                 }
 
                 setOrderMarker(home, driver)
@@ -175,7 +202,7 @@ class TrackOrderFragment : Fragment() {
 
     private fun zoomToLatLng(home: LatLng, driver: LatLng) {
         val focusBounds = trackOrderViewModel.getRouteFocusBounds(home, driver)
-        val padding = 100
+        val padding = 300
         val cameraUpdate = CameraUpdateFactory.newLatLngBounds(focusBounds, padding)
         map.moveCamera(cameraUpdate)
         map.animateCamera(cameraUpdate)
@@ -235,60 +262,107 @@ class TrackOrderFragment : Fragment() {
         }
     }
 
-    private fun createNotificationChannel() {
-        lateinit var builder: Notification.Builder
-
+    private fun createNotification() {
         notificationManagerCompat =
             NotificationManagerCompat.from(requireContext().applicationContext)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notificationChannel =
-                NotificationChannel(channelId, description, NotificationManager.IMPORTANCE_HIGH)
-            notificationChannel.enableLights(true)
-            notificationChannel.lightColor = Color.GREEN
-            notificationChannel.enableVibration(false)
-            notificationManagerCompat.createNotificationChannel(notificationChannel)
+        customView = RemoteViews(context?.packageName, R.layout.progress_notification_tray)
 
-            builder = Notification.Builder(requireContext(), channelId)
-                .setContentTitle("On Delivery")
-                .setContentText("Current progress")
-                .setSmallIcon(R.drawable.ic_launcher_background)
-                .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.ic_logo))
-        } else {
+        customView?.let { view ->
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                notificationChannel =
+                    NotificationChannel(channelId, description, NotificationManager.IMPORTANCE_HIGH)
+                notificationChannel.enableLights(true)
+                notificationChannel.lightColor = Color.GREEN
+                notificationChannel.enableVibration(false)
+                notificationManagerCompat.createNotificationChannel(notificationChannel)
 
-            builder = Notification.Builder(requireContext())
-                .setContentTitle("On Delivery")
-                .setContentText("Current progress")
-                .setSmallIcon(R.drawable.ic_launcher_background)
-                .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.ic_logo))
-        }
-
-        val progressMax = 100
-        var progressCurrent = 0
-        builder.setProgress(progressMax, progressCurrent, false)
-        checkNotificationPermission(true)
-        notificationManagerCompat.notify(1234, builder.build())
-
-        val handler = android.os.Handler()
-        val updateRunnable = object : Runnable {
-            override fun run() {
-                checkNotificationPermission(false)
-                if (progressCurrent <= progressMax) {
-                    progressCurrent += 10
-                    builder.setProgress(progressMax, progressCurrent, false)
-                    notificationManagerCompat.notify(1234, builder.build())
-                    handler.postDelayed(this, 1000) // Update every 1 second
-                } else {
-                    builder.setContentText("Download complete")
-                        .setProgress(0, 0, false)
-                    notificationManagerCompat.notify(1234, builder.build())
-                }
+                builder = NotificationCompat.Builder(requireContext(), channelId)
+                    .setSmallIcon(R.drawable.ic_launcher_background)
+                    .setCustomContentView(view)
+                    .setCustomBigContentView(view)
+                    .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.ic_logo))
+            } else {
+                builder = NotificationCompat.Builder(requireContext())
+                    .setSmallIcon(R.drawable.ic_launcher_background)
+                    .setCustomContentView(view)
+                    .setCustomBigContentView(view)
+                    .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.ic_logo))
             }
         }
 
-        // Start the initial update
-        handler.post(updateRunnable)
+//        builder.setProgress(progressMax, progressCurrent, false)
+        checkNotificationPermission(true)
+        notificationManagerCompat.notify(1234, builder.build())
     }
+
+    private fun updateNotificationCustomView(shipment: Shipment) {
+        customView?.setTextViewText(R.id.notification_title, shipment.statusDelivery)
+        when (shipment.statusDelivery) {
+            "On Delivery" -> {
+                customView?.setImageViewResource(R.id.iv_dot_one, R.drawable.point_round_orange)
+                customView?.setImageViewResource(R.id.iv_dot_two, R.drawable.point_round_orange)
+                customView?.setImageViewResource(R.id.iv_dot_three, R.drawable.point_round_orange)
+                customView?.setImageViewResource(R.id.v_line_one, R.drawable.rectangle_line_orange)
+                customView?.setImageViewResource(R.id.v_line_two, R.drawable.rectangle_line_orange)
+                customView?.setTextViewText(
+                    R.id.notification_text,
+                    "Track your order progress here!"
+                )
+            }
+
+            "Delivered" -> {
+                customView?.setImageViewResource(R.id.iv_dot_one, R.drawable.point_round_orange)
+                customView?.setImageViewResource(R.id.iv_dot_two, R.drawable.point_round_orange)
+                customView?.setImageViewResource(R.id.iv_dot_three, R.drawable.point_round_orange)
+                customView?.setImageViewResource(R.id.iv_dot_four, R.drawable.point_round_orange)
+                customView?.setImageViewResource(R.id.v_line_one, R.drawable.rectangle_line_orange)
+                customView?.setImageViewResource(R.id.v_line_two, R.drawable.rectangle_line_orange)
+                customView?.setImageViewResource(
+                    R.id.v_line_three,
+                    R.drawable.rectangle_line_orange
+                )
+                customView?.setTextViewText(
+                    R.id.notification_text,
+                    "Track your order progress here!"
+                )
+            }
+
+            else -> { // ON PROCESS
+                customView?.setImageViewResource(R.id.iv_dot_one, R.drawable.point_round_orange)
+                customView?.setImageViewResource(R.id.iv_dot_two, R.drawable.point_round_orange)
+                customView?.setImageViewResource(R.id.v_line_one, R.drawable.rectangle_line_orange)
+                customView?.setTextViewText(
+                    R.id.notification_text,
+                    "Track your order progress here!"
+                )
+            }
+        }
+        checkNotificationPermission(true)
+        notificationManagerCompat.notify(1234, builder.build())
+    }
+
+//    private fun observeNotificationLocationDistance(home: LatLng, distance: Double) {
+//        checkNotificationPermission(false)
+//        if (progressCurrent <= progressMax) {
+//            trackOrderViewModel.getProgressPercentage(home, distance, object : TrackDistanceCallback {
+//                override fun onSuccess(progressPercentage: Int) {
+//                    Log.d("test", progressPercentage.toString())
+//                    progressCurrent = progressPercentage
+//                }
+//
+//                override fun onFailure(string: String?) {
+//                    Toast.makeText(requireContext(), string, Toast.LENGTH_LONG).show()
+//                }
+//            })
+////            builder.setProgress(progressMax, progressCurrent, false)
+//            notificationManagerCompat.notify(1234, builder.build())
+//        } else {
+////            builder.setContentText("Download complete")
+////                .setProgress(0, 0, false)
+//            notificationManagerCompat.notify(1234, builder.build())
+//        }
+//    }
 
     private fun checkNotificationPermission(firstTime: Boolean) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && firstTime) {

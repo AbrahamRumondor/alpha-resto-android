@@ -38,7 +38,15 @@ data class RestaurantResponse(
 
     @get:PropertyName("token")
     @set:PropertyName("token")
-    var token: String = ""
+    var token: String = "",
+
+    @get:PropertyName("latitude")
+    @set:PropertyName("latitude")
+    var latitude: Double = 0.0,
+
+    @get:PropertyName("longitude")
+    @set:PropertyName("longitude")
+    var longitude: Double = 0.0
 ) {
     companion object {
         fun transform(resto: RestaurantResponse): Restaurant {
@@ -52,7 +60,9 @@ data class RestaurantResponse(
                 openingTime = resto.openingTime,
                 closingTime = resto.closingTime,
                 image = resto.image,
-                token = resto.token
+                token = resto.token,
+                latitude = resto.latitude,
+                longitude = resto.longitude
             )
         }
     }
