@@ -56,8 +56,8 @@ class TrackOrderViewModel @Inject constructor(
     fun getShipmentById(id: String) {
         viewModelScope.launch {
             shipmentUseCase.getShipmentById(id).observeForever {
-                _shipment.postValue(it) // Update LiveData wi
-            }// th fetched data
+                _shipment.postValue(it)
+            }
         }
     }
 

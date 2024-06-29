@@ -59,7 +59,8 @@ class OrderHistoryFragment : Fragment() {
                 Log.d("test", orderHistory.toString())
                 val action =
                     OrderHistoryFragmentDirections.actionOrderHistoryFragmentToTrackOrderFragment(
-                        orderHistory.orderId
+                        orderId = orderHistory.orderId,
+                        shipmentId = orderHistory.id
                     )
                 Navigation.findNavController(binding.root)
                     .navigate(action)

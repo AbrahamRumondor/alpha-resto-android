@@ -46,9 +46,11 @@ import com.example.alfaresto_customersapp.domain.error.OsrmCallback
 import com.example.alfaresto_customersapp.domain.error.RealtimeLocationCallback
 import com.example.alfaresto_customersapp.domain.error.TrackDistanceCallback
 import com.example.alfaresto_customersapp.domain.model.Shipment
+import com.example.alfaresto_customersapp.domain.service.NotificationForegroundService
 import com.example.alfaresto_customersapp.ui.components.restoTab.address.addNewAddress.AddNewAddressFragment.Companion.markersHeight
 import com.example.alfaresto_customersapp.ui.components.restoTab.address.addNewAddress.AddNewAddressFragment.Companion.markersWidth
 import com.example.alfaresto_customersapp.ui.components.trackOrder.chat.ChatActivity
+import com.example.alfaresto_customersapp.utils.user.UserConstants.SHIPMENT_STATUS
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
@@ -100,6 +102,7 @@ class TrackOrderFragment : Fragment() {
             trackOrderViewModel.order.observe(viewLifecycleOwner) { orderList ->
                 Log.d("test", args.orderId)
 
+
                 val order = orderList.find { it.id == args.orderId }
 
                 Log.d("test", order.toString())
@@ -107,16 +110,7 @@ class TrackOrderFragment : Fragment() {
                 order?.let { myOrder ->
                     val home = LatLng(myOrder.latitude, myOrder.longitude)
 
-                    trackOrderViewModel.getShipmentById(myOrder.id)
-                    lifecycleScope.launch {
-                        trackOrderViewModel.shipment
-                            .observe(viewLifecycleOwner) {
-                                it?.let {
-                                    createNotification()
-                                    updateNotificationCustomView(it)
-                                }
-                            }
-                    }
+                    trackOrderViewModel.getShipmentById(args.shipmentId)
 
                     mvTrack.onCreate(savedInstanceState)
                     mvTrack.getMapAsync {
@@ -262,85 +256,85 @@ class TrackOrderFragment : Fragment() {
         }
     }
 
-    private fun createNotification() {
-        notificationManagerCompat =
-            NotificationManagerCompat.from(requireContext().applicationContext)
+//    private fun createNotification() {
+//        notificationManagerCompat =
+//            NotificationManagerCompat.from(requireContext().applicationContext)
+//
+//        customView = RemoteViews(context?.packageName, R.layout.progress_notification_tray)
+//
+//        customView?.let { view ->
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                notificationChannel =
+//                    NotificationChannel(channelId, description, NotificationManager.IMPORTANCE_HIGH)
+//                notificationChannel.enableLights(true)
+//                notificationChannel.lightColor = Color.GREEN
+//                notificationChannel.enableVibration(false)
+//                notificationManagerCompat.createNotificationChannel(notificationChannel)
+//
+//                builder = NotificationCompat.Builder(requireContext(), channelId)
+//                    .setSmallIcon(R.drawable.ic_launcher_background)
+//                    .setCustomContentView(view)
+//                    .setCustomBigContentView(view)
+//                    .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.ic_logo))
+//            } else {
+//                builder = NotificationCompat.Builder(requireContext())
+//                    .setSmallIcon(R.drawable.ic_launcher_background)
+//                    .setCustomContentView(view)
+//                    .setCustomBigContentView(view)
+//                    .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.ic_logo))
+//            }
+//        }
+//
+////        builder.setProgress(progressMax, progressCurrent, false)
+//        checkNotificationPermission(true)
+//        notificationManagerCompat.notify(1234, builder.build())
+//    }
 
-        customView = RemoteViews(context?.packageName, R.layout.progress_notification_tray)
-
-        customView?.let { view ->
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                notificationChannel =
-                    NotificationChannel(channelId, description, NotificationManager.IMPORTANCE_HIGH)
-                notificationChannel.enableLights(true)
-                notificationChannel.lightColor = Color.GREEN
-                notificationChannel.enableVibration(false)
-                notificationManagerCompat.createNotificationChannel(notificationChannel)
-
-                builder = NotificationCompat.Builder(requireContext(), channelId)
-                    .setSmallIcon(R.drawable.ic_launcher_background)
-                    .setCustomContentView(view)
-                    .setCustomBigContentView(view)
-                    .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.ic_logo))
-            } else {
-                builder = NotificationCompat.Builder(requireContext())
-                    .setSmallIcon(R.drawable.ic_launcher_background)
-                    .setCustomContentView(view)
-                    .setCustomBigContentView(view)
-                    .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.ic_logo))
-            }
-        }
-
-//        builder.setProgress(progressMax, progressCurrent, false)
-        checkNotificationPermission(true)
-        notificationManagerCompat.notify(1234, builder.build())
-    }
-
-    private fun updateNotificationCustomView(shipment: Shipment) {
-        customView?.setTextViewText(R.id.notification_title, shipment.statusDelivery)
-        when (shipment.statusDelivery) {
-            "On Delivery" -> {
-                customView?.setImageViewResource(R.id.iv_dot_one, R.drawable.point_round_orange)
-                customView?.setImageViewResource(R.id.iv_dot_two, R.drawable.point_round_orange)
-                customView?.setImageViewResource(R.id.iv_dot_three, R.drawable.point_round_orange)
-                customView?.setImageViewResource(R.id.v_line_one, R.drawable.rectangle_line_orange)
-                customView?.setImageViewResource(R.id.v_line_two, R.drawable.rectangle_line_orange)
-                customView?.setTextViewText(
-                    R.id.notification_text,
-                    "Track your order progress here!"
-                )
-            }
-
-            "Delivered" -> {
-                customView?.setImageViewResource(R.id.iv_dot_one, R.drawable.point_round_orange)
-                customView?.setImageViewResource(R.id.iv_dot_two, R.drawable.point_round_orange)
-                customView?.setImageViewResource(R.id.iv_dot_three, R.drawable.point_round_orange)
-                customView?.setImageViewResource(R.id.iv_dot_four, R.drawable.point_round_orange)
-                customView?.setImageViewResource(R.id.v_line_one, R.drawable.rectangle_line_orange)
-                customView?.setImageViewResource(R.id.v_line_two, R.drawable.rectangle_line_orange)
-                customView?.setImageViewResource(
-                    R.id.v_line_three,
-                    R.drawable.rectangle_line_orange
-                )
-                customView?.setTextViewText(
-                    R.id.notification_text,
-                    "Track your order progress here!"
-                )
-            }
-
-            else -> { // ON PROCESS
-                customView?.setImageViewResource(R.id.iv_dot_one, R.drawable.point_round_orange)
-                customView?.setImageViewResource(R.id.iv_dot_two, R.drawable.point_round_orange)
-                customView?.setImageViewResource(R.id.v_line_one, R.drawable.rectangle_line_orange)
-                customView?.setTextViewText(
-                    R.id.notification_text,
-                    "Track your order progress here!"
-                )
-            }
-        }
-        checkNotificationPermission(true)
-        notificationManagerCompat.notify(1234, builder.build())
-    }
+//    private fun updateNotificationCustomView(shipment: Shipment) {
+//        customView?.setTextViewText(R.id.notification_title, shipment.statusDelivery)
+//        when (shipment.statusDelivery) {
+//            "On Delivery" -> {
+//                customView?.setImageViewResource(R.id.iv_dot_one, R.drawable.point_round_orange)
+//                customView?.setImageViewResource(R.id.iv_dot_two, R.drawable.point_round_orange)
+//                customView?.setImageViewResource(R.id.iv_dot_three, R.drawable.point_round_orange)
+//                customView?.setImageViewResource(R.id.v_line_one, R.drawable.rectangle_line_orange)
+//                customView?.setImageViewResource(R.id.v_line_two, R.drawable.rectangle_line_orange)
+//                customView?.setTextViewText(
+//                    R.id.notification_text,
+//                    "Track your order progress here!"
+//                )
+//            }
+//
+//            "Delivered" -> {
+//                customView?.setImageViewResource(R.id.iv_dot_one, R.drawable.point_round_orange)
+//                customView?.setImageViewResource(R.id.iv_dot_two, R.drawable.point_round_orange)
+//                customView?.setImageViewResource(R.id.iv_dot_three, R.drawable.point_round_orange)
+//                customView?.setImageViewResource(R.id.iv_dot_four, R.drawable.point_round_orange)
+//                customView?.setImageViewResource(R.id.v_line_one, R.drawable.rectangle_line_orange)
+//                customView?.setImageViewResource(R.id.v_line_two, R.drawable.rectangle_line_orange)
+//                customView?.setImageViewResource(
+//                    R.id.v_line_three,
+//                    R.drawable.rectangle_line_orange
+//                )
+//                customView?.setTextViewText(
+//                    R.id.notification_text,
+//                    "Track your order progress here!"
+//                )
+//            }
+//
+//            else -> { // ON PROCESS
+//                customView?.setImageViewResource(R.id.iv_dot_one, R.drawable.point_round_orange)
+//                customView?.setImageViewResource(R.id.iv_dot_two, R.drawable.point_round_orange)
+//                customView?.setImageViewResource(R.id.v_line_one, R.drawable.rectangle_line_orange)
+//                customView?.setTextViewText(
+//                    R.id.notification_text,
+//                    "Track your order progress here!"
+//                )
+//            }
+//        }
+//        checkNotificationPermission(true)
+//        notificationManagerCompat.notify(1234, builder.build())
+//    }
 
 //    private fun observeNotificationLocationDistance(home: LatLng, distance: Double) {
 //        checkNotificationPermission(false)
@@ -463,6 +457,8 @@ class TrackOrderFragment : Fragment() {
     }
 
     override fun onStop() {
+        trackOrderViewModel.getShipmentById(args.shipmentId)
+
         super.onStop()
         binding.mvTrack.onStop()
     }

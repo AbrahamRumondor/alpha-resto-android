@@ -75,5 +75,8 @@
         <argument
             android:name="orderId"
             app:argType="string" />
+        <argument
+            android:name="shipmentId"
+            app:argType="string" />
     </fragment>
 </navigation>
