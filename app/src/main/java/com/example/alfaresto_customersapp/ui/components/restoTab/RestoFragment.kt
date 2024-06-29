@@ -82,12 +82,12 @@ class RestoFragment : Fragment() {
             }
         }
 
-        binding.allMenuBtn.setOnClickListener {
+        binding.btnAllMenu.setOnClickListener {
             Navigation.findNavController(view)
                 .navigate(R.id.action_restoFragment_to_listAllMenuFragment)
         }
 
-        binding.ivIconCart.setOnClickListener {
+        binding.btnCart.setOnClickListener {
             Navigation.findNavController(requireView())
                 .navigate(R.id.action_restoFragment_to_orderSummaryFragment)
         }
