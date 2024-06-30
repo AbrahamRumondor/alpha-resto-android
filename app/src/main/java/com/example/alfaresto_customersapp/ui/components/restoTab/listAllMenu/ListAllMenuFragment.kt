@@ -1,7 +1,6 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,10 +20,9 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ListAllMenuFragment : Fragment() {
-
     private lateinit var binding: FragmentListAllMenuBinding
     private val viewModel: ListAllMenuViewModel by viewModels()
-    private val adapter = ListAllMenuAdapter()
+    private val adapter by lazy { ListAllMenuAdapter() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,116 +36,45 @@ class ListAllMenuFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupView()
-
-        binding.apply {
-            svSearchMenu.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    query?.let {
-                        viewModel.setSearchQuery(it)
-                        binding.svSearchMenu.clearFocus()
-                    }
-                    return true
-                }
-
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    if (newText.isNullOrEmpty()) {
-                        viewModel.setSearchQuery(null)
-                    }
-                    return true
-                }
-            })
-
-            svSearchMenu.setOnCloseListener {
-                viewModel.setSearchQuery(null)
-                false
-            }
-        }
-
+        setupSearch()
+        setupCartNavigation()
+        setMenusAdapterButtons()
         loadData()
     }
 
     private fun setupView() {
-        binding.rvListAllMenu.let {
-            it.adapter = adapter
-            it.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.rvListAllMenu.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.rvListAllMenu.adapter = adapter
+    }
+
+    private fun setupSearch() {
+        binding.svSearchMenu.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let {
+                    viewModel.setSearchQuery(it)
+                    binding.svSearchMenu.clearFocus()
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText.isNullOrEmpty()) {
+                    viewModel.setSearchQuery(null)
+                }
+                return true
+            }
+        })
+
+        binding.svSearchMenu.setOnCloseListener {
+            viewModel.setSearchQuery(null)
+            false
         }
     }
 
-    private fun loadData() {
-        lifecycleScope.launch {
-            viewModel.isLoading.collectLatest { isLoading ->
-                binding.loadingLayout.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-            }
-        }
-
-        loadData()
-
-        lifecycleScope.launch {
-            viewModel.menuList.collectLatest {
-                Log.d("test", it.toString())
-                adapter.submitData(it)
-            }
-        }
-
-        binding.rvListAllMenu.adapter = adapter
-        setMenusAdapterButtons()
-
+    private fun setupCartNavigation() {
         binding.btnCart.setOnClickListener {
-            Log.d("listall", "cart clicked")
             Navigation.findNavController(requireView())
                 .navigate(R.id.action_list_all_menu_fragment_to_order_summary_fragment)
-        }
-
-        setupView()
-
-        binding.apply {
-            svSearchMenu.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    query?.let {
-                        viewModel.setSearchQuery(it)
-                        binding.svSearchMenu.clearFocus()
-                    }
-                    return true
-                }
-
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    if (newText.isNullOrEmpty()) {
-                        viewModel.setSearchQuery(null)
-                    }
-                    return true
-                }
-            })
-
-            svSearchMenu.setOnCloseListener {
-                viewModel.setSearchQuery(null)
-                false
-            }
-        }
-
-        adapter.setItemClickListener {menu ->
-            val action = ListAllMenuFragmentDirections.actionListAllMenuFragmentToDetailFragment(
-                menuId = menu.id,
-                name = menu.name,
-                price = menu.price,
-                description = menu.description,
-                image = menu.image
-            )
-            Navigation.findNavController(requireView()).navigate(action)
-        }
-    }
-
-    private fun setupView() {
-        binding.rvListAllMenu.let {
-            it.adapter = adapter
-            it.layoutManager = GridLayoutManager(requireContext(), 2)
-        }
-    }
-
-    private fun loadData() {
-        lifecycleScope.launch {
-            viewModel.menuList.collectLatest {
-                adapter.submitData(it)
-            }
         }
     }
 
@@ -167,5 +94,13 @@ class ListAllMenuFragment : Fragment() {
                 }
             }
         })
+    }
+
+    private fun loadData() {
+        lifecycleScope.launch {
+            viewModel.menuList.collectLatest {
+                adapter.submitData(it)
+            }
+        }
     }
 }
