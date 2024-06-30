@@ -10,6 +10,7 @@ import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -51,8 +52,10 @@ class AddressListViewModel @Inject constructor(
     fun fetchAllAddresses() {
         viewModelScope.launch {
             try {
-                val addresses = userUseCase.getUserAddresses()
-                _userAddresses.value = addresses.value
+                userUseCase.getUserAddresses().collectLatest {
+                    Log.d("test", it.toString())
+                    _userAddresses.value = it
+                }
             } catch (e: Exception) {
                 Log.d("test", "GAGAL FETCH DATA: $e")
             }
@@ -86,7 +89,6 @@ class AddressListViewModel @Inject constructor(
             override fun onFailure(exception: Exception) {
                 Log.d("test", "On failure addresslistvm DATA: $exception")
             }
-
         })
     }
 }

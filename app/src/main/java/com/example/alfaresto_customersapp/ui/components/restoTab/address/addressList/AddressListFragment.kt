@@ -67,6 +67,7 @@ class AddressListFragment : Fragment() {
 
         lifecycleScope.launch {
             addressListViewModel.userAddresses.collect { data ->
+                Log.d("test", data.toString())
                 addressAdapter.updateData(data)
                 addressAdapter.notifyItemChanged(data.size - 1)
             }
