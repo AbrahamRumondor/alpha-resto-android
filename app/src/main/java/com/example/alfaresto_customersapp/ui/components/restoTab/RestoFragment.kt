@@ -123,6 +123,7 @@ class RestoFragment : Fragment() {
         }
 
         binding.toolbar.btnLogout.setOnClickListener {
+            viewModel.deleteAllCartItems()
             logoutValidation()
         }
 
