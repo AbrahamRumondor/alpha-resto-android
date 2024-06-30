@@ -48,6 +48,12 @@ class RestoFragment : Fragment() {
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         }
 
+        lifecycleScope.launch {
+            viewModel.isLoading.collectLatest { isLoading ->
+                binding.loadingLayout.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            }
+        }
+
         viewModel.getUserFromDB(object : FirestoreCallback {
             override fun onSuccess(user: User?) {
                 if (user != null) {

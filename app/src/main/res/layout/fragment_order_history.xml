@@ -5,6 +5,10 @@
     android:layout_height="match_parent"
     tools:context=".ui.components.orderHistoryTab.OrderHistoryFragment">
 
+    <include
+        android:id="@+id/loading_layout"
+        layout="@layout/loading_layout" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_order_history"
         android:layout_width="match_parent"

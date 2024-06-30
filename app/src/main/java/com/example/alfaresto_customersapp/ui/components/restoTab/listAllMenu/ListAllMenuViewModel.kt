@@ -1,7 +1,6 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu
 
 import android.util.Log
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -11,9 +10,9 @@ import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.data.pagingSource.MenuPagingSource
 import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
+import com.example.alfaresto_customersapp.ui.components.loadState.LoadStateViewModel
 import com.google.firebase.firestore.CollectionReference
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -26,7 +25,7 @@ import javax.inject.Named
 class ListAllMenuViewModel @Inject constructor(
     @Named("menusRef") private val menusRef: CollectionReference,
     private val cartUseCase: CartUseCase
-) : ViewModel() {
+) : LoadStateViewModel() {
 
     private val _menuList = MutableStateFlow<PagingData<Menu>>(PagingData.empty())
     val menuList: StateFlow<PagingData<Menu>> get() = _menuList
@@ -38,6 +37,7 @@ class ListAllMenuViewModel @Inject constructor(
     private fun fetchCart() {
         viewModelScope.launch {
             try {
+                setLoading(true)
                 cartUseCase.getCart().collectLatest { cartItems ->
                     val updatedPagingSource = MenuPagingSource(menusRef, cartItems)
                     val newPager = Pager(
@@ -48,6 +48,7 @@ class ListAllMenuViewModel @Inject constructor(
 
                     newPager.collectLatest {
                         _menuList.value = it
+                        setLoading(false)
                     }
                 }
             } catch (e: Exception) {
