@@ -14,7 +14,7 @@ class PushNotificationService : FirebaseMessagingService() {
         super.onNewToken(token)
         Log.d(
             "test",
-            "On new token"
+            "On new token called: $token"
         )
         sendTokenToFirestore(token)
         UserConstants.USER_TOKEN = token

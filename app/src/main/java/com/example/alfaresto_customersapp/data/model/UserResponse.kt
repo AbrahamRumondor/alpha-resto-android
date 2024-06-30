@@ -6,23 +6,23 @@ import com.google.firebase.firestore.PropertyName
 data class UserResponse(
     @get:PropertyName("user_id")
     @set:PropertyName("user_id")
-    var userID: String = "",
+    var id: String = "",
 
     @get:PropertyName("user_name")
     @set:PropertyName("user_name")
-    var userName: String = "",
+    var name: String = "",
 
     @get:PropertyName("user_no_telp")
     @set:PropertyName("user_no_telp")
-    var userNoTelp: String = "",
+    var noTelp: String = "",
 
     @get:PropertyName("user_email")
     @set:PropertyName("user_email")
-    var userEmail: String = "",
+    var email: String = "",
 
     @get:PropertyName("user_address")
     @set:PropertyName("user_address")
-    var userAddress: List<AddressResponse> = mutableListOf()
+    var address: List<AddressResponse> = mutableListOf()
 ) {
     // Public no-argument constructor required by Firestore
     constructor() : this("", "", "", "", mutableListOf())
@@ -30,11 +30,11 @@ data class UserResponse(
     companion object {
         fun transform(userResponse: UserResponse): User {
             return User(
-                id = userResponse.userID,
-                name = userResponse.userName,
-                phone = userResponse.userNoTelp,
-                email = userResponse.userEmail,
-                address = userResponse.userAddress.map { AddressResponse.transform(it) }
+                id = userResponse.id,
+                name = userResponse.name,
+                phone = userResponse.noTelp,
+                email = userResponse.email,
+                address = userResponse.address.map { AddressResponse.transform(it) }
             )
         }
     }

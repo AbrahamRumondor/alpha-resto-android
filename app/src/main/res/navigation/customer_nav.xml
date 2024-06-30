@@ -44,7 +44,7 @@
     </fragment>
     <fragment
         android:id="@+id/addressList"
-        android:name="com.example.alfaresto_customersapp.ui.components.restoTab.address.addressList.AddressList"
+        android:name="com.example.alfaresto_customersapp.ui.components.restoTab.address.addressList.AddressListFragment"
         android:label="fragment_address_list"
         tools:layout="@layout/fragment_address_list" >
         <action
@@ -60,7 +60,28 @@
         android:id="@+id/listAllMenuFragment"
         android:name="com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu.ListAllMenuFragment"
         android:label="fragment_list_all_menu"
-        tools:layout="@layout/fragment_list_all_menu" />
+        tools:layout="@layout/fragment_list_all_menu" >
+        <action
+            android:id="@+id/action_listAllMenuFragment_to_orderSummaryFragment"
+            app:destination="@id/orderSummaryFragment" />
+        <action
+            android:id="@+id/action_listAllMenuFragment_to_restoFragment"
+            app:destination="@id/restoFragment" />
+        <action
+            android:id="@+id/action_listAllMenuFragment_to_foodDetailFragment"
+            app:destination="@id/foodDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/foodDetailFragment"
+        android:name="com.example.alfaresto_customersapp.ui.components.detailPage.DetailFragment"
+        android:label="fragment_food_detail"
+        tools:layout="@layout/fragment_detail" >
+        <action
+            android:id="@+id/action_foodItem_to_foodDetailFragment"
+            app:destination="@id/listAllMenuFragment" />
+    </fragment>
+
     <fragment
         android:id="@+id/trackOrderFragment"
         android:name="com.example.alfaresto_customersapp.ui.components.trackOrder.TrackOrderFragment"
@@ -78,5 +99,8 @@
         <argument
             android:name="shipmentId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_trackOrderFragment_to_orderHistoryFragment"
+            app:destination="@id/orderHistoryFragment" />
     </fragment>
 </navigation>

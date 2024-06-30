@@ -30,35 +30,35 @@ class RegisterActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         firebaseFirestore = FirebaseFirestore.getInstance()
 
-        binding.registerButton.setOnClickListener {
-            val email = binding.emailTextInput.text.toString()
+        binding.btnRegister.setOnClickListener {
+            val email = binding.etEmail.text.toString()
             val image = "-"
-            val password = binding.passwordTextInput.text.toString()
-            val name = binding.nameTextInput.text.toString()
-            val noTelp = binding.noTelpTextInput.text.toString()
-            val reEnterPassword = binding.reEnterPasswordTextInput.text.toString()
+            val password = binding.etPassword.toString()
+            val name = binding.etName.text.toString()
+            val noTelp = binding.etPhone.text.toString()
+            val reEnterPassword = binding.etReeenterPassword.text.toString()
 
             if (email.isEmpty() || password.isEmpty() || reEnterPassword.isEmpty()) {
-                binding.emailTextInput.error = getString(R.string.email_pass_empty)
-                binding.passwordTextInput.error = getString(R.string.email_pass_empty)
+                binding.etEmail.error = getString(R.string.email_pass_empty)
+                binding.etPassword.error = getString(R.string.email_pass_empty)
                 return@setOnClickListener
             }
 
             if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                binding.emailTextInput.error = getString(R.string.email_not_valid)
-                binding.emailTextInput.requestFocus()
+                binding.etEmail.error = getString(R.string.email_not_valid)
+                binding.etEmail.requestFocus()
                 return@setOnClickListener
             }
 
             if (!passwordPatterns.matcher(password).matches()) {
-                binding.passwordTextInput.error = getString(R.string.password_not_valid)
-                binding.passwordTextInput.requestFocus()
+                binding.etPassword.error = getString(R.string.password_not_valid)
+                binding.etPassword.requestFocus()
                 return@setOnClickListener
             }
 
             if (password != reEnterPassword) {
-                binding.reEnterPasswordTextInput.error = getString(R.string.password_not_match)
-                binding.reEnterPasswordTextInput.requestFocus()
+                binding.etReeenterPassword.error = getString(R.string.password_not_match)
+                binding.etReeenterPassword.requestFocus()
                 return@setOnClickListener
             }
 

@@ -57,6 +57,7 @@ kapt {
 dependencies {
 
     implementation("com.google.firebase:firebase-messaging:24.0.0")
+    implementation("com.google.firebase:firebase-messaging-ktx:24.0.0")
     val coroutinesAndroid = "1.7.1"
     val coroutinesCore = "1.6.4"
 

@@ -22,10 +22,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class AddressList : Fragment() {
-
+class AddressListFragment : Fragment() {
     private lateinit var binding: FragmentAddressListBinding
-    private lateinit var addressAdapter: AddressListAdapter
+    private val addressAdapter by lazy { AddressListAdapter() }
     private val addressListViewModel: AddressListViewModel by activityViewModels()
     private val addNewAddressViewModel: AddNewAddressViewModel by activityViewModels()
 
@@ -39,8 +38,22 @@ class AddressList : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        addressToolbar()
         setupAddressAdapter()
         setButtonNewAddress()
+    }
+
+    private fun addressToolbar() {
+        binding.apply {
+            toolbar.btnLogout.visibility = View.GONE
+            toolbar.btnBack.visibility = View.VISIBLE
+            toolbar.btnBack.setOnClickListener {
+                Navigation.findNavController(it).popBackStack()
+            }
+            toolbar.tvToolbarAddress.visibility = View.VISIBLE
+            toolbar.tvToolbarTitle.visibility = View.GONE
+        }
     }
 
     private fun setButtonNewAddress() {
@@ -50,32 +63,16 @@ class AddressList : Fragment() {
     }
 
     private fun setupAddressAdapter() {
-        addressListViewModel.getUserFromDB(object : FirestoreCallback {
-            override fun onSuccess(user: User?) {
-                user?.let {
-                    addressListViewModel.fetchAllAddresses(it.id)
-                    addressAdapter =
-                        AddressListAdapter(
-                            addressListViewModel.userAddressFlow.value,
-                            requireContext()
-                        )
-                    binding.rvAddressList.adapter = addressAdapter
+        binding.rvAddressList.adapter = addressAdapter
 
-                    lifecycleScope.launch {
-                        addressListViewModel.userAddressFlow.collect { data ->
-                            addressAdapter.updateData(data)
-                        }
-                    }
-
-                    setAddressListener()
-                }
+        lifecycleScope.launch {
+            addressListViewModel.userAddresses.collect { data ->
+                addressAdapter.updateData(data)
+                addressAdapter.notifyItemChanged(data.size - 1)
             }
+        }
 
-            override fun onFailure(exception: Exception) {
-                Toast.makeText(requireContext(), exception.message.toString(), Toast.LENGTH_LONG).show()
-            }
-
-        })
+        setAddressListener()
     }
 
     private fun setAddressListener() {

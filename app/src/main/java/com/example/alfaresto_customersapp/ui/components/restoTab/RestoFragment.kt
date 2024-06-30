@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
+import android.content.Context
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
@@ -16,9 +17,9 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,6 +30,7 @@ import com.example.alfaresto_customersapp.databinding.FragmentRestoBinding
 import com.example.alfaresto_customersapp.domain.error.FirestoreCallback
 import com.example.alfaresto_customersapp.domain.model.User
 import com.example.alfaresto_customersapp.ui.components.listener.MenuListener
+import com.example.alfaresto_customersapp.ui.components.loginPage.LoginActivity
 import com.example.alfaresto_customersapp.ui.components.restoTab.adapter.RestoAdapter
 import com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu.ListAllMenuFragment
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -86,13 +88,12 @@ class RestoFragment : Fragment() {
                     return@collect
                 }
                 viewModel.cart.collectLatest {
-
-
                     if (it.isEmpty()) {
                         Log.d("test", "NO DATA")
-                        binding.rvMenu.adapter = adapter
                         setRestoAdapterButtons(it)
                         adapter.submitMenuList(menus)
+                        adapter.notifyItemChanged(menus.size - 1)
+
                         return@collectLatest
                     }
 
@@ -106,20 +107,24 @@ class RestoFragment : Fragment() {
                     }
 
                     setRestoAdapterButtons(it)
-                    binding.rvMenu.adapter = adapter
                     adapter.submitMenuList(updatedMenus)
+                    adapter.notifyItemChanged(updatedMenus.size - 1)
                 }
             }
         }
 
-        binding.allMenuBtn.setOnClickListener {
-            Navigation.findNavController(requireView())
+        binding.btnAllMenu.setOnClickListener {
+            Navigation.findNavController(view)
                 .navigate(R.id.action_restoFragment_to_listAllMenuFragment)
         }
 
-        binding.ivIconCart.setOnClickListener {
+        binding.btnCart.setOnClickListener {
             Navigation.findNavController(requireView())
                 .navigate(R.id.action_restoFragment_to_orderSummaryFragment)
+        }
+
+        binding.toolbar.btnLogout.setOnClickListener {
+            logoutValidation()
         }
 
         checkNotificationPermission(true)
@@ -128,21 +133,41 @@ class RestoFragment : Fragment() {
     private fun setRestoAdapterButtons(cart: List<CartEntity>?) {
         adapter.setItemListener(object : MenuListener {
             override fun onAddItemClicked(position: Int, menuId: String) {
-                var item: CartEntity? = null
-                item = cart?.find { it.menuId == menuId }
+                val item: CartEntity? = cart?.find { it.menuId == menuId }
                 viewModel.addOrderQuantity(menuId, item)
                 adapter.notifyItemChanged(position)
             }
 
             override fun onDecreaseItemClicked(position: Int, menuId: String) {
-                var item: CartEntity? = null
-                item = cart?.find { it.menuId == menuId }
+                val item: CartEntity? = cart?.find { it.menuId == menuId }
                 viewModel.decreaseOrderQuantity(menuId, item)
                 adapter.notifyItemChanged(position)
             }
         })
     }
 
+    private fun logoutValidation() {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Confirmation")
+            .setMessage("Are you sure you want to logout?")
+            .setPositiveButton("Logout") { _, _ ->
+                logout()
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun logout() {
+        val sharedPreferences = requireContext().getSharedPreferences("login", Context.MODE_PRIVATE)
+        with(sharedPreferences.edit()) {
+            putBoolean("isLoggedIn", false)
+            apply()
+        }
+
+        val intent = Intent(requireContext(), LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+    }
 
     private fun checkNotificationPermission(firstTime: Boolean) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && firstTime) {

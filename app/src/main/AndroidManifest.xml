@@ -35,7 +35,7 @@
             android:value="false" />
 
         <activity
-            android:name=".ui.components.registerPage.RegisterActivity"
+            android:name=".ui.components.SplashScreenActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -44,11 +44,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.components.MainActivity"
-            android:exported="true"></activity>
-        <activity
             android:name=".ui.components.loginPage.LoginActivity"
-            android:exported="true"></activity>
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".ui.components.MainActivity"
+            android:exported="true">
+        </activity>
+        <activity android:name=".ui.components.registerPage.RegisterActivity"
+            android:exported="true">
+        </activity>
         <activity
             android:name=".ui.components.trackOrder.TrackOrderActivity"
             android:exported="true">
