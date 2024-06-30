@@ -75,6 +75,12 @@ class ListAllMenuFragment : Fragment() {
 
     private fun loadData() {
         lifecycleScope.launch {
+            viewModel.isLoading.collectLatest { isLoading ->
+                binding.loadingLayout.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            }
+        }
+
+        lifecycleScope.launch {
             viewModel.menuList.collectLatest {
                 Log.d("test", it.toString())
                 adapter.submitData(it)

@@ -1,12 +1,12 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.address.addressList
 
 import android.util.Log
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.alfaresto_customersapp.domain.error.FirestoreCallback
 import com.example.alfaresto_customersapp.domain.model.Address
 import com.example.alfaresto_customersapp.domain.model.User
 import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase
+import com.example.alfaresto_customersapp.ui.components.loadState.LoadStateViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AddressListViewModel @Inject constructor(
     private val userUseCase: UserUseCase
-) : ViewModel() {
+) : LoadStateViewModel() {
     private val _userAddresses = MutableStateFlow<List<Address>>(mutableListOf())
     val userAddresses: StateFlow<List<Address>> = _userAddresses
 
@@ -49,12 +49,17 @@ class AddressListViewModel @Inject constructor(
     }
 
     fun fetchAllAddresses() {
+        setLoading(true)
         viewModelScope.launch {
             try {
                 val addresses = userUseCase.getUserAddresses()
                 _userAddresses.value = addresses.value
+                if (addresses.value.isEmpty()) {
+                    setLoading(false)
+                }
             } catch (e: Exception) {
                 Log.d("test", "GAGAL FETCH DATA: $e")
+                setLoading(false)
             }
         }
     }

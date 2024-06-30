@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
@@ -12,6 +13,7 @@ import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.FragmentAddressListBinding
 import com.example.alfaresto_customersapp.ui.components.listener.AddressItemListener
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -32,8 +34,15 @@ class AddressListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         addressToolbar()
+
         setupAddressAdapter()
         setButtonNewAddress()
+
+        lifecycleScope.launch {
+            addressListViewModel.isLoading.collectLatest { isLoading ->
+                binding.loadingLayout.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            }
+        }
     }
 
     private fun addressToolbar() {
@@ -61,6 +70,10 @@ class AddressListFragment : Fragment() {
             addressListViewModel.userAddresses.collect { data ->
                 addressAdapter.updateData(data)
                 addressAdapter.notifyItemChanged(data.size - 1)
+
+                if (data.isEmpty()) {
+                    Toast.makeText(requireContext(), "No addresses found", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
