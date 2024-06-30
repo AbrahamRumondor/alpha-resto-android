@@ -71,7 +71,7 @@ class OrderHistoryFragment : Fragment() {
         adapter.setItemListener(object : OrderHistoryListener {
             override fun onOrderClicked(orderHistory: OrderHistory) {
                 Navigation.findNavController(requireView())
-                    .navigate(R.id.action_orderHistoryFragment_to_trackOrderFragment)
+                    .navigate(R.id.action_order_history_fragment_to_track_order_fragment)
             }
         })
     }

@@ -59,7 +59,7 @@ class AddressListFragment : Fragment() {
 
     private fun setButtonNewAddress() {
         binding.btnNewAddress.setOnClickListener {
-            Navigation.findNavController(it).navigate(R.id.action_addressList_to_addNewAddressFragment)
+            Navigation.findNavController(it).navigate(R.id.action_address_list_to_add_new_address_fragment)
         }
     }
 

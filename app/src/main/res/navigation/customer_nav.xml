@@ -14,6 +14,9 @@
             android:id="@+id/action_resto_fragment_to_order_summary_fragment"
             app:destination="@id/order_summary_fragment" />
         <action
+            android:id="@+id/action_resto_fragment_to_order_history_fragment"
+            app:destination="@id/order_history_fragment" />
+        <action
             android:id="@+id/action_resto_fragment_to_list_all_menu_fragment"
             app:destination="@id/list_all_menu_fragment" />
         <action
@@ -26,6 +29,9 @@
         android:name="com.example.alfaresto_customersapp.ui.components.orderHistoryTab.OrderHistoryFragment"
         android:label="fragment_order_history"
         tools:layout="@layout/fragment_order_history" >
+        <action
+            android:id="@+id/action_order_history_fragment_to_resto_fragment"
+            app:destination="@id/resto_fragment" />
         <action
             android:id="@+id/action_order_history_fragment_to_track_order_fragment"
             app:destination="@id/track_order_fragment" />
@@ -68,6 +74,7 @@
         android:name="com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu.ListAllMenuFragment"
         android:label="fragment_list_all_menu"
         tools:layout="@layout/fragment_list_all_menu" >
+
         <action
             android:id="@+id/action_list_all_menu_fragment_to_order_summary_fragment"
             app:destination="@id/order_summary_fragment" />
@@ -75,18 +82,8 @@
             android:id="@+id/action_list_all_menu_fragment_to_resto_fragment"
             app:destination="@id/resto_fragment" />
         <action
-            android:id="@+id/action_list_all_menu_fragment_to_food_detail_fragment"
-            app:destination="@id/food_detail_fragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/food_detail_fragment"
-        android:name="com.example.alfaresto_customersapp.ui.components.detailPage.DetailFragment"
-        android:label="fragment_food_detail"
-        tools:layout="@layout/fragment_detail" >
-        <action
-            android:id="@+id/action_food_item_to_food_detail_fragment"
-            app:destination="@id/list_all_menu_fragment" />
+            android:id="@+id/action_list_all_menu_fragment_to_detail_fragment"
+            app:destination="@id/detail_fragment" />
     </fragment>
 
     <fragment
@@ -107,7 +104,7 @@
             android:name="orderId"
             app:argType="string" />
         <action
-            android:id="@+id/action_list_all_menu_fragment_to_food_detail_fragment"
+            android:id="@+id/action_list_all_menu_fragment_to_detail_fragment"
             app:destination="@id/detail_fragment" />
     </fragment>
 

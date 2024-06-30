@@ -45,6 +45,24 @@ class ListAllMenuFragment : Fragment() {
             }
         }
 
+        loadData()
+
+        lifecycleScope.launch {
+            viewModel.menuList.collectLatest {
+                Log.d("test", it.toString())
+                adapter.submitData(it)
+            }
+        }
+
+        binding.rvListAllMenu.adapter = adapter
+        setMenusAdapterButtons()
+
+        binding.btnCart.setOnClickListener {
+            Log.d("listall", "cart clicked")
+            Navigation.findNavController(requireView())
+                .navigate(R.id.action_list_all_menu_fragment_to_order_summary_fragment)
+        }
+
         setupView()
 
         binding.apply {
@@ -65,34 +83,22 @@ class ListAllMenuFragment : Fragment() {
                 }
             })
 
-            adapter.setItemClickListener {menu ->
-                val action = ListAllMenuFragmentDirections.actionListAllMenuFragmentToFoodDetailFragment (
-                    menuId = menu.id,
-                    name = menu.name,
-                    price = menu.price,
-                    description = menu.description,
-                    image = menu.image
-                )
-                Navigation.findNavController(requireView()).navigate(action)
-            }
-
-
             svSearchMenu.setOnCloseListener {
                 viewModel.setSearchQuery(null)
                 false
             }
         }
 
-        binding.rvListAllMenu.adapter = adapter
-        setMenusAdapterButtons()
-
-        binding.btnCart.setOnClickListener {
-            Log.d("listall", "cart clicked")
-            Navigation.findNavController(requireView())
-                .navigate(R.id.action_list_all_menu_fragment_to_order_summary_fragment)
+        adapter.setItemClickListener {menu ->
+            val action = ListAllMenuFragmentDirections.actionListAllMenuFragmentToDetailFragment(
+                menuId = menu.id,
+                name = menu.name,
+                price = menu.price,
+                description = menu.description,
+                image = menu.image
+            )
+            Navigation.findNavController(requireView()).navigate(action)
         }
-
-        loadData()
     }
 
     private fun setupView() {

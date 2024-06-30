@@ -30,6 +30,10 @@ class ListAllMenuViewModel @Inject constructor(
     private val _menuList = MutableStateFlow<PagingData<Menu>>(PagingData.empty())
     val menuList: StateFlow<PagingData<Menu>> get() = _menuList
 
+    private val _searchQuery = MutableStateFlow<String?>(null)
+    private val searchQuery: StateFlow<String?> get() = _searchQuery
+
+
     init {
         fetchCart()
     }
@@ -93,5 +97,9 @@ class ListAllMenuViewModel @Inject constructor(
             }
             result(null)
         }
+    }
+
+    fun setSearchQuery(query: String?) {
+        _searchQuery.value = query
     }
 }

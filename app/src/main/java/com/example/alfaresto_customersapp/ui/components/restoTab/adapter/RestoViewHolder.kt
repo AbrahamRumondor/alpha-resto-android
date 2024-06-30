@@ -24,22 +24,22 @@ class RestoViewHolder(
 
             val isVisible = menu.orderCartQuantity != 0
             it.btnMenuAdd.visibility = View.VISIBLE
-            it.btnPlus.visibility = View.INVISIBLE
+            it.btnAddOrder.visibility = View.INVISIBLE
             it.btnMenuAdd.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
-            it.btnMinus.visibility = if (isVisible) View.INVISIBLE else View.VISIBLE
+            it.btnDecreaseOrder.visibility = if (isVisible) View.INVISIBLE else View.VISIBLE
 
             val clickListener = View.OnClickListener { view ->
                 when (view) {
-                    it.btnMenuAdd, it.btnPlus -> listener?.onAddItemClicked(position, menuId = menu.id)
-                    it.btnMinus -> listener?.onDecreaseItemClicked(position, menuId = menu.id)
+                    it.btnMenuAdd, it.btnAddOrder -> listener?.onAddItemClicked(position, menuId = menu.id)
+                    it.btnDecreaseOrder -> listener?.onDecreaseItemClicked(position, menuId = menu.id)
                     else -> itemClickListener?.invoke(menu)
                 }
             }
 
             it.root.setOnClickListener(clickListener)
             it.btnMenuAdd.setOnClickListener(clickListener)
-            it.btnPlus.setOnClickListener(clickListener)
-            it.btnMinus.setOnClickListener(clickListener)
+            it.btnAddOrder.setOnClickListener(clickListener)
+            it.btnDecreaseOrder.setOnClickListener(clickListener)
         }
     }
 

@@ -94,4 +94,5 @@
     <string name="back_logo">Back Logo</string>
     <string name="add_item">+</string>
     <string name="remove_item">-</string>
+    <string name="order_history">Order History</string>
 </resources>

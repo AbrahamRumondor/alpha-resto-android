@@ -103,12 +103,12 @@ class RestoFragment : Fragment() {
 
         binding.btnAllMenu.setOnClickListener {
             Navigation.findNavController(view)
-                .navigate(R.id.action_restoFragment_to_listAllMenuFragment)
+                .navigate(R.id.action_resto_fragment_to_list_all_menu_fragment)
         }
 
         binding.btnCart.setOnClickListener {
             Navigation.findNavController(requireView())
-                .navigate(R.id.action_restoFragment_to_orderSummaryFragment)
+                .navigate(R.id.action_resto_fragment_to_order_summary_fragment)
         }
 
         binding.toolbar.btnLogout.setOnClickListener {

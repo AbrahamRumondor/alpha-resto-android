@@ -28,8 +28,8 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.addressList -> hideBottomNav()
-                R.id.addNewAddressFragment -> hideBottomNav()
+                R.id.address_list -> hideBottomNav()
+                R.id.add_new_address_fragment -> hideBottomNav()
                 else -> showBottomNav()
             }
         }

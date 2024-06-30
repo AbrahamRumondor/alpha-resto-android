@@ -22,19 +22,31 @@ class ListAllMenuViewHolder(
                 .into(it.ivMenuImage)
 
             val isVisible = menu.orderCartQuantity != 0
-            it.btnMenuAdd.visibility = View.VISIBLE
-            it.btnPlus.visibility = View.INVISIBLE
-            it.btnMenuAdd.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
-            it.btnMinus.visibility = if (isVisible) View.INVISIBLE else View.VISIBLE
+            it.btnMenuAdd.visibility = if (isVisible) View.GONE else View.VISIBLE
+            it.clActionButtons.visibility = if (isVisible) View.VISIBLE else View.GONE
+            it.btnDecreaseOrder.visibility = if (isVisible) View.VISIBLE else View.GONE
 
             val clickListener = View.OnClickListener { view ->
                 when (view) {
-                    it.btnMenuAdd, it.btnPlus -> listener?.onAddItemClicked(
-                        position,
-                        menuId = menu.id
-                    )
+                    it.btnMenuAdd -> {
+                        listener?.onAddItemClicked(position, menuId = menu.id)
+                        it.tvOrderQty.text = menu.orderCartQuantity.toString()
+                        it.clActionButtons.visibility = View.VISIBLE
+                    }
 
-                    it.btnMinus -> listener?.onDecreaseItemClicked(position, menuId = menu.id)
+                    it.btnDecreaseOrder -> {
+                        listener?.onDecreaseItemClicked(position, menuId = menu.id)
+                        it.tvOrderQty.text = menu.orderCartQuantity.toString()
+                        if (menu.orderCartQuantity == 0) {
+                            it.btnMenuAdd.visibility = View.VISIBLE
+                            it.clActionButtons.visibility = View.GONE
+                        }
+                    }
+                    it.btnAddOrder -> {
+                        listener?.onAddItemClicked(position, menuId = menu.id)
+                        it.tvOrderQty.text = menu.orderCartQuantity.toString()
+                        it.clActionButtons.visibility = View.VISIBLE
+                    }
 
                     else -> {
                         itemClickListener?.invoke(menu)
@@ -44,8 +56,8 @@ class ListAllMenuViewHolder(
 
             it.root.setOnClickListener(clickListener)
             it.btnMenuAdd.setOnClickListener(clickListener)
-            it.btnPlus.setOnClickListener(clickListener)
-            it.btnMinus.setOnClickListener(clickListener)
+            it.btnDecreaseOrder.setOnClickListener(clickListener)
+            it.btnAddOrder.setOnClickListener(clickListener)
         }
     }
 
