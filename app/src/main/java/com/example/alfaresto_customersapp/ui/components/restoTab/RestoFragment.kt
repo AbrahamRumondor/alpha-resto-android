@@ -104,8 +104,6 @@ class RestoFragment : Fragment() {
             }
         }
 
-
-
         binding.btnAllMenu.setOnClickListener {
             Navigation.findNavController(view)
                 .navigate(R.id.action_resto_fragment_to_list_all_menu_fragment)
@@ -120,16 +118,11 @@ class RestoFragment : Fragment() {
             logoutValidation()
         }
 
-        adapter.setItemClickListener {menu ->
-            val action = RestoFragmentDirections.actionRestoFragmentMenuToDetailFragment(
-                menuId = menu.id,
-                name = menu.name,
-                price = menu.price,
-                description = menu.description,
-                image = menu.image
-            )
-            Navigation.findNavController(requireView()).navigate(action)
+        binding.rvMenu.setOnClickListener {
+            Navigation.findNavController(requireView())
+                .navigate(R.id.action_resto_fragment_menu_to_detail_fragment)
         }
+
     }
 
     private fun setRestoAdapterButtons(cart: List<CartEntity>?) {

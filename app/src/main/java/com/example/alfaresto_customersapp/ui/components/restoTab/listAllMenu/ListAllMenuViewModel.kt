@@ -11,6 +11,7 @@ import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.data.pagingSource.MenuPagingSource
 import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
+import com.example.alfaresto_customersapp.ui.components.loadState.LoadStateViewModel
 import com.google.firebase.firestore.CollectionReference
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
