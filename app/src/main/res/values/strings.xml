@@ -79,4 +79,10 @@
     <string name="on_process">Your order is currently on process, waiting for Admin to accept…</string>
     <string name="on_delivery">Your order is currently on delivery, track the driver in App</string>
     <string name="delivered">Your order has arrived, Thank you for using AlfaResto</string>
+    <string name="delivery_address">Delivery Address</string>
+    <string name="_25_min">25 Min</string>
+    <string name="delivery_in">Delivery In</string>
+    <string name="order_id_1234567890">Order ID: 1234567890</string>
+    <string name="apa">apa</string>
+    <string name="on_process_status">On Process</string>
 </resources>

@@ -178,4 +178,8 @@ class TrackOrderViewModel @Inject constructor(
         }
     }
 
+    fun getTimeEstimation(duration: Double): String {
+        return (duration / 60.00).toString() + " min"
+    }
+
 }

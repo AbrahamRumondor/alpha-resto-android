@@ -6,6 +6,7 @@ import com.example.alfaresto_customersapp.utils.user.UserConstants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessagingService
+import com.google.firebase.messaging.RemoteMessage
 
 
 class PushNotificationService : FirebaseMessagingService() {
@@ -17,6 +18,13 @@ class PushNotificationService : FirebaseMessagingService() {
         )
         sendTokenToFirestore(token)
         UserConstants.USER_TOKEN = token
+    }
+
+    override fun onMessageReceived(message: RemoteMessage) {
+        super.onMessageReceived(message)
+        message.notification?.let {
+            
+        }
     }
 
     private fun sendTokenToFirestore(token: String) {

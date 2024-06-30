@@ -98,6 +98,9 @@ class TrackOrderFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        SHIPMENT_STATUS = "On Process"
+
         binding.run {
             trackOrderViewModel.order.observe(viewLifecycleOwner) { orderList ->
                 Log.d("test", args.orderId)
@@ -111,6 +114,13 @@ class TrackOrderFragment : Fragment() {
                     val home = LatLng(myOrder.latitude, myOrder.longitude)
 
                     trackOrderViewModel.getShipmentById(args.shipmentId)
+
+                    tvOrderStatusBody.text = getText(R.string.on_process_status)
+                    trackOrderViewModel.shipment.observe(viewLifecycleOwner) {
+                        tvOrderStatusBody.text = it.statusDelivery
+                    }
+
+                    tvAddressDetail.text = myOrder.fullAddress
 
                     mvTrack.onCreate(savedInstanceState)
                     mvTrack.getMapAsync {
@@ -159,6 +169,8 @@ class TrackOrderFragment : Fragment() {
                     polylineOptions.addAll(decodedPath)
 
                     polylines = map.addPolyline(polylineOptions)
+                    binding.tvEstimatedTime.text =
+                        trackOrderViewModel.getTimeEstimation(routeResponse.routes[0].duration)
 //                    observeNotificationLocationDistance(home, it.routes[0].distance)
                 }
 

@@ -44,7 +44,7 @@ class ShipmentRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getShipmentById(id: String): LiveData<Shipment?> {
-        listenerRegistration = shipmentsRef.document("E5eUgeleoiZxJsH3WfYB")
+        listenerRegistration = shipmentsRef.document(id)
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
                     Log.e("Firestore", "Error fetching document: $error")
@@ -71,6 +71,23 @@ class ShipmentRepositoryImpl @Inject constructor(
             }
 
         return shipment
+    }
+
+    override fun createShipment(shipment: Shipment) {
+        val newShipmentId = generateShipmentId()
+        shipmentsRef.document(newShipmentId).set(
+            ShipmentResponse.transform(shipment.copy(id = newShipmentId))
+        ).addOnSuccessListener {
+            Log.d(
+                "TEST",
+                "SUCCESS ON ORDER INSERTION"
+            )
+        }
+            .addOnFailureListener { Log.d("TEST", "ERROR ON ORDER INSERTION") }
+    }
+
+    private fun generateShipmentId(): String {
+        return shipmentsRef.document().id
     }
 
     private fun startForegroundService() {

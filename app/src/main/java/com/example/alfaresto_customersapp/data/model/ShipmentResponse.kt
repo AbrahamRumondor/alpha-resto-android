@@ -27,5 +27,13 @@ data class ShipmentResponse(
                 statusDelivery = shipmentResponse.statusDelivery
             )
         }
+
+        fun transform(shipment: Shipment): ShipmentResponse {
+            return ShipmentResponse(
+                id = shipment.id,
+                orderID = shipment.orderID,
+                statusDelivery = shipment.statusDelivery
+            )
+        }
     }
 }

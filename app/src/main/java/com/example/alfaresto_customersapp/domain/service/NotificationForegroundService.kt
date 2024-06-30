@@ -89,7 +89,7 @@ class NotificationForegroundService : Service() {
 
 
     private fun updateNotification() {
-        SHIPMENT_STATUS?.let {
+        SHIPMENT_STATUS.let {
             customView?.setTextViewText(R.id.notification_title, it)
             when (it) {
                 "On Delivery" -> {
