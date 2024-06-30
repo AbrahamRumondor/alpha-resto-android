@@ -14,7 +14,7 @@ import com.example.alfaresto_customersapp.ui.components.listener.AddressItemList
 import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_ID
 import kotlinx.coroutines.launch
 
-class AddressList : Fragment() {
+class AddressListFragment : Fragment() {
 
     private lateinit var binding: FragmentAddressListBinding
     private lateinit var addressAdapter: AddressListAdapter
@@ -30,8 +30,22 @@ class AddressList : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        addressToolbar()
         setupAddressAdapter()
         setButtonNewAddress()
+    }
+
+    private fun addressToolbar() {
+        binding.apply {
+            toolbar.btnLogout.visibility = View.GONE
+            toolbar.btnBack.visibility = View.VISIBLE
+            toolbar.btnBack.setOnClickListener {
+                Navigation.findNavController(it).popBackStack()
+            }
+            toolbar.tvToolbarAddress.visibility = View.VISIBLE
+            toolbar.tvToolbarTitle.visibility = View.GONE
+        }
     }
 
     private fun setButtonNewAddress() {
@@ -60,7 +74,7 @@ class AddressList : Fragment() {
             override fun onAddressClicked(position: Int, addressId: String) {
                 addressListViewModel.setAnAddress(USER_ID, addressId)
                 val otherAddress = addressListViewModel.updateAddress(position)
-                otherAddress?.let {previousSelected->
+                otherAddress?.let { previousSelected ->
                     addressAdapter.notifyItemChanged(previousSelected)
                 }
                 addressAdapter.notifyItemChanged(position)

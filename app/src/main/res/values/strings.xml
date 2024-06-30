@@ -82,4 +82,6 @@
     <string name="welcome_back">Welcome Back !</string>
     <string name="login_image">Login Image</string>
     <string name="splash_screen_description">Splash Screen</string>
+    <string name="back_button">Back Button</string>
+    <string name="back_logo">Back Logo</string>
 </resources>
