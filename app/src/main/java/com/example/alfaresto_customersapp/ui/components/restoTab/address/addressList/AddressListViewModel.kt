@@ -7,8 +7,6 @@ import com.example.alfaresto_customersapp.domain.error.FirestoreCallback
 import com.example.alfaresto_customersapp.domain.model.Address
 import com.example.alfaresto_customersapp.domain.model.User
 import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.firestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,8 +17,6 @@ import javax.inject.Inject
 class AddressListViewModel @Inject constructor(
     private val userUseCase: UserUseCase
 ) : ViewModel() {
-    val db = Firebase.firestore
-
     private val _userAddresses = MutableStateFlow<List<Address>>(mutableListOf())
     val userAddresses: StateFlow<List<Address>> = _userAddresses
 

@@ -2,7 +2,6 @@ package com.example.alfaresto_customersapp.ui.components.restoTab.address.addres
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.AddressItemBinding

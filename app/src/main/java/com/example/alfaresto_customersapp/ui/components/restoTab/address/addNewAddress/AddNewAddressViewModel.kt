@@ -6,12 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.alfaresto_customersapp.domain.model.Address
-import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
 import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase
 import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_ID
 import com.google.android.gms.maps.model.LatLng
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.firestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
