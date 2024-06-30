@@ -4,8 +4,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.example.alfaresto_customersapp.domain.model.OrderHistory
+import com.example.alfaresto_customersapp.ui.components.listener.MenuListener
+import com.example.alfaresto_customersapp.ui.components.listener.OrderHistoryListener
 
 class OrderHistoryAdapter : ListAdapter<OrderHistory, OrderHistoryViewHolder>(diffUtil) {
+
+    private var orderHistoryListener: OrderHistoryListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderHistoryViewHolder {
         return OrderHistoryViewHolder.create(parent)
@@ -13,7 +17,7 @@ class OrderHistoryAdapter : ListAdapter<OrderHistory, OrderHistoryViewHolder>(di
 
     override fun onBindViewHolder(holder: OrderHistoryViewHolder, position: Int) {
         val order = getItem(position)
-        holder.bind(order)
+        holder.bind(order, orderHistoryListener)
     }
 
     companion object {
@@ -26,5 +30,9 @@ class OrderHistoryAdapter : ListAdapter<OrderHistory, OrderHistoryViewHolder>(di
                 return oldItem == newItem
             }
         }
+    }
+
+    fun setItemListener(orderHistoryListener: OrderHistoryListener) {
+        this.orderHistoryListener = orderHistoryListener
     }
 }

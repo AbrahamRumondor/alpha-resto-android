@@ -1,6 +1,6 @@
 package com.example.alfaresto_customersapp.data.remote.pushNotification
 
-import com.example.alfaresto_customersapp.data.remote.pushNotification.retrofit.FcmApi
+import com.example.alfaresto_customersapp.data.remote.retrofit.FcmApi
 import com.example.alfaresto_customersapp.domain.error.DataError
 import com.example.alfaresto_customersapp.domain.error.Result
 import com.example.alfaresto_customersapp.domain.repository.FcmApiRepository

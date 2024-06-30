@@ -12,6 +12,8 @@ import com.example.alfaresto_customersapp.domain.usecase.order.OrderUseCase
 import com.example.alfaresto_customersapp.domain.usecase.order.OrderUseCaseImpl
 import com.example.alfaresto_customersapp.domain.usecase.orderHistory.OrderHistoryUseCase
 import com.example.alfaresto_customersapp.domain.usecase.orderHistory.OrderHistoryUseCaseImpl
+import com.example.alfaresto_customersapp.domain.usecase.resto.RestaurantUseCase
+import com.example.alfaresto_customersapp.domain.usecase.resto.RestaurantUseCaseImpl
 import com.example.alfaresto_customersapp.domain.usecase.shipment.ShipmentUseCase
 import com.example.alfaresto_customersapp.domain.usecase.shipment.ShipmentUseCaseImpl
 import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase
@@ -73,4 +75,10 @@ abstract class UseCaseModule {
     abstract fun provideNotificationUseCase(
         notificationUseCaseImpl: NotificationUseCaseImpl
     ): NotificationUseCase
+
+    @Binds
+    @ViewModelScoped
+    abstract fun provideRestaurantUseCase(
+        restaurantUseCaseImpl: RestaurantUseCaseImpl
+    ): RestaurantUseCase
 }

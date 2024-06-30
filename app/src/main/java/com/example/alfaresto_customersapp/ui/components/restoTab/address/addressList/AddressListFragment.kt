@@ -11,13 +11,13 @@ import androidx.navigation.Navigation
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.FragmentAddressListBinding
 import com.example.alfaresto_customersapp.ui.components.listener.AddressItemListener
-import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_ID
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class AddressListFragment : Fragment() {
-
     private lateinit var binding: FragmentAddressListBinding
-    private lateinit var addressAdapter: AddressListAdapter
+    private val addressAdapter by lazy { AddressListAdapter() }
     private val addressListViewModel: AddressListViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -55,14 +55,12 @@ class AddressListFragment : Fragment() {
     }
 
     private fun setupAddressAdapter() {
-        addressListViewModel.fetchAllAddresses("amnRLCt7iYGogz6JRxi5")
-        addressAdapter =
-            AddressListAdapter(addressListViewModel.userAddressFlow.value, requireContext())
         binding.rvAddressList.adapter = addressAdapter
 
         lifecycleScope.launch {
-            addressListViewModel.userAddressFlow.collect { data ->
+            addressListViewModel.userAddresses.collect { data ->
                 addressAdapter.updateData(data)
+                addressAdapter.notifyItemChanged(data.size - 1)
             }
         }
 
@@ -72,9 +70,9 @@ class AddressListFragment : Fragment() {
     private fun setAddressListener() {
         addressAdapter.setItemListener(object : AddressItemListener {
             override fun onAddressClicked(position: Int, addressId: String) {
-                addressListViewModel.setAnAddress(USER_ID, addressId)
+                addressListViewModel.setAnAddress(addressId)
                 val otherAddress = addressListViewModel.updateAddress(position)
-                otherAddress?.let { previousSelected ->
+                otherAddress?.let {previousSelected->
                     addressAdapter.notifyItemChanged(previousSelected)
                 }
                 addressAdapter.notifyItemChanged(position)

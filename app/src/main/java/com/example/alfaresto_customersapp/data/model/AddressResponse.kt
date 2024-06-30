@@ -35,5 +35,15 @@ data class AddressResponse(
                 longitude = addressResponse.longitude
             )
         }
+
+        fun transform(address: Address): AddressResponse {
+            return AddressResponse(
+                id = address.id,
+                label = address.label,
+                address = address.address,
+                latitude = address.latitude,
+                longitude = address.longitude
+            )
+        }
     }
 }

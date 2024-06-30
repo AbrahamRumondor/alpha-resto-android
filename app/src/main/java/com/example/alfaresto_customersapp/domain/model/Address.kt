@@ -2,7 +2,7 @@ package com.example.alfaresto_customersapp.domain.model
 
 
 data class Address(
-    val id: String = "",
+    var id: String = "",
     val label: String = "",
     val address: String = "",
     val latitude: Double = 0.0,

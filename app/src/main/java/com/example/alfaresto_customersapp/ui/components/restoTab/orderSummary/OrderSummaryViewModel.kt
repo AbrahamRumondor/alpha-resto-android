@@ -6,7 +6,11 @@ import androidx.lifecycle.viewModelScope
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.data.model.OrderItemResponse
 import com.example.alfaresto_customersapp.data.model.OrderResponse
+import com.example.alfaresto_customersapp.data.remote.pushNotification.NotificationBody
+import com.example.alfaresto_customersapp.data.remote.pushNotification.SendMessageDto
 import com.example.alfaresto_customersapp.domain.error.FirestoreCallback
+import com.example.alfaresto_customersapp.domain.error.Result.Error
+import com.example.alfaresto_customersapp.domain.error.Result.Success
 import com.example.alfaresto_customersapp.domain.model.Address
 import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.domain.model.Order
@@ -15,18 +19,18 @@ import com.example.alfaresto_customersapp.domain.model.User
 import com.example.alfaresto_customersapp.domain.repository.FcmApiRepository
 import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
 import com.example.alfaresto_customersapp.domain.usecase.menu.MenuUseCase
-import com.example.alfaresto_customersapp.domain.usecase.notification.NotificationUseCase
 import com.example.alfaresto_customersapp.domain.usecase.order.OrderUseCase
+import com.example.alfaresto_customersapp.domain.usecase.resto.RestaurantUseCase
 import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase
+import com.example.alfaresto_customersapp.utils.getText
 import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_ADDRESS
+import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_TOKEN
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -35,10 +39,10 @@ class OrderSummaryViewModel @Inject constructor(
     @Named("db") private val db: FirebaseFirestore,
     private val menuUseCase: MenuUseCase,
     private val cartUseCase: CartUseCase,
-    private val fcmApiRepository: FcmApiRepository,
     private val userUseCase: UserUseCase,
     private val orderUseCase: OrderUseCase,
-    private val notificationUseCase: NotificationUseCase
+    private val restaurantUseCase: RestaurantUseCase,
+    private val fcmApiRepository: FcmApiRepository
 ) : ViewModel() {
 
     private val _menus: MutableStateFlow<List<Menu>> = MutableStateFlow(emptyList())
@@ -49,6 +53,12 @@ class OrderSummaryViewModel @Inject constructor(
 
     private val _orders: MutableStateFlow<MutableList<Any?>> = MutableStateFlow(mutableListOf())
     val orders: StateFlow<List<Any?>> = _orders
+
+    private val _restoID: MutableStateFlow<String> = MutableStateFlow("")
+    val restoID: StateFlow<String> = _restoID
+
+    private val _restoToken: MutableStateFlow<String> = MutableStateFlow("")
+    val restoToken: StateFlow<String> = _restoToken
 
     init {
         fetchMenus()
@@ -89,11 +99,31 @@ class OrderSummaryViewModel @Inject constructor(
         return orderList
     }
 
+    init {
+        fetchMenus()
+        fetchCart()
+        fetchResto()
+    }
+
+    private fun fetchResto() {
+        viewModelScope.launch {
+            try {
+                val restoID = restaurantUseCase.getRestaurantId()
+                _restoID.value = restoID
+
+                val restoToken = restaurantUseCase.getRestaurantToken()
+                _restoToken.value = restoToken
+            } catch (e: Exception) {
+                Log.e("RESTO", "Error fetching resto: ${e.message}")
+            }
+        }
+    }
+
     private fun fetchMenus() {
         viewModelScope.launch {
             try {
                 val fetchedMenus = menuUseCase.getMenus().value
-                _menus.value = fetchedMenus
+                _menus.value = fetchedMenus ?: emptyList()
             } catch (e: Exception) {
                 Log.e("MENU", "Error fetching menus: ${e.message}")
             }
@@ -149,57 +179,78 @@ class OrderSummaryViewModel @Inject constructor(
     }
 
     // TODO 1:userID,addressID,restoID (fetch dr firestore) | 2:menuID (fetch dari firestore)
-    fun saveOrderInDatabase(user: User?, onResult: (msg: String) -> Unit) {
-        val PAYMENT_METHOD = _orders.value.size - 2
-        val TOTAL = orders.value.size - 3
+    fun saveOrderInDatabase(onResult: (msg: String) -> Unit) {
+        getUserFromDB(object : FirestoreCallback {
+            override fun onSuccess(user: User?) {
 
-        val payment =
-            if (_orders.value[PAYMENT_METHOD].toString() == "COD" || _orders.value[PAYMENT_METHOD].toString() == "GOPAY")
-                _orders.value[PAYMENT_METHOD].toString() else null
+                val PAYMENT_METHOD = _orders.value.size - 2
+                val TOTAL = orders.value.size - 3
 
-        val total = _orders.value[TOTAL] as Pair<Int, Int> ?: null
+                val payment =
+                    if (_orders.value[PAYMENT_METHOD].toString() == "COD" || _orders.value[PAYMENT_METHOD].toString() == "GOPAY")
+                        _orders.value[PAYMENT_METHOD].toString() else null
 
-        if (!payment.isNullOrEmpty() && total != null && _orders.value.size > 4
-            && user != null
-        ) {
-            db.runTransaction {
-                USER_ADDRESS?.let {
-                    val order = Order(
-                        id = getOrderDocumentId(),
-                        userName = user.name,
-                        userId = user.id,
-                        fullAddress = it.address,
-                        restoID = "NrhoLsLLieXFly9dXj7vu2ETi1T2", // nanti buat singleton
-                        date = Date(),
-                        paymentMethod = payment,
-                        totalPrice = total.second ?: -1,
-                        latitude = it.latitude,
-                        longitude = it.longitude
-                    )
-                    val orderToFirebase = OrderResponse.toResponse(order)
-                    orderUseCase.setOrder(order.id, orderToFirebase)
+                val total = _orders.value[TOTAL] as Pair<Int, Int> ?: null
 
-                    for (i in 1..<TOTAL) {
-                        val menu = _orders.value[i] as Menu ?: null
-                        menu?.let {
-                            val orderItem = OrderItem(
-                                id = getOrderItemDocumentId(order.id),
-                                menuName = menu.name,
-                                quantity = menu.orderCartQuantity,
-                                menuPrice = menu.price
-                            )
-                            val orderItemResponse = OrderItemResponse.toResponse(orderItem)
-                            orderUseCase.setOrderItem(order.id, orderItem.id, orderItemResponse)
+                if (!payment.isNullOrEmpty() && total != null && _orders.value.size > 4
+                    && user != null
+                ) {
+                    db.runTransaction {
+                        USER_ADDRESS?.let { address ->
+                            USER_TOKEN?.let { token ->
+                                val order = Order(
+                                    id = getOrderDocumentId(),
+                                    userName = user.name,
+                                    userId = user.id,
+                                    fullAddress = address.address,
+                                    restoID = restoID.value,
+                                    date = Date(),
+                                    paymentMethod = payment,
+                                    totalPrice = total.second ?: -1,
+                                    latitude = address.latitude,
+                                    longitude = address.longitude,
+                                    userToken = token,
+                                    restoToken = restoToken.value
+                                )
+                                val orderToFirebase = OrderResponse.toResponse(order)
+                                orderUseCase.setOrder(order.id, orderToFirebase)
+
+                                for (i in 1..<TOTAL) {
+                                    val menu = _orders.value[i] as Menu ?: null
+                                    menu?.let {
+                                        val orderItem = OrderItem(
+                                            id = getOrderItemDocumentId(order.id),
+                                            menuName = menu.name,
+                                            quantity = menu.orderCartQuantity,
+                                            menuPrice = menu.price
+                                        )
+                                        val orderItemResponse =
+                                            OrderItemResponse.toResponse(orderItem)
+                                        orderUseCase.setOrderItem(
+                                            order.id,
+                                            orderItem.id,
+                                            orderItemResponse
+                                        )
+                                    }
+                                }
+//                                sendNotificationToResto(onResult)
+//                                onResult("Success")
+                                sendNotificationToResto(
+                                    onResult
+                                )
+                            }
                         }
                     }
                 }
-
-//                sendNotificationToResto(onResult)
             }
-        }
+
+            override fun onFailure(exception: Exception) {
+                onResult("Failed to fetch user")
+            }
+        })
     }
 
-    fun getUserFromDB(callback: FirestoreCallback) {
+    private fun getUserFromDB(callback: FirestoreCallback) {
         viewModelScope.launch {
             try {
                 val user = userUseCase.getCurrentUser()
@@ -210,29 +261,20 @@ class OrderSummaryViewModel @Inject constructor(
         }
     }
 
-    private fun getCurrentDateTime(): String {
-        val currentDate = Date()
-        val dateFormat = SimpleDateFormat("dd MMMM yyyy, HH:mm", Locale.getDefault())
-        return dateFormat.format(currentDate)
-    }
+//    private fun getCurrentDateTime(): String {
+//        val currentDate = Date()
+//        val dateFormat = SimpleDateFormat("dd MMMM yyyy, HH:mm", Locale.getDefault())
+//        return dateFormat.format(currentDate)
+//    }
 
 //    private fun sendNotificationToResto(onResult: (msg: String) -> Unit) {
 //        db.collection("users").document("amnRLCt7iYGogz6JRxi5")
 //            .collection("tokens")
 //            .get()
 //            .addOnSuccessListener { documents ->
-//                Log.d("test", "SUCCESS FETCH DATA: $documents")
-//                val tokenList = mutableListOf<Token>()
-//                for (document in documents) {
-//                    val token = document.toObject(Token::class.java)
-//                    tokenList.add(token)
-//                    Log.d("test", "SUCCESS FETCH DATA: ${token.userToken}")
-//                }
-//                val latestToken = tokenList[tokenList.size - 1]
-//
 //                sendMessageToBackend(
 //                    message = "There's new order. Check your Resto App",
-//                    token = latestToken.userToken,
+//                    token = USER_TOKEN,
 //                    onResult
 //                )
 //            }
@@ -241,31 +283,29 @@ class OrderSummaryViewModel @Inject constructor(
 //            }
 //    }
 
-//    private fun sendMessageToBackend(
-//        message: String,
-//        token: String,
-//        onResult: (msg: String) -> Unit
-//    ) {
-//        viewModelScope.launch {
-//            val messageDto = SendMessageDto(
-//                to = token,
-//                notification = NotificationBody(
-//                    title = "New Message",
-//                    body = message
-//                )
-//            )
-//
-//            when (val result = fcmApiRepository.sendMessage(messageDto)) {
-//                is Result.Success -> {
-//                    onResult(result.data)
-//                }
-//
-//                is Result.Error -> {
-//                    onResult(result.error.getText())
-//                }
-//            }
-//
-//        }
-//    }
+    private fun sendNotificationToResto(
+        onResult: (msg: String) -> Unit
+    ) {
+        viewModelScope.launch {
+            val messageDto = SendMessageDto(
+                to = restoToken.value,
+                notification = NotificationBody(
+                    title = "New Message",
+                    body = "There's new order. Check your Resto App"
+                )
+            )
+
+            when (val result = fcmApiRepository.sendMessage(messageDto)) {
+                is Success -> {
+                    onResult(result.data)
+                }
+
+                is Error -> {
+                    onResult(result.error.getText())
+                }
+            }
+
+        }
+    }
 
 }

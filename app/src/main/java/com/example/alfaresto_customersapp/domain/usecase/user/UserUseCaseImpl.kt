@@ -6,6 +6,7 @@ import com.example.alfaresto_customersapp.domain.model.Address
 import com.example.alfaresto_customersapp.domain.model.User
 import com.example.alfaresto_customersapp.domain.repository.AuthRepository
 import com.example.alfaresto_customersapp.domain.repository.UserRepository
+import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 class UserUseCaseImpl @Inject constructor(
@@ -18,11 +19,23 @@ class UserUseCaseImpl @Inject constructor(
         return userRepository.getCurrentUser(authRepository.getCurrentUserID())
     }
 
-    override suspend fun getUserAddresses(): LiveData<List<Address>> {
+    override suspend fun getUserAddresses(): StateFlow<List<Address>> {
         return userRepository.getUserAddresses(authRepository.getCurrentUserID())
+    }
+
+    override suspend fun getUserAddressById(addressId: String): Address {
+        return userRepository.getUserAddressById(authRepository.getCurrentUserID(), addressId)
+    }
+
+    override suspend fun makeNewAddress(address: Address) {
+        userRepository.makeNewAddress(authRepository.getCurrentUserID(), address)
     }
 
 //    override suspend fun getUserTokens(): StateFlow<List<Token>> {
 //        return userRepository.getUserToken(authRepository.getCurrentUserID())
 //    }
+
+    override fun saveTokenToDB(uid: String, token: String) {
+        userRepository.saveTokenToDB(uid, token)
+    }
 }

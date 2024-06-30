@@ -65,6 +65,14 @@
     <string name="logo">logo</string>
     <string name="name">name</string>
     <string name="no_telp">no telp</string>
+    <string name="chat_title">Chat</string>
+    <string name="message_hint">Type a message</string>
+    <string name="track_order">Track Order</string>
+    <string name="order_status">Order Status</string>
+    <string name="focus_button">Focus Button</string>
+    <string name="guest">Guest</string>
+    <string name="driver">Driver</string>
+    <string name="me">Me</string>
     <string name="add">+</string>
     <string name="minus">-</string>
     <string name="email_resto">alfaresto@gmail.com</string>

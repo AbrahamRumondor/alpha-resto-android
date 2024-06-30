@@ -7,19 +7,21 @@ import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.OrderHistoryItemBinding
 import com.example.alfaresto_customersapp.domain.model.OrderHistory
 import com.example.alfaresto_customersapp.domain.model.OrderStatus
+import com.example.alfaresto_customersapp.ui.components.listener.MenuListener
+import com.example.alfaresto_customersapp.ui.components.listener.OrderHistoryListener
 
 class OrderHistoryViewHolder(
     private var binding: OrderHistoryItemBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(order: OrderHistory) {
-        binding.let {
-            it.tvOrderDate.text = order.orderDate
-            it.tvOrderPrice.text = order.orderTotalPrice.toString()
+    fun bind(order: OrderHistory, listener: OrderHistoryListener?) {
+        binding.run {
+            tvOrderDate.text = order.orderDate
+            tvOrderPrice.text = order.orderTotalPrice.toString()
             order.orderStatus.name.let { status ->
-                it.tvOrderStatus.text = status
-                it.cvOrderStatus.setCardBackgroundColor(
-                    it.root.context.getColor(
+                tvOrderStatus.text = status
+                cvOrderStatus.setCardBackgroundColor(
+                    root.context.getColor(
                         when (status) {
                             OrderStatus.DELIVERED.name -> R.color.green
                             OrderStatus.ON_DELIVERY.name -> R.color.orange
@@ -28,7 +30,12 @@ class OrderHistoryViewHolder(
                     )
                 )
             }
-            it.tvOrderAddress.text = order.addressLabel
+            tvOrderAddress.text = order.addressLabel
+
+            clOrderHistoryItem.setOnClickListener {
+                listener?.onOrderClicked(order)
+            }
+
         }
     }
 
