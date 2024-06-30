@@ -23,7 +23,7 @@
         <meta-data android:name="com.google.android.geo.API_KEY" android:value="${location.apikey}"/>
 
         <activity
-            android:name=".ui.components.loginPage.LoginActivity"
+            android:name=".ui.components.SplashScreenActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,7 +31,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name=".ui.components.loginPage.LoginActivity"
+            android:exported="true">
+        </activity>
         <activity
             android:name=".ui.components.MainActivity"
             android:exported="true">
