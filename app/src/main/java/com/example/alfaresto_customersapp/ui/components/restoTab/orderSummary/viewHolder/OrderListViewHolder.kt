@@ -31,7 +31,7 @@ class OrderListViewHolder(
                     itemListener?.onDecreaseItemClicked(position, menu.id)
                 }
                 ivOrderDelete.setOnClickListener {
-                    itemListener?.onDeleteItemClicked(position)
+                    itemListener?.onDeleteItemClicked(position, menu.id)
                 }
             }
         }

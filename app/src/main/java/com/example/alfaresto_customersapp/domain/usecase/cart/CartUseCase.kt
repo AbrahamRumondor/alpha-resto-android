@@ -8,7 +8,7 @@ interface CartUseCase {
     suspend fun insertMenu(cartEntity: CartEntity)
     fun getCart(): Flow<List<CartEntity>>
     fun getMenuById(menuId: String): Boolean
-    fun deleteMenu(menuId: String)
+    suspend fun deleteMenu(menuId: String)
 
     suspend fun deleteAllMenus()
 }

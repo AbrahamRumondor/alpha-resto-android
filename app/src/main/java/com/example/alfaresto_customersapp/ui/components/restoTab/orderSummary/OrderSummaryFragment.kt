@@ -95,7 +95,7 @@ class OrderSummaryFragment : Fragment() {
                         item = cart?.find { it.menuId == menuId }
                         orderSummaryViewModel.decreaseOrderQuantity(menuId, item)
                         if (it.orderCartQuantity == 0) {
-                            removeMenu(position)
+                            removeMenu(position, menuId)
                         } else {
                             orderAdapter.notifyItemChanged(position)
                         }
@@ -105,8 +105,8 @@ class OrderSummaryFragment : Fragment() {
                 }
             }
 
-            override fun onDeleteItemClicked(position: Int) {
-                removeMenu(position)
+            override fun onDeleteItemClicked(position: Int, menuId: String) {
+                removeMenu(position, menuId)
             }
 
             override fun onRadioButtonClicked(position: Int, id: Int) {
@@ -143,8 +143,8 @@ class OrderSummaryFragment : Fragment() {
         })
     }
 
-    private fun removeMenu(position: Int) {
-        val size = orderSummaryViewModel.removeOrder(position)
+    private fun removeMenu(position: Int, menuId: String) {
+        val size = orderSummaryViewModel.removeOrder(position, menuId)
         orderAdapter.notifyItemRemoved(position)
         orderAdapter.notifyItemRangeChanged(position, size)
     }

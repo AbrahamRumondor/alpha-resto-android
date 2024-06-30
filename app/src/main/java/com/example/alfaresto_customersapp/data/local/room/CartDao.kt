@@ -20,7 +20,7 @@ interface CartDao {
     fun getMenuById(menuId: String): Boolean
 
     @Query("DELETE FROM cart_db WHERE menuId = :menuId")
-    fun deleteMenu(menuId: String)
+    suspend fun deleteMenu(menuId: String)
 
     @Query("DELETE FROM cart_db")
     suspend fun deleteAllMenus()

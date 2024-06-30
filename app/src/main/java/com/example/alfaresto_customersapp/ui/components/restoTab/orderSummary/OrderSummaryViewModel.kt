@@ -72,8 +72,11 @@ class OrderSummaryViewModel @Inject constructor(
         _orders.value[orders.value.size - 2] = method
     }
 
-    fun removeOrder(position: Int): Int {
+    fun removeOrder(position: Int, menuId: String): Int {
         _orders.value.removeAt(position)
+        viewModelScope.launch {
+            cartUseCase.deleteMenu(menuId)
+        }
         return _orders.value.size
     }
 
