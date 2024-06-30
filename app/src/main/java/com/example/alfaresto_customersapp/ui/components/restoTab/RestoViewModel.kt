@@ -32,14 +32,9 @@ class RestoViewModel @Inject constructor(
     private val _cart: MutableStateFlow<List<CartEntity>> = MutableStateFlow(emptyList())
     val cart: StateFlow<List<CartEntity>> = _cart
 
-    fun setMenus(list: List<Menu>) {
-        _menus.value = list
-    }
-
     init {
         fetchMenus()
         fetchCart()
-        fetchCurrentUser()
         getToken()
     }
 

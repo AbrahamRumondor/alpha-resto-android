@@ -1,6 +1,5 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.address.addressList
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -11,9 +10,10 @@ import com.example.alfaresto_customersapp.domain.model.Address
 import com.example.alfaresto_customersapp.ui.components.listener.AddressItemListener
 import com.example.alfaresto_customersapp.utils.user.UserConstants
 
-class AddressListAdapter(private var addresses: List<Address>, private val context: Context) :
+class AddressListAdapter :
     RecyclerView.Adapter<AddressListAdapter.AddressListViewHolder>() {
 
+    private var addresses: List<Address> = listOf()
     private var addressItemListener: AddressItemListener? = null
 
     inner class AddressListViewHolder(private val itemBinding: AddressItemBinding) :
@@ -24,9 +24,9 @@ class AddressListAdapter(private var addresses: List<Address>, private val conte
                 tvAddressLabel2.text = address.label
                 tvAddressDetail.text = address.address
 
-                cvAddress.strokeColor = ContextCompat.getColor(context, R.color.dark_gray)
+                cvAddress.strokeColor = root.context.getColor(R.color.dark_gray)
                 if (address.isSelected) {
-                    cvAddress.strokeColor = ContextCompat.getColor(context, R.color.alfa_orange)
+                    cvAddress.strokeColor = root.context.getColor(R.color.alfa_orange)
                 }
 
                 cvAddress.setOnClickListener {
@@ -53,7 +53,6 @@ class AddressListAdapter(private var addresses: List<Address>, private val conte
 
     fun updateData(newItems: List<Address>) {
         addresses = newItems
-        notifyDataSetChanged()
     }
 
     fun setItemListener(addressItemListener: AddressItemListener) {

@@ -18,11 +18,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddNewAddressViewModel @Inject constructor(
-    private val cartUseCase: CartUseCase,
     private val userUseCase: UserUseCase
 ) : ViewModel() {
-    private val _chosenLatLng = MutableLiveData<LatLng?>()
 
+    private val _chosenLatLng = MutableLiveData<LatLng?>()
     var chosenLatLng: LiveData<LatLng?> = _chosenLatLng
 
     init {
@@ -44,38 +43,24 @@ class AddNewAddressViewModel @Inject constructor(
         }
     }
 
-    private val db = Firebase.firestore
-    private val addressCollection = db.collection("users").document(USER_ID?:"")
-        .collection("addresses")
-
     fun setChosenLatLng(latlng: LatLng?) {
         _chosenLatLng.value = latlng
     }
 
     fun saveAddressInDatabase(addressLabel: String?, addressDetail: String?) {
         if (!addressLabel.isNullOrEmpty() && !addressDetail.isNullOrEmpty()) {
-            _chosenLatLng.value?.let { latlng->
-                val newId = getAddressDocumentId()
-                try {
-                    addressCollection.document(newId).set(
-                        Address(
-                            id = newId,
-                            label = addressLabel,
-                            address = addressDetail,
-                            latitude = latlng.latitude,
-                            longitude = latlng.longitude
-                        )
+            chosenLatLng.value?.let { latlng ->
+                viewModelScope.launch {
+                    val address = Address(
+                        label = addressLabel,
+                        address = addressDetail,
+                        latitude = latlng.latitude,
+                        longitude = latlng.longitude
                     )
-                } catch (e: Exception) {
-                    Log.d("test", e.toString())
+
+                    userUseCase.makeNewAddress(address)
                 }
             }
         }
-    }
-
-    private fun getAddressDocumentId(): String {
-        val item = db.collection("users").document(USER_ID?:"")
-            .collection("addresses").document()
-        return item.id
     }
 }

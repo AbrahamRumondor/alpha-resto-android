@@ -28,6 +28,7 @@
             android:id="@+id/action_orderHistoryFragment_to_trackOrderFragment"
             app:destination="@id/trackOrderFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/orderSummaryFragment"
         android:name="com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.OrderSummaryFragment"
@@ -46,7 +47,7 @@
 
     <fragment
         android:id="@+id/addressList"
-        android:name="com.example.alfaresto_customersapp.ui.components.restoTab.address.addressList.AddressList"
+        android:name="com.example.alfaresto_customersapp.ui.components.restoTab.address.addressList.AddressListFragment"
         android:label="fragment_address_list"
         tools:layout="@layout/fragment_address_list" >
         <action
@@ -100,5 +101,8 @@
         <argument
             android:name="orderId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_trackOrderFragment_to_orderHistoryFragment"
+            app:destination="@id/orderHistoryFragment" />
     </fragment>
 </navigation>

@@ -27,34 +27,27 @@ class LoginActivity : AppCompatActivity()  {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        binding.loginButton.setOnClickListener {
-            val email = binding.emailTextInput.text.toString()
-            val password = binding.passwordTextInput.text.toString()
-            val address = binding.addressTextInput.text.toString()
+        binding.btnLogin.setOnClickListener {
+            val email = binding.etEmail.text.toString()
+            val password = binding.etPassword.text.toString()
 
             if (email.isEmpty() || password.isEmpty()) {
-                binding.emailTextInput.error = getString(R.string.email_pass_empty)
-                binding.passwordTextInput.error = getString(R.string.email_pass_empty)
+                binding.etEmail.error = getString(R.string.email_pass_empty)
+                binding.etPassword.error = getString(R.string.email_pass_empty)
                 return@setOnClickListener
             }
 
             if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                binding.emailTextInput.error = getString(R.string.email_not_valid)
-                binding.emailTextInput.requestFocus()
+                binding.etEmail.error = getString(R.string.email_not_valid)
+                binding.etPassword.requestFocus()
                 return@setOnClickListener
             }
 
-            if (!passwordPatterns.matcher(password).matches()) {
-                binding.passwordTextInput.error = getString(R.string.password_not_valid)
-                binding.passwordTextInput.requestFocus()
-                return@setOnClickListener
-            }
-
-            loginAuth(email, password, address)
+            loginAuth(email, password)
             // addAddress(email, address)
 
         }
-        val registerTextClicked: TextView = binding.registerTextView
+        val registerTextClicked: TextView = binding.tvRegister
         registerTextClicked.setOnClickListener {
             directToRegister(it)
         }
@@ -66,7 +59,7 @@ fun directToRegister(view: View) {
     view.context.startActivity(intent)
 }
 
-fun LoginActivity.loginAuth(email: String, password: String, address: String) {
+fun LoginActivity.loginAuth(email: String, password: String) {
     auth = FirebaseAuth.getInstance()
     firebaseFirestore = FirebaseFirestore.getInstance()
     auth.signInWithEmailAndPassword(email, password)

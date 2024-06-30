@@ -48,10 +48,6 @@ class RestoFragment : Fragment() {
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         }
 
-        viewModel.username.observe(viewLifecycleOwner) { username ->
-            binding.tvGreetings.setText(getString(R.string.greetings, username))
-        }
-
         viewModel.getUserFromDB(object : FirestoreCallback {
             override fun onSuccess(user: User?) {
                 if (user != null) {
@@ -117,15 +113,13 @@ class RestoFragment : Fragment() {
     private fun setRestoAdapterButtons(cart: List<CartEntity>?) {
         adapter.setItemListener(object : MenuListener {
             override fun onAddItemClicked(position: Int, menuId: String) {
-                var item: CartEntity? = null
-                item = cart?.find { it.menuId == menuId }
+                val item: CartEntity? = cart?.find { it.menuId == menuId }
                 viewModel.addOrderQuantity(menuId, item)
                 adapter.notifyItemChanged(position)
             }
 
             override fun onDecreaseItemClicked(position: Int, menuId: String) {
-                var item: CartEntity? = null
-                item = cart?.find { it.menuId == menuId }
+                val item: CartEntity? = cart?.find { it.menuId == menuId }
                 viewModel.decreaseOrderQuantity(menuId, item)
                 adapter.notifyItemChanged(position)
             }
