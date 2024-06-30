@@ -38,7 +38,7 @@ class ListAllMenuViewModel @Inject constructor(
         Pager(
             PagingConfig(pageSize = 10)
         ) {
-            MenuPagingSource(menusRef, query)
+            MenuPagingSource(menusRef, null, query)
         }.flow.cachedIn(viewModelScope)
     }
 
@@ -54,7 +54,7 @@ class ListAllMenuViewModel @Inject constructor(
             try {
                 setLoading(true)
                 cartUseCase.getCart().collectLatest { cartItems ->
-                    val updatedPagingSource = MenuPagingSource(menusRef, cartItems)
+                    val updatedPagingSource = MenuPagingSource(menusRef, cartItems, null)
                     val newPager = Pager(
                         PagingConfig(pageSize = 10)
                     ) {
