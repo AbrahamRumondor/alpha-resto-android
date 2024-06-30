@@ -66,13 +66,6 @@ class ListAllMenuFragment : Fragment() {
         loadData()
     }
 
-    private fun setupView() {
-        binding.rvListAllMenu.let {
-            it.adapter = adapter
-            it.layoutManager = GridLayoutManager(requireContext(), 2)
-        }
-    }
-
     private fun loadData() {
         lifecycleScope.launch {
             viewModel.isLoading.collectLatest { isLoading ->
@@ -80,11 +73,14 @@ class ListAllMenuFragment : Fragment() {
             }
         }
 
-        loadData()
+        lifecycleScope.launch {
+            viewModel.menuList.collectLatest {
+                adapter.submitData(it)
+            }
+        }
 
         lifecycleScope.launch {
             viewModel.menuList.collectLatest {
-                Log.d("test", it.toString())
                 adapter.submitData(it)
             }
         }
@@ -140,14 +136,6 @@ class ListAllMenuFragment : Fragment() {
         binding.rvListAllMenu.let {
             it.adapter = adapter
             it.layoutManager = GridLayoutManager(requireContext(), 2)
-        }
-    }
-
-    private fun loadData() {
-        lifecycleScope.launch {
-            viewModel.menuList.collectLatest {
-                adapter.submitData(it)
-            }
         }
     }
 

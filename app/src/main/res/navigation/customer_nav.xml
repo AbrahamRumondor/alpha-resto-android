@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--suppress NavigationFile-->
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -51,6 +52,13 @@
         <action
             android:id="@+id/action_order_summary_fragment_to_list_all_menu_fragment"
             app:destination="@id/list_all_menu_fragment" />
+        <action
+            android:id="@+id/action_order_summary_fragment_to_track_order_fragment"
+            app:destination="@id/track_order_fragment">
+            <argument
+                android:name="orderId"
+                app:argType="string" />
+        </action>
     </fragment>
 
     <fragment
@@ -100,12 +108,19 @@
         <action
             android:id="@+id/action_list_all_menu_fragment_to_resto_fragment"
             app:destination="@id/resto_fragment" />
-        <argument
-            android:name="orderId"
-            app:argType="string" />
+        <action
+            android:id="@+id/action_track_order_fragment_to_chat_fragment"
+            app:destination="@id/chat_fragment" >
+            <argument
+                android:name="orderId"
+                app:argType="string" />
+        </action>
         <action
             android:id="@+id/action_list_all_menu_fragment_to_detail_fragment"
             app:destination="@id/detail_fragment" />
+        <argument
+            android:name="orderId"
+            app:argType="string" />
     </fragment>
 
     <fragment
@@ -127,6 +142,16 @@
             app:argType="integer" />
         <argument
             android:name="image"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/chat_fragment"
+        android:name="com.example.alfaresto_customersapp.ui.components.trackOrder.chat.ChatFragment"
+        android:label="fragment_chat"
+        tools:layout="@layout/fragment_chat" >
+        <argument
+            android:name="orderId"
             app:argType="string" />
     </fragment>
 </navigation>
