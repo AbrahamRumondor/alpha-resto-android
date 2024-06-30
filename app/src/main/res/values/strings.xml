@@ -86,4 +86,8 @@
     <string name="deliver_to">Deliver to</string>
     <string name="logout_logo">Logout Logo</string>
     <string name="alfaresto_logo">Alfaresto Logo</string>
+    <string name="please_sign_in_to_continue">Please sign in to continue.</string>
+    <string name="welcome_back">Welcome Back !</string>
+    <string name="login_image">Login Image</string>
+    <string name="splash_screen_description">Splash Screen</string>
 </resources>
