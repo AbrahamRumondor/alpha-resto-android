@@ -1,108 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--suppress NavigationFile -->
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/customer_nav"
-    app:startDestination="@id/restoFragment">
+    app:startDestination="@id/resto_fragment">
 
     <fragment
-        android:id="@+id/restoFragment"
+        android:id="@+id/resto_fragment"
         android:name="com.example.alfaresto_customersapp.ui.components.restoTab.RestoFragment"
         android:label="fragment_resto"
         tools:layout="@layout/fragment_resto" >
         <action
-            android:id="@+id/action_restoFragment_to_orderSummaryFragment"
-            app:destination="@id/orderSummaryFragment" />
+            android:id="@+id/action_resto_fragment_to_order_summary_fragment"
+            app:destination="@id/order_summary_fragment" />
         <action
-            android:id="@+id/action_restoFragment_to_listAllMenuFragment"
-            app:destination="@id/listAllMenuFragment" />
+            android:id="@+id/action_resto_fragment_to_list_all_menu_fragment"
+            app:destination="@id/list_all_menu_fragment" />
+        <action
+            android:id="@+id/action_resto_fragment_menu_to_detail_fragment"
+            app:destination="@id/detail_fragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/orderHistoryFragment"
+        android:id="@+id/order_history_fragment"
         android:name="com.example.alfaresto_customersapp.ui.components.orderHistoryTab.OrderHistoryFragment"
         android:label="fragment_order_history"
         tools:layout="@layout/fragment_order_history" >
         <action
-            android:id="@+id/action_orderHistoryFragment_to_trackOrderFragment"
-            app:destination="@id/trackOrderFragment" />
+            android:id="@+id/action_order_history_fragment_to_track_order_fragment"
+            app:destination="@id/track_order_fragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/orderSummaryFragment"
+        android:id="@+id/order_summary_fragment"
         android:name="com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.OrderSummaryFragment"
         android:label="fragment_order_summary"
         tools:layout="@layout/fragment_order_summary" >
         <action
-            android:id="@+id/action_orderSummaryFragment_to_restoFragment"
-            app:destination="@id/restoFragment" />
+            android:id="@+id/action_order_summary_fragment_to_resto_fragment"
+            app:destination="@id/resto_fragment" />
         <action
-            android:id="@+id/action_orderSummaryFragment_to_addressList"
-            app:destination="@id/addressList" />
+            android:id="@+id/action_order_summary_fragment_to_address_list"
+            app:destination="@id/address_list" />
         <action
-            android:id="@+id/action_orderSummaryFragment_to_listAllMenuFragment"
-            app:destination="@id/listAllMenuFragment" />
+            android:id="@+id/action_order_summary_fragment_to_list_all_menu_fragment"
+            app:destination="@id/list_all_menu_fragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/addressList"
+        android:id="@+id/address_list"
         android:name="com.example.alfaresto_customersapp.ui.components.restoTab.address.addressList.AddressListFragment"
         android:label="fragment_address_list"
         tools:layout="@layout/fragment_address_list" >
         <action
-            android:id="@+id/action_addressList_to_addNewAddressFragment"
-            app:destination="@id/addNewAddressFragment" />
+            android:id="@+id/action_address_list_to_add_new_address_fragment"
+            app:destination="@id/add_new_address_fragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/addNewAddressFragment"
+        android:id="@+id/add_new_address_fragment"
         android:name="com.example.alfaresto_customersapp.ui.components.restoTab.address.addNewAddress.AddNewAddressFragment"
         android:label="fragment_add_new_address"
         tools:layout="@layout/fragment_add_new_address" />
 
     <fragment
-        android:id="@+id/listAllMenuFragment"
+        android:id="@+id/list_all_menu_fragment"
         android:name="com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu.ListAllMenuFragment"
         android:label="fragment_list_all_menu"
         tools:layout="@layout/fragment_list_all_menu" >
         <action
-            android:id="@+id/action_listAllMenuFragment_to_orderSummaryFragment"
-            app:destination="@id/orderSummaryFragment" />
+            android:id="@+id/action_list_all_menu_fragment_to_order_summary_fragment"
+            app:destination="@id/order_summary_fragment" />
         <action
-            android:id="@+id/action_listAllMenuFragment_to_restoFragment"
-            app:destination="@id/restoFragment" />
+            android:id="@+id/action_list_all_menu_fragment_to_resto_fragment"
+            app:destination="@id/resto_fragment" />
         <action
-            android:id="@+id/action_listAllMenuFragment_to_foodDetailFragment"
-            app:destination="@id/foodDetailFragment" />
+            android:id="@+id/action_list_all_menu_fragment_to_food_detail_fragment"
+            app:destination="@id/food_detail_fragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/foodDetailFragment"
+        android:id="@+id/food_detail_fragment"
         android:name="com.example.alfaresto_customersapp.ui.components.detailPage.DetailFragment"
         android:label="fragment_food_detail"
         tools:layout="@layout/fragment_detail" >
         <action
-            android:id="@+id/action_foodItem_to_foodDetailFragment"
-            app:destination="@id/listAllMenuFragment" />
+            android:id="@+id/action_food_item_to_food_detail_fragment"
+            app:destination="@id/list_all_menu_fragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/trackOrderFragment"
+        android:id="@+id/track_order_fragment"
         android:name="com.example.alfaresto_customersapp.ui.components.trackOrder.TrackOrderFragment"
         android:label="fragment_track_order"
         tools:layout="@layout/fragment_track_order" >
         <action
-            android:id="@+id/action_listAllMenuFragment_to_orderSummaryFragment"
-            app:destination="@id/orderSummaryFragment" />
+            android:id="@+id/action_track_order_fragment_to_order_history_fragment"
+            app:destination="@id/order_history_fragment" />
         <action
-            android:id="@+id/action_listAllMenuFragment_to_restoFragment"
-            app:destination="@id/restoFragment" />
+            android:id="@+id/action_list_all_menu_fragment_to_order_summary_fragment"
+            app:destination="@id/order_summary_fragment" />
+        <action
+            android:id="@+id/action_list_all_menu_fragment_to_resto_fragment"
+            app:destination="@id/resto_fragment" />
         <argument
             android:name="orderId"
             app:argType="string" />
         <action
-            android:id="@+id/action_trackOrderFragment_to_orderHistoryFragment"
-            app:destination="@id/orderHistoryFragment" />
+            android:id="@+id/action_list_all_menu_fragment_to_food_detail_fragment"
+            app:destination="@id/detail_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detail_fragment"
+        android:name="com.example.alfaresto_customersapp.ui.components.detailPage.DetailFragment"
+        android:label="fragment_food_detail"
+        tools:layout="@layout/fragment_detail" >
+        <argument
+            android:name="menuId"
+            app:argType="string" />
+        <argument
+            android:name="name"
+            app:argType="string" />
+        <argument
+            android:name="description"
+            app:argType="string" />
+        <argument
+            android:name="price"
+            app:argType="integer" />
+        <argument
+            android:name="image"
+            app:argType="string" />
     </fragment>
 </navigation>

@@ -114,6 +114,17 @@ class RestoFragment : Fragment() {
         binding.toolbar.btnLogout.setOnClickListener {
             logoutValidation()
         }
+
+        adapter.setItemClickListener {menu ->
+            val action = RestoFragmentDirections.actionRestoFragmentMenuToDetailFragment(
+                menuId = menu.id,
+                name = menu.name,
+                price = menu.price,
+                description = menu.description,
+                image = menu.image
+            )
+            Navigation.findNavController(requireView()).navigate(action)
+        }
     }
 
     private fun setRestoAdapterButtons(cart: List<CartEntity>?) {

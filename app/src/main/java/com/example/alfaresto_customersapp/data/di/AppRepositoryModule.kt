@@ -33,6 +33,11 @@ abstract class AppRepositoryModule {
     ): CartRepository
 
     @Binds
+    abstract fun provideMenuDetailUseCase(
+        menuDetailUseCaseImpl: MenuDetailUseCaseImpl
+    ): MenuDetailUseCase
+
+    @Binds
     abstract fun provideOrderRepository(
         orderRepositoryImpl: OrderRepositoryImpl
     ): OrderRepository

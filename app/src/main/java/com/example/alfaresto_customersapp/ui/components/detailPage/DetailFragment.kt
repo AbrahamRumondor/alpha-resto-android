@@ -5,12 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import com.example.alfaresto_customersapp.databinding.FragmentDetailBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DetailFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailBinding
     private var quantity = 1
+    private val args: DetailFragmentArgs by navArgs()
+    private val viewModel: DetailViewModel by viewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -22,6 +30,20 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel.menu.observe(viewLifecycleOwner) { menu ->
+            binding.apply {
+                tvFoodName.text = menu.name
+                tvFoodPrice.text = menu.price.toString()
+                tvFoodDesc.text = menu.description
+                Glide.with(this@DetailFragment)
+                    .load(menu.image)
+                    .placeholder(android.R.drawable.ic_menu_report_image)
+                    .into(ivFood)
+            }
+        }
+
+        viewModel.getMenuDetail(args.menuId)
 
         binding.apply {
             btnBack.setOnClickListener {

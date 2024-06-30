@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -23,7 +24,7 @@ class ListAllMenuFragment : Fragment() {
 
     private lateinit var binding: FragmentListAllMenuBinding
     private val viewModel: ListAllMenuViewModel by viewModels()
-    private val adapter by lazy { ListAllMenuAdapter() }
+    private val adapter = ListAllMenuAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,10 +45,41 @@ class ListAllMenuFragment : Fragment() {
             }
         }
 
-        lifecycleScope.launch {
-            viewModel.menuList.collectLatest {
-                Log.d("test", it.toString())
-                adapter.submitData(it)
+        setupView()
+
+        binding.apply {
+            svSearchMenu.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    query?.let {
+                        viewModel.setSearchQuery(it)
+                        binding.svSearchMenu.clearFocus()
+                    }
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    if (newText.isNullOrEmpty()) {
+                        viewModel.setSearchQuery(null)
+                    }
+                    return true
+                }
+            })
+
+            adapter.setItemClickListener {menu ->
+                val action = ListAllMenuFragmentDirections.actionListAllMenuFragmentToFoodDetailFragment (
+                    menuId = menu.id,
+                    name = menu.name,
+                    price = menu.price,
+                    description = menu.description,
+                    image = menu.image
+                )
+                Navigation.findNavController(requireView()).navigate(action)
+            }
+
+
+            svSearchMenu.setOnCloseListener {
+                viewModel.setSearchQuery(null)
+                false
             }
         }
 
@@ -57,7 +89,24 @@ class ListAllMenuFragment : Fragment() {
         binding.btnCart.setOnClickListener {
             Log.d("listall", "cart clicked")
             Navigation.findNavController(requireView())
-                .navigate(R.id.action_listAllMenuFragment_to_orderSummaryFragment)
+                .navigate(R.id.action_list_all_menu_fragment_to_order_summary_fragment)
+        }
+
+        loadData()
+    }
+
+    private fun setupView() {
+        binding.rvListAllMenu.let {
+            it.adapter = adapter
+            it.layoutManager = GridLayoutManager(requireContext(), 2)
+        }
+    }
+
+    private fun loadData() {
+        lifecycleScope.launch {
+            viewModel.menuList.collectLatest {
+                adapter.submitData(it)
+            }
         }
     }
 

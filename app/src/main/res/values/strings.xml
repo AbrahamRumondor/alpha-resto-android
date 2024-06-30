@@ -92,4 +92,6 @@
     <string name="splash_screen_description">Splash Screen</string>
     <string name="back_button">Back Button</string>
     <string name="back_logo">Back Logo</string>
+    <string name="add_item">+</string>
+    <string name="remove_item">-</string>
 </resources>
