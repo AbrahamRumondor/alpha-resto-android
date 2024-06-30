@@ -37,6 +37,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.data.remote.response.RouteResponse
@@ -102,6 +103,11 @@ class TrackOrderFragment : Fragment() {
         SHIPMENT_STATUS = "On Process"
 
         binding.run {
+
+            btnBack.setOnClickListener {
+                findNavController().popBackStack()
+            }
+
             trackOrderViewModel.order.observe(viewLifecycleOwner) { orderList ->
                 Log.d("test", args.orderId)
 

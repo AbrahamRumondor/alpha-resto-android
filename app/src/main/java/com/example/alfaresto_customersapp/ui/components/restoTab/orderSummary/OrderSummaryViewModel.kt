@@ -182,7 +182,7 @@ class OrderSummaryViewModel @Inject constructor(
     }
 
     // TODO 1:userID,addressID,restoID (fetch dr firestore) | 2:menuID (fetch dari firestore)
-    fun saveOrderInDatabase(onResult: (msg: String) -> Unit) {
+    fun saveOrderInDatabase(onResult: (msg: Boolean) -> Unit) {
         getUserFromDB(object : FirestoreCallback {
             override fun onSuccess(user: User?) {
 
@@ -238,7 +238,7 @@ class OrderSummaryViewModel @Inject constructor(
                                     }
                                 }
 //                                sendNotificationToResto(onResult)
-//                                onResult("Success")
+//                                onResult(true)
 
                                 shipmentUseCase.createShipment(
                                     Shipment(
@@ -248,8 +248,13 @@ class OrderSummaryViewModel @Inject constructor(
                                 )
 
                                 sendNotificationToResto(
-                                    onResult
+//                                    onResult
                                 )
+
+                                viewModelScope.launch {
+                                    cartUseCase.deleteAllMenus()
+                                }
+                                onResult(true)
                             }
                         }
                     }
@@ -257,7 +262,7 @@ class OrderSummaryViewModel @Inject constructor(
             }
 
             override fun onFailure(exception: Exception) {
-                onResult("Failed to fetch user")
+                onResult(false)
             }
         })
     }
@@ -296,7 +301,7 @@ class OrderSummaryViewModel @Inject constructor(
 //    }
 
     private fun sendNotificationToResto(
-        onResult: (msg: String) -> Unit
+//        onResult: (msg: Boolean) -> Unit
     ) {
         viewModelScope.launch {
             val messageDto = SendMessageDto(
@@ -307,15 +312,15 @@ class OrderSummaryViewModel @Inject constructor(
                 )
             )
 
-            when (val result = fcmApiRepository.sendMessage(messageDto)) {
-                is Success -> {
-                    onResult(result.data)
-                }
-
-                is Error -> {
-                    onResult(result.error.getText())
-                }
-            }
+//            when (val result = fcmApiRepository.sendMessage(messageDto)) {
+//                is Success -> {
+//                    onResult(true)
+//                }
+//
+//                is Error -> {
+//                    onResult(false)
+//                }
+//            }
 
         }
     }

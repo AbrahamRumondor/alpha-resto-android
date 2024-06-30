@@ -41,6 +41,9 @@
         <action
             android:id="@+id/action_orderSummaryFragment_to_listAllMenuFragment"
             app:destination="@id/listAllMenuFragment" />
+        <action
+            android:id="@+id/action_orderSummaryFragment_to_thankYouFragment"
+            app:destination="@id/thankYouFragment" />
     </fragment>
     <fragment
         android:id="@+id/addressList"
@@ -102,5 +105,17 @@
         <action
             android:id="@+id/action_trackOrderFragment_to_orderHistoryFragment"
             app:destination="@id/orderHistoryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/thankYouFragment"
+        android:name="com.example.alfaresto_customersapp.ui.components.restoTab.ThankYouFragment"
+        android:label="fragment_thank_you"
+        tools:layout="@layout/fragment_thank_you" >
+        <argument
+            android:name="checkoutStatus"
+            app:argType="boolean" />
+        <action
+            android:id="@+id/action_thankYouFragment_to_restoFragment"
+            app:destination="@id/restoFragment" />
     </fragment>
 </navigation>

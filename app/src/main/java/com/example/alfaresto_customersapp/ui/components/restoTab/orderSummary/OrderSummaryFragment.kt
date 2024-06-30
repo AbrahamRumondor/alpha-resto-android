@@ -1,13 +1,10 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
@@ -15,12 +12,10 @@ import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.databinding.FragmentOrderSummaryBinding
 import com.example.alfaresto_customersapp.databinding.OrderPaymentMethodBinding
-import com.example.alfaresto_customersapp.domain.error.FirestoreCallback
 import com.example.alfaresto_customersapp.domain.model.Menu
-import com.example.alfaresto_customersapp.domain.model.User
 import com.example.alfaresto_customersapp.ui.components.listener.OrderSummaryItemListener
 import com.example.alfaresto_customersapp.ui.components.restoTab.address.addressList.AddressListViewModel
-import com.example.alfaresto_customersapp.ui.components.trackOrder.TrackOrderActivity
+import com.example.alfaresto_customersapp.utils.user.UserConstants.ORDER_CHECKOUT_STATUS
 import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_ADDRESS
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -138,13 +133,13 @@ class OrderSummaryFragment : Fragment() {
             override fun onCheckoutButtonClicked() {
                 // TODO send to firebase
                 orderSummaryViewModel.saveOrderInDatabase {
-                    Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+                    ORDER_CHECKOUT_STATUS = it
+                    val action = OrderSummaryFragmentDirections.actionOrderSummaryFragmentToThankYouFragment(
+                        it
+                    )
+                    Navigation.findNavController(binding.root).navigate(action)
                 }
-
-                val intent = Intent(requireContext(), TrackOrderActivity::class.java)
-                startActivity(intent)
             }
-
         })
     }
 

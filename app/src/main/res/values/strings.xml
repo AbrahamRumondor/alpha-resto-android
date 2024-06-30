@@ -104,4 +104,6 @@
     <string name="order_id_1234567890">Order ID: 1234567890</string>
     <string name="apa">apa</string>
     <string name="on_process_status">On Process</string>
+    <string name="track_your_order_here">Track Your Order Here</string>
+    <string name="go_back_to_main_menu">Go back to main menu</string>
 </resources>

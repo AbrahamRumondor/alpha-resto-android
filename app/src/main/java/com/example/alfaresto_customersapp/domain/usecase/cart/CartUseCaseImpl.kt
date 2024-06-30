@@ -24,4 +24,8 @@ class CartUseCaseImpl @Inject constructor(
     override fun deleteMenu(menuId: String) {
         repository.deleteMenu(menuId)
     }
+
+    override suspend fun deleteAllMenus() {
+        repository.deleteAllMenus()
+    }
 }
