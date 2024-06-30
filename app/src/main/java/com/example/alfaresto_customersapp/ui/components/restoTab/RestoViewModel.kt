@@ -91,7 +91,7 @@ class RestoViewModel @Inject constructor(
         viewModelScope.launch {
             Log.d("test", "${cart?.menuId} dan ${cart?.menuQty}")
             cart?.let {
-                cartUseCase.insertMenu(it.copy(menuQty = cart.menuQty + 1))
+                cartUseCase.insertMenu(it.copy(menuQty = it.menuQty + 1))
             } ?: insertMenu(menuId = menuId, menuQty = 1)
         }
     }
