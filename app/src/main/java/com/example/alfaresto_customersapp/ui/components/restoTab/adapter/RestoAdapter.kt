@@ -26,6 +26,7 @@ class RestoAdapter : RecyclerView.Adapter<RestoViewHolder>() {
 
     fun submitMenuList(menuList: List<Menu>) {
         this.menuList = menuList
+        notifyDataSetChanged()
     }
 
     fun setItemClickListener(listener: (Menu) -> Unit) {

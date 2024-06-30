@@ -32,6 +32,9 @@ class RestoViewModel @Inject constructor(
     private val _cart: MutableStateFlow<List<CartEntity>> = MutableStateFlow(emptyList())
     val cart: StateFlow<List<CartEntity>> = _cart
 
+    private val _cartCount: MutableStateFlow<Int> = MutableStateFlow(0)
+    val cartCount: StateFlow<Int> = _cartCount
+
     init {
         fetchMenus()
         fetchCart()
@@ -54,12 +57,12 @@ class RestoViewModel @Inject constructor(
     private fun fetchCart() {
         viewModelScope.launch {
             try {
-                // Assuming cartUseCase returns Flow<List<CartEntity>>
                 cartUseCase.getCart().collect {
+                    _cartCount.value = 0
                     it.map {
-                        Log.e("CART", "fetching cart: ${it.menuId}")
+                        _cartCount.value += it.menuQty
                     }
-                    _cart.value = it // Update StateFlow with new data
+                    _cart.value = it
                 }
             } catch (e: Exception) {
                 Log.e("CART", "Error fetching cart: ${e.message}")
@@ -97,6 +100,7 @@ class RestoViewModel @Inject constructor(
         viewModelScope.launch {
             cart?.let {
                 if (cart.menuQty > 0) cartUseCase.insertMenu(it.copy(menuQty = cart.menuQty - 1))
+                else cartUseCase.deleteMenu(it.menuId)
             }
         }
     }

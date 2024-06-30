@@ -75,12 +75,11 @@ class RestoFragment : Fragment() {
                     Log.d("MENU", "Menus is empty, waiting for data...")
                     return@collect
                 }
+
                 viewModel.cart.collectLatest {
                     if (it.isEmpty()) {
-                        Log.d("test", "NO DATA")
                         setRestoAdapterButtons(it)
                         adapter.submitMenuList(menus)
-                        adapter.notifyItemChanged(menus.size - 1)
 
                         return@collectLatest
                     }
@@ -96,10 +95,16 @@ class RestoFragment : Fragment() {
 
                     setRestoAdapterButtons(it)
                     adapter.submitMenuList(updatedMenus)
-                    adapter.notifyItemChanged(updatedMenus.size - 1)
+
+                    viewModel.cartCount.collectLatest {
+                        binding.tvCartCount.text = it.toString()
+                        binding.rlCart.visibility = if (it > 0) View.VISIBLE else View.INVISIBLE
+                    }
                 }
             }
         }
+
+
 
         binding.btnAllMenu.setOnClickListener {
             Navigation.findNavController(view)

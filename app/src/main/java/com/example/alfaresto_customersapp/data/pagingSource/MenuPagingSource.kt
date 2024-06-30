@@ -12,18 +12,20 @@ import javax.inject.Named
 
 class MenuPagingSource(
     @Named("menusRef") private val menusRef: CollectionReference,
-    private val cartItems: List<CartEntity>?
+    private val cartItems: List<CartEntity>? = null,
+    private val query: String? = null
 ) : PagingSource<QuerySnapshot, Menu>() {
 
     override suspend fun load(params: LoadParams<QuerySnapshot>): LoadResult<QuerySnapshot, Menu> {
         return try {
-            val currentPage = params.key ?: menusRef.get().addOnSuccessListener {
-                it.toObjects(MenuResponse::class.java)
-            }.await()
+            val currentPage = params.key ?: menusRef.get().await()
 
-            val menus = currentPage.toObjects(MenuResponse::class.java).map {
-                MenuResponse.transform(it)
-            }
+            val menus = currentPage.toObjects(MenuResponse::class.java)
+                .map { MenuResponse.transform(it) }
+
+            // if query null updated menus
+
+            val queriedMenu = menus.filter { it.name.contains(query ?: "", ignoreCase = true) }
 
             val updatedMenus = cartItems?.let {
                 menus.map { menu ->
@@ -37,7 +39,7 @@ class MenuPagingSource(
             } ?: menus
 
             LoadResult.Page(
-                data = updatedMenus,
+                if (query.isNullOrEmpty()) updatedMenus else queriedMenu,
                 prevKey = null,
                 nextKey = null
             )

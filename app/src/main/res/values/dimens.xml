@@ -40,4 +40,8 @@
     <dimen name="dimen_24sp">24sp</dimen>
     <dimen name="dimen_5">5dp</dimen>
     <dimen name="font_26">26sp</dimen>
+    <dimen name="dimen_200">200dp</dimen>
+    <dimen name="dimen_300">300dp</dimen>
+    <dimen name="dimen_250">250dp</dimen>
+    <dimen name="dimen_500">500dp</dimen>
 </resources>

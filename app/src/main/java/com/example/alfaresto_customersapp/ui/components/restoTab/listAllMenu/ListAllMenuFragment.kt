@@ -37,8 +37,43 @@ class ListAllMenuFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.rvListAllMenu.layoutManager = GridLayoutManager(requireContext(), 2)
+        setupView()
 
+        binding.apply {
+            svSearchMenu.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    query?.let {
+                        viewModel.setSearchQuery(it)
+                        binding.svSearchMenu.clearFocus()
+                    }
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    if (newText.isNullOrEmpty()) {
+                        viewModel.setSearchQuery(null)
+                    }
+                    return true
+                }
+            })
+
+            svSearchMenu.setOnCloseListener {
+                viewModel.setSearchQuery(null)
+                false
+            }
+        }
+
+        loadData()
+    }
+
+    private fun setupView() {
+        binding.rvListAllMenu.let {
+            it.adapter = adapter
+            it.layoutManager = GridLayoutManager(requireContext(), 2)
+        }
+    }
+
+    private fun loadData() {
         lifecycleScope.launch {
             viewModel.isLoading.collectLatest { isLoading ->
                 binding.loadingLayout.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
