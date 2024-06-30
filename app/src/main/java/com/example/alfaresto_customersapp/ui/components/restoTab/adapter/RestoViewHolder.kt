@@ -13,33 +13,37 @@ class RestoViewHolder(
     private var binding: MenuItemBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(menu: Menu, position: Int, listener: MenuListener?, itemClickListener: ((Menu) -> Unit)? = null) {
-        binding.let {
-            it.tvMenuName.text = menu.name
-            it.tvMenuPrice.text = menu.price.toString()
-            Glide.with(it.root)
+    fun bind(menu: Menu, position: Int, listener: MenuListener?) {
+        binding.run {
+            tvMenuName.text = menu.name
+            tvMenuPrice.text = menu.price.toString()
+            tvOrderQty.text = menu.orderCartQuantity.toString()
+
+            Glide.with(root)
                 .load(menu.image)
                 .placeholder(android.R.drawable.ic_menu_report_image)
-                .into(it.ivMenuImage)
+                .into(ivMenuImage)
 
             val isVisible = menu.orderCartQuantity != 0
-            it.btnMenuAdd.visibility = View.VISIBLE
-            it.btnAddOrder.visibility = View.INVISIBLE
-            it.btnMenuAdd.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
-            it.btnDecreaseOrder.visibility = if (isVisible) View.INVISIBLE else View.VISIBLE
+            clActionButtons.visibility = View.VISIBLE
+            btnMenuAdd.visibility = View.INVISIBLE
+            clActionButtons.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
+            btnMenuAdd.visibility = if (isVisible) View.INVISIBLE else View.VISIBLE
 
             val clickListener = View.OnClickListener { view ->
                 when (view) {
-                    it.btnMenuAdd, it.btnAddOrder -> listener?.onAddItemClicked(position, menuId = menu.id)
-                    it.btnDecreaseOrder -> listener?.onDecreaseItemClicked(position, menuId = menu.id)
-                    else -> itemClickListener?.invoke(menu)
+                    btnMenuAdd, btnAddOrder -> listener?.onAddItemClicked(
+                        position,
+                        menuId = menu.id
+                    )
+
+                    btnDecreaseOrder -> listener?.onDecreaseItemClicked(position, menuId = menu.id)
                 }
             }
 
-            it.root.setOnClickListener(clickListener)
-            it.btnMenuAdd.setOnClickListener(clickListener)
-            it.btnAddOrder.setOnClickListener(clickListener)
-            it.btnDecreaseOrder.setOnClickListener(clickListener)
+            btnMenuAdd.setOnClickListener(clickListener)
+            btnAddOrder.setOnClickListener(clickListener)
+            btnDecreaseOrder.setOnClickListener(clickListener)
         }
     }
 

@@ -21,7 +21,7 @@ class RestoAdapter : RecyclerView.Adapter<RestoViewHolder>() {
 
     override fun onBindViewHolder(holder: RestoViewHolder, position: Int) {
         val menuItem = menuList[position]
-        holder.bind(menuItem, position, menuListener, itemClickListener)
+        holder.bind(menuItem, position, menuListener)
     }
 
     fun submitMenuList(menuList: List<Menu>) {
@@ -32,6 +32,7 @@ class RestoAdapter : RecyclerView.Adapter<RestoViewHolder>() {
     fun setItemClickListener(listener: (Menu) -> Unit) {
         this.itemClickListener = listener
     }
+
     fun setItemListener(menuListener: MenuListener) {
         this.menuListener = menuListener
     }

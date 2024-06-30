@@ -76,11 +76,9 @@ class ListAllMenuViewModel @Inject constructor(
 
     fun addOrderQuantity(menuId: String, cart: CartEntity?) {
         viewModelScope.launch {
-            if (cart != null) {
-                cartUseCase.insertMenu(cart.copy(menuQty = cart.menuQty + 1))
-            } else {
-                insertMenu(menuId = menuId, menuQty = 1)
-            }
+            cart?.let {
+                cartUseCase.insertMenu(it.copy(menuQty = it.menuQty + 1))
+            } ?: insertMenu(menuId = menuId, menuQty = 1)
         }
     }
 
