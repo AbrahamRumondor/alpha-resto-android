@@ -13,11 +13,13 @@ import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
 import com.google.firebase.firestore.CollectionReference
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Named
@@ -28,8 +30,20 @@ class ListAllMenuViewModel @Inject constructor(
     private val cartUseCase: CartUseCase
 ) : ViewModel() {
 
+    private val _searchQuery = MutableStateFlow<String?>(null)
+    private val searchQuery: StateFlow<String?> get() = _searchQuery
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val menuList: Flow<PagingData<Menu>> = searchQuery.flatMapLatest { query ->
+        Pager(
+            PagingConfig(pageSize = 10)
+        ) {
+            MenuPagingSource(menusRef, query)
+        }.flow.cachedIn(viewModelScope)
+    }
+
     private val _menuList = MutableStateFlow<PagingData<Menu>>(PagingData.empty())
-    val menuList: StateFlow<PagingData<Menu>> get() = _menuList
+//    val menuList: StateFlow<PagingData<Menu>> get() = _menuList
 
     init {
         fetchCart()
@@ -92,5 +106,9 @@ class ListAllMenuViewModel @Inject constructor(
             }
             result(null)
         }
+    }
+
+    fun setSearchQuery(query: String?) {
+        _searchQuery.value = query
     }
 }

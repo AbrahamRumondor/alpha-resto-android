@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -36,8 +37,43 @@ class ListAllMenuFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.rvListAllMenu.layoutManager = GridLayoutManager(requireContext(), 2)
+        setupView()
 
+        binding.apply {
+            svSearchMenu.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    query?.let {
+                        viewModel.setSearchQuery(it)
+                        binding.svSearchMenu.clearFocus()
+                    }
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    if (newText.isNullOrEmpty()) {
+                        viewModel.setSearchQuery(null)
+                    }
+                    return true
+                }
+            })
+
+            svSearchMenu.setOnCloseListener {
+                viewModel.setSearchQuery(null)
+                false
+            }
+        }
+
+        loadData()
+    }
+
+    private fun setupView() {
+        binding.rvListAllMenu.let {
+            it.adapter = adapter
+            it.layoutManager = GridLayoutManager(requireContext(), 2)
+        }
+    }
+
+    private fun loadData() {
         lifecycleScope.launch {
             viewModel.menuList.collectLatest {
                 Log.d("test", it.toString())
