@@ -8,40 +8,44 @@ import com.example.alfaresto_customersapp.domain.model.Menu
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.tasks.await
-import javax.inject.Named
 
 class MenuPagingSource(
-    @Named("menusRef") private val menusRef: CollectionReference,
-    private val cartItems: List<CartEntity>? = null,
-    private val query: String? = null
+    private val menusRef: CollectionReference,
+    private val cartItems: List<CartEntity>,
+    private val query: String?
 ) : PagingSource<QuerySnapshot, Menu>() {
 
     override suspend fun load(params: LoadParams<QuerySnapshot>): LoadResult<QuerySnapshot, Menu> {
         return try {
-            val currentPage = params.key ?: menusRef.get().await()
+            val currentPage = params.key ?: menusRef.limit(params.loadSize.toLong()).get().await()
 
             val menus = currentPage.toObjects(MenuResponse::class.java)
                 .map { MenuResponse.transform(it) }
 
-            // if query null updated menus
+            val filteredMenus = if (!query.isNullOrEmpty()) {
+                menus.filter { it.name.contains(query, ignoreCase = true) }
+            } else {
+                menus
+            }
 
-            val queriedMenu = menus.filter { it.name.contains(query ?: "", ignoreCase = true) }
-
-            val updatedMenus = cartItems?.let {
-                menus.map { menu ->
-                    val cartItem = it.find { cart -> cart.menuId == menu.id }
-                    if (cartItem != null) {
-                        menu.copy(orderCartQuantity = cartItem.menuQty)
-                    } else {
-                        menu
-                    }
+            val updatedMenus = filteredMenus.map { menu ->
+                val cartItem = cartItems.find { it.menuId == menu.id }
+                if (cartItem != null) {
+                    menu.copy(orderCartQuantity = cartItem.menuQty)
+                } else {
+                    menu
                 }
-            } ?: menus
+            }
+
+            val lastVisible = currentPage.documents.lastOrNull()
+            val nextPage = lastVisible?.let {
+                menusRef.startAfter(it).limit(params.loadSize.toLong()).get().await()
+            }
 
             LoadResult.Page(
-                if (query.isNullOrEmpty()) updatedMenus else queriedMenu,
+                data = updatedMenus,
                 prevKey = null,
-                nextKey = null
+                nextKey = nextPage
             )
         } catch (e: Exception) {
             LoadResult.Error(e)
@@ -49,6 +53,8 @@ class MenuPagingSource(
     }
 
     override fun getRefreshKey(state: PagingState<QuerySnapshot, Menu>): QuerySnapshot? {
-        return null
+        return state.anchorPosition?.let { anchorPosition ->
+            state.closestPageToPosition(anchorPosition)?.nextKey
+        }
     }
 }

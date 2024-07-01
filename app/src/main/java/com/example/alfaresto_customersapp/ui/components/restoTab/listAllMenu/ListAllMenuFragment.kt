@@ -1,6 +1,7 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -73,6 +74,7 @@ class ListAllMenuFragment : Fragment() {
 
     private fun setupCartNavigation() {
         binding.btnCart.setOnClickListener {
+            Log.d("listall", "cart clicked")
             Navigation.findNavController(requireView())
                 .navigate(R.id.action_list_all_menu_fragment_to_order_summary_fragment)
         }
@@ -82,6 +84,7 @@ class ListAllMenuFragment : Fragment() {
         adapter.setItemListener(object : MenuListener {
             override fun onAddItemClicked(position: Int, menuId: String) {
                 viewModel.getCartByMenuId(menuId) {
+                    Log.d("ListAllMenuFragment", "onAddItemClicked: $it")
                     viewModel.addOrderQuantity(menuId, it)
                     adapter.notifyItemChanged(position)
                 }
@@ -89,7 +92,8 @@ class ListAllMenuFragment : Fragment() {
 
             override fun onDecreaseItemClicked(position: Int, menuId: String) {
                 viewModel.getCartByMenuId(menuId) {
-                    viewModel.decreaseOrderQuantity(menuId, it)
+                    Log.d("ListAllMenuFragment", "onDecreaseItemClicked: $it")
+                    viewModel.decreaseOrderQuantity(it)
                     adapter.notifyItemChanged(position)
                 }
             }

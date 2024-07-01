@@ -76,7 +76,7 @@ class RestoFragment : Fragment() {
                     return@collect
                 }
 
-                viewModel.cart.collectLatest {
+                viewModel.cart.collectLatest { it ->
                     if (it.isEmpty()) {
                         setRestoAdapterButtons(it)
                         adapter.submitMenuList(menus)
@@ -97,14 +97,13 @@ class RestoFragment : Fragment() {
                     adapter.submitMenuList(updatedMenus)
 
                     viewModel.cartCount.collectLatest {
+                        Log.d("CART", "Cart count: $it")
                         binding.tvCartCount.text = it.toString()
                         binding.rlCart.visibility = if (it > 0) View.VISIBLE else View.INVISIBLE
                     }
                 }
             }
         }
-
-
 
         binding.btnAllMenu.setOnClickListener {
             Navigation.findNavController(view)

@@ -1,5 +1,6 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,52 +13,40 @@ import com.example.alfaresto_customersapp.ui.components.listener.MenuListener
 class ListAllMenuViewHolder(
     private var binding: AllMenuItemBinding
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(menu: Menu, position: Int, listener: MenuListener?, itemClickListener: ((Menu) -> Unit)? = null) {
-        binding.let {
-            it.tvMenuName.text = menu.name
-            it.tvMenuPrice.text = menu.price.toString()
-            Glide.with(it.root)
+
+    fun bind(menu: Menu, position: Int, listener: MenuListener?) {
+        binding.run {
+            tvMenuName.text = menu.name
+            tvMenuPrice.text = menu.price.toString()
+            tvOrderQty.text = menu.orderCartQuantity.toString()
+
+            Glide.with(root)
                 .load(menu.image)
                 .placeholder(android.R.drawable.ic_menu_report_image)
-                .into(it.ivMenuImage)
+                .into(ivMenuImage)
 
             val isVisible = menu.orderCartQuantity != 0
-            it.btnMenuAdd.visibility = if (isVisible) View.GONE else View.VISIBLE
-            it.clActionButtons.visibility = if (isVisible) View.VISIBLE else View.GONE
-            it.btnDecreaseOrder.visibility = if (isVisible) View.VISIBLE else View.GONE
+            clActionButtons.visibility = View.VISIBLE
+            btnMenuAdd.visibility = View.INVISIBLE
+            clActionButtons.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
+            btnMenuAdd.visibility = if (isVisible) View.INVISIBLE else View.VISIBLE
 
             val clickListener = View.OnClickListener { view ->
+                Log.d("ListAllMenuViewHolder", "bind: $view")
                 when (view) {
-                    it.btnMenuAdd -> {
-                        listener?.onAddItemClicked(position, menuId = menu.id)
-                        it.tvOrderQty.text = menu.orderCartQuantity.toString()
-                        it.clActionButtons.visibility = View.VISIBLE
-                    }
+                    btnMenuAdd, btnAddOrder ->
+                        listener?.onAddItemClicked(
+                        position,
+                        menuId = menu.id
+                    )
 
-                    it.btnDecreaseOrder -> {
-                        listener?.onDecreaseItemClicked(position, menuId = menu.id)
-                        it.tvOrderQty.text = menu.orderCartQuantity.toString()
-                        if (menu.orderCartQuantity == 0) {
-                            it.btnMenuAdd.visibility = View.VISIBLE
-                            it.clActionButtons.visibility = View.GONE
-                        }
-                    }
-                    it.btnAddOrder -> {
-                        listener?.onAddItemClicked(position, menuId = menu.id)
-                        it.tvOrderQty.text = menu.orderCartQuantity.toString()
-                        it.clActionButtons.visibility = View.VISIBLE
-                    }
-
-                    else -> {
-                        itemClickListener?.invoke(menu)
-                    }
+                    btnDecreaseOrder -> listener?.onDecreaseItemClicked(position, menuId = menu.id)
                 }
             }
 
-            it.root.setOnClickListener(clickListener)
-            it.btnMenuAdd.setOnClickListener(clickListener)
-            it.btnDecreaseOrder.setOnClickListener(clickListener)
-            it.btnAddOrder.setOnClickListener(clickListener)
+            btnMenuAdd.setOnClickListener(clickListener)
+            btnAddOrder.setOnClickListener(clickListener)
+            btnDecreaseOrder.setOnClickListener(clickListener)
         }
     }
 

@@ -1,6 +1,5 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
@@ -26,14 +25,16 @@ class ListAllMenuViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _searchQuery = MutableStateFlow<String?>(null)
-    private val searchQuery: StateFlow<String?> get() = _searchQuery
-
-    private val _menuList = MutableStateFlow<PagingData<Menu>>(PagingData.empty())
+    private val _cartItems = MutableStateFlow<List<CartEntity>>(emptyList())
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val menuList: Flow<PagingData<Menu>> = searchQuery.flatMapLatest { query ->
-        fetchMenus(query)
-    }.cachedIn(viewModelScope)
+    val menuList: Flow<PagingData<Menu>> = combine(_searchQuery, _cartItems) { query, cartItems ->
+        query to cartItems
+    }.flatMapLatest { (query, cartItems) ->
+        Pager(PagingConfig(pageSize = 10)) {
+            MenuPagingSource(menusRef, cartItems, query)
+        }.flow.cachedIn(viewModelScope)
+    }
 
     init {
         fetchCart()
@@ -41,52 +42,31 @@ class ListAllMenuViewModel @Inject constructor(
 
     private fun fetchCart() {
         viewModelScope.launch {
-            try {
-                cartUseCase.getCart().collectLatest { cartItems ->
-                    _menuList.value = fetchMenus(null, cartItems).first()
-                }
-            } catch (e: Exception) {
-                Log.e("CART", "Error fetching cart: ${e.message}")
+            cartUseCase.getCart().collectLatest { items ->
+                _cartItems.value = items
             }
         }
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    private fun fetchMenus(
-        query: String?,
-        cartItems: List<CartEntity> = emptyList()
-    ): Flow<PagingData<Menu>> {
-        return Pager(
-            PagingConfig(pageSize = 10)
-        ) {
-            MenuPagingSource(menusRef, cartItems, query)
-        }.flow
     }
 
     fun setSearchQuery(query: String?) {
         _searchQuery.value = query
     }
 
-    fun insertMenu(menuId: String, menuQty: Int) {
-        viewModelScope.launch {
-            val cartEntity = CartEntity(menuId = menuId, menuQty = menuQty)
-            cartUseCase.insertMenu(cartEntity)
-        }
-    }
-
     fun addOrderQuantity(menuId: String, cart: CartEntity?) {
         viewModelScope.launch {
-            cart?.let {
-                cartUseCase.insertMenu(it.copy(menuQty = it.menuQty + 1))
-            } ?: insertMenu(menuId = menuId, menuQty = 1)
+            if (cart != null) {
+                cartUseCase.insertMenu(cart.copy(menuQty = cart.menuQty + 1))
+            } else {
+                insertMenu(menuId)
+            }
         }
     }
 
-    fun decreaseOrderQuantity(menuId: String, cart: CartEntity?) {
+    fun decreaseOrderQuantity(cart: CartEntity?) {
         viewModelScope.launch {
             cart?.let {
-                if (cart.menuQty > 0) {
-                    cartUseCase.insertMenu(it.copy(menuQty = cart.menuQty - 1))
+                if (it.menuQty > 0) {
+                    cartUseCase.insertMenu(it.copy(menuQty = it.menuQty - 1))
                 }
             }
         }
@@ -94,8 +74,14 @@ class ListAllMenuViewModel @Inject constructor(
 
     fun getCartByMenuId(menuId: String, result: (CartEntity?) -> Unit) {
         viewModelScope.launch {
-            val cart = cartUseCase.getCart().firstOrNull()?.find { it.menuId == menuId }
-            result(cart)
+            val cartItem = _cartItems.value.find { it.menuId == menuId }
+            result(cartItem)
+        }
+    }
+
+    private fun insertMenu(menuId: String) {
+        viewModelScope.launch {
+            cartUseCase.insertMenu(CartEntity(menuId = menuId, menuQty = 1))
         }
     }
 }
