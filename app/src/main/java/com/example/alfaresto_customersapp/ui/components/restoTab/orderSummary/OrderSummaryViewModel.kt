@@ -319,15 +319,15 @@ class OrderSummaryViewModel @Inject constructor(
                 )
             )
 
-//            when (val result = fcmApiRepository.sendMessage(messageDto)) {
-//                is Success -> {
-//                    onResult(true)
-//                }
-//
-//                is Error -> {
-//                    onResult(false)
-//                }
-//            }
+            when (val result = fcmApiRepository.sendMessage(messageDto)) {
+                is Success -> {
+                    Log.d("test", "FCM SENT")
+                }
+
+                is Error -> {
+                    Log.d("test", "FCM FAILED")
+                }
+            }
 
         }
     }

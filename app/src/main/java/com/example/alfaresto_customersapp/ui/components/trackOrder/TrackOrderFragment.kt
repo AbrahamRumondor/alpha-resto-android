@@ -126,6 +126,8 @@ class TrackOrderFragment : Fragment() {
 //                    trackOrderViewModel.getShipmentById(args.shipmentId)
 
                     tvOrderStatusBody.text = getText(R.string.on_process_status)
+
+                    trackOrderViewModel.getShipmentById(args.shipmentId)
                     trackOrderViewModel.shipment.observe(viewLifecycleOwner) {
                         tvOrderStatusBody.text = it.statusDelivery
                     }
