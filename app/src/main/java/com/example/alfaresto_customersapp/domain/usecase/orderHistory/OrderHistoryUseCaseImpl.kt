@@ -46,13 +46,13 @@ class OrderHistoryUseCaseImpl @Inject constructor(
 
             // Filter orders and shipments based on user ID and order IDs
             val myOrders = orders.filter { it.userName == user.value?.name }
-            shipmentRepository.getShipments().collectLatest { shipments ->
+            shipmentRepository.getShipments().collect { shipments ->
                 val myShipments = shipments.filter { shipment ->
                     myOrders.any { it.id == shipment.orderID }
                 }
 
                 // Map to order history
-                val orderHistories = myOrders.map { order ->
+                val orderHistoriesList = myOrders.map { order ->
                     val shipment = myShipments.find { it.orderID == order.id }
                     OrderHistory(
                         orderDate = order.date.toString(),
@@ -68,9 +68,9 @@ class OrderHistoryUseCaseImpl @Inject constructor(
                         id = shipment?.id ?: ""
                     )
                 }
-                Log.d("ORDERHISTORY", orderHistories.toString())
+                Log.d("ORDERHISTORY", orderHistoriesList.toString())
 
-                orderHistories(orderHistories)
+                orderHistories(orderHistoriesList)
             }
         }
     }

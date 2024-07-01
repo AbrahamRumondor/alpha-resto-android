@@ -26,7 +26,6 @@ class OrderRepositoryImpl @Inject constructor(
     private val orderList: StateFlow<List<Order>> = _orderList
     private var currentSize = 0
 
-
     override suspend fun getOrders(): StateFlow<List<Order>> {
         try {
             val snapshot = ordersRef.get().await()
@@ -45,31 +44,30 @@ class OrderRepositoryImpl @Inject constructor(
     }
 
     override fun fetchOrders(): StateFlow<List<Order>> {
+        val mutableStateFlow = MutableStateFlow<List<Order>>(emptyList())
+
         ordersRef.addSnapshotListener { snapshots, error ->
             if (error != null) {
                 Log.e("OrderHistory orderrepoimpl", "Error fetching orders", error)
-                _orders.value = emptyList()
+                mutableStateFlow.value = emptyList()
                 return@addSnapshotListener
             }
 
-            val orderList = mutableListOf<Order>()
-            if (snapshots != null) {
-                for (doc in snapshots) {
-                    if (doc.exists()) {
-                        val orderResponse = doc.toObject(OrderResponse::class.java)
-                        orderList.add(OrderResponse.transform(orderResponse))
-                    }
+            val orders = mutableListOf<Order>()
+            snapshots?.forEach { doc ->
+                if (doc.exists()) {
+                    val orderResponse = doc.toObject(OrderResponse::class.java)
+                    orders.add(OrderResponse.transform(orderResponse))
                 }
             }
-            if (currentSize != orderList.size) {
-                _orderList.value = orderList
-                currentSize = orderList.size
-            }
+            mutableStateFlow.value = orders
 
+            Log.d("testy", mutableStateFlow.value.toString())
         }
-        return orderList
-    }
 
+        Log.d("testz", mutableStateFlow.value.toString())
+        return mutableStateFlow
+    }
     override suspend fun getMyOrders(userName: String): StateFlow<List<Order>> {
         try {
             val snapshot = ordersRef.get().await()
@@ -122,7 +120,8 @@ class OrderRepositoryImpl @Inject constructor(
     override suspend fun getOrderByID(orderId: String): Order? {
         return try {
             val snapshot = ordersRef.document(orderId).get().await()
-            val order = snapshot.toObject(OrderResponse::class.java)?.let { OrderResponse.transform(it) }
+            val order =
+                snapshot.toObject(OrderResponse::class.java)?.let { OrderResponse.transform(it) }
 
             order
         } catch (e: Exception) {
