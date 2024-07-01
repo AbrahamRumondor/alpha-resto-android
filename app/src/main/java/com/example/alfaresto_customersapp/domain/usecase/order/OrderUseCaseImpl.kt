@@ -23,7 +23,7 @@ class OrderUseCaseImpl @Inject constructor(
 
     override suspend fun getMyOrders(): StateFlow<List<Order>> {
         val userName =
-            userRepository.getCurrentUser(authRepository.getCurrentUserID()).value?.name ?: ""
+            userRepository.getCurrentUser(authRepository.getCurrentUserID()).value.name ?: ""
         Log.d("OrderUseCaseImpl", "getMyOrders: $userName")
         return orderRepository.getMyOrders(userName)
     }

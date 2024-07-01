@@ -1,7 +1,6 @@
 package com.example.alfaresto_customersapp.ui.components.orderHistoryDetailPage
 
 import android.util.Log
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.alfaresto_customersapp.domain.model.OrderHistory
 import com.example.alfaresto_customersapp.domain.model.OrderItem

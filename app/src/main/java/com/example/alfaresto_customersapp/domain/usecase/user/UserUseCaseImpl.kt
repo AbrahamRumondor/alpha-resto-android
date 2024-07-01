@@ -1,7 +1,6 @@
 package com.example.alfaresto_customersapp.domain.usecase.user
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import com.example.alfaresto_customersapp.domain.model.Address
 import com.example.alfaresto_customersapp.domain.model.User
 import com.example.alfaresto_customersapp.domain.repository.AuthRepository

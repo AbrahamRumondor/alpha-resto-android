@@ -3,7 +3,6 @@ package com.example.alfaresto_customersapp.data.di
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

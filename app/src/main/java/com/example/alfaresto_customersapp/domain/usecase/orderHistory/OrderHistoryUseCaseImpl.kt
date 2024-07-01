@@ -12,7 +12,6 @@ import com.example.alfaresto_customersapp.domain.repository.ShipmentRepository
 import com.example.alfaresto_customersapp.domain.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 
 class OrderHistoryUseCaseImpl @Inject constructor(

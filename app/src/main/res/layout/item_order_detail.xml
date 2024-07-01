@@ -26,7 +26,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/bold"
-            android:text="Red n hot pizza"
             android:textColor="@color/mainblack"
             android:textSize="16sp" />
 
@@ -35,7 +34,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/semibold"
-            android:text="Spicy chicken, beef"
             android:textColor="@color/mainblack"
             android:textSize="16sp" />
 
@@ -50,7 +48,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:fontFamily="@font/semibold"
-                android:text="Rp 50.000,-"
                 android:textColor="@color/mainblack"
                 android:textSize="16sp" />
 
@@ -61,7 +58,6 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="120dp"
                 android:fontFamily="@font/bold"
-                android:text="2 pcs"
                 android:textColor="@color/mainblack"
                 android:textSize="16sp" />
 
