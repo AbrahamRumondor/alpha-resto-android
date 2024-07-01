@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface OrderRepository {
     suspend fun getOrders(): StateFlow<List<Order>>
+    fun fetchOrders(): StateFlow<List<Order>>
     suspend fun getMyOrders(userName: String): StateFlow<List<Order>>
     fun getOrderDocID(): String
     fun getOrderItemDocID(orderId: String): String

@@ -120,6 +120,7 @@ class TrackOrderViewModel @Inject constructor(
 
         database.getReference("driver_location").addValueEventListener(object :
             ValueEventListener {
+
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 Log.d("test", dataSnapshot.toString())
                 val latitude = dataSnapshot.child("latitude").getValue(Double::class.java)
@@ -140,6 +141,7 @@ class TrackOrderViewModel @Inject constructor(
                 callback.onFailure(databaseError.message.toString())
                 Log.w("Firebase", "loadPost:onCancelled", databaseError.toException())
             }
+
         })
     }
 

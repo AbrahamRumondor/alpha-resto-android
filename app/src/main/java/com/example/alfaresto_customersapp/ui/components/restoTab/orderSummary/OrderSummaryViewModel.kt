@@ -179,7 +179,7 @@ class OrderSummaryViewModel @Inject constructor(
     }
 
     fun getOrderDocumentId(): String {
-        return FirebaseFirestore.getInstance().collection("orders").document().id
+        return orderUseCase.getOrderDocID()
     }
 
     private fun getOrderItemDocumentId(orderId: String): String {
@@ -245,12 +245,14 @@ class OrderSummaryViewModel @Inject constructor(
 //                                sendNotificationToResto(onResult)
 //                                onResult(true)
 
-                                shipmentUseCase.createShipment(
-                                    Shipment(
-                                        orderID = orderId,
-                                        statusDelivery = "On Process"
+                                viewModelScope.launch {
+                                    shipmentUseCase.createShipment(
+                                        Shipment(
+                                            orderID = orderId,
+                                            statusDelivery = "On Process"
+                                        )
                                     )
-                                )
+                                }
 
                                 sendNotificationToResto(
 //                                    onResult
@@ -317,15 +319,15 @@ class OrderSummaryViewModel @Inject constructor(
                 )
             )
 
-//            when (val result = fcmApiRepository.sendMessage(messageDto)) {
-//                is Success -> {
-//                    onResult(true)
-//                }
-//
-//                is Error -> {
-//                    onResult(false)
-//                }
-//            }
+            when (val result = fcmApiRepository.sendMessage(messageDto)) {
+                is Success -> {
+                    Log.d("test", "FCM SENT")
+                }
+
+                is Error -> {
+                    Log.d("test", "FCM FAILED")
+                }
+            }
 
         }
     }

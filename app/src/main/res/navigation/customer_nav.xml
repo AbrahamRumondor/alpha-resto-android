@@ -22,21 +22,6 @@
         <action
             android:id="@+id/action_resto_fragment_menu_to_detail_fragment"
             app:destination="@id/detail_fragment" />
-        <argument
-            android:name="menuId"
-            app:argType="string" />
-        <argument
-            android:name="name"
-            app:argType="string" />
-        <argument
-            android:name="description"
-            app:argType="string" />
-        <argument
-            android:name="price"
-            app:argType="integer" />
-        <argument
-            android:name="image"
-            app:argType="string" />
     </fragment>
 
     <fragment
@@ -91,7 +76,7 @@
         </action>
         <action
             android:id="@+id/action_orderSummaryFragment_to_thankYouFragment"
-            app:destination="@id/thankYouFragment" />
+            app:destination="@id/thank_you_fragment" />
     </fragment>
 
     <fragment
@@ -159,20 +144,16 @@
             app:destination="@id/resto_fragment" />
         <action
             android:id="@+id/action_track_order_fragment_to_chat_fragment"
-            app:destination="@id/chat_fragment">
-            <argument
-                android:name="orderId"
-                app:argType="string" />
-        </action>
+            app:destination="@id/chat_fragment"/>
+        <action
+            android:id="@+id/action_list_all_menu_fragment_to_detail_fragment"
+            app:destination="@id/detail_fragment" />
         <argument
             android:name="orderId"
             app:argType="string" />
         <argument
             android:name="shipmentId"
             app:argType="string" />
-        <action
-            android:id="@+id/action_list_all_menu_fragment_to_detail_fragment"
-            app:destination="@id/detail_fragment" />
     </fragment>
 
     <fragment
@@ -207,7 +188,7 @@
             app:argType="string" />
     </fragment>
     <fragment
-        android:id="@+id/thankYouFragment"
+        android:id="@+id/thank_you_fragment"
         android:name="com.example.alfaresto_customersapp.ui.components.restoTab.ThankYouFragment"
         android:label="fragment_thank_you"
         tools:layout="@layout/fragment_thank_you">

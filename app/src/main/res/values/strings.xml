@@ -111,4 +111,6 @@
     <string name="on_process_status">On Process</string>
     <string name="track_your_order_here">Track Your Order Here</string>
     <string name="go_back_to_main_menu">Go back to main menu</string>
+    <string name="resto">Resto</string>
+    <string name="strip">-</string>
 </resources>
