@@ -11,6 +11,7 @@ import com.example.alfaresto_customersapp.databinding.OrderPaymentMethodBinding
 import com.example.alfaresto_customersapp.databinding.OrderTotalPriceBinding
 import com.example.alfaresto_customersapp.domain.model.Address
 import com.example.alfaresto_customersapp.domain.model.Menu
+import com.example.alfaresto_customersapp.domain.model.OrderItem
 import com.example.alfaresto_customersapp.ui.components.listener.OrderSummaryItemListener
 import com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.viewHolder.CheckoutButtonViewHolder
 import com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.viewHolder.OrderAddressViewHolder
@@ -18,11 +19,10 @@ import com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.vi
 import com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.viewHolder.OrderTotalViewHolder
 import com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.viewHolder.PaymentMethodViewHolder
 
-class OrderSummaryAdapter() :
+class OrderSummaryAdapter :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items: MutableList<Any?> = mutableListOf()
-
     private var orderSummaryItemListener: OrderSummaryItemListener? = null
 
     private val SHOW_ADDRESS = 0
@@ -94,8 +94,9 @@ class OrderSummaryAdapter() :
         return items.size
     }
 
-    fun submitOrderList(items: MutableList<Any?> ) {
-        this.items = items
+    fun submitOrderList(orderItems: MutableList<Any?> ) {
+        this.items.clear()
+        this.items.addAll(orderItems)
         Log.d("ORDER adapter", "order list submitted: $items")
     }
 

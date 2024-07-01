@@ -6,7 +6,9 @@ import androidx.recyclerview.widget.ListAdapter
 import com.example.alfaresto_customersapp.domain.model.OrderHistory
 import com.example.alfaresto_customersapp.ui.components.listener.OrderHistoryListener
 
-class OrderHistoryAdapter : ListAdapter<OrderHistory, OrderHistoryViewHolder>(diffUtil) {
+class OrderHistoryAdapter(
+    private val onItemClick: (OrderHistory) -> Unit
+) : ListAdapter<OrderHistory, OrderHistoryViewHolder>(diffUtil) {
 
     private var orderHistoryListener: OrderHistoryListener? = null
 
@@ -17,6 +19,9 @@ class OrderHistoryAdapter : ListAdapter<OrderHistory, OrderHistoryViewHolder>(di
     override fun onBindViewHolder(holder: OrderHistoryViewHolder, position: Int) {
         val order = getItem(position)
         holder.bind(order, orderHistoryListener)
+        holder.itemView.setOnClickListener {
+            onItemClick(order)
+        }
     }
 
     companion object {

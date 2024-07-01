@@ -26,7 +26,7 @@ class OrderHistoryFragment : Fragment() {
 
     private lateinit var binding: FragmentOrderHistoryBinding
     private val viewModel: OrderHistoryViewModel by viewModels()
-    private val adapter by lazy { OrderHistoryAdapter() }
+    private val adapter by lazy { OrderHistoryAdapter(::onOrderItemClicked) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

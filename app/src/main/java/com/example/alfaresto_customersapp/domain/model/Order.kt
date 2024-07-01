@@ -6,6 +6,7 @@ data class Order(
     val id: String = "",
     val userId: String = "",
     val userName: String = "",
+    val userPhone: String = "",
     val fullAddress: String = "",
     val restoID: String = "",
     val userToken: String = "",
