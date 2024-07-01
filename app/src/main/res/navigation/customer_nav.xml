@@ -139,9 +139,6 @@
         <argument
             android:name="shipmentId"
             app:argType="string" />
-        <action
-            android:id="@+id/action_list_all_menu_fragment_to_detail_fragment"
-            app:destination="@id/detail_fragment" />
     </fragment>
 
     <fragment
