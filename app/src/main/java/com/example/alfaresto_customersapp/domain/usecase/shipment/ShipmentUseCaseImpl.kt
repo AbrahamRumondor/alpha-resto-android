@@ -17,7 +17,7 @@ class ShipmentUseCaseImpl @Inject constructor(
         return shipmentRepository.getShipmentById(id)
     }
 
-    override fun createShipment(shipment: Shipment) {
+    override suspend fun createShipment(shipment: Shipment) {
         shipmentRepository.createShipment(shipment)
     }
 }

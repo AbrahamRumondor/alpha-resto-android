@@ -245,12 +245,14 @@ class OrderSummaryViewModel @Inject constructor(
 //                                sendNotificationToResto(onResult)
 //                                onResult(true)
 
-                                shipmentUseCase.createShipment(
-                                    Shipment(
-                                        orderID = orderId,
-                                        statusDelivery = "On Process"
+                                viewModelScope.launch {
+                                    shipmentUseCase.createShipment(
+                                        Shipment(
+                                            orderID = orderId,
+                                            statusDelivery = "On Process"
+                                        )
                                     )
-                                )
+                                }
 
                                 sendNotificationToResto(
 //                                    onResult

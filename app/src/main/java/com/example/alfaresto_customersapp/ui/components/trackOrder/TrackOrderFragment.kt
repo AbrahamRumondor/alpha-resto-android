@@ -123,7 +123,7 @@ class TrackOrderFragment : Fragment() {
                 order?.let { myOrder ->
                     val home = LatLng(myOrder.latitude, myOrder.longitude)
 
-                    trackOrderViewModel.getShipmentById(args.shipmentId)
+//                    trackOrderViewModel.getShipmentById(args.shipmentId)
 
                     tvOrderStatusBody.text = getText(R.string.on_process_status)
                     trackOrderViewModel.shipment.observe(viewLifecycleOwner) {

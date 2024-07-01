@@ -80,7 +80,7 @@ class ShipmentRepositoryImpl @Inject constructor(
         return shipment
     }
 
-    override fun createShipment(shipment: Shipment) {
+    override suspend fun createShipment(shipment: Shipment) {
         val newShipmentId = generateShipmentId()
         shipmentsRef.document(newShipmentId).set(
             ShipmentResponse.transform(shipment.copy(id = newShipmentId))
@@ -91,6 +91,9 @@ class ShipmentRepositoryImpl @Inject constructor(
             )
         }
             .addOnFailureListener { Log.d("TEST", "ERROR ON ORDER INSERTION") }
+
+        getShipmentById(newShipmentId)
+        startForegroundService()
     }
 
     private fun generateShipmentId(): String {
