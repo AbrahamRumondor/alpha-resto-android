@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
@@ -18,10 +19,10 @@ class ChatViewModel @Inject constructor(
 
     private var chatListener: ListenerRegistration? = null
 
-    private val _messages = MutableLiveData<List<Pair<String, Boolean>>>()
-    val messages: LiveData<List<Pair<String, Boolean>>> get() = _messages
+    private val _messages = MutableLiveData<List<Pair<String, String>>>()
+    val messages: LiveData<List<Pair<String, String>>> get() = _messages
 
-    private val restoId = "NrhoLsLLieXFly9dXj7vu2ETi1T2"
+    val restoId = "NrhoLsLLieXFly9dXj7vu2ETi1T2"
 
     init {
         firestore = FirebaseFirestore.getInstance()
@@ -32,13 +33,15 @@ class ChatViewModel @Inject constructor(
             .document(orderId)
             .collection("chats")
 
+        val dateFormatted = Timestamp.now().toDate()
+
         Log.d(TAG, "orderId: $orderId")
 
         val data: HashMap<String, Any> = hashMapOf(
+            "date_send" to dateFormatted,
             "message" to message,
-            "timestamp" to System.currentTimeMillis(),
-            "senderId" to userId,
-            "receiverId" to restoId
+            "sender_id" to userId,
+            "user_name" to "Customer"
         )
 
         chatCollection.add(data)
@@ -50,41 +53,40 @@ class ChatViewModel @Inject constructor(
             }
     }
 
-
     fun listenForMessages(orderId: String) {
-        val chatCollection = firestore.collection("orders")
-            .document(orderId)
-            .collection("chats")
+        val user = FirebaseAuth.getInstance().currentUser
+        val userId = user?.uid
+        if (userId != null) {
+            val chatCollection = firestore.collection("orders")
+                .document(orderId)
+                .collection("chats")
 
-        chatListener = chatCollection.addSnapshotListener { snapshots, e ->
-            if (e != null) {
-                Log.w("ChatViewModel", "Listen failed.", e)
-                return@addSnapshotListener
-            }
+            chatListener = chatCollection.addSnapshotListener { snapshots, e ->
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e)
+                    return@addSnapshotListener
+                }
 
-            val newMessages = mutableListOf<Pair<String, Boolean>>()
-            if (snapshots != null) {
-                for (doc in snapshots.documentChanges) {
-                    if (doc.type == com.google.firebase.firestore.DocumentChange.Type.ADDED) {
-                        val message = doc.document.getString("message")
-                        val senderId = doc.document.getString("senderId")
-                        if (message != null && senderId != null) {
-                            val isSent = senderId == FirebaseAuth.getInstance().currentUser?.uid
-                            newMessages.add(Pair(message, isSent))
+                if (snapshots != null) {
+                    val messages = mutableListOf<Pair<String, String>>()
+                    for (doc in snapshots.documentChanges) {
+                        if (doc.type == com.google.firebase.firestore.DocumentChange.Type.ADDED) {
+                            val message = doc.document.getString("message")
+                            val senderId = doc.document.getString("sender_id")
+                            if (message != null && senderId != null) {
+                                messages.add(Pair(message, senderId))
+                            }
                         }
                     }
+                    _messages.postValue(messages)
                 }
-                _messages.value = newMessages
             }
         }
     }
 
-    fun removeListener() {
-        chatListener?.remove()
-    }
 
-    override fun onCleared() {
-        super.onCleared()
-        removeListener()
+    fun getUserId(): String {
+        val user = FirebaseAuth.getInstance().currentUser
+        return user?.uid ?: ""
     }
 }

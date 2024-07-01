@@ -173,7 +173,7 @@ class OrderSummaryViewModel @Inject constructor(
     }
 
     fun getOrderDocumentId(): String {
-        return FirebaseFirestore.getInstance().collection("orders").document().id
+        return orderUseCase.getOrderDocID()
     }
 
     private fun getOrderItemDocumentId(orderId: String): String {
@@ -181,7 +181,7 @@ class OrderSummaryViewModel @Inject constructor(
     }
 
     // TODO 1:userID,addressID,restoID (fetch dr firestore) | 2:menuID (fetch dari firestore)
-    fun saveOrderInDatabase(onResult: (msg: String) -> Unit) {
+    fun saveOrderInDatabase(onResult: (msg: String, orderId: String) -> Unit) {
         getUserFromDB(object : FirestoreCallback {
             override fun onSuccess(user: User?) {
 
@@ -238,7 +238,7 @@ class OrderSummaryViewModel @Inject constructor(
 //                                sendNotificationToResto(onResult)
 //                                onResult("Success")
                                 sendNotificationToResto(
-                                    onResult
+                                    onResult, order.id
                                 )
                             }
                         }
@@ -247,7 +247,7 @@ class OrderSummaryViewModel @Inject constructor(
             }
 
             override fun onFailure(exception: Exception) {
-                onResult("Failed to fetch user")
+                onResult("Failed to fetch user", "")
             }
         })
     }
@@ -286,7 +286,8 @@ class OrderSummaryViewModel @Inject constructor(
 //    }
 
     private fun sendNotificationToResto(
-        onResult: (msg: String) -> Unit
+        onResult: (msg: String, orderId: String) -> Unit,
+        orderId: String
     ) {
         viewModelScope.launch {
             val messageDto = SendMessageDto(
@@ -299,11 +300,11 @@ class OrderSummaryViewModel @Inject constructor(
 
             when (val result = fcmApiRepository.sendMessage(messageDto)) {
                 is Success -> {
-                    onResult(result.data)
+                    onResult(result.data, orderId)
                 }
 
                 is Error -> {
-                    onResult(result.error.getText())
+                    onResult(result.error.getText(), orderId)
                 }
             }
 

@@ -22,21 +22,6 @@
         <action
             android:id="@+id/action_resto_fragment_menu_to_detail_fragment"
             app:destination="@id/detail_fragment" />
-        <argument
-            android:name="menuId"
-            app:argType="string" />
-        <argument
-            android:name="name"
-            app:argType="string" />
-        <argument
-            android:name="description"
-            app:argType="string" />
-        <argument
-            android:name="price"
-            app:argType="integer" />
-        <argument
-            android:name="image"
-            app:argType="string" />
     </fragment>
 
     <fragment
@@ -68,11 +53,7 @@
             app:destination="@id/list_all_menu_fragment" />
         <action
             android:id="@+id/action_order_summary_fragment_to_track_order_fragment"
-            app:destination="@id/track_order_fragment">
-            <argument
-                android:name="orderId"
-                app:argType="string" />
-        </action>
+            app:destination="@id/track_order_fragment"/>
     </fragment>
 
     <fragment
@@ -140,11 +121,7 @@
             app:destination="@id/resto_fragment" />
         <action
             android:id="@+id/action_track_order_fragment_to_chat_fragment"
-            app:destination="@id/chat_fragment">
-            <argument
-                android:name="orderId"
-                app:argType="string" />
-        </action>
+            app:destination="@id/chat_fragment"/>
         <action
             android:id="@+id/action_list_all_menu_fragment_to_detail_fragment"
             app:destination="@id/detail_fragment" />

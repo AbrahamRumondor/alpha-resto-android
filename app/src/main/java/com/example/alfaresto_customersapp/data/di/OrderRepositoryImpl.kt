@@ -55,7 +55,7 @@ class OrderRepositoryImpl @Inject constructor(
     }
 
     override fun getOrderDocID(): String {
-        return firestore.collection("orders").document().id
+        return ordersRef.document().id
     }
 
     override fun getOrderItemDocID(orderId: String): String {

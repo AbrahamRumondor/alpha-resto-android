@@ -11,7 +11,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.FragmentChatBinding
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
 @Suppress("DEPRECATION")
@@ -20,7 +19,6 @@ class ChatFragment : Fragment() {
     private lateinit var binding: FragmentChatBinding
     private val viewModel: ChatViewModel by viewModels()
     private val args: ChatFragmentArgs by navArgs()
-    private val chatViews = mutableListOf<TextView>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,9 +30,10 @@ class ChatFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val userId = viewModel.getUserId()
         val orderId = args.orderId
-
-        if (orderId.isNullOrEmpty()) {
+        val restoId = "NrhoLsLLieXFly9dXj7vu2ETi1T2"
+        if (orderId.isEmpty()) {
             Toast.makeText(requireContext(), "Order ID is missing", Toast.LENGTH_SHORT).show()
             requireActivity().onBackPressed()
             return
@@ -43,45 +42,41 @@ class ChatFragment : Fragment() {
         viewModel.listenForMessages(orderId)
 
         binding.sendButton.setOnClickListener {
-            sendMessage()
+            val message = binding.chatInput.text.toString()
+            if (message.isNotEmpty()) {
+                viewModel.sendMessage(userId, orderId, message)
+                binding.chatInput.text.clear()
+            } else {
+                Toast.makeText(requireContext(), "Message cannot be empty", Toast.LENGTH_SHORT).show()
+            }
         }
 
         viewModel.messages.observe(viewLifecycleOwner) { messages ->
-            binding.chatLinearLayout.removeAllViews()
-            messages.forEach { message ->
-                addMessageToChatView(message.first, message.second)
+            messages.forEach { pair ->
+                addMessageToChatView(pair.first, pair.second)
             }
         }
     }
 
-    private fun sendMessage() {
-        val orderId = args.orderId
-        val message = binding.chatInput.text.toString()
-        if (message.isNotBlank()) {
-            val user = FirebaseAuth.getInstance().currentUser
-            val userId = user?.uid
+    private fun addMessageToChatView(message: String, senderId: String) {
+        val userId = viewModel.getUserId()
+        val restoId = viewModel.restoId
 
-            if (userId != null) {
-                viewModel.sendMessage(userId, orderId, message)
-                addMessageToChatView(message, true)
-                binding.chatInput.text.clear()
-                Toast.makeText(requireContext(), "Message sent", Toast.LENGTH_SHORT).show()
+        val layoutId = when (senderId) {
+            userId -> {
+                R.layout.customer_chat
+            }
+            restoId -> {
+                R.layout.resto_chat
+            }
+            else -> {
+                R.layout.customer_chat
             }
         }
-    }
 
-    private fun addMessageToChatView(message: String, isSent: Boolean) {
-        val layoutId = if (isSent) R.layout.customer_chat else R.layout.resto_chat
         val textView = LayoutInflater.from(requireContext())
             .inflate(layoutId, binding.chatLinearLayout, false) as TextView
         textView.text = message
         binding.chatLinearLayout.addView(textView)
-        chatViews.add(textView)
-    }
-
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        viewModel.removeListener()
     }
 }

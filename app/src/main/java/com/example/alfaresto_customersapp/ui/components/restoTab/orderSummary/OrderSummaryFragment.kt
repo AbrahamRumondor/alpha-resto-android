@@ -133,14 +133,13 @@ class OrderSummaryFragment : Fragment() {
             }
 
             override fun onCheckoutButtonClicked() {
-                val orderId = orderSummaryViewModel.getOrderDocumentId()
-                Log.d("OrderSummaryFragment", "orderId: $orderId")
-                orderSummaryViewModel.saveOrderInDatabase { orderId ->
+                orderSummaryViewModel.saveOrderInDatabase { _, orderId ->
                     Toast.makeText(requireContext(), "Order ID: $orderId", Toast.LENGTH_LONG).show()
-                }
+                    Log.d("OrderSummaryFragment", "Order ID: $orderId")
                     val action = OrderSummaryFragmentDirections.actionOrderSummaryFragmentToTrackOrderFragment(orderId)
                     Navigation.findNavController(binding.root).navigate(action)
                 }
+            }
         })
     }
 

@@ -39,7 +39,6 @@ class TrackOrderFragment : Fragment() {
     private val trackOrderViewModel: TrackOrderViewModel by viewModels()
     private lateinit var map: GoogleMap
     private var polylines: Polyline? = null
-    private val args: TrackOrderFragmentArgs by navArgs()
     private var driverMarker: Marker? = null
     private var myMarker: Marker? = null
 
@@ -54,11 +53,13 @@ class TrackOrderFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val args: TrackOrderFragmentArgs by navArgs()
         val orderId = args.orderId
+
         binding.run {
             trackOrderViewModel.order.observe(viewLifecycleOwner) { orderList ->
 
-                Log.d("test", orderId)
+                Log.d("test", "orderid: $orderId")
 
                 val order = orderList.find { it.id == orderId }
 
