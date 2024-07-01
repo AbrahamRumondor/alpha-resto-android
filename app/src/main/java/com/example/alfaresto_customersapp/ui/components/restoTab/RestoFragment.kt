@@ -124,6 +124,17 @@ class RestoFragment : Fragment() {
                 .navigate(R.id.action_resto_fragment_menu_to_detail_fragment)
         }
 
+        adapter.setItemClickListener { menu ->
+            val action = RestoFragmentDirections.actionRestoFragmentMenuToDetailFragment(
+                menuId = menu.id,
+                name = menu.name,
+                price = menu.price,
+                description = menu.description,
+                image = menu.image
+            )
+            Navigation.findNavController(requireView()).navigate(action)
+        }
+
     }
 
     private fun setRestoAdapterButtons(cart: List<CartEntity>?) {

@@ -8,11 +8,12 @@ import com.example.alfaresto_customersapp.ui.components.listener.MenuListener
 
 class ListAllMenuAdapter : PagingDataAdapter<Menu, ListAllMenuViewHolder>(MenuComparator) {
     private var menuListener: MenuListener? = null
+    private var itemClickListener: ((Menu) -> Unit)? = null
 
     override fun onBindViewHolder(holder: ListAllMenuViewHolder, position: Int) {
         val item = getItem(position)
         if (item != null) {
-            holder.bind(item, position, menuListener)
+            holder.bind(item, position, menuListener, itemClickListener)
         }
     }
 
@@ -34,5 +35,9 @@ class ListAllMenuAdapter : PagingDataAdapter<Menu, ListAllMenuViewHolder>(MenuCo
 
     fun setItemListener(menuListener: MenuListener) {
         this.menuListener = menuListener
+    }
+
+    fun setItemClickListener(listener: (Menu) -> Unit) {
+        itemClickListener = listener
     }
 }

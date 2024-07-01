@@ -1,6 +1,5 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,12 @@ class ListAllMenuViewHolder(
     private var binding: AllMenuItemBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(menu: Menu, position: Int, listener: MenuListener?) {
+    fun bind(
+        menu: Menu,
+        position: Int,
+        listener: MenuListener?,
+        itemClickListener: ((Menu) -> Unit)?
+    ) {
         binding.run {
             tvMenuName.text = menu.name
             tvMenuPrice.text = menu.price.toString()
@@ -32,18 +36,22 @@ class ListAllMenuViewHolder(
             btnMenuAdd.visibility = if (isVisible) View.INVISIBLE else View.VISIBLE
 
             val clickListener = View.OnClickListener { view ->
-                Log.d("ListAllMenuViewHolder", "bind: $view")
                 when (view) {
                     btnMenuAdd, btnAddOrder ->
                         listener?.onAddItemClicked(
-                        position,
-                        menuId = menu.id
-                    )
+                            position,
+                            menuId = menu.id
+                        )
 
                     btnDecreaseOrder -> listener?.onDecreaseItemClicked(position, menuId = menu.id)
+
+                    else -> {
+                        itemClickListener?.invoke(menu)
+                    }
                 }
             }
 
+            root.setOnClickListener(clickListener)
             btnMenuAdd.setOnClickListener(clickListener)
             btnAddOrder.setOnClickListener(clickListener)
             btnDecreaseOrder.setOnClickListener(clickListener)

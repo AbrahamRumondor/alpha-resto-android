@@ -1,7 +1,6 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu
 
 import android.util.Log
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig

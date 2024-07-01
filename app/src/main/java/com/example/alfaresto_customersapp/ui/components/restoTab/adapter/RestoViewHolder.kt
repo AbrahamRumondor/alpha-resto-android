@@ -13,7 +13,7 @@ class RestoViewHolder(
     private var binding: MenuItemBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(menu: Menu, position: Int, listener: MenuListener?) {
+    fun bind(menu: Menu, position: Int, listener: MenuListener?, itemClickListener: ((Menu) -> Unit)?) {
         binding.run {
             tvMenuName.text = menu.name
             tvMenuPrice.text = menu.price.toString()
@@ -38,8 +38,14 @@ class RestoViewHolder(
                     )
 
                     btnDecreaseOrder -> listener?.onDecreaseItemClicked(position, menuId = menu.id)
+
+                    else -> {
+                        itemClickListener?.invoke(menu)
+                    }
                 }
             }
+
+            root.setOnClickListener(clickListener)
             btnMenuAdd.setOnClickListener(clickListener)
             btnAddOrder.setOnClickListener(clickListener)
             btnDecreaseOrder.setOnClickListener(clickListener)
