@@ -14,7 +14,8 @@
     <dimen name="dimen_50dp">50dp</dimen>
     <dimen name="dimen_250dp">250dp</dimen>
     <dimen name="dimen_500dp">500dp</dimen>
-    <dimen name="dimen_font24">24sp</dimen>
+
+
     <dimen name="dimen_20">20dp</dimen>
     <dimen name="dimen_110">110dp</dimen>
     <dimen name="dimen_24">24sp</dimen>
@@ -44,4 +45,5 @@
     <dimen name="dimen_300">300dp</dimen>
     <dimen name="dimen_250">250dp</dimen>
     <dimen name="dimen_500">500dp</dimen>
+    <dimen name="dimen_55">55dp</dimen>
 </resources>

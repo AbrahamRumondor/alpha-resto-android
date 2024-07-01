@@ -104,7 +104,6 @@ class TrackOrderFragment : Fragment() {
 
         SHIPMENT_STATUS = "On Process"
 
-
         val orderId = args.orderId
         binding.run {
 
@@ -134,6 +133,7 @@ class TrackOrderFragment : Fragment() {
 
                     tvAddressDetail.text = myOrder.fullAddress
 
+//                    mvTrack.onCreate(savedInstanceState)
                     mvTrack.getMapAsync {
                         map = it
                         setMapIdleListener()

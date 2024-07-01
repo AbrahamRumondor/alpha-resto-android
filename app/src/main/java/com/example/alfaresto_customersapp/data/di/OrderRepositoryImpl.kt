@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.alfaresto_customersapp.data.model.OrderItemResponse
 import com.example.alfaresto_customersapp.data.model.OrderResponse
 import com.example.alfaresto_customersapp.domain.model.Order
+import com.example.alfaresto_customersapp.domain.model.OrderItem
 import com.example.alfaresto_customersapp.domain.repository.OrderRepository
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -116,5 +117,35 @@ class OrderRepositoryImpl @Inject constructor(
                 )
             }
             .addOnFailureListener { Log.d("TEST", "ERROR ON ORDER ITEM INSERTION") }
+    }
+
+    override suspend fun getOrderByID(orderId: String): Order? {
+        return try {
+            val snapshot = ordersRef.document(orderId).get().await()
+            val order = snapshot.toObject(OrderResponse::class.java)?.let { OrderResponse.transform(it) }
+
+            order
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    override suspend fun getOrderItems(orderId: String): StateFlow<List<OrderItem>> {
+        val orderItems = MutableStateFlow<List<OrderItem>>(emptyList())
+
+        try {
+            val snapshot = ordersRef.document(orderId).collection("order_items").get().await()
+            val orderItemList = snapshot.toObjects(OrderItemResponse::class.java)
+            orderItems.value = orderItemList.map { OrderItemResponse.transform(it) }
+
+            orderItems.value.map {
+                Log.d("test", it.toString())
+            }
+        } catch (e: Exception) {
+            orderItems.value = emptyList()
+        }
+
+        Log.d("orderhistory repo", "Order Items: ${orderItems.value}")
+        return orderItems
     }
 }

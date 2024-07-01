@@ -58,9 +58,10 @@
     <string name="menuimage">menuImage</string>
     <string name="cartlogo">cartLogo</string>
     <string name="list_all_menu">List All Menu</string>
+    <string name="_0">0</string>
     <string name="add_to_menu">Add to Menu</string>
     <string name="greetings">Hi, %1$s</string>
-    <string name="_0">0"</string>
+    <string name="phone_number">Phone number</string>
     <string name="alfaresto">AlfaResto</string>
     <string name="menu_image">menu image</string>
     <string name="logo">logo</string>

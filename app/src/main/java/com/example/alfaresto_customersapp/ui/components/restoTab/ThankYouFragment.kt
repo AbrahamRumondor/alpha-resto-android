@@ -1,17 +1,15 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.example.alfaresto_customersapp.R
-import com.example.alfaresto_customersapp.databinding.FragmentRestoBinding
 import com.example.alfaresto_customersapp.databinding.FragmentThankYouBinding
-import com.example.alfaresto_customersapp.databinding.FragmentTrackOrderBinding
-import com.example.alfaresto_customersapp.ui.components.trackOrder.TrackOrderFragmentArgs
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -40,6 +38,8 @@ class ThankYouFragment : Fragment() {
             tvOrderBody.apply {
                 text = if (checkoutStatus) "Please wait for your order" else ""
             }
+
+            Log.d("ThankYouFragment", "Checkout Status: $checkoutStatus")
 
             btnProceed.setOnClickListener {
                 Navigation.findNavController(view)

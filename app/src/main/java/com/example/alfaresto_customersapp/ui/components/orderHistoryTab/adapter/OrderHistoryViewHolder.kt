@@ -1,5 +1,6 @@
 package com.example.alfaresto_customersapp.ui.components.orderHistoryTab.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -32,6 +33,7 @@ class OrderHistoryViewHolder(
             tvOrderAddress.text = order.addressLabel
 
             clOrderHistoryItem.setOnClickListener {
+                Log.d("OrderHistoryViewHolder", "Order ID: ${order.id}")
                 listener?.onOrderClicked(order)
             }
 

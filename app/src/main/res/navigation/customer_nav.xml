@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--suppress NavigationFile -->
+<?xml version="1.0" encoding="utf-8"?><!--suppress NavigationFile -->
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -36,6 +35,22 @@
         <action
             android:id="@+id/action_order_history_fragment_to_track_order_fragment"
             app:destination="@id/track_order_fragment" />
+        <action
+            android:id="@+id/action_order_history_fragment_to_orderHistoryDetailFragment"
+            app:destination="@id/order_history_detail_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/order_history_detail_fragment"
+        android:name="com.example.alfaresto_customersapp.ui.components.orderHistoryDetailPage.OrderHistoryDetailFragment"
+        android:label="fragment_order_history_detail"
+        tools:layout="@layout/order_history_detail">
+        <argument
+            android:name="orderId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_order_history_detail_fragment_to_order_history_fragment"
+            app:destination="@id/order_history_fragment" />
     </fragment>
 
     <fragment
@@ -176,7 +191,7 @@
         android:id="@+id/thank_you_fragment"
         android:name="com.example.alfaresto_customersapp.ui.components.restoTab.ThankYouFragment"
         android:label="fragment_thank_you"
-        tools:layout="@layout/fragment_thank_you" >
+        tools:layout="@layout/fragment_thank_you">
         <argument
             android:name="checkoutStatus"
             app:argType="boolean" />

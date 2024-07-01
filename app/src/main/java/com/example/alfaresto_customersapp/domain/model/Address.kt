@@ -1,6 +1,5 @@
 package com.example.alfaresto_customersapp.domain.model
 
-
 data class Address(
     var id: String = "",
     val label: String = "",

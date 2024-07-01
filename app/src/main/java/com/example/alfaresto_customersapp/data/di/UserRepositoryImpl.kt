@@ -1,8 +1,6 @@
 package com.example.alfaresto_customersapp.data.di
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.alfaresto_customersapp.data.model.AddressResponse
 import com.example.alfaresto_customersapp.data.model.UserResponse
 import com.example.alfaresto_customersapp.domain.model.Address
@@ -21,22 +19,24 @@ class UserRepositoryImpl @Inject constructor(
     @Named("usersRef") private val usersRef: CollectionReference
 ) : UserRepository {
 
-    private val _currentUser = MutableLiveData<User>()
-    private val currentUser: LiveData<User> = _currentUser
+    private val _currentUser = MutableStateFlow<User>(User())
+    private val currentUser: StateFlow<User> = _currentUser
 
     private val _addresses = MutableStateFlow<List<Address>>(emptyList())
     private val addresses: StateFlow<List<Address>> = _addresses
 
-    override suspend fun getCurrentUser(uid: String): LiveData<User> {
+    override suspend fun getCurrentUser(uid: String): StateFlow<User> {
         try {
             val snapshot = usersRef.get().await()
             val user = snapshot.toObjects(UserResponse::class.java)
                 .find { it.id == uid }
+                ?.let { UserResponse.transform(it) }
 
-            _currentUser.value = user?.let { UserResponse.transform(it) }
+            if (user != null) {
+                _currentUser.value = user
+            }
         } catch (e: Exception) {
             _currentUser.value = User()
-
             Log.e("UserRepositoryImpl", "Error fetching user", e)
         }
 
