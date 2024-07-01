@@ -53,7 +53,6 @@ class OrderHistoryFragment : Fragment() {
                 }
 
                 adapter.submitList(orderHistories)
-//                adapter.notifyItemRangeChanged(0,orderHistories.size)
                 binding.rvOrderHistory.layoutManager =
                     LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
                 setOnOrderClickListener()
