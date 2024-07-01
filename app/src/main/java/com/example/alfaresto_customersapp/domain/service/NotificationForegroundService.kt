@@ -111,7 +111,7 @@ class NotificationForegroundService : Service() {
                     )
                     customView?.setTextViewText(
                         R.id.notification_text,
-                        "Track your order progress here!"
+                        getText(R.string.on_delivery)
                     )
                     customView?.setImageViewResource(
                         R.id.v_line_three,
@@ -144,7 +144,7 @@ class NotificationForegroundService : Service() {
                     )
                     customView?.setTextViewText(
                         R.id.notification_text,
-                        "Track your order progress here!"
+                        getText(R.string.delivered)
                     )
                 }
 
@@ -167,7 +167,8 @@ class NotificationForegroundService : Service() {
                     )
                     customView?.setTextViewText(
                         R.id.notification_text,
-                        "Track your order progress here!"
+                        getText(R.string.on_process)
+
                     )
                 }
             }

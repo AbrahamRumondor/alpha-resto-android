@@ -14,7 +14,12 @@ data class ShipmentResponse(
 
     @get:PropertyName("status_delivery")
     @set:PropertyName("status_delivery")
-    var statusDelivery: String = ""
+    var statusDelivery: String = "",
+
+
+    @get:PropertyName("is_already_notify_when_50_m")
+    @set:PropertyName("is_already_notify_when_50_m")
+    var alreadyNotify: Boolean = false
 ) {
     // Public no-argument constructor required by Firestore
     constructor() : this("", "", "")
