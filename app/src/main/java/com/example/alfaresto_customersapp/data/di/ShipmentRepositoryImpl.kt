@@ -32,13 +32,20 @@ class ShipmentRepositoryImpl @Inject constructor(
     private var listenerRegistration: ListenerRegistration? = null
 
     override suspend fun getShipments(): LiveData<List<Shipment>> {
-        try {
-            val snapshot = shipmentsRef.get().await()
-            val shipmentList = snapshot.toObjects(ShipmentResponse::class.java)
-                .map { ShipmentResponse.transform(it) }
-            _shipments.value = shipmentList
-        } catch (e: Exception) {
-            _shipments.value = emptyList()
+        shipmentsRef.addSnapshotListener { snapshot, error ->
+            if (error != null) {
+                Log.e("Firestore", "Error fetching documents: $error")
+                _shipments.value = emptyList()
+                return@addSnapshotListener
+            }
+
+            if (snapshot != null) {
+                val shipmentList = snapshot.toObjects(ShipmentResponse::class.java)
+                    .map { ShipmentResponse.transform(it) }
+                _shipments.value = shipmentList
+            } else {
+                _shipments.value = emptyList()
+            }
         }
         return shipments
     }
