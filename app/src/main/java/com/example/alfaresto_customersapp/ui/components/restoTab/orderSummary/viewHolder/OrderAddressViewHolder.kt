@@ -19,7 +19,7 @@ class OrderAddressViewHolder(
                 tvAddressLocation.text = address.address
             } else {
                 val noAddressLabel = "Please choose an address"
-                val noAddressDesc = "we need you address to be able to perform transaction"
+                val noAddressDesc = "We need you address to be able to \nperform transaction"
                 tvAddressLabel.text = noAddressLabel
                 tvAddressLocation.text = noAddressDesc
             }

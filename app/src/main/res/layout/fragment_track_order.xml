@@ -8,261 +8,266 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/buttonLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="30dp"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="15dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+<!--        <androidx.cardview.widget.CardView-->
+<!--            android:id="@+id/buttonLayout"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:layout_marginStart="30dp"-->
+<!--            android:layout_marginTop="30dp"-->
+<!--            app:cardBackgroundColor="@color/white"-->
+<!--            app:cardCornerRadius="15dp"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent">-->
 
-        <ImageButton
-            android:id="@+id/btn_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="7dp"
-            android:layout_marginStart="20dp"
-            android:background="@android:color/transparent"
-            android:paddingVertical="4dp"
-            android:paddingStart="10dp"
-            android:src="@drawable/ic_back"
-            tools:ignore="ContentDescription,RtlSymmetry" />
+<!--            <ImageButton-->
+<!--                android:id="@+id/btn_back"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="7dp"-->
+<!--                android:layout_marginStart="20dp"-->
+<!--                android:background="@android:color/transparent"-->
+<!--                android:paddingVertical="4dp"-->
+<!--                android:paddingStart="10dp"-->
+<!--                android:src="@drawable/ic_back"-->
+<!--                tools:ignore="ContentDescription,RtlSymmetry" />-->
 
-    </androidx.cardview.widget.CardView>
+<!--        </androidx.cardview.widget.CardView>-->
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:fontFamily="@font/bold"
-        android:text="@string/track_order"
-        android:textColor="@color/black"
-        android:textSize="28sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.35"
-        app:layout_constraintStart_toEndOf="@+id/buttonLayout"
-        app:layout_constraintTop_toTopOf="parent" />
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="32dp"-->
+<!--            android:fontFamily="@font/bold"-->
+<!--            android:text="@string/track_order"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:textSize="28sp"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintHorizontal_bias="0.35"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/buttonLayout"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/mapCard"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginHorizontal="@dimen/dimen_15"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonLayout">
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.cardview.widget.CardView
+            android:id="@+id/mapCard"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/dimen_45"
+            android:layout_marginTop="20dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
-            <com.google.android.gms.maps.MapView
-                android:id="@+id/mv_track"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                app:layout_constraintDimensionRatio="H,1:1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_gravity="center" />
+                android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/iv_focus"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:scaleType="centerCrop"
-                app:layout_constraintBottom_toBottomOf="@id/mv_track"
-                android:src="@drawable/ic_focus_location"
-                android:layout_margin="10dp"
-                android:contentDescription="@string/focus_button" />
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_gravity="bottom"
-                app:cardBackgroundColor="@color/white"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/mv_track">
-
-                <LinearLayout
-                    android:id="@+id/orderStatusLayout"
+                <com.google.android.gms.maps.MapView
+                    android:id="@+id/mv_track"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginHorizontal="20dp"
-                    android:orientation="horizontal">
+                    android:layout_height="0dp"
+                    android:layout_gravity="center"
+                    app:layout_constraintDimensionRatio="H,1:1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/iv_focus"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="10dp"
+                    android:contentDescription="@string/focus_button"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_focus_location"
+                    app:layout_constraintBottom_toBottomOf="@id/mv_track"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_gravity="bottom"
+                    app:cardBackgroundColor="@color/white"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/mv_track">
 
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:id="@+id/orderStatusLayout"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/orderStatus"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:fontFamily="@font/regular"
-                            android:text="@string/order_status"
-                            android:textColor="@color/black"
-                            android:textSize="20sp" />
-
-                        <TextView
-                            android:id="@+id/tv_order_status_body"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/regular"
-                            android:textStyle="bold"
-                            android:text="@string/apa"
-                            android:textColor="@color/black"
-                            android:textSize="20sp" />
-                    </LinearLayout>
-
-                    <androidx.appcompat.widget.AppCompatImageButton
-                        android:id="@+id/btn_chat"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
                         android:layout_gravity="center_vertical"
-                        android:background="@drawable/chat_button"
-                        android:src="@drawable/ic_chat"
-                        tools:ignore="ContentDescription" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                        android:layout_marginHorizontal="20dp"
+                        android:orientation="horizontal">
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
 
-    </androidx.cardview.widget.CardView>
+                            <TextView
+                                android:id="@+id/orderStatus"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:fontFamily="@font/regular"
+                                android:text="@string/order_status"
+                                android:textColor="@color/black"
+                                android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/orderIDTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginTop="20dp"
-        android:fontFamily="@font/regular"
-        android:text="@string/order_id_1234567890"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toStartOf="@id/buttonLayout"
-        app:layout_constraintTop_toBottomOf="@+id/mapCard" />
+                            <TextView
+                                android:id="@+id/tv_order_status_body"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/regular"
+                                android:text="@string/apa"
+                                android:textColor="@color/black"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/deliveryInLayout"
-        android:layout_width="0dp"
-        android:layout_marginEnd="@dimen/dimen_20"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="@id/mapCard"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toStartOf="@id/orderIDTextView"
-        app:layout_constraintTop_toBottomOf="@id/orderIDTextView">
+                        <androidx.appcompat.widget.AppCompatImageButton
+                            android:id="@+id/btn_chat"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_gravity="center_vertical"
+                            android:background="@drawable/chat_button"
+                            android:src="@drawable/ic_chat"
+                            tools:ignore="ContentDescription" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
 
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="10dp"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_time"
-            tools:ignore="ContentDescription" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/orderIDTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/dimen_10"
+            android:layout_marginTop="@dimen/dimen_20"
+            android:fontFamily="@font/regular"
+            android:text="@string/order_id_1234567890"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_18"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@id/toolbar"
+            app:layout_constraintTop_toBottomOf="@+id/mapCard" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:id="@+id/deliveryInLayout"
+            android:layout_width="@dimen/dimen_none"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:orientation="vertical"
-            android:padding="15dp">
+            android:layout_marginStart="@dimen/dimen_20"
+            android:layout_marginTop="@dimen/dimen_20"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="@id/mapCard"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@id/orderIDTextView"
+            app:layout_constraintTop_toBottomOf="@id/orderIDTextView">
 
-            <TextView
+            <ImageView
+                android:layout_width="@dimen/dimen_30"
+                android:layout_height="@dimen/dimen_30"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="@dimen/dimen_10"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_time"
+                tools:ignore="ContentDescription" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/regular"
-                android:text="@string/delivery_in"
-                android:textAlignment="textStart"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                tools:ignore="RtlSymmetry" />
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical"
+                android:padding="@dimen/dimen_15">
 
-            <TextView
-                android:id="@+id/tv_estimated_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/bold"
-                android:text="@string/strip"
-                android:textAlignment="textStart"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                tools:ignore="RtlSymmetry" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/regular"
+                    android:text="@string/delivery_in"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    tools:ignore="RtlSymmetry" />
+
+                <TextView
+                    android:id="@+id/tv_estimated_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/bold"
+                    android:text="@string/strip"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    tools:ignore="RtlSymmetry" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="@+id/deliveryInLayout"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/deliveryInLayout"
-        app:layout_constraintTop_toBottomOf="@+id/deliveryInLayout">
-
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="10dp"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_place"
-            tools:ignore="ContentDescription" />
-
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:orientation="vertical"
-            android:padding="15dp">
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="@+id/deliveryInLayout"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/deliveryInLayout"
+            app:layout_constraintTop_toBottomOf="@+id/deliveryInLayout">
 
-            <TextView
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="10dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_place"
+                tools:ignore="ContentDescription" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/regular"
-                android:text="@string/delivery_address"
-                android:textAlignment="textStart"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                tools:ignore="RtlSymmetry" />
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical"
+                android:padding="15dp">
 
-            <TextView
-                android:id="@+id/tv_address_detail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/bold"
-                android:text="@string/address"
-                android:textAlignment="textStart"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                tools:ignore="RtlSymmetry" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/regular"
+                    android:text="@string/delivery_address"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    tools:ignore="RtlSymmetry" />
+
+                <TextView
+                    android:id="@+id/tv_address_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/bold"
+                    android:text="@string/address"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    tools:ignore="RtlSymmetry" />
+
+            </LinearLayout>
 
         </LinearLayout>
-
-    </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

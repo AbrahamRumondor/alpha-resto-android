@@ -1,7 +1,6 @@
 package com.example.alfaresto_customersapp.ui.components.orderHistoryDetailPage
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,9 +10,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.OrderHistoryDetailBinding
 import com.example.alfaresto_customersapp.ui.components.orderHistoryDetailPage.adapter.OrderHistoryDetailItemsAdapter
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -44,6 +43,14 @@ class OrderHistoryDetailFragment : Fragment() {
     }
 
     private fun setupView() {
+        binding.toolbar.apply {
+            btnLogout.visibility = View.GONE
+            btnBack.visibility = View.VISIBLE
+            tvToolbarTitle.visibility = View.GONE
+            tvToolbarText.visibility = View.VISIBLE
+            tvToolbarText.text = getString(R.string.order_detail)
+        }
+
         binding.rvOrderItems.let {
             it.layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -52,7 +59,7 @@ class OrderHistoryDetailFragment : Fragment() {
     }
 
     private fun setupBackBtn() {
-        binding.backButton.setOnClickListener {
+        binding.toolbar.btnBack.setOnClickListener {
             findNavController().popBackStack()
         }
     }
@@ -65,7 +72,6 @@ class OrderHistoryDetailFragment : Fragment() {
                     tvOrderDate.text = orderHistory.orderDate
                     tvTotalPrice.text = String.format("Rp %,d", orderHistory.orderTotalPrice)
                     tvUserAddress.text = orderHistory.addressLabel
-                    tvOrderStatus.text = orderHistory.orderStatus.toString()
                 }
 
                 viewModel.fetchOrderItems(orderHistory.orderId)

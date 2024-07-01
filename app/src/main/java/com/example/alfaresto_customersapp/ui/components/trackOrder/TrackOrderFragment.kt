@@ -1,18 +1,12 @@
 package com.example.alfaresto_customersapp.ui.components.trackOrder
 
 import android.Manifest
-import android.app.Notification
 import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.ColorFilter
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -21,12 +15,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.RelativeLayout
 import android.widget.RemoteViews
-import android.widget.RemoteViews.RemoteView
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
@@ -37,7 +26,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.alfaresto_customersapp.R
@@ -46,10 +34,6 @@ import com.example.alfaresto_customersapp.databinding.BsdLocationPermissionBindi
 import com.example.alfaresto_customersapp.databinding.FragmentTrackOrderBinding
 import com.example.alfaresto_customersapp.domain.error.OsrmCallback
 import com.example.alfaresto_customersapp.domain.error.RealtimeLocationCallback
-import com.example.alfaresto_customersapp.ui.components.restoTab.RestoFragmentDirections
-import com.example.alfaresto_customersapp.domain.error.TrackDistanceCallback
-import com.example.alfaresto_customersapp.domain.model.Shipment
-import com.example.alfaresto_customersapp.domain.service.NotificationForegroundService
 import com.example.alfaresto_customersapp.ui.components.restoTab.address.addNewAddress.AddNewAddressFragment.Companion.markersHeight
 import com.example.alfaresto_customersapp.ui.components.restoTab.address.addNewAddress.AddNewAddressFragment.Companion.markersWidth
 import com.example.alfaresto_customersapp.utils.user.UserConstants.SHIPMENT_STATUS
@@ -64,7 +48,6 @@ import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.maps.android.PolyUtil
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class TrackOrderFragment : Fragment() {
@@ -104,10 +87,18 @@ class TrackOrderFragment : Fragment() {
 
         SHIPMENT_STATUS = "On Process"
 
+        binding.toolbar.apply {
+            btnLogout.visibility = View.GONE
+            btnBack.visibility = View.VISIBLE
+            tvToolbarTitle.visibility = View.GONE
+            tvToolbarText.visibility = View.VISIBLE
+            tvToolbarText.text = getString(R.string.track_order)
+        }
+
         val orderId = args.orderId
         binding.run {
 
-            btnBack.setOnClickListener {
+            toolbar.btnBack.setOnClickListener {
                 findNavController().popBackStack()
             }
 

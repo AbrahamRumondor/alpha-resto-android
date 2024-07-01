@@ -14,7 +14,7 @@
         <FrameLayout
             android:id="@+id/fl_map"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="350dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -22,7 +22,7 @@
             <com.google.android.gms.maps.MapView
                 android:id="@+id/mv_map"
                 android:layout_width="match_parent"
-                android:layout_height="400dp"
+                android:layout_height="match_parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -47,9 +47,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="@dimen/dimen_20"
             android:text="@string/address_label"
-            android:textColor="@color/dark_gray"
+            android:fontFamily="@font/semibold"
+            android:textColor="@color/mainblack"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fl_map" />
@@ -57,7 +58,7 @@
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/et_address_label"
             android:layout_width="match_parent"
-            android:layout_height="60sp"
+            android:layout_height="@dimen/dimen_50"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/edit_text_border"
@@ -70,9 +71,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="@dimen/dimen_20"
+            android:fontFamily="@font/semibold"
             android:text="@string/address_detail"
-            android:textColor="@color/dark_gray"
+            android:textColor="@color/mainblack"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/et_address_label" />
@@ -80,7 +82,7 @@
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/et_address_detail"
             android:layout_width="match_parent"
-            android:layout_height="60sp"
+            android:layout_height="@dimen/dimen_50"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/edit_text_border"
@@ -90,16 +92,16 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_save_address"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_width="@dimen/dimen_150"
+            android:layout_height="wrap_content"
             android:layout_marginHorizontal="60dp"
             android:layout_marginVertical="50dp"
-            android:background="@drawable/button_radius"
-            android:backgroundTint="@color/button_light_orange"
+            android:background="@drawable/add_button"
             android:text="@string/save"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="17sp"
+            android:fontFamily="@font/bold"
+            android:textSize="@dimen/font_18"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/et_address_detail" />
