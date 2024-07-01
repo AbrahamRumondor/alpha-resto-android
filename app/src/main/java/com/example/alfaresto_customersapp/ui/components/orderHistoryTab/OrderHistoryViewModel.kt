@@ -23,14 +23,18 @@ class OrderHistoryViewModel @Inject constructor(
         fetchOrderHistories()
     }
 
+    fun setLoadingTrue() {
+        setLoading(true)
+    }
+
     private fun fetchOrderHistories() {
         viewModelScope.launch {
-            orderHistoryUseCase.getOrderHistories().observeForever { orderHistories ->
-                setLoading(true)
+            orderHistoryUseCase.getOrderHistories { orderHistories ->
+                Log.d("orderhistoryvm", orderHistories.toString())
                 if (orderHistories.isEmpty()) {
                     Log.d("OrderHistory viewmodel", "Order histories is empty, waiting for data...")
                     setLoading(false)
-                    return@observeForever
+                    return@getOrderHistories
                 }
 
                 _orderHistories.value = orderHistories
