@@ -46,7 +46,7 @@ class OrderHistoryUseCaseImpl @Inject constructor(
 
             // Filter orders and shipments based on user ID and order IDs
             val myOrders = orders.filter { it.userName == user.value?.name }
-            shipmentRepository.getShipments().collect { shipments ->
+            shipmentRepository.getShipments().observeForever { shipments ->
                 val myShipments = shipments.filter { shipment ->
                     myOrders.any { it.id == shipment.orderID }
                 }
@@ -85,7 +85,7 @@ class OrderHistoryUseCaseImpl @Inject constructor(
 
     private suspend fun fetchShipments(): List<Shipment> {
         return try {
-            shipmentRepository.getShipments().value
+            shipmentRepository.getShipments().value ?: emptyList()
         } catch (e: Exception) {
             emptyList()
         }

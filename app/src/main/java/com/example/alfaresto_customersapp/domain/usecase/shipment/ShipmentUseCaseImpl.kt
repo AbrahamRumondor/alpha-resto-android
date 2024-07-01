@@ -10,7 +10,7 @@ class ShipmentUseCaseImpl @Inject constructor(
     private val shipmentRepository: ShipmentRepository
 ) : ShipmentUseCase {
 
-    override suspend fun getShipments(): StateFlow<List<Shipment>> {
+    override suspend fun getShipments(): LiveData<List<Shipment>> {
         return shipmentRepository.getShipments()
     }
 

@@ -44,29 +44,30 @@ class OrderRepositoryImpl @Inject constructor(
     }
 
     override fun fetchOrders(): StateFlow<List<Order>> {
-        val mutableStateFlow = MutableStateFlow<List<Order>>(emptyList())
-
         ordersRef.addSnapshotListener { snapshots, error ->
             if (error != null) {
                 Log.e("OrderHistory orderrepoimpl", "Error fetching orders", error)
-                mutableStateFlow.value = emptyList()
+                _orders.value = emptyList()
                 return@addSnapshotListener
             }
 
-            val orders = mutableListOf<Order>()
-            snapshots?.forEach { doc ->
-                if (doc.exists()) {
-                    val orderResponse = doc.toObject(OrderResponse::class.java)
-                    orders.add(OrderResponse.transform(orderResponse))
+            val orderList = mutableListOf<Order>()
+            if (snapshots != null) {
+                for (doc in snapshots) {
+                    if (doc.exists()) {
+                        val orderResponse = doc.toObject(OrderResponse::class.java)
+                        orderList.add(OrderResponse.transform(orderResponse))
+                    }
                 }
             }
-            mutableStateFlow.value = orders
+            if (currentSize != orderList.size) {
+                _orderList.value = orderList
+                currentSize = orderList.size
+            }
 
-            Log.d("testy", mutableStateFlow.value.toString())
         }
-
-        Log.d("testz", mutableStateFlow.value.toString())
-        return mutableStateFlow
+        Log.d("test", orderList.value.toString())
+        return orderList
     }
     override suspend fun getMyOrders(userName: String): StateFlow<List<Order>> {
         try {

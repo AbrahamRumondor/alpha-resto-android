@@ -23,15 +23,15 @@ class ShipmentRepositoryImpl @Inject constructor(
     private val context: Context
 ) : ShipmentRepository {
 
-    private val _shipments = MutableStateFlow<List<Shipment>>(emptyList())
-    private val shipments: StateFlow<List<Shipment>> = _shipments
+    private val _shipments = MutableLiveData<List<Shipment>>(emptyList())
+    private val shipments: LiveData<List<Shipment>> = _shipments
 
     private val _shipment = MutableLiveData(Shipment().copy(statusDelivery = "On Process"))
     private val shipment: LiveData<Shipment?> = _shipment
 
     private var listenerRegistration: ListenerRegistration? = null
 
-    override suspend fun getShipments(): StateFlow<List<Shipment>> {
+    override suspend fun getShipments(): LiveData<List<Shipment>> {
         shipmentsRef.addSnapshotListener { snapshot, error ->
             if (error != null) {
                 Log.e("Firestore", "Error fetching documents: $error")
@@ -106,7 +106,7 @@ class ShipmentRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getShipmentByOrderId(orderId: String): Shipment? {
-        val myShipment = getShipments().value.find { it.orderID == orderId }
+        val myShipment = getShipments().value?.find { it.orderID == orderId }
 
         return myShipment
     }
