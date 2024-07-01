@@ -68,8 +68,8 @@ class OrderHistoryFragment : Fragment() {
     private fun setOnOrderClickListener(orderStatus: OrderStatus) {
         adapter.setItemListener(object : OrderHistoryListener {
             override fun onOrderClicked(orderHistory: OrderHistory) {
-                val action = if (orderStatus == OrderStatus.DELIVERED) {
-                    Log.d("OrderHistory", "Order ID: ${orderHistory.orderId}")
+                val action = if (orderHistory.orderStatus == OrderStatus.DELIVERED) {
+                    Log.d("OrderHistory", "Order ID: ${orderHistory.orderStatus}")
                     OrderHistoryFragmentDirections.actionOrderHistoryFragmentToOrderHistoryDetailFragment(
                         orderId = orderHistory.orderId
                     )
