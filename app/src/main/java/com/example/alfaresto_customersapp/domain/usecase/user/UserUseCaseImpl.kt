@@ -14,7 +14,7 @@ class UserUseCaseImpl @Inject constructor(
     private val authRepository: AuthRepository
 ) : UserUseCase {
 
-    override suspend fun getCurrentUser(): LiveData<User> {
+    override suspend fun getCurrentUser(): StateFlow<User> {
         Log.d("UserUseCaseImpl", "Current user ID: ${authRepository.getCurrentUserID()}")
         return userRepository.getCurrentUser(authRepository.getCurrentUserID())
     }

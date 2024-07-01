@@ -8,7 +8,7 @@ import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.flow.StateFlow
 
 interface UserRepository {
-    suspend fun getCurrentUser(uid: String): LiveData<User>
+    suspend fun getCurrentUser(uid: String): StateFlow<User>
     suspend fun getUserAddresses(uid: String): StateFlow<List<Address>>
     suspend fun getUserAddressById(uid: String, addressId: String): Address
     suspend fun makeNewAddress(uid: String, address: Address)

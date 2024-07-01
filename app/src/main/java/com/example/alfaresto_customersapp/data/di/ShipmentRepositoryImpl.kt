@@ -14,6 +14,8 @@ import com.example.alfaresto_customersapp.domain.service.NotificationForegroundS
 import com.example.alfaresto_customersapp.utils.user.UserConstants
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.ListenerRegistration
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import javax.inject.Named
@@ -23,15 +25,15 @@ class ShipmentRepositoryImpl @Inject constructor(
     private val context: Context
 ) : ShipmentRepository {
 
-    private val _shipments = MutableLiveData<List<Shipment>>(emptyList())
-    private val shipments: LiveData<List<Shipment>> = _shipments
+    private val _shipments = MutableStateFlow<List<Shipment>>(emptyList())
+    private val shipments: StateFlow<List<Shipment>> = _shipments
 
     private val _shipment = MutableLiveData(Shipment().copy(statusDelivery = "On Process"))
     private val shipment: LiveData<Shipment?> = _shipment
 
     private var listenerRegistration: ListenerRegistration? = null
 
-    override suspend fun getShipments(): LiveData<List<Shipment>> {
+    override suspend fun getShipments(): StateFlow<List<Shipment>> {
         try {
             val snapshot = shipmentsRef.get().await()
             val shipmentList = snapshot.toObjects(ShipmentResponse::class.java)
@@ -95,5 +97,9 @@ class ShipmentRepositoryImpl @Inject constructor(
         ContextCompat.startForegroundService(context, serviceIntent)
     }
 
+    override suspend fun getShipmentByOrderId(orderId: String): Shipment? {
+        val myShipment = getShipments().value.find { it.orderID == orderId }
 
+        return myShipment
+    }
 }

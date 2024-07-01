@@ -16,6 +16,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -35,13 +36,7 @@ class AddNewAddressViewModel @Inject constructor(
 
     private fun fetchCurrentUser() {
         viewModelScope.launch {
-            userUseCase.getCurrentUser().observeForever { user ->
-                if (user == null) {
-                    Log.d("TEST", "User is null, waiting for data...")
-                    // Optionally, you can show a loading state or handle the null case
-                    return@observeForever
-                }
-
+            userUseCase.getCurrentUser().collectLatest { user ->
                 Log.d("Resto viewmodel", "User: ${user.name}")
                 USER_ID = user.id
             }

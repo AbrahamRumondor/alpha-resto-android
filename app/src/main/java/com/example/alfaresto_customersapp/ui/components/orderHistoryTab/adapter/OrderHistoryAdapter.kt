@@ -1,16 +1,15 @@
 package com.example.alfaresto_customersapp.ui.components.orderHistoryTab.adapter
 
+import android.util.Log
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.example.alfaresto_customersapp.domain.model.OrderHistory
 import com.example.alfaresto_customersapp.ui.components.listener.OrderHistoryListener
 
-class OrderHistoryAdapter(
-    private val onItemClick: (OrderHistory) -> Unit
-) : ListAdapter<OrderHistory, OrderHistoryViewHolder>(diffUtil) {
+class OrderHistoryAdapter : ListAdapter<OrderHistory, OrderHistoryViewHolder>(diffUtil) {
 
-    private var orderHistoryListener: OrderHistoryListener? = null
+    private var itemClickListener: OrderHistoryListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderHistoryViewHolder {
         return OrderHistoryViewHolder.create(parent)
@@ -18,9 +17,10 @@ class OrderHistoryAdapter(
 
     override fun onBindViewHolder(holder: OrderHistoryViewHolder, position: Int) {
         val order = getItem(position)
-        holder.bind(order, orderHistoryListener)
+        holder.bind(order, itemClickListener)
         holder.itemView.setOnClickListener {
-            onItemClick(order)
+            Log.d("OrderHistoryAdapter", "Order ID: ${order.id}")
+            itemClickListener?.onOrderClicked(order)
         }
     }
 
@@ -37,6 +37,6 @@ class OrderHistoryAdapter(
     }
 
     fun setItemListener(orderHistoryListener: OrderHistoryListener) {
-        this.orderHistoryListener = orderHistoryListener
+        this.itemClickListener = orderHistoryListener
     }
 }

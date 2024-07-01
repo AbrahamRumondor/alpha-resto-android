@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.alfaresto_customersapp.data.model.OrderItemResponse
 import com.example.alfaresto_customersapp.data.model.OrderResponse
 import com.example.alfaresto_customersapp.domain.model.Order
+import com.example.alfaresto_customersapp.domain.model.OrderItem
 import com.example.alfaresto_customersapp.domain.repository.AuthRepository
 import com.example.alfaresto_customersapp.domain.repository.OrderRepository
 import com.example.alfaresto_customersapp.domain.repository.UserRepository
@@ -41,5 +42,10 @@ class OrderUseCaseImpl @Inject constructor(
 
     override fun setOrderItem(orderId: String, orderItemId: String, orderItem: OrderItemResponse) {
         orderRepository.setOrderItem(orderId, orderItemId, orderItem)
+    }
+
+    override suspend fun getOrderItems(orderId: String): StateFlow<List<OrderItem>> {
+        Log.d("OrderUseCaseImpl", "getOrderItems: ${orderRepository.getOrderItems(orderId).value}")
+        return orderRepository.getOrderItems(orderId)
     }
 }
