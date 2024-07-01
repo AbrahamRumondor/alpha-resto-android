@@ -95,6 +95,7 @@ class TrackOrderFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentTrackOrderBinding.inflate(inflater, container, false)
+        binding.mvTrack.onCreate(savedInstanceState)
         return binding.root
     }
 
