@@ -75,13 +75,12 @@ class AddressListFragment : Fragment() {
 
         lifecycleScope.launch {
             addressListViewModel.userAddresses.collect { data ->
-                Log.d("test", data.toString())
+//                if (data.isEmpty()) {
+//                    Toast.makeText(requireContext(), "No addresses found", Toast.LENGTH_SHORT).show()
+//                }
+
                 addressAdapter.updateData(data)
                 addressAdapter.notifyItemChanged(data.size - 1)
-
-                if (data.isEmpty()) {
-                    Toast.makeText(requireContext(), "No addresses found", Toast.LENGTH_SHORT).show()
-                }
             }
         }
 

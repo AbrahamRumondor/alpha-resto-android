@@ -153,7 +153,6 @@ class RestoFragment : Fragment() {
             Navigation.findNavController(requireView()).navigate(action)
         }
 
-
         checkNotificationPermission(true)
     }
 

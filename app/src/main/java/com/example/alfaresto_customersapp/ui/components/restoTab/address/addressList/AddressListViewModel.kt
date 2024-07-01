@@ -58,6 +58,8 @@ class AddressListViewModel @Inject constructor(
                     _userAddresses.value = it
                     setLoading(false)
                 }
+//                val addresses = userUseCase.getUserAddresses()
+//                _userAddresses.value = addresses.value
             } catch (e: Exception) {
                 Log.d("test", "GAGAL FETCH DATA: $e")
                 setLoading(false)

@@ -13,6 +13,10 @@ data class OrderResponse(
     @set:PropertyName("user_name")
     var userName: String = "",
 
+    @get:PropertyName("user_phone")
+    @set:PropertyName("user_phone")
+    var userPhone: String = "",
+
     @get:PropertyName("full_address")
     @set:PropertyName("full_address")
     var fullAddress: String = "",
@@ -49,13 +53,14 @@ data class OrderResponse(
     val longitude: Double = 0.0,
 ) {
     // Public no-argument constructor required by Firestore
-    constructor() : this("", "", "", "", "", Date(), "", 0, "", "", 0.0, 0.0)
+    constructor() : this("", "", "", "", "", "", Date(), "", 0, "", "", 0.0, 0.0)
 
     companion object {
         fun transform(orderResponse: OrderResponse): Order {
             return Order(
                 id = orderResponse.id,
                 userName = orderResponse.userName,
+                userPhone = orderResponse.userPhone,
                 fullAddress = orderResponse.fullAddress,
                 restoID = orderResponse.restoID,
                 date = orderResponse.date,
@@ -74,6 +79,7 @@ data class OrderResponse(
             return newOrder.copy(
                 id = order.id,
                 userName = order.userName,
+                userPhone = order.userPhone,
                 fullAddress = order.fullAddress,
                 restoID = order.restoID,
                 date = order.date,

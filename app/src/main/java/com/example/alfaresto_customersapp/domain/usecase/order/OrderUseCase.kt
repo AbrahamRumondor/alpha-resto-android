@@ -3,6 +3,7 @@ package com.example.alfaresto_customersapp.domain.usecase.order
 import com.example.alfaresto_customersapp.data.model.OrderItemResponse
 import com.example.alfaresto_customersapp.data.model.OrderResponse
 import com.example.alfaresto_customersapp.domain.model.Order
+import com.example.alfaresto_customersapp.domain.model.OrderItem
 import kotlinx.coroutines.flow.StateFlow
 
 interface OrderUseCase {
@@ -12,4 +13,5 @@ interface OrderUseCase {
     fun getOrderItemDocID(orderId: String): String
     fun setOrder(orderId: String, order: OrderResponse)
     fun setOrderItem(orderId: String, orderItemId: String, orderItem: OrderItemResponse)
+    suspend fun getOrderItems(orderId: String): StateFlow<List<OrderItem>>
 }
