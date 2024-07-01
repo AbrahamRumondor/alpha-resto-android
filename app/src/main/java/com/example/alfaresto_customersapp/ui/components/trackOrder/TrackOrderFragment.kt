@@ -95,6 +95,7 @@ class TrackOrderFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentTrackOrderBinding.inflate(inflater, container, false)
+        binding.mvTrack.onCreate(savedInstanceState)
         return binding.root
     }
 
@@ -102,7 +103,6 @@ class TrackOrderFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         SHIPMENT_STATUS = "On Process"
-
 
         val orderId = args.orderId
         binding.run {
@@ -131,7 +131,7 @@ class TrackOrderFragment : Fragment() {
 
                     tvAddressDetail.text = myOrder.fullAddress
 
-                    mvTrack.onCreate(savedInstanceState)
+//                    mvTrack.onCreate(savedInstanceState)
                     mvTrack.getMapAsync {
                         map = it
                         setMapIdleListener()

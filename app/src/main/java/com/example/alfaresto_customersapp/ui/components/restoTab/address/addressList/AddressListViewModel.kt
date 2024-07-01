@@ -53,15 +53,13 @@ class AddressListViewModel @Inject constructor(
         setLoading(true)
         viewModelScope.launch {
             try {
-//                userUseCase.getUserAddresses().collectLatest {
-//                    Log.d("test", it.toString())
-//                    _userAddresses.value = it
-//                }
-                val addresses = userUseCase.getUserAddresses()
-                _userAddresses.value = addresses.value
-                if (addresses.value.isEmpty()) {
+                userUseCase.getUserAddresses().collectLatest {
+                    Log.d("test", it.toString())
+                    _userAddresses.value = it
                     setLoading(false)
                 }
+//                val addresses = userUseCase.getUserAddresses()
+//                _userAddresses.value = addresses.value
             } catch (e: Exception) {
                 Log.d("test", "GAGAL FETCH DATA: $e")
                 setLoading(false)
