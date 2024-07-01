@@ -12,4 +12,12 @@ class ShipmentUseCaseImpl @Inject constructor(
     override suspend fun getShipments(): LiveData<List<Shipment>> {
         return shipmentRepository.getShipments()
     }
+
+    override suspend fun getShipmentById(id: String): LiveData<Shipment?> {
+        return shipmentRepository.getShipmentById(id)
+    }
+
+    override suspend fun createShipment(shipment: Shipment) {
+        shipmentRepository.createShipment(shipment)
+    }
 }

@@ -1,6 +1,8 @@
 package com.example.alfaresto_customersapp.domain.usecase.orderHistory
 
+import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
 import com.example.alfaresto_customersapp.domain.model.Address
 import com.example.alfaresto_customersapp.domain.model.Order
@@ -20,39 +22,46 @@ class OrderHistoryUseCaseImpl @Inject constructor(
     private val shipmentRepository: ShipmentRepository
 ) : OrderHistoryUseCase {
 
-    override suspend fun getOrderHistories(): LiveData<List<OrderHistory>> = liveData {
+    private val _orderHistories = MutableLiveData<List<OrderHistory>>()
+    val orderHistories: LiveData<List<OrderHistory>> = _orderHistories
+
+    override suspend fun getOrderHistories(): LiveData<List<OrderHistory>> {
         val uid = authRepository.getCurrentUserID()
         val user = userRepository.getCurrentUser(uid)
 
         // Fetch orders and shipments
         val orders = fetchOrders()
-        val shipments = fetchShipments()
         val userAddresses = fetchUserAddresses(uid)
 
         // Filter orders and shipments based on user ID and order IDs
         val myOrders = orders.filter { it.userName == user.value?.name }
-        val myShipments = shipments.filter { shipment ->
-            myOrders.any { it.id == shipment.orderID }
-        }
+        shipmentRepository.getShipments().observeForever {shipments->
+            val myShipments = shipments.filter { shipment ->
+                myOrders.any { it.id == shipment.orderID }
+            }
 
-        // Map to order history
-        val orderHistories = myOrders.map { order ->
-            val shipment = myShipments.find { it.orderID == order.id }
-            OrderHistory(
-                orderDate = order.date.toString(),
-                orderTotalPrice = order.totalPrice,
-                addressLabel = userAddresses.find { it.address == order.fullAddress }?.label
-                    ?: "Unknown",
-                orderStatus = when (shipment?.statusDelivery) {
-                    "Delivered" -> OrderStatus.DELIVERED
-                    "On Delivery" -> OrderStatus.ON_DELIVERY
-                    else -> OrderStatus.ON_PROCESS
-                },
-                orderId = shipment?.orderID ?: ""
-            )
-        }
+            // Map to order history
+            val orderHistories = myOrders.map { order ->
+                val shipment = myShipments.find { it.orderID == order.id }
+                OrderHistory(
+                    orderDate = order.date.toString(),
+                    orderTotalPrice = order.totalPrice,
+                    addressLabel = userAddresses.find { it.address == order.fullAddress }?.label
+                        ?: "Unknown",
+                    orderStatus = when (shipment?.statusDelivery) {
+                        "Delivered" -> OrderStatus.DELIVERED
+                        "On Delivery" -> OrderStatus.ON_DELIVERY
+                        else -> OrderStatus.ON_PROCESS
+                    },
+                    orderId = order.id,
+                    id = shipment?.id ?: ""
+                )
+            }
+            Log.d("ORDERHISTORY", orderHistories.toString())
 
-        emit(orderHistories)
+            _orderHistories.value = orderHistories
+        }
+        return orderHistories
     }
 
     private suspend fun fetchOrders(): List<Order> {

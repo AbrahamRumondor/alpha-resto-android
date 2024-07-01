@@ -1,5 +1,6 @@
 package com.example.alfaresto_customersapp.ui.components.trackOrder
 
+import android.location.Location
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,17 +9,19 @@ import androidx.lifecycle.viewModelScope
 import com.example.alfaresto_customersapp.data.remote.response.RouteResponse
 import com.example.alfaresto_customersapp.domain.error.OsrmCallback
 import com.example.alfaresto_customersapp.domain.error.RealtimeLocationCallback
+import com.example.alfaresto_customersapp.domain.error.TrackDistanceCallback
 import com.example.alfaresto_customersapp.domain.model.Order
+import com.example.alfaresto_customersapp.domain.model.Shipment
 import com.example.alfaresto_customersapp.domain.repository.OsrmApiRepository
 import com.example.alfaresto_customersapp.domain.usecase.order.OrderUseCase
+import com.example.alfaresto_customersapp.domain.usecase.resto.RestaurantUseCase
+import com.example.alfaresto_customersapp.domain.usecase.shipment.ShipmentUseCase
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
-import com.google.firebase.Firebase
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.database
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -29,21 +32,39 @@ import javax.inject.Inject
 class TrackOrderViewModel @Inject constructor(
     private val osrmApiRepository: OsrmApiRepository,
     private val orderUseCase: OrderUseCase,
+    private val restaurantUseCase: RestaurantUseCase,
+    private val shipmentUseCase: ShipmentUseCase
 ) : ViewModel() {
 
     private var _order: MutableLiveData<List<Order>> = MutableLiveData()
     val order: LiveData<List<Order>> = _order
 
+    private var _shipment: MutableLiveData<Shipment> = MutableLiveData()
+    val shipment: LiveData<Shipment> = _shipment
+
     init {
         getOrder()
     }
 
-    fun getOrder() {
+    private fun getOrder() {
         viewModelScope.launch {
             val result = orderUseCase.getOrders()
             _order.postValue(result.value) // Update LiveData with fetched data
         }
     }
+
+    fun getShipmentById(id: String) {
+        viewModelScope.launch {
+            shipmentUseCase.getShipmentById(id).observeForever {
+                _shipment.postValue(it)
+            }
+        }
+    }
+
+    fun getShipmentById(id: String, items: List<Shipment>): Shipment {
+        return items.find { it.orderID == id } ?: Shipment().copy(statusDelivery = "On Process")
+    }
+
 
     fun getRoute(home: LatLng, driver: LatLng, osrmCallback: OsrmCallback) {
         val call = osrmApiRepository.getRoute(
@@ -81,25 +102,25 @@ class TrackOrderViewModel @Inject constructor(
     }
 
     fun getLocationUpdates(callback: RealtimeLocationCallback) {
-        val database = FirebaseDatabase.getInstance("https://final-project-alfa-default-rtdb.asia-southeast1.firebasedatabase.app")
+        val database =
+            FirebaseDatabase.getInstance("https://final-project-alfa-default-rtdb.asia-southeast1.firebasedatabase.app")
 
-        val locationMap = mapOf(
-            "latitude" to -6.22695,
-            "longitude" to 106.60729
-        )
-
-        database.reference.child("driver_location").setValue(locationMap)
-            .addOnSuccessListener {
-                // Handle success
-                Log.d("Firebase", "Location daxwta set successfully")
-            }
-            .addOnFailureListener { exception ->
-                // Handle failure
-                Log.e("Firebase", "Failed to set location data", exception)
-            }
+//        val locationMap = mapOf(
+//            "latitude" to -6.22695,
+//            "longitude" to 106.60729
+//        )
+//
+//        database.reference.child("driver_location").setValue(locationMap)
+//            .addOnSuccessListener {
+//                Log.d("Firebase", "Location daxwta set successfully")
+//            }
+//            .addOnFailureListener { exception ->
+//                Log.e("Firebase", "Failed to set location data", exception)
+//            }
 
         database.getReference("driver_location").addValueEventListener(object :
             ValueEventListener {
+
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 Log.d("test", dataSnapshot.toString())
                 val latitude = dataSnapshot.child("latitude").getValue(Double::class.java)
@@ -120,6 +141,47 @@ class TrackOrderViewModel @Inject constructor(
                 callback.onFailure(databaseError.message.toString())
                 Log.w("Firebase", "loadPost:onCancelled", databaseError.toException())
             }
+
         })
     }
+
+    fun calculateDistanceBetween(location1: LatLng, location2: LatLng): Float {
+        val results = FloatArray(1)
+        Location.distanceBetween(
+            location1.latitude,
+            location1.longitude,
+            location2.latitude,
+            location2.longitude,
+            results
+        )
+        return results[0] // The distance in meters
+    }
+
+    fun getProgressPercentage(home: LatLng, distance: Double, callback: TrackDistanceCallback) {
+        viewModelScope.launch {
+            try {
+                val restaurant = restaurantUseCase.getRestaurant()
+                Log.d("test", "resto = ${restaurant.toString()}")
+                restaurant?.let {
+                    val restaurantLatLng = LatLng(restaurant.latitude, restaurant.longitude)
+                    val totalDistance = calculateDistanceBetween(home, restaurantLatLng)
+
+                    val progressPercentage =
+                        (((totalDistance - distance) / totalDistance) * 100).toInt()
+                    Log.d("test", "progress = ${progressPercentage}")
+                    callback.onSuccess(
+                        if (progressPercentage < 0) 0
+                        else progressPercentage
+                    )
+                }
+            } catch (e: Exception) {
+                callback.onFailure(e.message.toString())
+            }
+        }
+    }
+
+    fun getTimeEstimation(duration: Double): String {
+        return (duration / 60.00).toInt().toString() + " min"
+    }
+
 }

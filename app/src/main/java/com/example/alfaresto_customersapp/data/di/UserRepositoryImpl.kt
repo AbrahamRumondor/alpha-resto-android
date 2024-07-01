@@ -45,23 +45,24 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getUserAddresses(uid: String): StateFlow<List<Address>> {
-        try {
-            val snapshot = usersRef.document(uid)
-                .collection("addresses")
-                .get()
-                .await()
+        usersRef.document(uid)
+            .collection("addresses")
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    Log.d("UserRepositoryImpl", "Error listening to address updates", error)
+                    _addresses.value = emptyList()
+                    return@addSnapshotListener
+                }
 
-            val addresses = snapshot.toObjects(AddressResponse::class.java)
-                .map { AddressResponse.transform(it) }
+                if (snapshot != null) {
+                    val addressesList = snapshot.toObjects(AddressResponse::class.java)
+                        .map { AddressResponse.transform(it) }
+                    _addresses.value = addressesList
+                    Log.d("UserRepositoryImpl", "Addresses updated: ${addresses.value}")
+                }
+            }
 
-            _addresses.value = addresses
-        } catch (e: Exception) {
-            _addresses.value = emptyList()
-
-            Log.e("UserRepositoryImpl", "Error fetching addresses", e)
-        }
-
-        Log.d("UserRepositoryImpl", "Addresses: ${addresses.value}")
+        // Return the current state of addresses
         return addresses
     }
 
@@ -81,7 +82,7 @@ class UserRepositoryImpl @Inject constructor(
         try {
             val newAddressID = currentUser.collection("addresses").document().id
             address.id = newAddressID
-            
+
             currentUser.collection("addresses")
                 .document(newAddressID)
                 .set(AddressResponse.transform(address))

@@ -1,5 +1,6 @@
 package com.example.alfaresto_customersapp.domain.usecase.resto
 
+import com.example.alfaresto_customersapp.domain.model.Restaurant
 import com.example.alfaresto_customersapp.domain.repository.RestaurantRepository
 import javax.inject.Inject
 
@@ -13,5 +14,9 @@ class RestaurantUseCaseImpl @Inject constructor(
 
     override suspend fun getRestaurantToken(): String {
         return restaurantRepository.getRestaurantToken()
+    }
+
+    override suspend fun getRestaurant(): Restaurant? {
+        return restaurantRepository.getRestaurant()
     }
 }

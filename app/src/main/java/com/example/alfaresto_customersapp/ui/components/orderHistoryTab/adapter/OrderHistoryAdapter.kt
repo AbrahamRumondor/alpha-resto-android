@@ -4,7 +4,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.example.alfaresto_customersapp.domain.model.OrderHistory
-import com.example.alfaresto_customersapp.ui.components.listener.MenuListener
 import com.example.alfaresto_customersapp.ui.components.listener.OrderHistoryListener
 
 class OrderHistoryAdapter : ListAdapter<OrderHistory, OrderHistoryViewHolder>(diffUtil) {

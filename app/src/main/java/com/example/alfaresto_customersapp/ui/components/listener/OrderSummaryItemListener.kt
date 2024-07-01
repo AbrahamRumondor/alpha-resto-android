@@ -8,7 +8,7 @@ interface OrderSummaryItemListener {
     fun onAddressClicked(position: Int)
     fun onAddItemClicked(position: Int,  menuId: String)
     fun onDecreaseItemClicked(position: Int,  menuId: String)
-    fun onDeleteItemClicked(position: Int)
+    fun onDeleteItemClicked(position: Int, menuId: String)
     fun onRadioButtonClicked(position: Int, id: Int)
     fun onPaymentMethodClicked(view: OrderPaymentMethodBinding)
     fun onCheckoutButtonClicked()

@@ -81,6 +81,12 @@ class RestoViewModel @Inject constructor(
         return cartUseCase.getCart()
     }
 
+    fun deleteAllCartItems() {
+        viewModelScope.launch {
+            cartUseCase.deleteAllMenus()
+        }
+    }
+
     fun getOrderByMenuId(list: List<CartEntity>, menuId: String): CartEntity? {
         return list.firstOrNull() { cart ->
             cart.menuId == menuId

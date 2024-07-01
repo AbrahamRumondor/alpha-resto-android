@@ -25,7 +25,11 @@ class CartRepositoryImpl @Inject constructor(
         return cartDao.getMenuById(menuId)
     }
 
-    override fun deleteMenu(menuId: String) {
+    override suspend fun deleteMenu(menuId: String) {
         cartDao.deleteMenu(menuId)
+    }
+
+    override suspend fun deleteAllMenus() {
+        cartDao.deleteAllMenus()
     }
 }

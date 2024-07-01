@@ -15,12 +15,14 @@ import com.example.alfaresto_customersapp.domain.model.Address
 import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.domain.model.Order
 import com.example.alfaresto_customersapp.domain.model.OrderItem
+import com.example.alfaresto_customersapp.domain.model.Shipment
 import com.example.alfaresto_customersapp.domain.model.User
 import com.example.alfaresto_customersapp.domain.repository.FcmApiRepository
 import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
 import com.example.alfaresto_customersapp.domain.usecase.menu.MenuUseCase
 import com.example.alfaresto_customersapp.domain.usecase.order.OrderUseCase
 import com.example.alfaresto_customersapp.domain.usecase.resto.RestaurantUseCase
+import com.example.alfaresto_customersapp.domain.usecase.shipment.ShipmentUseCase
 import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase
 import com.example.alfaresto_customersapp.utils.getText
 import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_ADDRESS
@@ -42,7 +44,8 @@ class OrderSummaryViewModel @Inject constructor(
     private val userUseCase: UserUseCase,
     private val orderUseCase: OrderUseCase,
     private val restaurantUseCase: RestaurantUseCase,
-    private val fcmApiRepository: FcmApiRepository
+    private val fcmApiRepository: FcmApiRepository,
+    private val shipmentUseCase: ShipmentUseCase
 ) : ViewModel() {
 
     private val firestore = FirebaseFirestore.getInstance()
@@ -71,8 +74,11 @@ class OrderSummaryViewModel @Inject constructor(
         _orders.value[orders.value.size - 2] = method
     }
 
-    fun removeOrder(position: Int): Int {
+    fun removeOrder(position: Int, menuId: String): Int {
         _orders.value.removeAt(position)
+        viewModelScope.launch {
+            cartUseCase.deleteMenu(menuId)
+        }
         return _orders.value.size
     }
 
@@ -181,7 +187,7 @@ class OrderSummaryViewModel @Inject constructor(
     }
 
     // TODO 1:userID,addressID,restoID (fetch dr firestore) | 2:menuID (fetch dari firestore)
-    fun saveOrderInDatabase(onResult: (msg: String, orderId: String) -> Unit) {
+    fun saveOrderInDatabase(onResult: (msg: Boolean) -> Unit) {
         getUserFromDB(object : FirestoreCallback {
             override fun onSuccess(user: User?) {
 
@@ -200,8 +206,9 @@ class OrderSummaryViewModel @Inject constructor(
                     db.runTransaction {
                         USER_ADDRESS?.let { address ->
                             USER_TOKEN?.let { token ->
+                                val orderId = getOrderDocumentId()
                                 val order = Order(
-                                    id = getOrderDocumentId(),
+                                    id = orderId,
                                     userName = user.name,
                                     userId = user.id,
                                     fullAddress = address.address,
@@ -236,10 +243,25 @@ class OrderSummaryViewModel @Inject constructor(
                                     }
                                 }
 //                                sendNotificationToResto(onResult)
-//                                onResult("Success")
+//                                onResult(true)
+
+                                viewModelScope.launch {
+                                    shipmentUseCase.createShipment(
+                                        Shipment(
+                                            orderID = orderId,
+                                            statusDelivery = "On Process"
+                                        )
+                                    )
+                                }
+
                                 sendNotificationToResto(
-                                    onResult, order.id
+//                                    onResult
                                 )
+
+                                viewModelScope.launch {
+                                    cartUseCase.deleteAllMenus()
+                                }
+                                onResult(true)
                             }
                         }
                     }
@@ -247,7 +269,7 @@ class OrderSummaryViewModel @Inject constructor(
             }
 
             override fun onFailure(exception: Exception) {
-                onResult("Failed to fetch user", "")
+                onResult(false)
             }
         })
     }
@@ -286,8 +308,7 @@ class OrderSummaryViewModel @Inject constructor(
 //    }
 
     private fun sendNotificationToResto(
-        onResult: (msg: String, orderId: String) -> Unit,
-        orderId: String
+//        onResult: (msg: Boolean) -> Unit
     ) {
         viewModelScope.launch {
             val messageDto = SendMessageDto(
@@ -298,15 +319,15 @@ class OrderSummaryViewModel @Inject constructor(
                 )
             )
 
-            when (val result = fcmApiRepository.sendMessage(messageDto)) {
-                is Success -> {
-                    onResult(result.data, orderId)
-                }
-
-                is Error -> {
-                    onResult(result.error.getText(), orderId)
-                }
-            }
+//            when (val result = fcmApiRepository.sendMessage(messageDto)) {
+//                is Success -> {
+//                    onResult(true)
+//                }
+//
+//                is Error -> {
+//                    onResult(false)
+//                }
+//            }
 
         }
     }

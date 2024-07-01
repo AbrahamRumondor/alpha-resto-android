@@ -1,13 +1,10 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
@@ -18,6 +15,7 @@ import com.example.alfaresto_customersapp.databinding.OrderPaymentMethodBinding
 import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.ui.components.listener.OrderSummaryItemListener
 import com.example.alfaresto_customersapp.ui.components.restoTab.address.addressList.AddressListViewModel
+import com.example.alfaresto_customersapp.utils.user.UserConstants.ORDER_CHECKOUT_STATUS
 import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_ADDRESS
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -97,7 +95,7 @@ class OrderSummaryFragment : Fragment() {
                         item = cart?.find { it.menuId == menuId }
                         orderSummaryViewModel.decreaseOrderQuantity(menuId, item)
                         if (it.orderCartQuantity == 0) {
-                            removeMenu(position)
+                            removeMenu(position, menuId)
                         } else {
                             orderAdapter.notifyItemChanged(position)
                         }
@@ -107,8 +105,8 @@ class OrderSummaryFragment : Fragment() {
                 }
             }
 
-            override fun onDeleteItemClicked(position: Int) {
-                removeMenu(position)
+            override fun onDeleteItemClicked(position: Int, menuId: String) {
+                removeMenu(position, menuId)
             }
 
             override fun onRadioButtonClicked(position: Int, id: Int) {
@@ -133,18 +131,20 @@ class OrderSummaryFragment : Fragment() {
             }
 
             override fun onCheckoutButtonClicked() {
-                orderSummaryViewModel.saveOrderInDatabase { _, orderId ->
-                    Toast.makeText(requireContext(), "Order ID: $orderId", Toast.LENGTH_LONG).show()
-                    Log.d("OrderSummaryFragment", "Order ID: $orderId")
-                    val action = OrderSummaryFragmentDirections.actionOrderSummaryFragmentToTrackOrderFragment(orderId)
+                // TODO send to firebase
+                orderSummaryViewModel.saveOrderInDatabase {
+                    ORDER_CHECKOUT_STATUS = it
+                    val action = OrderSummaryFragmentDirections.actionOrderSummaryFragmentToThankYouFragment(
+                        it
+                    )
                     Navigation.findNavController(binding.root).navigate(action)
                 }
             }
         })
     }
 
-    private fun removeMenu(position: Int) {
-        val size = orderSummaryViewModel.removeOrder(position)
+    private fun removeMenu(position: Int, menuId: String) {
+        val size = orderSummaryViewModel.removeOrder(position, menuId)
         orderAdapter.notifyItemRemoved(position)
         orderAdapter.notifyItemRangeChanged(position, size)
     }

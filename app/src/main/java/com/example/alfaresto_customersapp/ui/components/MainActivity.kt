@@ -7,7 +7,6 @@ import com.example.alfaresto_customersapp.databinding.ActivityMainBinding
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.alfaresto_customersapp.R
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -30,6 +29,9 @@ class MainActivity : AppCompatActivity() {
             when (destination.id) {
                 R.id.address_list -> hideBottomNav()
                 R.id.add_new_address_fragment -> hideBottomNav()
+                R.id.thank_you_fragment -> hideBottomNav()
+                R.id.track_order_fragment -> hideBottomNav()
+                R.id.detail_fragment -> hideBottomNav()
                 else -> showBottomNav()
             }
         }

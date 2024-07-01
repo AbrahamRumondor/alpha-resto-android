@@ -5,10 +5,14 @@
         android:id="@+id/resto_fragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:title="Resto" />
+        android:icon="@drawable/ic_round_home"
+        android:iconTint="@color/alfa_orange"
+        android:title="@string/resto" />
     <item
         android:id="@+id/order_history_fragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:title="Order History" />
+        android:icon="@drawable/ic_order"
+        android:iconTint="@color/alfa_orange"
+        android:title="@string/order_history" />
 </menu>

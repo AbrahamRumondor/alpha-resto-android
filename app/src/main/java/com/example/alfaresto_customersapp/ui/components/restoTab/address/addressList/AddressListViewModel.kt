@@ -10,6 +10,7 @@ import com.example.alfaresto_customersapp.ui.components.loadState.LoadStateViewM
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -52,9 +53,9 @@ class AddressListViewModel @Inject constructor(
         setLoading(true)
         viewModelScope.launch {
             try {
-                val addresses = userUseCase.getUserAddresses()
-                _userAddresses.value = addresses.value
-                if (addresses.value.isEmpty()) {
+                userUseCase.getUserAddresses().collectLatest {
+                    Log.d("test", it.toString())
+                    _userAddresses.value = it
                     setLoading(false)
                 }
             } catch (e: Exception) {
@@ -91,7 +92,6 @@ class AddressListViewModel @Inject constructor(
             override fun onFailure(exception: Exception) {
                 Log.d("test", "On failure addresslistvm DATA: $exception")
             }
-
         })
     }
 }
