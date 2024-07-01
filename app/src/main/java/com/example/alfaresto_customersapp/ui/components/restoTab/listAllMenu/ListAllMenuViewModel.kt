@@ -37,6 +37,9 @@ class ListAllMenuViewModel @Inject constructor(
         }.flow.cachedIn(viewModelScope)
     }
 
+    private val _cartCount: MutableStateFlow<Int> = MutableStateFlow(0)
+    val cartCount: StateFlow<Int> = _cartCount
+
     init {
         fetchCart()
     }
@@ -46,6 +49,11 @@ class ListAllMenuViewModel @Inject constructor(
             try {
                 setLoading(true)
                 cartUseCase.getCart().collectLatest { items ->
+                    _cartCount.value = 0
+                    items.map {
+                        _cartCount.value += it.menuQty
+                    }
+
                     _cartItems.value = items
                 }
             } catch (e: Exception) {
