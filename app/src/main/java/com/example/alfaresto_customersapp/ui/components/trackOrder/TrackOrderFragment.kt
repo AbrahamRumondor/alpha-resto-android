@@ -132,7 +132,6 @@ class TrackOrderFragment : Fragment() {
 
                     tvAddressDetail.text = myOrder.fullAddress
 
-                    mvTrack.onCreate(savedInstanceState)
                     mvTrack.getMapAsync {
                         map = it
                         setMapIdleListener()
