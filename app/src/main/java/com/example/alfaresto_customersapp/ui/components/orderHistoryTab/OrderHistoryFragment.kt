@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,7 +17,6 @@ import com.example.alfaresto_customersapp.domain.model.OrderStatus
 import com.example.alfaresto_customersapp.ui.components.listener.OrderHistoryListener
 import com.example.alfaresto_customersapp.ui.components.orderHistoryTab.adapter.OrderHistoryAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -82,25 +80,6 @@ class OrderHistoryFragment : Fragment() {
         }
     }
 
-//        adapter.setItemListener(object : OrderHistoryListener {
-//            override fun onOrderClicked(orderHistory: OrderHistory) {
-//                val action = if (orderHistory.orderStatus == OrderStatus.DELIVERED) {
-//                    OrderHistoryFragmentDirections.actionOrderHistoryFragmentToOrderHistoryDetailFragment(
-//                        orderId = orderHistory.orderId
-//                    )
-//                } else {
-//                    OrderHistoryFragmentDirections.actionOrderHistoryFragmentToTrackOrderFragment(
-//                        orderId = orderHistory.orderId,
-//                        shipmentId = orderHistory.id
-//                    )
-//                }
-//
-//                Navigation.findNavController(binding.root)
-//                    .navigate(action)
-//            }
-//        })
-    }
-
     private fun setOnOrderClickListener(orderStatus: OrderStatus) {
         adapter.setItemListener(object : OrderHistoryListener {
             override fun onOrderClicked(orderHistory: OrderHistory) {
@@ -114,11 +93,10 @@ class OrderHistoryFragment : Fragment() {
                         orderId = orderHistory.orderId,
                         shipmentId = orderHistory.id
                     )
+                }
+
                 Navigation.findNavController(binding.root)
                     .navigate(action)
-
-//                Navigation.findNavController(requireView())
-//                    .navigate(R.id.action_orderHistoryFragment_to_trackOrderFragment)
             }
         })
     }
@@ -127,5 +105,4 @@ class OrderHistoryFragment : Fragment() {
         super.onResume()
         viewModel.setLoadingTrue()
     }
-
 }

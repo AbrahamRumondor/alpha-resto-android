@@ -3,7 +3,6 @@ package com.example.alfaresto_customersapp.domain.usecase.orderHistory
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.liveData
 import com.example.alfaresto_customersapp.domain.model.Address
 import com.example.alfaresto_customersapp.domain.model.Order
 import com.example.alfaresto_customersapp.domain.model.OrderHistory
@@ -13,11 +12,10 @@ import com.example.alfaresto_customersapp.domain.repository.AuthRepository
 import com.example.alfaresto_customersapp.domain.repository.OrderRepository
 import com.example.alfaresto_customersapp.domain.repository.ShipmentRepository
 import com.example.alfaresto_customersapp.domain.repository.UserRepository
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChangedBy
 import javax.inject.Inject
 
 class OrderHistoryUseCaseImpl @Inject constructor(
@@ -48,7 +46,7 @@ class OrderHistoryUseCaseImpl @Inject constructor(
 
             // Filter orders and shipments based on user ID and order IDs
             val myOrders = orders.filter { it.userName == user.value?.name }
-            shipmentRepository.getShipments().observeForever { shipments ->
+            shipmentRepository.getShipments().collectLatest { shipments ->
                 val myShipments = shipments.filter { shipment ->
                     myOrders.any { it.id == shipment.orderID }
                 }

@@ -15,7 +15,6 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -32,7 +31,7 @@ class ShipmentRepositoryImpl @Inject constructor(
 
     private var listenerRegistration: ListenerRegistration? = null
 
-    override suspend fun getShipments(): LiveData<List<Shipment>> {
+    override suspend fun getShipments(): StateFlow<List<Shipment>> {
         shipmentsRef.addSnapshotListener { snapshot, error ->
             if (error != null) {
                 Log.e("Firestore", "Error fetching documents: $error")
