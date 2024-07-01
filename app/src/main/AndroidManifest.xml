@@ -54,18 +54,6 @@
         <activity android:name=".ui.components.registerPage.RegisterActivity"
             android:exported="true">
         </activity>
-        <activity
-            android:name=".ui.components.trackOrder.TrackOrderActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".ui.components.trackOrder.chat.ChatActivity"
-            android:exported="true"></activity>
-
         <service
             android:name=".ui.components.restoTab.orderSummary.pushNotification.PushNotificationService"
             android:exported="false">

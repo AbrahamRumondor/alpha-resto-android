@@ -75,9 +75,6 @@
                 app:argType="string" />
         </action>
         <action
-            android:id="@+id/action_orderSummaryFragment_to_listAllMenuFragment"
-            app:destination="@id/listAllMenuFragment" />
-        <action
             android:id="@+id/action_orderSummaryFragment_to_thankYouFragment"
             app:destination="@id/thankYouFragment" />
     </fragment>
@@ -152,9 +149,6 @@
                 android:name="orderId"
                 app:argType="string" />
         </action>
-        <action
-            android:id="@+id/action_listAllMenuFragment_to_restoFragment"
-            app:destination="@id/restoFragment" />
         <argument
             android:name="orderId"
             app:argType="string" />
@@ -164,12 +158,6 @@
         <action
             android:id="@+id/action_list_all_menu_fragment_to_detail_fragment"
             app:destination="@id/detail_fragment" />
-        <argument
-            android:name="orderId"
-            app:argType="string" />
-        <action
-            android:id="@+id/action_trackOrderFragment_to_orderHistoryFragment"
-            app:destination="@id/orderHistoryFragment" />
     </fragment>
 
     <fragment
@@ -213,6 +201,6 @@
             app:argType="boolean" />
         <action
             android:id="@+id/action_thankYouFragment_to_restoFragment"
-            app:destination="@id/restoFragment" />
+            app:destination="@id/resto_fragment" />
     </fragment>
 </navigation>

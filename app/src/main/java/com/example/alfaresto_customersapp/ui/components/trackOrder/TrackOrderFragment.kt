@@ -52,7 +52,6 @@ import com.example.alfaresto_customersapp.domain.model.Shipment
 import com.example.alfaresto_customersapp.domain.service.NotificationForegroundService
 import com.example.alfaresto_customersapp.ui.components.restoTab.address.addNewAddress.AddNewAddressFragment.Companion.markersHeight
 import com.example.alfaresto_customersapp.ui.components.restoTab.address.addNewAddress.AddNewAddressFragment.Companion.markersWidth
-import com.example.alfaresto_customersapp.ui.components.trackOrder.chat.ChatActivity
 import com.example.alfaresto_customersapp.utils.user.UserConstants.SHIPMENT_STATUS
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
