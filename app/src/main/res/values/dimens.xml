@@ -45,4 +45,5 @@
     <dimen name="dimen_300">300dp</dimen>
     <dimen name="dimen_250">250dp</dimen>
     <dimen name="dimen_500">500dp</dimen>
+    <dimen name="dimen_55">55dp</dimen>
 </resources>
