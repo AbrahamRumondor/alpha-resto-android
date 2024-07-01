@@ -35,7 +35,7 @@
     <string name="add_new_address">Add new address</string>
     <string name="marker">marker</string>
     <string name="go_to_settings">Go to settings</string>
-    <string name="we_re_sorry_we_need_your_location_permission_to_use_this_app">we\'re sorry we need your location permission to use this app</string>
+    <string name="we_re_sorry_we_need_your_location_permission_to_use_this_app">We\'re sorry we need your location permission to use this app</string>
 
     <string name="dialog_to_settings_message">The app is unavailable because it needs the permissions that you denied</string>
     <string name="permission_required">Permission Required</string>
@@ -61,14 +61,14 @@
     <string name="_0">0</string>
     <string name="add_to_menu">Add to Menu</string>
     <string name="greetings">Hi, %1$s</string>
-    <string name="phone_number">Phone number</string>
+    <string name="phone_number">Phone Number</string>
     <string name="alfaresto">AlfaResto</string>
     <string name="menu_image">menu image</string>
     <string name="logo">logo</string>
     <string name="deliver_to">Deliver to:</string>
     <string name="hi_bella">Hi, Bella!</string>
-    <string name="name">name</string>
-    <string name="no_telp">no telp</string>
+    <string name="name">Name</string>
+    <string name="order_detail">Order Detail</string>
     <string name="chat_title">Chat</string>
     <string name="message_hint">Type a message</string>
     <string name="track_order">Track Order</string>

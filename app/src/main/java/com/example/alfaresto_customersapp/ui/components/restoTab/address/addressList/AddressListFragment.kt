@@ -59,7 +59,7 @@ class AddressListFragment : Fragment() {
             toolbar.btnBack.setOnClickListener {
                 Navigation.findNavController(it).popBackStack()
             }
-            toolbar.tvToolbarAddress.visibility = View.VISIBLE
+            toolbar.tvToolbarText.visibility = View.VISIBLE
             toolbar.tvToolbarTitle.visibility = View.GONE
         }
     }

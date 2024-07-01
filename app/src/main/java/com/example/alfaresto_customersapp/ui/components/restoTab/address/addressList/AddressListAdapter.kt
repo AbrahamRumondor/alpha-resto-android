@@ -19,7 +19,6 @@ class AddressListAdapter :
         RecyclerView.ViewHolder(itemBinding.root) {
         fun bindItem(address: Address, position: Int) {
             itemBinding.run {
-                tvAddressLabel.text = address.label
                 tvAddressLabel2.text = address.label
                 tvAddressDetail.text = address.address
 

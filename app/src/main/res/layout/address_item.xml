@@ -7,15 +7,18 @@
     android:layout_marginVertical="10dp"
     android:background="@color/white">
 
-    <TextView
-        android:id="@+id/tv_address_label"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="10dp"
-        android:text="@string/address"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+<!--    <TextView-->
+<!--        android:id="@+id/tv_address_label"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="@dimen/dimen_10"-->
+<!--        android:paddingBottom="10dp"-->
+<!--        android:fontFamily="@font/bold"-->
+<!--        android:textColor="@color/mainblack"-->
+<!--        android:text="@string/address"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cv_address"
@@ -26,24 +29,27 @@
         android:backgroundTint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_address_label">
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_margin="@dimen/dimen_15"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tv_address_label_2"
                 android:layout_width="wrap_content"
+                android:fontFamily="@font/bold"
+                android:layout_marginBottom="@dimen/dimen_5"
+                android:textSize="@dimen/font_18"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
                 android:text="@string/address" />
 
             <TextView
                 android:id="@+id/tv_address_detail"
                 android:layout_width="match_parent"
+                android:fontFamily="@font/semibold"
                 android:layout_height="wrap_content"
                 android:text="@string/dummy_address" />
 

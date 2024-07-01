@@ -19,7 +19,8 @@
         android:id="@+id/tv_address_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingVertical="15dp"
+        android:fontFamily="@font/bold"
+        android:layout_marginTop="@dimen/dimen_20"
         android:text="@string/tempat_kerja"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -28,13 +29,16 @@
 
     <TextView
         android:id="@+id/tv_address_location"
-        android:layout_width="0dp"
+        android:layout_width="@dimen/dimen_350"
         android:layout_height="wrap_content"
-        android:paddingBottom="15dp"
+        android:layout_marginTop="8dp"
+        android:paddingBottom="@dimen/dimen_20"
+        android:fontFamily="@font/regular"
         android:text="@string/dummy_address"
         android:textSize="16sp"
         app:layout_constraintEnd_toStartOf="@id/iv_proceed"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/tv_address_label"
         app:layout_constraintTop_toBottomOf="@id/tv_address_label" />
 
     <ImageView
@@ -43,9 +47,11 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/icon_proceed"
         android:src="@drawable/ic_proceed"
+        android:layout_marginEnd="@dimen/dimen_10"
         app:layout_constraintBottom_toBottomOf="@id/div_2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/div_1" />
+        app:layout_constraintTop_toTopOf="@id/div_1"
+        app:tint="@color/mainblack" />
 
     <View
         android:id="@+id/div_2"

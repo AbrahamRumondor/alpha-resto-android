@@ -34,20 +34,20 @@
     <TextView
         android:id="@+id/chatTitle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dimen_50"
         android:fontFamily="@font/bold"
         android:text="@string/chat_title"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="28sp"
+        android:textSize="@dimen/font_28"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/buttonLayout"
         app:layout_constraintTop_toTopOf="@id/buttonLayout" />
 
     <ScrollView
         android:id="@+id/scrollView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="@dimen/dimen_none"
+        android:layout_height="@dimen/dimen_none"
         app:layout_constraintBottom_toTopOf="@id/chatInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -64,9 +64,9 @@
 
     <LinearLayout
         android:id="@+id/chatInputLayout"
-        android:layout_width="300dp"
+        android:layout_width="@dimen/dimen_350"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="@dimen/dimen_30"
         android:orientation="horizontal"
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -75,9 +75,10 @@
 
         <EditText
             android:id="@+id/chatInput"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/dimen_none"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:fontFamily="@font/regular"
             android:hint="@string/message_hint"
             android:importantForAutofill="no"
             android:inputType="text"
@@ -85,9 +86,9 @@
 
         <ImageButton
             android:id="@+id/sendButton"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="20dp"
+            android:layout_width="@dimen/dimen_50"
+            android:layout_height="@dimen/dimen_50"
+            android:layout_marginStart="@dimen/dimen_20"
             android:background="@android:color/transparent"
             android:importantForAccessibility="no"
             android:src="@drawable/ic_send" />
