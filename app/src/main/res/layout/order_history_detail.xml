@@ -5,45 +5,45 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-<!--    <androidx.cardview.widget.CardView-->
-<!--        android:id="@+id/buttonLayout"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="center"-->
-<!--        android:layout_marginStart="30dp"-->
-<!--        android:layout_marginTop="30dp"-->
-<!--        app:cardBackgroundColor="@color/white"-->
-<!--        app:cardCornerRadius="15dp"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent">-->
+    <!--    <androidx.cardview.widget.CardView-->
+    <!--        android:id="@+id/buttonLayout"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_gravity="center"-->
+    <!--        android:layout_marginStart="30dp"-->
+    <!--        android:layout_marginTop="30dp"-->
+    <!--        app:cardBackgroundColor="@color/white"-->
+    <!--        app:cardCornerRadius="15dp"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent">-->
 
-<!--        <ImageButton-->
-<!--            android:id="@+id/backButton"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_margin="7dp"-->
-<!--            android:layout_marginStart="20dp"-->
-<!--            android:background="@android:color/transparent"-->
-<!--            android:paddingVertical="4dp"-->
-<!--            android:paddingStart="10dp"-->
-<!--            android:src="@drawable/ic_back"-->
-<!--            tools:ignore="ContentDescription,RtlSymmetry" />-->
+    <!--        <ImageButton-->
+    <!--            android:id="@+id/backButton"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_margin="7dp"-->
+    <!--            android:layout_marginStart="20dp"-->
+    <!--            android:background="@android:color/transparent"-->
+    <!--            android:paddingVertical="4dp"-->
+    <!--            android:paddingStart="10dp"-->
+    <!--            android:src="@drawable/ic_back"-->
+    <!--            tools:ignore="ContentDescription,RtlSymmetry" />-->
 
-<!--    </androidx.cardview.widget.CardView>-->
+    <!--    </androidx.cardview.widget.CardView>-->
 
-<!--    <TextView-->
-<!--        android:id="@+id/tv_history_detail"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="33dp"-->
-<!--        android:fontFamily="@font/bold"-->
-<!--        android:text="Order Success"-->
-<!--        android:textColor="@color/black"-->
-<!--        android:textSize="28sp"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.232"-->
-<!--        app:layout_constraintStart_toEndOf="@+id/buttonLayout"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
+    <!--    <TextView-->
+    <!--        android:id="@+id/tv_history_detail"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="33dp"-->
+    <!--        android:fontFamily="@font/bold"-->
+    <!--        android:text="Order Success"-->
+    <!--        android:textColor="@color/black"-->
+    <!--        android:textSize="28sp"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintHorizontal_bias="0.232"-->
+    <!--        app:layout_constraintStart_toEndOf="@+id/buttonLayout"-->
+    <!--        app:layout_constraintTop_toTopOf="parent" />-->
 
     <include
         android:id="@+id/toolbar"
@@ -126,21 +126,13 @@
                 app:layout_constraintStart_toStartOf="@+id/divider1"
                 app:layout_constraintTop_toBottomOf="@+id/divider1">
 
-                <ScrollView
-                    android:id="@+id/sv_order_items"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_order_items"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/divider1">
+                    android:layout_margin="5dp"
+                    tools:listitem="@layout/item_order_detail" />
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_order_items"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        tools:listitem="@layout/item_order_detail" />
-
-                </ScrollView>
 
             </LinearLayout>
 
