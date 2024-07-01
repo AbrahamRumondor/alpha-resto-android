@@ -9,11 +9,12 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavDirections
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.FragmentOrderHistoryBinding
 import com.example.alfaresto_customersapp.domain.model.OrderHistory
+import com.example.alfaresto_customersapp.domain.model.OrderStatus
 import com.example.alfaresto_customersapp.ui.components.listener.OrderHistoryListener
 import com.example.alfaresto_customersapp.ui.components.orderHistoryTab.adapter.OrderHistoryAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,13 +39,21 @@ class OrderHistoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.rvOrderHistory.adapter = adapter
+        binding.rvOrderHistory.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+
         lifecycleScope.launch {
             viewModel.isLoading.collectLatest { isLoading ->
                 binding.loadingLayout.progressBar.visibility =
                     if (isLoading) View.VISIBLE else View.GONE
 
                 if (!isLoading) {
-                    Toast.makeText(requireContext(), "Order History Loaded. There's no order history.", Toast.LENGTH_SHORT)
+                    Toast.makeText(
+                        requireContext(),
+                        "Order History Loaded. There's no order history.",
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
                 }
             }
@@ -59,23 +68,32 @@ class OrderHistoryFragment : Fragment() {
                 }
 
                 adapter.submitList(orderHistories)
-                binding.rvOrderHistory.adapter = adapter
-                binding.rvOrderHistory.layoutManager =
-                    LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-                setOnOrderClickListener()
+
+                orderHistories.map {
+                    setOnOrderClickListener(it.orderStatus)
+                }
             }
         }
     }
 
-    private fun setOnOrderClickListener() {
+    private fun setOnOrderClickListener(orderStatus: OrderStatus) {
         adapter.setItemListener(object : OrderHistoryListener {
             override fun onOrderClicked(orderHistory: OrderHistory) {
-                Log.d("test", orderHistory.toString())
-                val action =
+
+                var action: NavDirections? = null
+
+//                if (orderStatus == OrderStatus.DELIVERED) {
+//                    action = OrderHistoryFragmentDirections.actionOrderHistoryFragmentTo(
+//                        orderId = orderHistory.orderId
+//                    )
+//                }
+
+                action =
                     OrderHistoryFragmentDirections.actionOrderHistoryFragmentToTrackOrderFragment(
                         orderId = orderHistory.orderId,
                         shipmentId = orderHistory.id
                     )
+
                 Navigation.findNavController(binding.root)
                     .navigate(action)
 
