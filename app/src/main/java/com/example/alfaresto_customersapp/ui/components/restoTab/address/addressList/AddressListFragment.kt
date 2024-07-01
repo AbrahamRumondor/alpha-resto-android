@@ -19,6 +19,7 @@ import com.example.alfaresto_customersapp.ui.components.listener.AddressItemList
 import com.example.alfaresto_customersapp.ui.components.restoTab.address.addNewAddress.AddNewAddressViewModel
 import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_ID
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -40,8 +41,15 @@ class AddressListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         addressToolbar()
+
         setupAddressAdapter()
         setButtonNewAddress()
+
+        lifecycleScope.launch {
+            addressListViewModel.isLoading.collectLatest { isLoading ->
+                binding.loadingLayout.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            }
+        }
     }
 
     private fun addressToolbar() {
@@ -58,7 +66,7 @@ class AddressListFragment : Fragment() {
 
     private fun setButtonNewAddress() {
         binding.btnNewAddress.setOnClickListener {
-            Navigation.findNavController(it).navigate(R.id.action_addressList_to_addNewAddressFragment)
+            Navigation.findNavController(it).navigate(R.id.action_address_list_to_add_new_address_fragment)
         }
     }
 
@@ -70,6 +78,10 @@ class AddressListFragment : Fragment() {
                 Log.d("test", data.toString())
                 addressAdapter.updateData(data)
                 addressAdapter.notifyItemChanged(data.size - 1)
+
+                if (data.isEmpty()) {
+                    Toast.makeText(requireContext(), "No addresses found", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 

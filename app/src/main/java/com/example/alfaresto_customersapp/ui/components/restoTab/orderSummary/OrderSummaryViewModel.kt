@@ -48,6 +48,8 @@ class OrderSummaryViewModel @Inject constructor(
     private val shipmentUseCase: ShipmentUseCase
 ) : ViewModel() {
 
+    private val firestore = FirebaseFirestore.getInstance()
+
     private val _menus: MutableStateFlow<List<Menu>> = MutableStateFlow(emptyList())
     val menus: StateFlow<List<Menu>> = _menus
 
@@ -176,8 +178,8 @@ class OrderSummaryViewModel @Inject constructor(
         }
     }
 
-    private fun getOrderDocumentId(): String {
-        return orderUseCase.getOrderDocID()
+    fun getOrderDocumentId(): String {
+        return FirebaseFirestore.getInstance().collection("orders").document().id
     }
 
     private fun getOrderItemDocumentId(orderId: String): String {

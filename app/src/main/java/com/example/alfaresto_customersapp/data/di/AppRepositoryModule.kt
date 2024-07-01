@@ -8,6 +8,8 @@ import com.example.alfaresto_customersapp.domain.repository.OrderRepository
 import com.example.alfaresto_customersapp.domain.repository.RestaurantRepository
 import com.example.alfaresto_customersapp.domain.repository.ShipmentRepository
 import com.example.alfaresto_customersapp.domain.repository.UserRepository
+import com.example.alfaresto_customersapp.domain.usecase.menuDetail.MenuDetailUseCase
+import com.example.alfaresto_customersapp.domain.usecase.menuDetail.MenuDetailUseCaseImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -31,6 +33,11 @@ abstract class AppRepositoryModule {
     abstract fun provideCartRepository(
         cartRepositoryImpl: CartRepositoryImpl
     ): CartRepository
+
+    @Binds
+    abstract fun provideMenuDetailUseCase(
+        menuDetailUseCaseImpl: MenuDetailUseCaseImpl
+    ): MenuDetailUseCase
 
     @Binds
     abstract fun provideOrderRepository(

@@ -18,7 +18,6 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,7 +34,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.Navigation
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -45,6 +46,7 @@ import com.example.alfaresto_customersapp.databinding.BsdLocationPermissionBindi
 import com.example.alfaresto_customersapp.databinding.FragmentTrackOrderBinding
 import com.example.alfaresto_customersapp.domain.error.OsrmCallback
 import com.example.alfaresto_customersapp.domain.error.RealtimeLocationCallback
+import com.example.alfaresto_customersapp.ui.components.restoTab.RestoFragmentDirections
 import com.example.alfaresto_customersapp.domain.error.TrackDistanceCallback
 import com.example.alfaresto_customersapp.domain.model.Shipment
 import com.example.alfaresto_customersapp.domain.service.NotificationForegroundService
@@ -71,8 +73,8 @@ class TrackOrderFragment : Fragment() {
     private lateinit var binding: FragmentTrackOrderBinding
     private val trackOrderViewModel: TrackOrderViewModel by viewModels()
     private lateinit var map: GoogleMap
-    private val args: TrackOrderFragmentArgs by navArgs()
     private var polylines: Polyline? = null
+    private val args: TrackOrderFragmentArgs by navArgs()
     private var driverMarker: Marker? = null
     private var myMarker: Marker? = null
 
@@ -102,6 +104,8 @@ class TrackOrderFragment : Fragment() {
 
         SHIPMENT_STATUS = "On Process"
 
+
+        val orderId = args.orderId
         binding.run {
 
             btnBack.setOnClickListener {
@@ -109,10 +113,10 @@ class TrackOrderFragment : Fragment() {
             }
 
             trackOrderViewModel.order.observe(viewLifecycleOwner) { orderList ->
-                Log.d("test", args.orderId)
 
+                Log.d("test", orderId)
 
-                val order = orderList.find { it.id == args.orderId }
+                val order = orderList.find { it.id == orderId }
 
                 Log.d("test", order.toString())
 
@@ -138,8 +142,10 @@ class TrackOrderFragment : Fragment() {
                 }
 
                 btnChat.setOnClickListener {
-                    val intent = Intent(requireContext(), ChatActivity::class.java)
-                    startActivity(intent)
+                    val action = TrackOrderFragmentDirections.actionTrackOrderFragmentToChatFragment(
+                        orderId = orderId
+                    )
+                    Navigation.findNavController(requireView()).navigate(action)
                 }
             }
         }
@@ -475,8 +481,6 @@ class TrackOrderFragment : Fragment() {
     }
 
     override fun onStop() {
-        trackOrderViewModel.getShipmentById(args.shipmentId)
-
         super.onStop()
         binding.mvTrack.onStop()
     }

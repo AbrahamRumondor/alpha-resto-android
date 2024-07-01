@@ -6,6 +6,7 @@ import com.example.alfaresto_customersapp.data.model.OrderResponse
 import com.example.alfaresto_customersapp.domain.model.Order
 import com.example.alfaresto_customersapp.domain.repository.OrderRepository
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.tasks.await
@@ -13,7 +14,8 @@ import javax.inject.Inject
 import javax.inject.Named
 
 class OrderRepositoryImpl @Inject constructor(
-    @Named("ordersRef") private val ordersRef: CollectionReference
+    @Named("ordersRef") private val ordersRef: CollectionReference,
+    private val firestore: FirebaseFirestore
 ) : OrderRepository {
 
     private val _orders = MutableStateFlow<List<Order>>(emptyList())
@@ -53,7 +55,7 @@ class OrderRepositoryImpl @Inject constructor(
     }
 
     override fun getOrderDocID(): String {
-        return ordersRef.document().id
+        return firestore.collection("orders").document().id
     }
 
     override fun getOrderItemDocID(orderId: String): String {

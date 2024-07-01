@@ -70,7 +70,7 @@ class OrderSummaryFragment : Fragment() {
             override fun onAddressClicked(position: Int) {
 //                TODO go to address page
                 Navigation.findNavController(binding.root)
-                    .navigate(R.id.action_orderSummaryFragment_to_addressList)
+                    .navigate(R.id.action_order_summary_fragment_to_address_list)
             }
 
             override fun onAddItemClicked(position: Int, menuId: String) {

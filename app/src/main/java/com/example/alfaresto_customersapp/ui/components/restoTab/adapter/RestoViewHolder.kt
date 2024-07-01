@@ -1,12 +1,10 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.MenuItemBinding
 import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.ui.components.listener.MenuListener
@@ -15,7 +13,7 @@ class RestoViewHolder(
     private var binding: MenuItemBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(menu: Menu, position: Int, listener: MenuListener?) {
+    fun bind(menu: Menu, position: Int, listener: MenuListener?, itemClickListener: ((Menu) -> Unit)?) {
         binding.run {
             tvMenuName.text = menu.name
             tvMenuPrice.text = menu.price.toString()
@@ -34,11 +32,20 @@ class RestoViewHolder(
 
             val clickListener = View.OnClickListener { view ->
                 when (view) {
-                    btnMenuAdd, btnAddOrder -> listener?.onAddItemClicked(position, menuId = menu.id)
+                    btnMenuAdd, btnAddOrder -> listener?.onAddItemClicked(
+                        position,
+                        menuId = menu.id
+                    )
+
                     btnDecreaseOrder -> listener?.onDecreaseItemClicked(position, menuId = menu.id)
+
+                    else -> {
+                        itemClickListener?.invoke(menu)
+                    }
                 }
             }
 
+            root.setOnClickListener(clickListener)
             btnMenuAdd.setOnClickListener(clickListener)
             btnAddOrder.setOnClickListener(clickListener)
             btnDecreaseOrder.setOnClickListener(clickListener)

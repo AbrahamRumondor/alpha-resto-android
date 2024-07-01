@@ -1,7 +1,6 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab
 
 import android.util.Log
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.domain.error.FirestoreCallback
@@ -10,6 +9,7 @@ import com.example.alfaresto_customersapp.domain.model.User
 import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
 import com.example.alfaresto_customersapp.domain.usecase.menu.MenuUseCase
 import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase
+import com.example.alfaresto_customersapp.ui.components.loadState.LoadStateViewModel
 import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_TOKEN
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,13 +24,16 @@ class RestoViewModel @Inject constructor(
     private val menuUseCase: MenuUseCase,
     private val cartUseCase: CartUseCase,
     private val userUseCase: UserUseCase
-) : ViewModel() {
+) : LoadStateViewModel() {
 
     private val _menus: MutableStateFlow<List<Menu>> = MutableStateFlow(emptyList())
     val menus: StateFlow<List<Menu>> = _menus
 
     private val _cart: MutableStateFlow<List<CartEntity>> = MutableStateFlow(emptyList())
     val cart: StateFlow<List<CartEntity>> = _cart
+
+    private val _cartCount: MutableStateFlow<Int> = MutableStateFlow(0)
+    val cartCount: StateFlow<Int> = _cartCount
 
     init {
         fetchMenus()
@@ -40,9 +43,11 @@ class RestoViewModel @Inject constructor(
 
     private fun fetchMenus() {
         viewModelScope.launch {
+            setLoading(true)
             try {
                 val fetchedMenus = menuUseCase.getMenus().value
                 _menus.value = fetchedMenus
+                setLoading(false)
             } catch (e: Exception) {
                 Log.e("MENU", "Error fetching menus: ${e.message}")
             }
@@ -52,12 +57,12 @@ class RestoViewModel @Inject constructor(
     private fun fetchCart() {
         viewModelScope.launch {
             try {
-                // Assuming cartUseCase returns Flow<List<CartEntity>>
                 cartUseCase.getCart().collect {
+                    _cartCount.value = 0
                     it.map {
-                        Log.e("CART", "fetching cart: ${it.menuId}")
+                        _cartCount.value += it.menuQty
                     }
-                    _cart.value = it // Update StateFlow with new data
+                    _cart.value = it
                 }
             } catch (e: Exception) {
                 Log.e("CART", "Error fetching cart: ${e.message}")
@@ -101,6 +106,7 @@ class RestoViewModel @Inject constructor(
         viewModelScope.launch {
             cart?.let {
                 if (cart.menuQty > 0) cartUseCase.insertMenu(it.copy(menuQty = cart.menuQty - 1))
+                else cartUseCase.deleteMenu(it.menuId)
             }
         }
     }

@@ -65,6 +65,12 @@ class RestoFragment : Fragment() {
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         }
 
+        lifecycleScope.launch {
+            viewModel.isLoading.collectLatest { isLoading ->
+                binding.loadingLayout.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            }
+        }
+
         viewModel.getUserFromDB(object : FirestoreCallback {
             override fun onSuccess(user: User?) {
                 if (user != null) {
@@ -86,12 +92,11 @@ class RestoFragment : Fragment() {
                     Log.d("MENU", "Menus is empty, waiting for data...")
                     return@collect
                 }
-                viewModel.cart.collectLatest {
+
+                viewModel.cart.collectLatest { it ->
                     if (it.isEmpty()) {
-                        Log.d("test", "NO DATA")
                         setRestoAdapterButtons(it)
                         adapter.submitMenuList(menus)
-                        adapter.notifyItemChanged(menus.size - 1)
 
                         return@collectLatest
                     }
@@ -107,25 +112,47 @@ class RestoFragment : Fragment() {
 
                     setRestoAdapterButtons(it)
                     adapter.submitMenuList(updatedMenus)
-                    adapter.notifyItemChanged(updatedMenus.size - 1)
+
+                    viewModel.cartCount.collectLatest {
+                        Log.d("CART", "Cart count: $it")
+                        binding.tvCartCount.text = it.toString()
+                        binding.rlCart.visibility = if (it > 0) View.VISIBLE else View.INVISIBLE
+                    }
                 }
             }
         }
 
         binding.btnAllMenu.setOnClickListener {
             Navigation.findNavController(view)
-                .navigate(R.id.action_restoFragment_to_listAllMenuFragment)
+                .navigate(R.id.action_resto_fragment_to_list_all_menu_fragment)
         }
 
         binding.btnCart.setOnClickListener {
             Navigation.findNavController(requireView())
-                .navigate(R.id.action_restoFragment_to_orderSummaryFragment)
+                .navigate(R.id.action_resto_fragment_to_order_summary_fragment)
         }
 
         binding.toolbar.btnLogout.setOnClickListener {
             viewModel.deleteAllCartItems()
             logoutValidation()
         }
+
+        binding.rvMenu.setOnClickListener {
+            Navigation.findNavController(requireView())
+                .navigate(R.id.action_resto_fragment_menu_to_detail_fragment)
+        }
+
+        adapter.setItemClickListener { menu ->
+            val action = RestoFragmentDirections.actionRestoFragmentMenuToDetailFragment(
+                menuId = menu.id,
+                name = menu.name,
+                price = menu.price,
+                description = menu.description,
+                image = menu.image
+            )
+            Navigation.findNavController(requireView()).navigate(action)
+        }
+
 
         checkNotificationPermission(true)
     }

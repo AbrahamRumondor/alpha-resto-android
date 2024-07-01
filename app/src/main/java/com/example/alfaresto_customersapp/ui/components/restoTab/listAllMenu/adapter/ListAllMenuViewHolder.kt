@@ -12,7 +12,13 @@ import com.example.alfaresto_customersapp.ui.components.listener.MenuListener
 class ListAllMenuViewHolder(
     private var binding: AllMenuItemBinding
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(menu: Menu, position: Int, listener: MenuListener?) {
+
+    fun bind(
+        menu: Menu,
+        position: Int,
+        listener: MenuListener?,
+        itemClickListener: ((Menu) -> Unit)?
+    ) {
         binding.run {
             tvMenuName.text = menu.name
             tvMenuPrice.text = menu.price.toString()
@@ -31,15 +37,21 @@ class ListAllMenuViewHolder(
 
             val clickListener = View.OnClickListener { view ->
                 when (view) {
-                    btnMenuAdd, btnAddOrder -> listener?.onAddItemClicked(
-                        position,
-                        menuId = menu.id
-                    )
+                    btnMenuAdd, btnAddOrder ->
+                        listener?.onAddItemClicked(
+                            position,
+                            menuId = menu.id
+                        )
 
                     btnDecreaseOrder -> listener?.onDecreaseItemClicked(position, menuId = menu.id)
+
+                    else -> {
+                        itemClickListener?.invoke(menu)
+                    }
                 }
             }
 
+            root.setOnClickListener(clickListener)
             btnMenuAdd.setOnClickListener(clickListener)
             btnAddOrder.setOnClickListener(clickListener)
             btnDecreaseOrder.setOnClickListener(clickListener)

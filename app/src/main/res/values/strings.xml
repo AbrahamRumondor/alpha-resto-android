@@ -62,7 +62,10 @@
     <string name="greetings">Hi, %1$s</string>
     <string name="_0">0"</string>
     <string name="alfaresto">AlfaResto</string>
+    <string name="menu_image">menu image</string>
     <string name="logo">logo</string>
+    <string name="deliver_to">Deliver to:</string>
+    <string name="hi_bella">Hi, Bella!</string>
     <string name="name">name</string>
     <string name="no_telp">no telp</string>
     <string name="chat_title">Chat</string>
@@ -82,8 +85,6 @@
     <string name="food_desc_title">Description</string>
     <string name="food_price">Rp 50.000,-</string>
     <string name="food_name">Soft Shell Taco</string>
-    <string name="hi_bella">Hi Bella!</string>
-    <string name="deliver_to">Deliver to</string>
     <string name="logout_logo">Logout Logo</string>
     <string name="alfaresto_logo">Alfaresto Logo</string>
     <string name="please_sign_in_to_continue">Please sign in to continue.</string>
@@ -92,6 +93,9 @@
     <string name="splash_screen_description">Splash Screen</string>
     <string name="back_button">Back Button</string>
     <string name="back_logo">Back Logo</string>
+    <string name="add_item">+</string>
+    <string name="remove_item">-</string>
+    <string name="order_history">Order History</string>
     <string name="dialog_for_permission_message_notification">This app requires notification permissions for the apps to work</string>
     <string name="your_driver_is_on_the_way">your driver is on the way</string>
     <string name="hello">Hello,</string>
