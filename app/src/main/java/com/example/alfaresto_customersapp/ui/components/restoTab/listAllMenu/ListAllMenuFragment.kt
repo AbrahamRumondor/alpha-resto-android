@@ -98,6 +98,17 @@ class ListAllMenuFragment : Fragment() {
                 }
             }
         })
+
+        adapter.setItemClickListener { menu ->
+            val action = ListAllMenuFragmentDirections.actionListAllMenuFragmentToDetailFragment(
+                menuId = menu.id,
+                name = menu.name,
+                price = menu.price,
+                description = menu.description,
+                image = menu.image
+            )
+            Navigation.findNavController(requireView()).navigate(action)
+        }
     }
 
     private fun loadData() {

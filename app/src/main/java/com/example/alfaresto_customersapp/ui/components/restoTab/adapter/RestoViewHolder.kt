@@ -40,7 +40,6 @@ class RestoViewHolder(
                     btnDecreaseOrder -> listener?.onDecreaseItemClicked(position, menuId = menu.id)
                 }
             }
-
             btnMenuAdd.setOnClickListener(clickListener)
             btnAddOrder.setOnClickListener(clickListener)
             btnDecreaseOrder.setOnClickListener(clickListener)

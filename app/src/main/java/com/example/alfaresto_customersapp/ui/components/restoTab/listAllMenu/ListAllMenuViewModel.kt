@@ -1,5 +1,6 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
@@ -10,6 +11,7 @@ import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.data.pagingSource.MenuPagingSource
 import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
+import com.example.alfaresto_customersapp.ui.components.loadState.LoadStateViewModel
 import com.google.firebase.firestore.CollectionReference
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -22,7 +24,7 @@ import javax.inject.Named
 class ListAllMenuViewModel @Inject constructor(
     @Named("menusRef") private val menusRef: CollectionReference,
     private val cartUseCase: CartUseCase
-) : ViewModel() {
+) : LoadStateViewModel() {
 
     private val _searchQuery = MutableStateFlow<String?>(null)
     private val _cartItems = MutableStateFlow<List<CartEntity>>(emptyList())
@@ -42,8 +44,13 @@ class ListAllMenuViewModel @Inject constructor(
 
     private fun fetchCart() {
         viewModelScope.launch {
-            cartUseCase.getCart().collectLatest { items ->
-                _cartItems.value = items
+            try {
+                setLoading(true)
+                cartUseCase.getCart().collectLatest { items ->
+                    _cartItems.value = items
+                }
+            } catch (e: Exception) {
+                Log.e("CART", "Error fetching cart: ${e.message}")
             }
         }
     }

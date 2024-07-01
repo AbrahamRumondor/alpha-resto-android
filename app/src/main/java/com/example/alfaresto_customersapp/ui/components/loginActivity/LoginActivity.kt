@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.LoginPageBinding
 import com.example.alfaresto_customersapp.ui.components.registerActivity.RegisterActivity
-import com.example.alfaresto_customersapp.ui.components.trackOrder.TrackOrderActivity
 import com.example.alfaresto_customersapp.ui.components.util.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -67,9 +66,6 @@ fun LoginActivity.loginAuth(email: String, password: String) {
             if (task.isSuccessful) {
                 Toast.makeText(baseContext, R.string.login_success, Toast.LENGTH_SHORT).show()
                 //addAddress(email, address)
-
-                val intent = Intent(this, TrackOrderActivity::class.java)
-                startActivity(intent)
             } else {
                 Toast.makeText(baseContext, R.string.login_failed, Toast.LENGTH_SHORT).show()
             }
