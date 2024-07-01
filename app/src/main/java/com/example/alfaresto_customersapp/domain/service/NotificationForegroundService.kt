@@ -10,21 +10,15 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Build
 import android.os.IBinder
+import android.os.Handler
 import android.widget.RemoteViews
-import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.example.alfaresto_customersapp.R
-import com.example.alfaresto_customersapp.ui.components.trackOrder.TrackOrderViewModel
 import com.example.alfaresto_customersapp.utils.user.UserConstants.SHIPMENT_STATUS
-import kotlinx.coroutines.launch
-import okhttp3.internal.notify
 
+@Suppress("DEPRECATION")
 class NotificationForegroundService : Service() {
 
     private lateinit var notificationChannel: NotificationChannel
@@ -33,6 +27,8 @@ class NotificationForegroundService : Service() {
     private lateinit var notificationManagerCompat: NotificationManagerCompat
     lateinit var builder: NotificationCompat.Builder
     private var customView: RemoteViews? = null
+    private val handler = Handler()
+    private val delayMillis: Long = 2 * 60 * 1000
 
     override fun onCreate() {
         super.onCreate()
@@ -40,10 +36,14 @@ class NotificationForegroundService : Service() {
         createNotification()
         updateNotification()
         startForeground(1234, builder.build())
+
+        handler.postDelayed({
+            stopForeground(true)
+            stopSelf()
+        }, delayMillis)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Handle incoming intents or data updates here
         updateNotification()
         return START_STICKY
     }

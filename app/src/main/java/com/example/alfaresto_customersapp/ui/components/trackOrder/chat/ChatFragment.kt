@@ -52,7 +52,7 @@ class ChatFragment : Fragment() {
         }
 
         viewModel.messages.observe(viewLifecycleOwner) { messages ->
-            messages.forEach { pair ->
+            messages.sortedBy { it.first }.forEach { pair ->
                 addMessageToChatView(pair.first, pair.second)
             }
         }
