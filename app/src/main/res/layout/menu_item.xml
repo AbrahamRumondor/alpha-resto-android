@@ -57,16 +57,16 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_55"
             android:background="@drawable/menu_add_button"
-            android:padding="@dimen/dimen_16dp"
+            android:fontFamily="@font/bold"
+            android:padding="@dimen/dimen_16"
             android:text="@string/add_to_cart"
-            android:visibility="invisible"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:fontFamily="@font/bold"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="@dimen/font_18"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ll_texts"
-            android:textSize="@dimen/dimen_18sp"  />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ll_texts" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clActionButtons"
