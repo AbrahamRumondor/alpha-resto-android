@@ -1,6 +1,5 @@
 package com.example.alfaresto_customersapp.domain.usecase.orderHistory
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.alfaresto_customersapp.domain.model.Address
@@ -14,7 +13,6 @@ import com.example.alfaresto_customersapp.domain.repository.ShipmentRepository
 import com.example.alfaresto_customersapp.domain.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import javax.inject.Inject
 
@@ -26,14 +24,14 @@ class OrderHistoryUseCaseImpl @Inject constructor(
 ) : OrderHistoryUseCase {
 
     private val _orderHistories = MutableLiveData<List<OrderHistory>>()
-    val orderHistories: LiveData<List<OrderHistory>> = _orderHistories
+    private val orderHistories: LiveData<List<OrderHistory>> = _orderHistories
 
     private val _myOrderHistory: MutableStateFlow<OrderHistory> = MutableStateFlow(OrderHistory())
-    val myOrderHistory: StateFlow<OrderHistory> = _myOrderHistory
+    private val myOrderHistory: StateFlow<OrderHistory> = _myOrderHistory
 
-    fun resultOrderHistories(): LiveData<List<OrderHistory>> {
-        return orderHistories
-    }
+//    fun resultOrderHistories(): LiveData<List<OrderHistory>> {
+//        return orderHistories
+//    }
 
     override suspend fun getOrderHistories(orderHistories: (List<OrderHistory>) -> Unit) {
         val uid = authRepository.getCurrentUserID()
@@ -42,10 +40,8 @@ class OrderHistoryUseCaseImpl @Inject constructor(
         orderRepository.fetchOrders().distinctUntilChangedBy { it.size }.collect { orders ->
             val userAddresses = fetchUserAddresses(uid)
 
-            Log.d("testttt", orders.toString())
-
             // Filter orders and shipments based on user ID and order IDs
-            val myOrders = orders.filter { it.userName == user.value?.name }
+            val myOrders = orders.filter { it.userName == user.value.name }
             shipmentRepository.getShipments().observeForever { shipments ->
                 val myShipments = shipments.filter { shipment ->
                     myOrders.any { it.id == shipment.orderID }
@@ -54,6 +50,7 @@ class OrderHistoryUseCaseImpl @Inject constructor(
                 // Map to order history
                 val orderHistoriesList = myOrders.map { order ->
                     val shipment = myShipments.find { it.orderID == order.id }
+
                     OrderHistory(
                         orderDate = order.date.toString(),
                         orderTotalPrice = order.totalPrice,
@@ -68,7 +65,6 @@ class OrderHistoryUseCaseImpl @Inject constructor(
                         id = shipment?.id ?: ""
                     )
                 }
-                Log.d("ORDERHISTORY", orderHistoriesList.toString())
 
                 orderHistories(orderHistoriesList)
             }
@@ -131,10 +127,7 @@ class OrderHistoryUseCaseImpl @Inject constructor(
             )
         }
 
-        // Update the StateFlow
         _myOrderHistory.value = orderHistory.first()
-
-        Log.d("OrderHistoryUseCaseImpl 1", "Order Histories: $orderHistories")
 
         return myOrderHistory.value
     }

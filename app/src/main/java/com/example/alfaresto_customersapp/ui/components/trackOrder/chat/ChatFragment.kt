@@ -13,7 +13,6 @@ import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.FragmentChatBinding
 import dagger.hilt.android.AndroidEntryPoint
 
-@Suppress("DEPRECATION")
 @AndroidEntryPoint
 class ChatFragment : Fragment() {
     private lateinit var binding: FragmentChatBinding
@@ -32,12 +31,6 @@ class ChatFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val userId = viewModel.getUserId()
         val orderId = args.orderId
-        val restoId = "NrhoLsLLieXFly9dXj7vu2ETi1T2"
-        if (orderId.isEmpty()) {
-            Toast.makeText(requireContext(), "Order ID is missing", Toast.LENGTH_SHORT).show()
-            requireActivity().onBackPressed()
-            return
-        }
 
         viewModel.listenForMessages(orderId)
 
@@ -47,7 +40,8 @@ class ChatFragment : Fragment() {
                 viewModel.sendMessage(userId, orderId, message)
                 binding.chatInput.text.clear()
             } else {
-                Toast.makeText(requireContext(), "Message cannot be empty", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Message cannot be empty", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
@@ -60,15 +54,17 @@ class ChatFragment : Fragment() {
 
     private fun addMessageToChatView(message: String, senderId: String) {
         val userId = viewModel.getUserId()
-        val restoId = viewModel.restoId
+        val restoId = viewModel.restoID.value
 
         val layoutId = when (senderId) {
             userId -> {
                 R.layout.customer_chat
             }
+
             restoId -> {
                 R.layout.resto_chat
             }
+
             else -> {
                 R.layout.customer_chat
             }

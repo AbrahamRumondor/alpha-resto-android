@@ -1,7 +1,6 @@
 package com.example.alfaresto_customersapp.ui.components.orderHistoryTab
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +16,6 @@ import com.example.alfaresto_customersapp.domain.model.OrderStatus
 import com.example.alfaresto_customersapp.ui.components.listener.OrderHistoryListener
 import com.example.alfaresto_customersapp.ui.components.orderHistoryTab.adapter.OrderHistoryAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -39,12 +37,12 @@ class OrderHistoryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.rvOrderHistory.adapter = adapter
+        binding.rvOrderHistory.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
         lifecycleScope.launch {
             viewModel.orderHistories.observe(viewLifecycleOwner) { orderHistories ->
                 if (orderHistories.isEmpty()) {
-                    Log.d("OrderHistory", "Order History is empty, waiting for data...")
-                    // Optionally, you can show a loading state or handle the empty case
                     Toast.makeText(
                         requireContext(),
                         "Order History Loaded. There's no order history.",
@@ -54,22 +52,18 @@ class OrderHistoryFragment : Fragment() {
                 }
 
                 adapter.submitList(orderHistories)
-                binding.rvOrderHistory.layoutManager =
-                    LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-//                setOnOrderClickListener()
 
                 orderHistories.map {
-                    setOnOrderClickListener(it.orderStatus)
+                    setOnOrderClickListener()
                 }
             }
         }
     }
 
-    private fun setOnOrderClickListener(orderStatus: OrderStatus) {
+    private fun setOnOrderClickListener() {
         adapter.setItemListener(object : OrderHistoryListener {
             override fun onOrderClicked(orderHistory: OrderHistory) {
                 val action = if (orderHistory.orderStatus == OrderStatus.DELIVERED) {
-                    Log.d("OrderHistory", "Order ID: ${orderHistory.orderId}")
                     OrderHistoryFragmentDirections.actionOrderHistoryFragmentToOrderHistoryDetailFragment(
                         orderId = orderHistory.orderId
                     )

@@ -1,6 +1,5 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -11,7 +10,6 @@ import com.example.alfaresto_customersapp.databinding.OrderPaymentMethodBinding
 import com.example.alfaresto_customersapp.databinding.OrderTotalPriceBinding
 import com.example.alfaresto_customersapp.domain.model.Address
 import com.example.alfaresto_customersapp.domain.model.Menu
-import com.example.alfaresto_customersapp.domain.model.OrderItem
 import com.example.alfaresto_customersapp.ui.components.listener.OrderSummaryItemListener
 import com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.viewHolder.CheckoutButtonViewHolder
 import com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.viewHolder.OrderAddressViewHolder
@@ -94,10 +92,9 @@ class OrderSummaryAdapter :
         return items.size
     }
 
-    fun submitOrderList(orderItems: MutableList<Any?> ) {
+    fun submitOrderList(orderItems: MutableList<Any?>) {
         this.items.clear()
         this.items.addAll(orderItems)
-        Log.d("ORDER adapter", "order list submitted: $items")
     }
 
     fun setItemListener(orderSummaryItemListener: OrderSummaryItemListener) {

@@ -10,15 +10,13 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.LoginPageBinding
 import com.example.alfaresto_customersapp.ui.components.registerActivity.RegisterActivity
-import com.example.alfaresto_customersapp.ui.components.util.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
-class LoginActivity : AppCompatActivity()  {
+class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: LoginPageBinding
     lateinit var auth: FirebaseAuth
-    private val passwordPatterns = Constants.passwordPatterns
     var firebaseFirestore = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +41,6 @@ class LoginActivity : AppCompatActivity()  {
             }
 
             loginAuth(email, password)
-            // addAddress(email, address)
 
         }
         val registerTextClicked: TextView = binding.tvRegister
@@ -65,40 +62,8 @@ fun LoginActivity.loginAuth(email: String, password: String) {
         .addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
                 Toast.makeText(baseContext, R.string.login_success, Toast.LENGTH_SHORT).show()
-                //addAddress(email, address)
             } else {
                 Toast.makeText(baseContext, R.string.login_failed, Toast.LENGTH_SHORT).show()
             }
         }
 }
-//
-//fun LoginActivity.addAddress(email: String, address: String) {
-//    val userAddress = hashMapOf(
-//        "address" to address
-//    )
-//
-//    FirebaseFirestore.getInstance().collection("users").whereEqualTo("email", email)
-//        .get()
-//        .addOnSuccessListener { documents ->
-//            if (documents.isEmpty) {
-//                Log.d("Firestore", "No user found with email: $email")
-//                return@addOnSuccessListener
-//            }
-//
-//            for (document in documents) {
-//                val userDocRef = document.reference
-//                val addressCollectionRef = userDocRef.collection("address")
-//
-//                addressCollectionRef.add(userAddress)
-//                    .addOnSuccessListener {
-//                        Toast.makeText(baseContext, "Address added", Toast.LENGTH_SHORT).show()
-//                    }
-//                    .addOnFailureListener { _ ->
-//                        Toast.makeText(baseContext, "Error adding address", Toast.LENGTH_SHORT).show()
-//                    }
-//            }
-//        }
-//        .addOnFailureListener { _ ->
-//            Toast.makeText(baseContext, "Error adding address", Toast.LENGTH_SHORT).show()
-//        }
-//}

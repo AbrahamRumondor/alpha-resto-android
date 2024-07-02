@@ -1,6 +1,5 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.domain.error.FirestoreCallback
@@ -17,6 +16,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -49,7 +49,7 @@ class RestoViewModel @Inject constructor(
                 _menus.value = fetchedMenus
                 setLoading(false)
             } catch (e: Exception) {
-                Log.e("MENU", "Error fetching menus: ${e.message}")
+                Timber.tag("MENU").e("Error fetching menus: %s", e.message)
             }
         }
     }
@@ -65,14 +65,14 @@ class RestoViewModel @Inject constructor(
                     _cart.value = it
                 }
             } catch (e: Exception) {
-                Log.e("CART", "Error fetching cart: ${e.message}")
+                Timber.tag("CART").e("Error fetching cart: %s", e.message)
             }
         }
     }
 
-    fun insertMenu(menuId: String, menuQty: Int) {
+    private fun insertMenu(menuId: String) {
         viewModelScope.launch {
-            val cartEntity = CartEntity(menuId = menuId, menuQty = menuQty)
+            val cartEntity = CartEntity(menuId = menuId, menuQty = 1)
             cartUseCase.insertMenu(cartEntity)
         }
     }
@@ -87,18 +87,12 @@ class RestoViewModel @Inject constructor(
         }
     }
 
-    fun getOrderByMenuId(list: List<CartEntity>, menuId: String): CartEntity? {
-        return list.firstOrNull() { cart ->
-            cart.menuId == menuId
-        }
-    }
-
     fun addOrderQuantity(menuId: String, cart: CartEntity?) {
         viewModelScope.launch {
-            Log.d("test", "${cart?.menuId} dan ${cart?.menuQty}")
+            Timber.tag("test").d("%s dan %s", cart?.menuId, cart?.menuQty)
             cart?.let {
                 cartUseCase.insertMenu(it.copy(menuQty = it.menuQty + 1))
-            } ?: insertMenu(menuId = menuId, menuQty = 1)
+            } ?: insertMenu(menuId = menuId)
         }
     }
 
@@ -115,11 +109,10 @@ class RestoViewModel @Inject constructor(
         FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
             if (token != null) {
                 USER_TOKEN = token
-                Log.d("token", token)
                 saveToken(token)
             }
         }.addOnFailureListener { e ->
-            Log.e("token", "Failed to get token", e)
+            Timber.tag("token").e(e, "Failed to get token")
         }
     }
 
@@ -130,7 +123,8 @@ class RestoViewModel @Inject constructor(
             }
 
             override fun onFailure(exception: Exception) {
-                Log.d("PushNotificationService", "Error adding FCM token to Firestore", exception)
+                Timber.tag("PushNotificationService")
+                    .d(exception, "Error adding FCM token to Firestore")
             }
         })
     }

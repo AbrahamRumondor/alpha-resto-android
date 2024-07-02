@@ -1,6 +1,5 @@
 package com.example.alfaresto_customersapp.data.di
 
-import android.util.Log
 import com.example.alfaresto_customersapp.data.model.AddressResponse
 import com.example.alfaresto_customersapp.data.model.UserResponse
 import com.example.alfaresto_customersapp.domain.model.Address
@@ -12,6 +11,7 @@ import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.tasks.await
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -37,10 +37,7 @@ class UserRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             _currentUser.value = User()
-            Log.e("UserRepositoryImpl", "Error fetching user", e)
         }
-
-        Log.d("UserRepositoryImpl", "User: ${currentUser.value}")
         return currentUser
     }
 
@@ -49,7 +46,6 @@ class UserRepositoryImpl @Inject constructor(
             .collection("addresses")
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
-                    Log.d("UserRepositoryImpl", "Error listening to address updates", error)
                     _addresses.value = emptyList()
                     return@addSnapshotListener
                 }
@@ -58,11 +54,9 @@ class UserRepositoryImpl @Inject constructor(
                     val addressesList = snapshot.toObjects(AddressResponse::class.java)
                         .map { AddressResponse.transform(it) }
                     _addresses.value = addressesList
-                    Log.d("UserRepositoryImpl", "Addresses updated: ${addresses.value}")
                 }
             }
 
-        // Return the current state of addresses
         return addresses
     }
 
@@ -88,7 +82,7 @@ class UserRepositoryImpl @Inject constructor(
                 .set(AddressResponse.transform(address))
                 .await()
         } catch (e: Exception) {
-            Log.e("UserRepositoryImpl", "Error saving address", e)
+            Timber.tag("UserRepositoryImpl").e(e, "Error saving address")
         }
     }
 
@@ -103,10 +97,10 @@ class UserRepositoryImpl @Inject constructor(
 
         currentUser.update("token", token)
             .addOnSuccessListener {
-                Log.d("UserRepositoryImpl", "Token saved to DB")
+                Timber.tag("UserRepositoryImpl").d("Token saved to DB")
             }
             .addOnFailureListener {
-                Log.e("UserRepositoryImpl", "Error saving token to DB", it)
+                Timber.tag("UserRepositoryImpl").e(it, "Error saving token to DB")
             }
     }
 }

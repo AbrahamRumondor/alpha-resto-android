@@ -11,7 +11,6 @@ import androidx.navigation.Navigation
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.FragmentAddressListBinding
 import com.example.alfaresto_customersapp.ui.components.listener.AddressItemListener
-import com.example.alfaresto_customersapp.ui.components.restoTab.address.addNewAddress.AddNewAddressViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -21,7 +20,6 @@ class AddressListFragment : Fragment() {
     private lateinit var binding: FragmentAddressListBinding
     private val addressAdapter by lazy { AddressListAdapter() }
     private val addressListViewModel: AddressListViewModel by activityViewModels()
-    private val addNewAddressViewModel: AddNewAddressViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,7 +39,8 @@ class AddressListFragment : Fragment() {
 
         lifecycleScope.launch {
             addressListViewModel.isLoading.collectLatest { isLoading ->
-                binding.loadingLayout.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+                binding.loadingLayout.progressBar.visibility =
+                    if (isLoading) View.VISIBLE else View.GONE
             }
         }
     }
@@ -60,7 +59,8 @@ class AddressListFragment : Fragment() {
 
     private fun setButtonNewAddress() {
         binding.btnNewAddress.setOnClickListener {
-            Navigation.findNavController(it).navigate(R.id.action_address_list_to_add_new_address_fragment)
+            Navigation.findNavController(it)
+                .navigate(R.id.action_address_list_to_add_new_address_fragment)
         }
     }
 
@@ -86,7 +86,7 @@ class AddressListFragment : Fragment() {
             override fun onAddressClicked(position: Int, addressId: String) {
                 addressListViewModel.setAnAddress(addressId)
                 val otherAddress = addressListViewModel.updateAddress(position)
-                otherAddress?.let {previousSelected->
+                otherAddress?.let { previousSelected ->
                     addressAdapter.notifyItemChanged(previousSelected)
                 }
                 addressAdapter.notifyItemChanged(position)

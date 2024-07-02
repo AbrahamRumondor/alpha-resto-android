@@ -1,6 +1,5 @@
 package com.example.alfaresto_customersapp.ui.components.orderHistoryTab.adapter
 
-import android.util.Log
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -19,7 +18,6 @@ class OrderHistoryAdapter : ListAdapter<OrderHistory, OrderHistoryViewHolder>(di
         val order = getItem(position)
         holder.bind(order, itemClickListener)
         holder.itemView.setOnClickListener {
-            Log.d("OrderHistoryAdapter", "Order ID: ${order.id}")
             itemClickListener?.onOrderClicked(order)
         }
     }

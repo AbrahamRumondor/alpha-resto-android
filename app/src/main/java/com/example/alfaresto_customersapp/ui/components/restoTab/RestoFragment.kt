@@ -1,22 +1,21 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
-import android.content.Context
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -31,11 +30,11 @@ import com.example.alfaresto_customersapp.domain.model.User
 import com.example.alfaresto_customersapp.ui.components.listener.MenuListener
 import com.example.alfaresto_customersapp.ui.components.loginPage.LoginActivity
 import com.example.alfaresto_customersapp.ui.components.restoTab.adapter.RestoAdapter
-import com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu.ListAllMenuFragment
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
 class RestoFragment : Fragment() {
@@ -57,8 +56,6 @@ class RestoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        viewModel.getToken()
-
         binding.rvMenu.let {
             it.adapter = adapter
             it.layoutManager =
@@ -67,7 +64,8 @@ class RestoFragment : Fragment() {
 
         lifecycleScope.launch {
             viewModel.isLoading.collectLatest { isLoading ->
-                binding.loadingLayout.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+                binding.loadingLayout.progressBar.visibility =
+                    if (isLoading) View.VISIBLE else View.GONE
             }
         }
 
@@ -89,7 +87,7 @@ class RestoFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.menus.collect { menus ->
                 if (menus.isEmpty()) {
-                    Log.d("MENU", "Menus is empty, waiting for data...")
+                    Timber.tag("MENU").d("Menus is empty, waiting for data...")
                     return@collect
                 }
 
@@ -114,7 +112,6 @@ class RestoFragment : Fragment() {
                     adapter.submitMenuList(updatedMenus)
 
                     viewModel.cartCount.collectLatest {
-                        Log.d("CART", "Cart count: $it")
                         binding.tvCartCount.text = it.toString()
                         binding.rlCart.visibility = if (it > 0) View.VISIBLE else View.INVISIBLE
                     }
