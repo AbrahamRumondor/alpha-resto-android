@@ -16,6 +16,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.Navigation
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.BsdLocationPermissionBinding
 import com.example.alfaresto_customersapp.databinding.FragmentAddNewAddressBinding
@@ -69,6 +70,7 @@ class AddNewAddressFragment : Fragment() {
                     addressLabel = addressLabel,
                     addressDetail = addressDetail
                 )
+                Navigation.findNavController(it).popBackStack()
             }
         }
     }

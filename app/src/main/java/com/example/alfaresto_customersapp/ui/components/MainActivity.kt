@@ -32,6 +32,9 @@ class MainActivity : AppCompatActivity() {
                 R.id.thank_you_fragment -> hideBottomNav()
                 R.id.track_order_fragment -> hideBottomNav()
                 R.id.detail_food_fragment -> hideBottomNav()
+                R.id.chat_fragment -> hideBottomNav()
+                R.id.order_summary_fragment -> hideBottomNav()
+                R.id.list_all_menu_fragment -> hideBottomNav()
                 else -> showBottomNav()
             }
         }
