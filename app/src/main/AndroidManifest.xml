@@ -55,7 +55,7 @@
             android:screenOrientation="nosensor"
             android:exported="true">
         </activity>
-        <activity android:name=".ui.components.registerPage.RegisterPage"
+        <activity android:name=".ui.components.registerPage.RegisterActivity"
             android:screenOrientation="nosensor"
             android:exported="true">
         </activity>

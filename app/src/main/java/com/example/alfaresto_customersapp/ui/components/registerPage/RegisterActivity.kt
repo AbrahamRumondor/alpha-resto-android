@@ -11,7 +11,7 @@ import com.example.alfaresto_customersapp.databinding.ActivityRegisterBinding
 import com.example.alfaresto_customersapp.ui.components.loginPage.LoginActivity
 import com.example.alfaresto_customersapp.utils.Constants
 
-class RegisterPage : AppCompatActivity() {
+class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterBinding
     private lateinit var viewModel: RegisterViewModel
