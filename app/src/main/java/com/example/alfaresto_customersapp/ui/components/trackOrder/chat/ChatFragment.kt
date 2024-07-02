@@ -8,12 +8,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.FragmentChatBinding
 import dagger.hilt.android.AndroidEntryPoint
 
-@Suppress("DEPRECATION")
 @AndroidEntryPoint
 class ChatFragment : Fragment() {
     private lateinit var binding: FragmentChatBinding
@@ -30,9 +30,20 @@ class ChatFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.toolbar.apply {
+            ivToolbarTitle.visibility = View.GONE
+            tvToolbarText.visibility = View.VISIBLE
+            tvToolbarText.text = "Chat"
+            btnLogout.visibility = View.GONE
+            btnBack.visibility = View.VISIBLE
+            btnBack.setOnClickListener {
+                findNavController().popBackStack()
+            }
+        }
+
         val userId = viewModel.getUserId()
         val orderId = args.orderId
-        val restoId = "NrhoLsLLieXFly9dXj7vu2ETi1T2"
         if (orderId.isEmpty()) {
             Toast.makeText(requireContext(), "Order ID is missing", Toast.LENGTH_SHORT).show()
             requireActivity().onBackPressed()
@@ -52,7 +63,7 @@ class ChatFragment : Fragment() {
         }
 
         viewModel.messages.observe(viewLifecycleOwner) { messages ->
-            messages.sortedBy { it.first }.forEach { pair ->
+            messages.forEach { pair ->
                 addMessageToChatView(pair.first, pair.second)
             }
         }
@@ -74,9 +85,14 @@ class ChatFragment : Fragment() {
             }
         }
 
-        val textView = LayoutInflater.from(requireContext())
-            .inflate(layoutId, binding.chatLinearLayout, false) as TextView
-        textView.text = message
-        binding.chatLinearLayout.addView(textView)
+        val chatBubble = layoutInflater.inflate(layoutId, binding.chatLinearLayout, false)
+        val messageTextView = chatBubble.findViewById<TextView>(R.id.customerChat) ?: chatBubble.findViewById(R.id.restoChat)
+        messageTextView.text = message
+        binding.chatLinearLayout.addView(chatBubble)
+
+        binding.scrollView.post {
+            binding.scrollView.fullScroll(View.FOCUS_DOWN)
+        }
+
     }
 }
