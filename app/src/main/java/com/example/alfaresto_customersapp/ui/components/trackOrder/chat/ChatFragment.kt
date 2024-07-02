@@ -8,6 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.FragmentChatBinding
@@ -39,15 +40,22 @@ class ChatFragment : Fragment() {
             return
         }
 
-        viewModel.listenForMessages(orderId)
+        binding.run {
+            viewModel.listenForMessages(orderId)
 
-        binding.sendButton.setOnClickListener {
-            val message = binding.chatInput.text.toString()
-            if (message.isNotEmpty()) {
-                viewModel.sendMessage(userId, orderId, message)
-                binding.chatInput.text.clear()
-            } else {
-                Toast.makeText(requireContext(), "Message cannot be empty", Toast.LENGTH_SHORT).show()
+            imgBtnBack.setOnClickListener {
+                Navigation.findNavController(binding.root).popBackStack()
+            }
+
+            imgBtnSend.setOnClickListener {
+                val message = etChatInput.text.toString()
+                if (message.isNotEmpty()) {
+                    viewModel.sendMessage(userId, orderId, message)
+                    etChatInput.text.clear()
+                } else {
+                    Toast.makeText(requireContext(), "Message cannot be empty", Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
         }
 
@@ -56,6 +64,7 @@ class ChatFragment : Fragment() {
                 addMessageToChatView(pair.first, pair.second)
             }
         }
+
     }
 
     private fun addMessageToChatView(message: String, senderId: String) {
@@ -66,17 +75,19 @@ class ChatFragment : Fragment() {
             userId -> {
                 R.layout.customer_chat
             }
+
             restoId -> {
                 R.layout.resto_chat
             }
+
             else -> {
                 R.layout.customer_chat
             }
         }
 
         val textView = LayoutInflater.from(requireContext())
-            .inflate(layoutId, binding.chatLinearLayout, false) as TextView
+            .inflate(layoutId, binding.llChatLayout, false) as TextView
         textView.text = message
-        binding.chatLinearLayout.addView(textView)
+        binding.llChatLayout.addView(textView)
     }
 }
