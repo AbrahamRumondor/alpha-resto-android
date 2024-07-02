@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
+            supportFragmentManager.findFragmentById(R.id.fcv_switch_screen) as NavHostFragment
         val navController = navHostFragment.navController
 
         binding.bnvCustomerNavigation.setupWithNavController(navController)
@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.add_new_address_fragment -> hideBottomNav()
                 R.id.thank_you_fragment -> hideBottomNav()
                 R.id.track_order_fragment -> hideBottomNav()
-                R.id.detail_fragment -> hideBottomNav()
+                R.id.detail_food_fragment -> hideBottomNav()
                 else -> showBottomNav()
             }
         }

@@ -8,7 +8,7 @@
     tools:context=".ui.components.MainActivity">
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentContainerView"
+        android:id="@+id/fcv_switch_screen"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="@dimen/dimen_none"
         android:layout_height="@dimen/dimen_none"
@@ -35,7 +35,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fragmentContainerView"
+        app:layout_constraintTop_toBottomOf="@id/fcv_switch_screen"
         app:menu="@menu/bottom_navigation_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

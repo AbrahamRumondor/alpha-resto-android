@@ -69,7 +69,7 @@ class TrackOrderViewModel @Inject constructor(
     fun getRoute(home: LatLng, driver: LatLng, osrmCallback: OsrmCallback) {
         val call = osrmApiRepository.getRoute(
             profile = "car", // Replace with your desired profile
-            coordinates = "${home.longitude},${home.latitude};${driver.longitude},${driver.latitude}",
+            coordinates = "${driver.longitude},${driver.latitude};${home.longitude},${home.latitude}",
             alternatives = false,
             steps = true,
             geometries = "polyline", // Choose your desired geometry format

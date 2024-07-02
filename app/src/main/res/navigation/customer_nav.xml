@@ -21,7 +21,7 @@
             app:destination="@id/list_all_menu_fragment" />
         <action
             android:id="@+id/action_resto_fragment_menu_to_detail_fragment"
-            app:destination="@id/detail_fragment" />
+            app:destination="@id/detail_food_fragment" />
     </fragment>
 
     <fragment
@@ -109,7 +109,7 @@
             app:destination="@id/resto_fragment" />
         <action
             android:id="@+id/action_list_all_menu_fragment_to_detail_fragment"
-            app:destination="@id/detail_fragment">
+            app:destination="@id/detail_food_fragment">
             <argument
                 android:name="menuId"
                 app:argType="string" />
@@ -147,7 +147,7 @@
             app:destination="@id/chat_fragment"/>
         <action
             android:id="@+id/action_list_all_menu_fragment_to_detail_fragment"
-            app:destination="@id/detail_fragment" />
+            app:destination="@id/detail_food_fragment" />
         <argument
             android:name="orderId"
             app:argType="string" />
@@ -157,10 +157,10 @@
     </fragment>
 
     <fragment
-        android:id="@+id/detail_fragment"
-        android:name="com.example.alfaresto_customersapp.ui.components.detailPage.DetailFragment"
+        android:id="@+id/detail_food_fragment"
+        android:name="com.example.alfaresto_customersapp.ui.components.detailPage.DetailFoodFragment"
         android:label="fragment_food_detail"
-        tools:layout="@layout/fragment_detail">
+        tools:layout="@layout/fragment_detail_food">
         <argument
             android:name="menuId"
             app:argType="string" />
