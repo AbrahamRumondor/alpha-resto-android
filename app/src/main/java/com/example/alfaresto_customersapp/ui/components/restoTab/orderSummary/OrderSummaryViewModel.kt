@@ -1,6 +1,5 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
@@ -24,7 +23,6 @@ import com.example.alfaresto_customersapp.domain.usecase.order.OrderUseCase
 import com.example.alfaresto_customersapp.domain.usecase.resto.RestaurantUseCase
 import com.example.alfaresto_customersapp.domain.usecase.shipment.ShipmentUseCase
 import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase
-import com.example.alfaresto_customersapp.utils.getText
 import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_ADDRESS
 import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_TOKEN
 import com.google.firebase.firestore.FirebaseFirestore
@@ -32,6 +30,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.Date
 import javax.inject.Inject
 import javax.inject.Named
@@ -47,8 +46,6 @@ class OrderSummaryViewModel @Inject constructor(
     private val fcmApiRepository: FcmApiRepository,
     private val shipmentUseCase: ShipmentUseCase
 ) : ViewModel() {
-
-    private val firestore = FirebaseFirestore.getInstance()
 
     private val _menus: MutableStateFlow<List<Menu>> = MutableStateFlow(emptyList())
     val menus: StateFlow<List<Menu>> = _menus
@@ -82,28 +79,16 @@ class OrderSummaryViewModel @Inject constructor(
         return _orders.value.size
     }
 
-    fun setMenus(list: List<Menu>) {
-        _menus.value = list
-    }
-
     fun makeOrders(
-        address: Address?,
-        orders: List<Menu>,
-        total: Pair<Int, Int>
+        address: Address?, orders: List<Menu>, total: Pair<Int, Int>
     ): MutableList<Any?> {
         val orderList = mutableListOf(
-            address,
-            total,
-            "payment_method",
-            "checkout"
+            address, total, "payment_method", "checkout"
         )
 
         orderList.addAll(1, orders)
         _orders.value = orderList
 
-        orderList.map {
-            Log.d("test", it.toString())
-        }
         return orderList
     }
 
@@ -122,7 +107,7 @@ class OrderSummaryViewModel @Inject constructor(
                 val restoToken = restaurantUseCase.getRestaurantToken()
                 _restoToken.value = restoToken
             } catch (e: Exception) {
-                Log.e("RESTO", "Error fetching resto: ${e.message}")
+                Timber.tag("RESTO").e("Error fetching resto: %s", e.message)
             }
         }
     }
@@ -131,9 +116,9 @@ class OrderSummaryViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val fetchedMenus = menuUseCase.getMenus().value
-                _menus.value = fetchedMenus ?: emptyList()
+                _menus.value = fetchedMenus
             } catch (e: Exception) {
-                Log.e("MENU", "Error fetching menus: ${e.message}")
+                Timber.tag("MENU").e("Error fetching menus: %s", e.message)
             }
         }
     }
@@ -141,15 +126,11 @@ class OrderSummaryViewModel @Inject constructor(
     private fun fetchCart() {
         viewModelScope.launch {
             try {
-                // Assuming cartUseCase returns Flow<List<CartEntity>>
                 cartUseCase.getCart().collect {
-                    it.map {
-                        Log.e("CART", "cart: ${it.menuId}")
-                    }
-                    _cart.value = it // Update StateFlow with new data
+                    _cart.value = it
                 }
             } catch (e: Exception) {
-                Log.e("CART", "Error fetching cart: ${e.message}")
+                Timber.tag("CART").e("Error fetching cart: %s", e.message)
             }
         }
     }
@@ -163,7 +144,6 @@ class OrderSummaryViewModel @Inject constructor(
 
     fun addOrderQuantity(menuId: String, cart: CartEntity?) {
         viewModelScope.launch {
-            Log.d("test", "${cart?.menuId} dan ${cart?.menuQty}")
             cart?.let {
                 cartUseCase.insertMenu(it.copy(menuQty = cart.menuQty + 1))
             } ?: insertMenu(menuId = menuId, menuQty = 1)
@@ -195,14 +175,11 @@ class OrderSummaryViewModel @Inject constructor(
                 val TOTAL = orders.value.size - 3
 
                 val payment =
-                    if (_orders.value[PAYMENT_METHOD].toString() == "COD" || _orders.value[PAYMENT_METHOD].toString() == "GOPAY")
-                        _orders.value[PAYMENT_METHOD].toString() else null
+                    if (_orders.value[PAYMENT_METHOD].toString() == "COD" || _orders.value[PAYMENT_METHOD].toString() == "GOPAY") _orders.value[PAYMENT_METHOD].toString() else null
 
-                val total = _orders.value[TOTAL] as Pair<Int, Int> ?: null
+                val total = _orders.value[TOTAL] as Pair<Int, Int>
 
-                if (!payment.isNullOrEmpty() && total != null && _orders.value.size > 4
-                    && user != null
-                ) {
+                if (!payment.isNullOrEmpty() && _orders.value.size > 4 && user != null) {
                     db.runTransaction {
                         USER_ADDRESS?.let { address ->
                             USER_TOKEN?.let { token ->
@@ -215,7 +192,7 @@ class OrderSummaryViewModel @Inject constructor(
                                     restoID = restoID.value,
                                     date = Date(),
                                     paymentMethod = payment,
-                                    totalPrice = total.second ?: -1,
+                                    totalPrice = total.second,
                                     latitude = address.latitude,
                                     longitude = address.longitude,
                                     userToken = token,
@@ -225,7 +202,7 @@ class OrderSummaryViewModel @Inject constructor(
                                 orderUseCase.setOrder(order.id, orderToFirebase)
 
                                 for (i in 1..<TOTAL) {
-                                    val menu = _orders.value[i] as Menu ?: null
+                                    val menu = _orders.value[i] as Menu
                                     menu?.let {
                                         val orderItem = OrderItem(
                                             id = getOrderItemDocumentId(order.id),
@@ -236,20 +213,15 @@ class OrderSummaryViewModel @Inject constructor(
                                         val orderItemResponse =
                                             OrderItemResponse.toResponse(orderItem)
                                         orderUseCase.setOrderItem(
-                                            order.id,
-                                            orderItem.id,
-                                            orderItemResponse
+                                            order.id, orderItem.id, orderItemResponse
                                         )
                                     }
                                 }
-//                                sendNotificationToResto(onResult)
-//                                onResult(true)
 
                                 viewModelScope.launch {
                                     shipmentUseCase.createShipment(
                                         Shipment(
-                                            orderID = orderId,
-                                            statusDelivery = "On Process"
+                                            orderID = orderId, statusDelivery = "On Process"
                                         )
                                     )
                                 }
@@ -265,6 +237,8 @@ class OrderSummaryViewModel @Inject constructor(
                             }
                         }
                     }
+                } else {
+                    onResult(false)
                 }
             }
 
@@ -285,47 +259,23 @@ class OrderSummaryViewModel @Inject constructor(
         }
     }
 
-//    private fun getCurrentDateTime(): String {
-//        val currentDate = Date()
-//        val dateFormat = SimpleDateFormat("dd MMMM yyyy, HH:mm", Locale.getDefault())
-//        return dateFormat.format(currentDate)
-//    }
-
-//    private fun sendNotificationToResto(onResult: (msg: String) -> Unit) {
-//        db.collection("users").document("amnRLCt7iYGogz6JRxi5")
-//            .collection("tokens")
-//            .get()
-//            .addOnSuccessListener { documents ->
-//                sendMessageToBackend(
-//                    message = "There's new order. Check your Resto App",
-//                    token = USER_TOKEN,
-//                    onResult
-//                )
-//            }
-//            .addOnFailureListener {
-//                Log.d("test", "GAGAL FETCH DATA: $it")
-//            }
-//    }
-
     private fun sendNotificationToResto(
 //        onResult: (msg: Boolean) -> Unit
     ) {
         viewModelScope.launch {
             val messageDto = SendMessageDto(
-                to = restoToken.value,
-                notification = NotificationBody(
-                    title = "New Message",
-                    body = "There's new order. Check your Resto App"
+                to = restoToken.value, notification = NotificationBody(
+                    title = "New Message", body = "There's new order. Check your Resto App"
                 )
             )
 
             when (val result = fcmApiRepository.sendMessage(messageDto)) {
                 is Success -> {
-                    Log.d("test", "FCM SENT")
+                    Timber.tag("test").d("FCM SENT")
                 }
 
                 is Error -> {
-                    Log.d("test", "FCM FAILED")
+                    Timber.tag("test").d("FCM FAILED")
                 }
             }
 

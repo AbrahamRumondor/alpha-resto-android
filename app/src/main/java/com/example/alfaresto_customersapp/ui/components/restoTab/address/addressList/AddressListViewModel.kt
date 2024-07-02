@@ -1,6 +1,5 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.address.addressList
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.alfaresto_customersapp.domain.error.FirestoreCallback
 import com.example.alfaresto_customersapp.domain.model.Address
@@ -12,6 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -49,19 +49,15 @@ class AddressListViewModel @Inject constructor(
         return previousSelected
     }
 
-    fun fetchAllAddresses() {
+    private fun fetchAllAddresses() {
         setLoading(true)
         viewModelScope.launch {
             try {
                 userUseCase.getUserAddresses().collectLatest {
-                    Log.d("test", it.toString())
                     _userAddresses.value = it
                     setLoading(false)
                 }
-//                val addresses = userUseCase.getUserAddresses()
-//                _userAddresses.value = addresses.value
             } catch (e: Exception) {
-                Log.d("test", "GAGAL FETCH DATA: $e")
                 setLoading(false)
             }
         }
@@ -86,13 +82,13 @@ class AddressListViewModel @Inject constructor(
                         val address = userUseCase.getUserAddressById(addressId)
                         _selectedAddress.value = address
                     } catch (e: Exception) {
-                        Log.d("test", "GAGAL FETCH DATA: $e")
+                        Timber.tag("test").d(e, "GAGAL FETCH DATA")
                     }
                 }
             }
 
             override fun onFailure(exception: Exception) {
-                Log.d("test", "On failure addresslistvm DATA: $exception")
+                Timber.tag("test").d(exception, "On failure addresslistvm DATA")
             }
         })
     }

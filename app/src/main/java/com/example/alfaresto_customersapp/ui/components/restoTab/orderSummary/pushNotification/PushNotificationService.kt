@@ -1,21 +1,17 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.pushNotification
 
-import android.util.Log
 import com.example.alfaresto_customersapp.domain.model.Token
 import com.example.alfaresto_customersapp.utils.user.UserConstants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import timber.log.Timber
 
 
 class PushNotificationService : FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        Log.d(
-            "test",
-            "On new token called: $token"
-        )
         sendTokenToFirestore(token)
         UserConstants.USER_TOKEN = token
     }
@@ -23,13 +19,12 @@ class PushNotificationService : FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
         message.notification?.let {
-            
+
         }
     }
 
     private fun sendTokenToFirestore(token: String) {
         val db = FirebaseFirestore.getInstance()
-        val userId = FirebaseAuth.getInstance().currentUser!!.uid
 
         val documentId = db.collection("users").document("amnRLCt7iYGogz6JRxi5")
             .collection("tokens").document().id
@@ -39,17 +34,10 @@ class PushNotificationService : FirebaseMessagingService() {
             .collection("tokens").document(documentId)
             .set(userToken)
             .addOnSuccessListener {
-                Log.d(
-                    "test",
-                    "FCM token added to Firestore"
-                )
+                Timber.tag("test").d("FCM token added to Firestore")
             }
             .addOnFailureListener { e ->
-                Log.w(
-                    "test",
-                    "Error adding FCM token to Firestore",
-                    e
-                )
+                Timber.tag("test").w(e, "Error adding FCM token to Firestore")
             }
     }
 }

@@ -8,23 +8,23 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
-import com.example.alfaresto_customersapp.databinding.FragmentDetailBinding
+import com.example.alfaresto_customersapp.databinding.FragmentDetailFoodBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class DetailFragment : Fragment() {
+class DetailFoodFragment : Fragment() {
 
-    private lateinit var binding: FragmentDetailBinding
+    private lateinit var binding: FragmentDetailFoodBinding
     private var quantity = 1
-    private val args: DetailFragmentArgs by navArgs()
-    private val viewModel: DetailViewModel by viewModels()
+    private val args: DetailFoodFragmentArgs by navArgs()
+    private val viewModel: DetailFoodViewModel by viewModels()
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentDetailBinding.inflate(inflater, container, false)
+        binding = FragmentDetailFoodBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -36,7 +36,7 @@ class DetailFragment : Fragment() {
                 tvFoodName.text = menu.name
                 tvFoodPrice.text = menu.price.toString()
                 tvFoodDesc.text = menu.description
-                Glide.with(this@DetailFragment)
+                Glide.with(this@DetailFoodFragment)
                     .load(menu.image)
                     .placeholder(android.R.drawable.ic_menu_report_image)
                     .into(ivFood)
@@ -53,7 +53,7 @@ class DetailFragment : Fragment() {
             btnAddToCart.setOnClickListener {
                 btnAddToCart.visibility = View.GONE
                 llQuantity.visibility = View.VISIBLE
-                this@DetailFragment.quantity = 1
+                this@DetailFoodFragment.quantity = 1
                 tvQuantity.text = quantity.toString()
             }
 

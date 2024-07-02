@@ -1,6 +1,5 @@
 package com.example.alfaresto_customersapp.domain.usecase.order
 
-import android.util.Log
 import com.example.alfaresto_customersapp.data.model.OrderItemResponse
 import com.example.alfaresto_customersapp.data.model.OrderResponse
 import com.example.alfaresto_customersapp.domain.model.Order
@@ -23,8 +22,7 @@ class OrderUseCaseImpl @Inject constructor(
 
     override suspend fun getMyOrders(): StateFlow<List<Order>> {
         val userName =
-            userRepository.getCurrentUser(authRepository.getCurrentUserID()).value.name ?: ""
-        Log.d("OrderUseCaseImpl", "getMyOrders: $userName")
+            userRepository.getCurrentUser(authRepository.getCurrentUserID()).value.name
         return orderRepository.getMyOrders(userName)
     }
 
@@ -45,7 +43,6 @@ class OrderUseCaseImpl @Inject constructor(
     }
 
     override suspend fun getOrderItems(orderId: String): StateFlow<List<OrderItem>> {
-        Log.d("OrderUseCaseImpl", "getOrderItems: ${orderRepository.getOrderItems(orderId).value}")
         return orderRepository.getOrderItems(orderId)
     }
 }

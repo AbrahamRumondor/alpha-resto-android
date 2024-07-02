@@ -1,6 +1,5 @@
 package com.example.alfaresto_customersapp.ui.components.orderHistoryDetailPage
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.alfaresto_customersapp.domain.model.OrderHistory
 import com.example.alfaresto_customersapp.domain.model.OrderItem
@@ -13,6 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,11 +35,8 @@ class OrderHistoryDetailViewModel @Inject constructor(
     }
 
     fun fetchOrderHistory(orderId: String) {
-        Log.d("OrderHistoryDetailViewModel", "Order ID: $orderId")
         viewModelScope.launch {
             _orderHistory.value = orderHistoryUseCase.getOrderHistoryByOrderID(orderId)
-
-            Log.d("OrderHistoryDetailViewModel", "Order History: ${orderHistory.value}")
         }
     }
 
@@ -51,7 +48,7 @@ class OrderHistoryDetailViewModel @Inject constructor(
                     _user.value = user
                 }
             } catch (e: Exception) {
-                Log.e("ORDER_HISTORY_DETAIL", "Error fetching user: ${e.message}")
+                Timber.tag("ORDER_HISTORY_DETAIL").e("Error fetching user: %s", e.message)
             }
         }
     }
@@ -61,11 +58,9 @@ class OrderHistoryDetailViewModel @Inject constructor(
             try {
                 orderUseCase.getOrderItems(orderId).collectLatest {
                     _orderItems.value = it
-
-                    Log.d("orderhistoryviewmodel", "Order Items: ${orderItems.value}")
                 }
             } catch (e: Exception) {
-                Log.e("ORDER_HISTORY_DETAIL", "Error fetching order items: ${e.message}")
+                Timber.tag("ORDER_HISTORY_DETAIL").e("Error fetching order items: %s", e.message)
             }
         }
     }

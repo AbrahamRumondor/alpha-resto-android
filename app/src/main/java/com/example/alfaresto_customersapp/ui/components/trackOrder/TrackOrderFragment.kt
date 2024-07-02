@@ -11,7 +11,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -97,18 +96,12 @@ class TrackOrderFragment : Fragment() {
 
         val orderId = args.orderId
         binding.run {
-
             toolbar.btnBack.setOnClickListener {
                 findNavController().popBackStack()
             }
 
             trackOrderViewModel.order.observe(viewLifecycleOwner) { orderList ->
-
-                Log.d("test", orderId)
-
                 val order = orderList.find { it.id == orderId }
-
-                Log.d("test", order.toString())
 
                 order?.let { myOrder ->
                     val home = LatLng(myOrder.latitude, myOrder.longitude)
@@ -134,9 +127,10 @@ class TrackOrderFragment : Fragment() {
                 }
 
                 btnChat.setOnClickListener {
-                    val action = TrackOrderFragmentDirections.actionTrackOrderFragmentToChatFragment(
-                        orderId = orderId
-                    )
+                    val action =
+                        TrackOrderFragmentDirections.actionTrackOrderFragmentToChatFragment(
+                            orderId = orderId
+                        )
                     Navigation.findNavController(requireView()).navigate(action)
                 }
             }
@@ -146,7 +140,6 @@ class TrackOrderFragment : Fragment() {
     private fun setLocationUpdatesListener(home: LatLng) {
         trackOrderViewModel.getLocationUpdates(object : RealtimeLocationCallback {
             override fun onSuccess(driverLatLng: LatLng) {
-                Log.d("test", "driver lat lng = ${driverLatLng.toString()}")
                 setOnFocusLocationButtonClickListener(home, driverLatLng)
                 setRouting(home = home, driver = driverLatLng)
             }

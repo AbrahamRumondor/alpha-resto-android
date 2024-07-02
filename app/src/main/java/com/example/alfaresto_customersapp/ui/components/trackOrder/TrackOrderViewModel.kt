@@ -1,7 +1,6 @@
 package com.example.alfaresto_customersapp.ui.components.trackOrder
 
 import android.location.Location
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -26,6 +25,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -69,7 +69,7 @@ class TrackOrderViewModel @Inject constructor(
     fun getRoute(home: LatLng, driver: LatLng, osrmCallback: OsrmCallback) {
         val call = osrmApiRepository.getRoute(
             profile = "car", // Replace with your desired profile
-            coordinates = "${home.longitude},${home.latitude};${driver.longitude},${driver.latitude}",
+            coordinates = "${driver.longitude},${driver.latitude};${home.longitude},${home.latitude}",
             alternatives = false,
             steps = true,
             geometries = "polyline", // Choose your desired geometry format
@@ -122,24 +122,22 @@ class TrackOrderViewModel @Inject constructor(
             ValueEventListener {
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                Log.d("test", dataSnapshot.toString())
                 val latitude = dataSnapshot.child("latitude").getValue(Double::class.java)
                 val longitude = dataSnapshot.child("longitude").getValue(Double::class.java)
 
                 if (latitude != null && longitude != null) {
-                    Log.d("Firebase", "Latitude: $latitude, Longitude: $longitude")
                     callback.onSuccess(
                         LatLng(latitude, longitude)
                     )
                 } else {
                     callback.onFailure("Location data is missing")
-                    Log.d("Firebase", "Location data is missing")
+                    Timber.tag("Firebase").d("Location data is missing")
                 }
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                callback.onFailure(databaseError.message.toString())
-                Log.w("Firebase", "loadPost:onCancelled", databaseError.toException())
+                callback.onFailure(databaseError.message)
+                Timber.tag("Firebase").w(databaseError.toException(), "loadPost:onCancelled")
             }
 
         })
@@ -161,14 +159,12 @@ class TrackOrderViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val restaurant = restaurantUseCase.getRestaurant()
-                Log.d("test", "resto = ${restaurant.toString()}")
                 restaurant?.let {
                     val restaurantLatLng = LatLng(restaurant.latitude, restaurant.longitude)
                     val totalDistance = calculateDistanceBetween(home, restaurantLatLng)
 
                     val progressPercentage =
                         (((totalDistance - distance) / totalDistance) * 100).toInt()
-                    Log.d("test", "progress = ${progressPercentage}")
                     callback.onSuccess(
                         if (progressPercentage < 0) 0
                         else progressPercentage

@@ -1,6 +1,5 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -16,6 +15,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -57,7 +57,7 @@ class ListAllMenuViewModel @Inject constructor(
                     _cartItems.value = items
                 }
             } catch (e: Exception) {
-                Log.e("CART", "Error fetching cart: ${e.message}")
+                Timber.tag("CART").e("Error fetching cart: %s", e.message)
             }
         }
     }

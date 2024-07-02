@@ -1,7 +1,6 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,10 +38,8 @@ class ThankYouFragment : Fragment() {
                 text = if (checkoutStatus) "Please wait for your order" else ""
             }
 
-            Log.d("ThankYouFragment", "Checkout Status: $checkoutStatus")
-
             btnProceed.setOnClickListener {
-                Navigation.findNavController(view)
+                Navigation.findNavController(binding.root)
                     .navigate(R.id.action_thankYouFragment_to_restoFragment)
             }
         }
