@@ -1,6 +1,7 @@
 package com.example.alfaresto_customersapp.ui.components.trackOrder.chat
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.FragmentChatBinding
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class ChatFragment : Fragment() {
@@ -71,7 +73,9 @@ class ChatFragment : Fragment() {
 
     private fun addMessageToChatView(message: String, senderId: String) {
         val userId = viewModel.getUserId()
-        val restoId = viewModel.restoId
+        val restoId = viewModel.restoID.value
+
+        Timber.tag("ChatFragment").d("userId: " + userId + ", restoId: " + restoId)
 
         val layoutId = when (senderId) {
             userId -> {
