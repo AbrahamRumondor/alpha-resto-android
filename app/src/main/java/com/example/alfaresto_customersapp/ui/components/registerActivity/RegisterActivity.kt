@@ -8,7 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.alfaresto_customersapp.R
-import com.example.alfaresto_customersapp.databinding.RegisterPageBinding
+import com.example.alfaresto_customersapp.databinding.ActivityRegisterBinding
 import com.example.alfaresto_customersapp.ui.components.loginActivity.LoginActivity
 import com.example.alfaresto_customersapp.ui.components.util.Constants
 import com.google.firebase.auth.FirebaseAuth
@@ -17,14 +17,14 @@ import java.security.MessageDigest
 
 class RegisterActivity : AppCompatActivity() {
 
-    private lateinit var binding: RegisterPageBinding
+    private lateinit var binding: ActivityRegisterBinding
     lateinit var auth: FirebaseAuth
     private lateinit var firebaseFirestore: FirebaseFirestore
     private val passwordPatterns = Constants.passwordPatterns
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = RegisterPageBinding.inflate(layoutInflater)
+        binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         auth = FirebaseAuth.getInstance()

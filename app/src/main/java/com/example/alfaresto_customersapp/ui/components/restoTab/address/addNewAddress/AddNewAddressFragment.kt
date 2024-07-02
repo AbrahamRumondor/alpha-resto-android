@@ -48,8 +48,12 @@ class AddNewAddressFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        requestLocationPermissions()
+        binding.mvMap.onCreate(savedInstanceState)
+    }
+
+    private fun setUpMap() {
         binding.run {
-            mvMap.onCreate(savedInstanceState)
             mvMap.getMapAsync {
                 map = it
                 enableMyLocation()
@@ -58,7 +62,6 @@ class AddNewAddressFragment : Fragment() {
             }
         }
         onSaveButtonClicked()
-        requestLocationPermissions()
     }
 
     private fun onSaveButtonClicked() {
@@ -111,6 +114,7 @@ class AddNewAddressFragment : Fragment() {
             when {
                 fineLocationGranted || coarseLocationGranted -> {
                     // Fine location access granted
+                    setUpMap()
                 }
 
                 else -> {
@@ -140,6 +144,7 @@ class AddNewAddressFragment : Fragment() {
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) -> {
+                setUpMap()
                 // You can use the API that requires the permission.
             }
 
@@ -147,6 +152,7 @@ class AddNewAddressFragment : Fragment() {
                 requireContext(),
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) -> {
+                setUpMap()
                 // You can use the API that requires the permission.
             }
 
