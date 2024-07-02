@@ -1,6 +1,5 @@
 package com.example.alfaresto_customersapp.ui.components.orderHistoryTab
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -9,6 +8,7 @@ import com.example.alfaresto_customersapp.domain.usecase.orderHistory.OrderHisto
 import com.example.alfaresto_customersapp.ui.components.loadState.LoadStateViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,9 +30,9 @@ class OrderHistoryViewModel @Inject constructor(
     private fun fetchOrderHistories() {
         viewModelScope.launch {
             orderHistoryUseCase.getOrderHistories { orderHistories ->
-                Log.d("orderhistoryvm", orderHistories.toString())
                 if (orderHistories.isEmpty()) {
-                    Log.d("OrderHistory viewmodel", "Order histories is empty, waiting for data...")
+                    Timber.tag("OrderHistory viewmodel")
+                        .d("Order histories is empty, waiting for data...")
                     setLoading(false)
                     return@getOrderHistories
                 }

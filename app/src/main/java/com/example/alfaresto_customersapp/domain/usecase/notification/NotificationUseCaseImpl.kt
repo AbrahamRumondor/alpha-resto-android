@@ -1,6 +1,5 @@
 package com.example.alfaresto_customersapp.domain.usecase.notification
 
-import android.util.Log
 import com.example.alfaresto_customersapp.data.model.TokenResponse
 import com.example.alfaresto_customersapp.data.remote.pushNotification.NotificationBody
 import com.example.alfaresto_customersapp.data.remote.pushNotification.SendMessageDto
@@ -10,6 +9,7 @@ import com.example.alfaresto_customersapp.domain.repository.FcmApiRepository
 import com.example.alfaresto_customersapp.domain.repository.UserRepository
 import com.example.alfaresto_customersapp.utils.getText
 import kotlinx.coroutines.tasks.await
+import timber.log.Timber
 import javax.inject.Inject
 
 class NotificationUseCaseImpl @Inject constructor(
@@ -21,8 +21,6 @@ class NotificationUseCaseImpl @Inject constructor(
     override suspend fun sendNotificationToResto(onResult: (msg: String) -> Unit) {
         userRepository.getUserToken(authRepository.getCurrentUserID())
             .addOnSuccessListener { documents ->
-                Log.d("test", "SUCCESS FETCH DATA: $documents")
-
                 val token = documents.toObjects(TokenResponse::class.java)
                     .firstOrNull()?.userToken
 
@@ -32,11 +30,11 @@ class NotificationUseCaseImpl @Inject constructor(
 //                        token = token,
 //                        onResult
 //                    )
-                    Log.d("test", "TOKEN: $token")
+                    Timber.tag("test").d("TOKEN: %s", token)
                 }
             }
             .addOnFailureListener {
-                Log.d("test", "GAGAL FETCH DATA: $it")
+                Timber.tag("test").d(it, "GAGAL FETCH DATA")
             }.await()
     }
 

@@ -1,6 +1,5 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.viewHolder
 
-import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import com.example.alfaresto_customersapp.databinding.OrderSummaryAddressBinding
 import com.example.alfaresto_customersapp.domain.model.Address
@@ -25,7 +24,6 @@ class OrderAddressViewHolder(
             }
 
             clAddressView.setOnClickListener {
-                Log.d("test", "HI")
                 itemListener?.onAddressClicked(position)
             }
         }

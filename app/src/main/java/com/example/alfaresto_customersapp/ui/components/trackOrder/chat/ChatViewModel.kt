@@ -1,7 +1,6 @@
 package com.example.alfaresto_customersapp.ui.components.trackOrder.chat
 
 import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,6 +18,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -39,8 +39,6 @@ class ChatViewModel @Inject constructor(
     private val _restoID: MutableStateFlow<String> = MutableStateFlow("")
     val restoID: StateFlow<String> = _restoID
 
-    val restoId = "NrhoLsLLieXFly9dXj7vu2ETi1T2"
-
     init {
         firestore = FirebaseFirestore.getInstance()
         fetchResto()
@@ -53,8 +51,6 @@ class ChatViewModel @Inject constructor(
 
         val dateFormatted = Timestamp.now().toDate()
 
-        Log.d(TAG, "orderId: $orderId")
-
         val data: HashMap<String, Any> = hashMapOf(
             "date_send" to dateFormatted,
             "message" to message,
@@ -64,11 +60,11 @@ class ChatViewModel @Inject constructor(
 
         chatCollection.add(data)
             .addOnSuccessListener {
-                sendNotificationToResto(message)
-                Log.d(TAG, "Message sent with ID: $orderId")
+                sendNotificationToResto("New message from customer: $message")
+                Timber.tag(TAG).d("Message sent with ID: %s", orderId)
             }
             .addOnFailureListener { e ->
-                Log.w(TAG, "Error sending message", e)
+                Timber.tag(TAG).w(e, "Error sending message")
             }
     }
 
@@ -80,9 +76,10 @@ class ChatViewModel @Inject constructor(
                 .document(orderId)
                 .collection("chats")
 
-            chatListener = chatCollection.addSnapshotListener { snapshots, e ->
+            chatListener = chatCollection.orderBy("date_send")
+                .addSnapshotListener { snapshots, e ->
                 if (e != null) {
-                    Log.w(TAG, "Listen failed.", e)
+                    Timber.tag(TAG).w(e, "Listen failed.")
                     return@addSnapshotListener
                 }
 
@@ -111,11 +108,8 @@ class ChatViewModel @Inject constructor(
 
                 val restoToken = restaurantUseCase.getRestaurantToken()
                 _restoToken.value = restoToken
-
-                Log.d("RESTO", "Resto Token: $restoToken")
-                Log.d("RESTO", "Resto ID: $restoID")
             } catch (e: Exception) {
-                Log.e("RESTO", "Error fetching resto: ${e.message}")
+                Timber.tag("RESTO").e("Error fetching resto: %s", e.message)
             }
         }
     }
@@ -133,11 +127,11 @@ class ChatViewModel @Inject constructor(
 
             when (val result = fcmApiRepository.sendMessage(messageDto)) {
                 is Result.Success -> {
-                    Log.d("test", "FCM SENT")
+                    Timber.tag("test").d("FCM SENT")
                 }
 
                 is Result.Error -> {
-                    Log.d("test", "FCM FAILED")
+                    Timber.tag("test").d("FCM FAILED")
                 }
             }
 
@@ -149,7 +143,7 @@ class ChatViewModel @Inject constructor(
         return user?.uid ?: ""
     }
 
-    fun getUserName(): String {
+    private fun getUserName(): String {
         val user = FirebaseAuth.getInstance().currentUser
         return user?.displayName ?: ""
     }

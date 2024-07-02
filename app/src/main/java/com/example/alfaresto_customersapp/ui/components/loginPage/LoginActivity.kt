@@ -2,7 +2,6 @@ package com.example.alfaresto_customersapp.ui.components.loginPage
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.widget.Toast
@@ -53,8 +52,6 @@ class LoginActivity : AppCompatActivity() {
     private fun validateLogin() {
         val email = binding.etEmail.text.toString()
         val password = binding.etPassword.text.toString()
-
-        Log.d("LoginActivity", "Email: $email, Password: $password")
 
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, R.string.email_pass_empty, Toast.LENGTH_SHORT).show()

@@ -1,8 +1,6 @@
 package com.example.alfaresto_customersapp.ui.components.orderHistoryTab
 
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +18,6 @@ import com.example.alfaresto_customersapp.domain.model.OrderStatus
 import com.example.alfaresto_customersapp.ui.components.listener.OrderHistoryListener
 import com.example.alfaresto_customersapp.ui.components.orderHistoryTab.adapter.OrderHistoryAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -42,12 +39,12 @@ class OrderHistoryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.rvOrderHistory.adapter = adapter
+        binding.rvOrderHistory.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
         lifecycleScope.launch {
             viewModel.orderHistories.observe(viewLifecycleOwner) { orderHistories ->
                 if (orderHistories.isEmpty()) {
-                    Log.d("OrderHistory", "Order History is empty, waiting for data...")
-                    // Optionally, you can show a loading state or handle the empty case
                     Toast.makeText(
                         requireContext(),
                         "Order History Loaded. There's no order history.",
@@ -56,6 +53,7 @@ class OrderHistoryFragment : Fragment() {
                     return@observe
                 }
 
+                adapter.submitList(orderHistories)
                 binding.run {
                     var sortedOrderHistories: List<OrderHistory> =
                         orderHistories.sortedByDescending {
@@ -66,9 +64,13 @@ class OrderHistoryFragment : Fragment() {
                         sortedOrderHistories = orderHistories.sortedByDescending {
                             it.orderDate
                         }
-                        btnLatest.background = ContextCompat.getDrawable(requireContext(), R.drawable.button_radius)
+                        btnLatest.background =
+                            ContextCompat.getDrawable(requireContext(), R.drawable.button_radius)
                         btnLatest.alpha = 1.0F
-                        btnOldest.background = ContextCompat.getDrawable(requireContext(), R.drawable.button_radius_gray)
+                        btnOldest.background = ContextCompat.getDrawable(
+                            requireContext(),
+                            R.drawable.button_radius_gray
+                        )
                         btnOldest.alpha = 0.5F
                         adapter.submitList(sortedOrderHistories)
                     }
@@ -76,9 +78,13 @@ class OrderHistoryFragment : Fragment() {
                         sortedOrderHistories = orderHistories.sortedBy {
                             it.orderDate
                         }
-                        btnOldest.background = ContextCompat.getDrawable(requireContext(), R.drawable.button_radius)
+                        btnOldest.background =
+                            ContextCompat.getDrawable(requireContext(), R.drawable.button_radius)
                         btnOldest.alpha = 1.0F
-                        btnLatest.background = ContextCompat.getDrawable(requireContext(), R.drawable.button_radius_gray)
+                        btnLatest.background = ContextCompat.getDrawable(
+                            requireContext(),
+                            R.drawable.button_radius_gray
+                        )
                         btnLatest.alpha = 0.5F
                         adapter.submitList(sortedOrderHistories)
                     }
@@ -87,21 +93,18 @@ class OrderHistoryFragment : Fragment() {
                     rvOrderHistory.layoutManager =
                         LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 //                setOnOrderClickListener()
-
-                    orderHistories.map {
-                        setOnOrderClickListener(it.orderStatus)
-                    }
+                }
+                orderHistories.map {
+                    setOnOrderClickListener()
                 }
             }
         }
     }
 
-
-    private fun setOnOrderClickListener(orderStatus: OrderStatus) {
+    private fun setOnOrderClickListener() {
         adapter.setItemListener(object : OrderHistoryListener {
             override fun onOrderClicked(orderHistory: OrderHistory) {
                 val action = if (orderHistory.orderStatus == OrderStatus.DELIVERED) {
-                    Log.d("OrderHistory", "Order ID: ${orderHistory.orderStatus}")
                     OrderHistoryFragmentDirections.actionOrderHistoryFragmentToOrderHistoryDetailFragment(
                         orderId = orderHistory.orderId
                     )

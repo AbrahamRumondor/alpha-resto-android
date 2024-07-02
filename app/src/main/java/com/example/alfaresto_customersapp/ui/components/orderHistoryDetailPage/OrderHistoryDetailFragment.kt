@@ -46,7 +46,7 @@ class OrderHistoryDetailFragment : Fragment() {
         binding.toolbar.apply {
             btnLogout.visibility = View.GONE
             btnBack.visibility = View.VISIBLE
-            tvToolbarTitle.visibility = View.GONE
+            ivToolbarTitle.visibility = View.GONE
             tvToolbarText.visibility = View.VISIBLE
             tvToolbarText.text = getString(R.string.order_detail)
         }

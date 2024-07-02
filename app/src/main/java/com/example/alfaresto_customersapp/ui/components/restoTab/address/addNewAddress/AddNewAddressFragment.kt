@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,13 +14,14 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.BsdLocationPermissionBinding
 import com.example.alfaresto_customersapp.databinding.FragmentAddNewAddressBinding
-import com.example.alfaresto_customersapp.ui.components.restoTab.address.addressList.AddressListViewModel
 import com.example.alfaresto_customersapp.utils.location.LocationGpsUtility
 import com.example.alfaresto_customersapp.utils.location.LocationGpsUtility.locationDialogIsShown
 import com.example.alfaresto_customersapp.utils.location.LocationPermissions
@@ -29,6 +29,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import kotlinx.coroutines.launch
 
 class AddNewAddressFragment : Fragment() {
 
@@ -70,10 +71,12 @@ class AddNewAddressFragment : Fragment() {
             btnSaveAddress.setOnClickListener {
                 val addressLabel = etAddressLabel.text.toString()
                 val addressDetail = etAddressDetail.text.toString()
-                addNewAddressViewModel.saveAddressInDatabase(
-                    addressLabel = addressLabel,
-                    addressDetail = addressDetail
-                )
+                lifecycleScope.launch {
+                    addNewAddressViewModel.saveAddressInDatabase(
+                        addressLabel = addressLabel,
+                        addressDetail = addressDetail
+                    )
+                }
                 Navigation.findNavController(it).popBackStack()
             }
         }

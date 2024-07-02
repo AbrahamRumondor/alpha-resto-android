@@ -54,4 +54,7 @@
     <dimen name="dimen_350">350dp</dimen>
     <dimen name="font_28">28sp</dimen>
     <dimen name="dimen_25">25dp</dimen>
+    <dimen name="dimen_220">220dp</dimen>
+    <dimen name="dimen_280">280dp</dimen>
+    <dimen name="dimen_2">2dp</dimen>
 </resources>
