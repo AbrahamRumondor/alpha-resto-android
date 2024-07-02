@@ -8,6 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.FragmentChatBinding
@@ -29,8 +30,25 @@ class ChatFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.toolbar.apply {
+            ivToolbarTitle.visibility = View.GONE
+            tvToolbarText.visibility = View.VISIBLE
+            tvToolbarText.text = "Chat"
+            btnLogout.visibility = View.GONE
+            btnBack.visibility = View.VISIBLE
+            btnBack.setOnClickListener {
+                findNavController().popBackStack()
+            }
+        }
+
         val userId = viewModel.getUserId()
         val orderId = args.orderId
+        if (orderId.isEmpty()) {
+            Toast.makeText(requireContext(), "Order ID is missing", Toast.LENGTH_SHORT).show()
+            requireActivity().onBackPressed()
+            return
+        }
 
         viewModel.listenForMessages(orderId)
 
@@ -40,13 +58,12 @@ class ChatFragment : Fragment() {
                 viewModel.sendMessage(userId, orderId, message)
                 binding.chatInput.text.clear()
             } else {
-                Toast.makeText(requireContext(), "Message cannot be empty", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(requireContext(), "Message cannot be empty", Toast.LENGTH_SHORT).show()
             }
         }
 
         viewModel.messages.observe(viewLifecycleOwner) { messages ->
-            messages.sortedBy { it.first }.forEach { pair ->
+            messages.forEach { pair ->
                 addMessageToChatView(pair.first, pair.second)
             }
         }
@@ -54,25 +71,28 @@ class ChatFragment : Fragment() {
 
     private fun addMessageToChatView(message: String, senderId: String) {
         val userId = viewModel.getUserId()
-        val restoId = viewModel.restoID.value
+        val restoId = viewModel.restoId
 
         val layoutId = when (senderId) {
             userId -> {
                 R.layout.customer_chat
             }
-
             restoId -> {
                 R.layout.resto_chat
             }
-
             else -> {
                 R.layout.customer_chat
             }
         }
 
-        val textView = LayoutInflater.from(requireContext())
-            .inflate(layoutId, binding.chatLinearLayout, false) as TextView
-        textView.text = message
-        binding.chatLinearLayout.addView(textView)
+        val chatBubble = layoutInflater.inflate(layoutId, binding.chatLinearLayout, false)
+        val messageTextView = chatBubble.findViewById<TextView>(R.id.customerChat) ?: chatBubble.findViewById(R.id.restoChat)
+        messageTextView.text = message
+        binding.chatLinearLayout.addView(chatBubble)
+
+        binding.scrollView.post {
+            binding.scrollView.fullScroll(View.FOCUS_DOWN)
+        }
+
     }
 }

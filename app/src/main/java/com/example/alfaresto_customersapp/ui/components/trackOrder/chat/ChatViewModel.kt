@@ -76,7 +76,8 @@ class ChatViewModel @Inject constructor(
                 .document(orderId)
                 .collection("chats")
 
-            chatListener = chatCollection.addSnapshotListener { snapshots, e ->
+            chatListener = chatCollection.orderBy("date_send")
+                .addSnapshotListener { snapshots, e ->
                 if (e != null) {
                     Timber.tag(TAG).w(e, "Listen failed.")
                     return@addSnapshotListener
