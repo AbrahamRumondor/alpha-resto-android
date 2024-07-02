@@ -12,8 +12,7 @@
         android:id="@+id/tv_order_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_blank_fragment"
-        android:textSize="@dimen/dimen_20sp"
+        android:textSize="@dimen/font_18"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/tv_order_body"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,7 +23,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
-        android:text="@string/hello_blank_fragment"
         app:layout_constraintBottom_toTopOf="@id/iv_driver"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -38,14 +36,15 @@
         app:layout_constraintDimensionRatio="H,1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/driver" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_proceed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/button_radius"
-        android:paddingHorizontal="40dp"
+        android:paddingHorizontal="@dimen/dimen_35"
         android:text="@string/go_back_to_main_menu"
         android:textColor="@color/white"
         android:textAllCaps="false"

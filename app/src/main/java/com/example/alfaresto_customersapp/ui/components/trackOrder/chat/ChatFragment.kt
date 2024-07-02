@@ -34,7 +34,7 @@ class ChatFragment : Fragment() {
         binding.toolbar.apply {
             ivToolbarTitle.visibility = View.GONE
             tvToolbarText.visibility = View.VISIBLE
-            tvToolbarText.text = "Chat"
+            tvToolbarText.text = getString(R.string.chat)
             btnLogout.visibility = View.GONE
             btnBack.visibility = View.VISIBLE
             btnBack.setOnClickListener {
@@ -44,11 +44,11 @@ class ChatFragment : Fragment() {
 
         val userId = viewModel.getUserId()
         val orderId = args.orderId
-        if (orderId.isEmpty()) {
-            Toast.makeText(requireContext(), "Order ID is missing", Toast.LENGTH_SHORT).show()
-            requireActivity().onBackPressed()
-            return
-        }
+//        if (orderId.isEmpty()) {
+//            Toast.makeText(requireContext(), "Order ID is missing", Toast.LENGTH_SHORT).show()
+//            requireActivity().onBackPressed()
+//            return
+//        }
 
         viewModel.listenForMessages(orderId)
 
@@ -58,7 +58,8 @@ class ChatFragment : Fragment() {
                 viewModel.sendMessage(userId, orderId, message)
                 binding.chatInput.text.clear()
             } else {
-                Toast.makeText(requireContext(), "Message cannot be empty", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Message cannot be empty", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
@@ -71,22 +72,25 @@ class ChatFragment : Fragment() {
 
     private fun addMessageToChatView(message: String, senderId: String) {
         val userId = viewModel.getUserId()
-        val restoId = viewModel.restoId
+        val restoId = viewModel.restoID.value
 
         val layoutId = when (senderId) {
             userId -> {
                 R.layout.customer_chat
             }
+
             restoId -> {
                 R.layout.resto_chat
             }
+
             else -> {
                 R.layout.customer_chat
             }
         }
 
         val chatBubble = layoutInflater.inflate(layoutId, binding.chatLinearLayout, false)
-        val messageTextView = chatBubble.findViewById<TextView>(R.id.customerChat) ?: chatBubble.findViewById(R.id.restoChat)
+        val messageTextView = chatBubble.findViewById<TextView>(R.id.customerChat)
+            ?: chatBubble.findViewById(R.id.restoChat)
         messageTextView.text = message
         binding.chatLinearLayout.addView(chatBubble)
 

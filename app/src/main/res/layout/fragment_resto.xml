@@ -36,7 +36,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_menu"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="@dimen/dimen_none"
         android:layout_marginVertical="@dimen/dimen_30"
         android:clickable="true"
         android:focusable="true"
@@ -71,7 +71,7 @@
             android:layout_width="@dimen/dimen_50"
             android:layout_height="@dimen/dimen_50"
             android:background="@android:color/transparent"
-            android:contentDescription="@string/logo"
+            android:contentDescription="@string/cartlogo"
             android:src="@drawable/ic_cart" />
 
         <TextView

@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginBottom="@dimen/dimen_10"
-            android:contentDescription="@string/menuimageview"
+            android:contentDescription="@string/menu_image_view"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -67,7 +67,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:textSize="@dimen/dimen_18sp"  />
+            android:textSize="@dimen/font_18"  />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clActionButtons"

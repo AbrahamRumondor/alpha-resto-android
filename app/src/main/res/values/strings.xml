@@ -37,11 +37,15 @@
     <string name="food_desc_title">Description</string>
     <string name="food_name">Soft Shell Taco</string>
     <string name="food_price">Rp 50.000,-</string>
+    <string name="gopay">GOPAY</string>
+    <string name="go_back_to_main_menu">Go back to main menu</string>
+    <string name="go_to_settings">Go to settings</string>
     <string name="greetings">Hi, %1$s</string>
     <string name="guest">Guest</string>
     <string name="hello">Hello,</string>
     <string name="hi_bella">Hi, Bella!</string>
     <string name="icon_proceed">Icon_Proceed</string>
+    <string name="latest">Latest</string>
     <string name="list_all_menu">List All Menu</string>
     <string name="login">Login</string>
     <string name="login_failed">Login Failed</string>
@@ -56,6 +60,7 @@
     <string name="name">Name</string>
     <string name="no">No</string>
     <string name="ok">OK</string>
+    <string name="oldest">Oldest</string>
     <string name="on_delivery">Your order is currently on delivery, track the driver in App</string>
     <string name="on_process">Your order is currently on process, waiting for Admin to accept…</string>
     <string name="on_process_status">On Process</string>
@@ -92,4 +97,7 @@
     <string name="welcome_back">Welcome Back !</string>
     <string name="yes">Yes</string>
     <string name="your_driver_is_on_the_way">your driver is on the way</string>
+    <string name="track_order">Track Order</string>
+    <string name="permission_required">Permission Required</string>
+    <string name="chat">Chat</string>
 </resources>

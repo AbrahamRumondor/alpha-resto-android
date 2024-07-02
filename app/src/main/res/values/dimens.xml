@@ -28,4 +28,5 @@
     <dimen name="font_24">24sp</dimen>
     <dimen name="font_26">26sp</dimen>
     <dimen name="font_28">28sp</dimen>
+    <dimen name="dimen_220">220dp</dimen>
 </resources>
