@@ -1,4 +1,4 @@
-package com.example.alfaresto_customersapp.ui.components
+package com.example.alfaresto_customersapp.ui.components.splashScreenActivity
 
 import android.annotation.SuppressLint
 import android.content.Intent

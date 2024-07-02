@@ -2,16 +2,16 @@ package com.example.alfaresto_customersapp.ui.components.loginPage
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.LoginPageBinding
-import com.example.alfaresto_customersapp.ui.components.MainActivity
+import com.example.alfaresto_customersapp.ui.components.mainActivity.MainActivity
 import com.example.alfaresto_customersapp.ui.components.loginPage.repository.AuthRepositoryImpl
 import com.example.alfaresto_customersapp.ui.components.registerPage.RegisterActivity
+import com.example.alfaresto_customersapp.ui.util.Constants
 
 class LoginActivity : AppCompatActivity() {
 
@@ -54,8 +54,6 @@ class LoginActivity : AppCompatActivity() {
         val email = binding.etEmail.text.toString()
         val password = binding.etPassword.text.toString()
 
-        Log.d("LoginActivity", "Email: $email, Password: $password")
-
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, R.string.email_pass_empty, Toast.LENGTH_SHORT).show()
             return
@@ -81,16 +79,16 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun saveLoginStatus(isLoggedIn: Boolean) {
-        val sharedPreferences = getSharedPreferences("login", MODE_PRIVATE)
+        val sharedPreferences = getSharedPreferences(Constants.login, MODE_PRIVATE)
         with(sharedPreferences.edit()) {
-            putBoolean("isLoggedIn", isLoggedIn)
+            putBoolean(Constants.isLoggedIn, isLoggedIn)
             apply()
         }
     }
 
     private fun isLoggedIn(): Boolean {
-        val sharedPreferences = getSharedPreferences("login", MODE_PRIVATE)
-        return sharedPreferences.getBoolean("isLoggedIn", false)
+        val sharedPreferences = getSharedPreferences(Constants.login, MODE_PRIVATE)
+        return sharedPreferences.getBoolean(Constants.isLoggedIn, false)
     }
 }
 

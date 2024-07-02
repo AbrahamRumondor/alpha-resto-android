@@ -16,7 +16,7 @@
         android:theme="@style/Theme.AlfaRestoCustomersApp"
         tools:targetApi="31">
         <activity
-            android:name=".ui.components.SplashActivity"
+            android:name=".ui.components.splashScreenActivity.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,7 +29,7 @@
             android:exported="true">
         </activity>
         <activity
-            android:name=".ui.components.MainActivity"
+            android:name=".ui.components.mainActivity.MainActivity"
             android:exported="true">
         </activity>
         <activity android:name=".ui.components.registerPage.RegisterActivity"

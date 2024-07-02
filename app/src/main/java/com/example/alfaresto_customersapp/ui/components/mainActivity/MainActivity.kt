@@ -1,4 +1,4 @@
-package com.example.alfaresto_customersapp.ui.components
+package com.example.alfaresto_customersapp.ui.components.mainActivity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

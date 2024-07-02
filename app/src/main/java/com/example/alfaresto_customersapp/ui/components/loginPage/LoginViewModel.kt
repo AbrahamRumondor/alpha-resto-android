@@ -12,12 +12,8 @@ class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
         get() = _loginResult
 
     fun login(email: String, password: String) {
-        authRepository.login(email, password) { success ->
-            if (success) {
-                _loginResult.postValue(true)
-            } else {
-                _loginResult.postValue(false)
-            }
+        authRepository.login(email, password) {
+            _loginResult.postValue(true)
         }
-}
+    }
 }

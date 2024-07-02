@@ -11,13 +11,13 @@ class RegisterViewModel : ViewModel() {
     private val auth = FirebaseAuth.getInstance()
     private val firestore = FirebaseFirestore.getInstance()
 
-    fun registerUser(email: String, name: String, phone: String, password: String, onComplete: (Boolean) -> Unit) {
+    fun registerUser(email: String, name: String, userPhone: String, password: String, onComplete: (Boolean) -> Unit) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { register ->
                 if (register.isSuccessful) {
                     val user = auth.currentUser
                     val id = user?.uid ?: return@addOnCompleteListener
-                    val phone = user.phoneNumber ?: phone
+                    val phone = user.phoneNumber ?: userPhone
                     val hashedPassword = hashPassword(password)
                     val newUser = User(id, name, phone, email, password = hashedPassword)
                     addToFirestore(newUser) { success ->

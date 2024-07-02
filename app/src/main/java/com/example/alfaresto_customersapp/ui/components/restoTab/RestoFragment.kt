@@ -3,7 +3,6 @@ package com.example.alfaresto_customersapp.ui.components.restoTab
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,8 +42,6 @@ class RestoFragment : Fragment() {
 
         viewModel.menus.observe(viewLifecycleOwner) { menus ->
             if (menus.isEmpty()) {
-                Log.d("RestoFragment", "Menus is empty, waiting for data...")
-                // Optionally, you can show a loading state or handle the empty case
                 return@observe
             }
 
@@ -63,12 +60,12 @@ class RestoFragment : Fragment() {
 
     private fun logoutValidation() {
         AlertDialog.Builder(requireContext())
-            .setTitle("Confirmation")
-            .setMessage("Are you sure you want to logout?")
-            .setPositiveButton("Logout") { _, _ ->
+            .setTitle(getString(R.string.confirmation_alert))
+            .setMessage(getString(R.string.logout_confirmation))
+            .setPositiveButton(getString(R.string.logout)) { _, _ ->
                 logout()
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton(getString(R.string.cancel_logout), null)
             .show()
     }
 

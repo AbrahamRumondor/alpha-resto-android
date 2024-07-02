@@ -1,6 +1,5 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -27,11 +26,8 @@ class RestoViewModel @Inject constructor(
         viewModelScope.launch {
             menuUseCase.getMenus().observeForever { menus ->
                 if (menus.isEmpty()) {
-                    Log.d("Resto viewmodel", "Menus is empty, waiting for data...")
-                    // Optionally, you can show a loading state or handle the empty case
                     return@observeForever
                 }
-
                 _menus.value = menus
             }
         }

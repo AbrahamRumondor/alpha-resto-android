@@ -37,4 +37,8 @@
     <string name="login_image">Login Image</string>
     <string name="splash_screen_description">Splash Screen</string>
     <string name="please_sign_in_to_continue">Please sign in to continue</string>
+    <string name="confirmation_alert">Confirmation</string>
+    <string name="logout_confirmation">Are you sure you want to logout?</string>
+    <string name="logout">Logout</string>
+    <string name="cancel_logout">Cancel</string>
 </resources>
