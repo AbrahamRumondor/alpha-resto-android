@@ -114,13 +114,13 @@ class ChatViewModel @Inject constructor(
     }
 
 
-    private fun sendNotificationToResto() {
+    private fun sendNotificationToResto(message: String) {
         viewModelScope.launch {
             val messageDto = SendMessageDto(
                 to = restoToken.value,
                 notification = NotificationBody(
-                    title = "New Message",
-                    body = "There is a new message from customer #${getUserName()}",
+                    title = "Customer",
+                    body = message,
                 )
             )
 

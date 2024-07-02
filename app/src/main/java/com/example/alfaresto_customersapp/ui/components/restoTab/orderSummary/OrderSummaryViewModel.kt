@@ -237,6 +237,8 @@ class OrderSummaryViewModel @Inject constructor(
                             }
                         }
                     }
+                } else {
+                    onResult(false)
                 }
             }
 

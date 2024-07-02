@@ -39,7 +39,7 @@ class ThankYouFragment : Fragment() {
             }
 
             btnProceed.setOnClickListener {
-                Navigation.findNavController(view)
+                Navigation.findNavController(binding.root)
                     .navigate(R.id.action_thankYouFragment_to_restoFragment)
             }
         }
