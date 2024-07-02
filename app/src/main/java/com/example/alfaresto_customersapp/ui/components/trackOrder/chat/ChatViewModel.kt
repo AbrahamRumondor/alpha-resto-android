@@ -10,6 +10,7 @@ import com.example.alfaresto_customersapp.data.remote.pushNotification.SendMessa
 import com.example.alfaresto_customersapp.domain.error.Result
 import com.example.alfaresto_customersapp.domain.repository.FcmApiRepository
 import com.example.alfaresto_customersapp.domain.usecase.resto.RestaurantUseCase
+import com.example.alfaresto_customersapp.ui.components.loadState.LoadStateViewModel
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -26,7 +27,7 @@ class ChatViewModel @Inject constructor(
     private var firestore: FirebaseFirestore,
     private val fcmApiRepository: FcmApiRepository,
     private val restaurantUseCase: RestaurantUseCase
-) : ViewModel() {
+) : LoadStateViewModel() {
 
     private var chatListener: ListenerRegistration? = null
 
@@ -42,6 +43,14 @@ class ChatViewModel @Inject constructor(
     init {
         firestore = FirebaseFirestore.getInstance()
         fetchResto()
+    }
+
+    fun setLoadingTrue() {
+        setLoading(true)
+    }
+
+    fun setLoadingFalse() {
+        setLoading(false)
     }
 
     fun sendMessage(userId: String, orderId: String, message: String) {

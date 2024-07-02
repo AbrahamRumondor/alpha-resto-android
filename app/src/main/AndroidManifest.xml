@@ -21,6 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AlfaRestoCustomersApp"
         android:usesCleartextTraffic="true"
+        android:screenOrientation="portrait"
         tools:targetApi="tiramisu">
 
         <meta-data
@@ -36,6 +37,7 @@
 
         <activity
             android:name=".ui.components.SplashScreenActivity"
+            android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -45,13 +47,16 @@
         </activity>
         <activity
             android:name=".ui.components.loginPage.LoginActivity"
+            android:screenOrientation="nosensor"
             android:exported="true">
         </activity>
         <activity
             android:name=".ui.components.MainActivity"
+            android:screenOrientation="nosensor"
             android:exported="true">
         </activity>
         <activity android:name=".ui.components.registerPage.RegisterActivity"
+            android:screenOrientation="nosensor"
             android:exported="true">
         </activity>
         <service

@@ -11,7 +11,7 @@ import androidx.navigation.Navigation
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.databinding.FragmentOrderSummaryBinding
-import com.example.alfaresto_customersapp.databinding.OrderPaymentMethodBinding
+import com.example.alfaresto_customersapp.databinding.OrderSummaryPaymentMethodBinding
 import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.ui.components.listener.OrderSummaryItemListener
 import com.example.alfaresto_customersapp.ui.components.restoTab.address.addressList.AddressListViewModel
@@ -118,7 +118,7 @@ class OrderSummaryFragment : Fragment() {
                 orderSummaryViewModel.setPayment(payment)
             }
 
-            override fun onPaymentMethodClicked(view: OrderPaymentMethodBinding) {
+            override fun onPaymentMethodClicked(view: OrderSummaryPaymentMethodBinding) {
                 view.run {
                     if (rgPaymentMethod.visibility == View.GONE) {
                         ivIconAction.setImageResource(R.drawable.ic_down)
