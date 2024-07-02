@@ -60,7 +60,7 @@ class ChatViewModel @Inject constructor(
 
         chatCollection.add(data)
             .addOnSuccessListener {
-                sendNotificationToResto()
+                sendNotificationToResto("New message from customer: $message")
                 Timber.tag(TAG).d("Message sent with ID: %s", orderId)
             }
             .addOnFailureListener { e ->

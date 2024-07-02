@@ -95,7 +95,7 @@ class OrderHistoryFragment : Fragment() {
 //                setOnOrderClickListener()
                 }
                 orderHistories.map {
-                    setOnOrderClickListener(it.orderStatus)
+                    setOnOrderClickListener()
                 }
             }
         }
