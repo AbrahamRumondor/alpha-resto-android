@@ -24,6 +24,7 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
+import com.example.alfaresto_customersapp.databinding.ActivityMainBinding
 import com.example.alfaresto_customersapp.databinding.BsdLocationPermissionBinding
 import com.example.alfaresto_customersapp.databinding.FragmentRestoBinding
 import com.example.alfaresto_customersapp.domain.error.FirestoreCallback

@@ -3,6 +3,7 @@ package com.example.alfaresto_customersapp.ui.components
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.navigation.Navigation.findNavController
 import com.example.alfaresto_customersapp.databinding.ActivityMainBinding
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -25,6 +26,20 @@ class MainActivity : AppCompatActivity() {
 
         binding.bnvCustomerNavigation.setupWithNavController(navController)
 
+        binding.bnvCustomerNavigation.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.resto_fragment,-> {
+                    navController.navigate(R.id.resto_fragment)
+                    true
+                }
+                R.id.order_history_fragment -> {
+                    navController.navigate(R.id.order_history_fragment)
+                    true
+                }
+                else -> false
+            }
+        }
+
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.address_list -> hideBottomNav()
@@ -33,8 +48,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.track_order_fragment -> hideBottomNav()
                 R.id.detail_food_fragment -> hideBottomNav()
                 R.id.chat_fragment -> hideBottomNav()
-                R.id.order_summary_fragment -> hideBottomNav()
-                R.id.list_all_menu_fragment -> hideBottomNav()
                 else -> showBottomNav()
             }
         }
