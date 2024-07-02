@@ -1,6 +1,7 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.address.addNewAddress
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -49,8 +50,12 @@ class AddNewAddressFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        requestLocationPermissions()
+        binding.mvMap.onCreate(savedInstanceState)
+    }
+
+    private fun setUpMap() {
         binding.run {
-            mvMap.onCreate(savedInstanceState)
             mvMap.getMapAsync {
                 map = it
                 enableMyLocation()
@@ -59,7 +64,6 @@ class AddNewAddressFragment : Fragment() {
             }
         }
         onSaveButtonClicked()
-        requestLocationPermissions()
     }
 
     private fun onSaveButtonClicked() {
@@ -114,6 +118,7 @@ class AddNewAddressFragment : Fragment() {
             when {
                 fineLocationGranted || coarseLocationGranted -> {
                     // Fine location access granted
+                    setUpMap()
                 }
 
                 else -> {
@@ -143,6 +148,7 @@ class AddNewAddressFragment : Fragment() {
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) -> {
+                setUpMap()
                 // You can use the API that requires the permission.
             }
 
@@ -150,6 +156,7 @@ class AddNewAddressFragment : Fragment() {
                 requireContext(),
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) -> {
+                setUpMap()
                 // You can use the API that requires the permission.
             }
 
@@ -184,13 +191,32 @@ class AddNewAddressFragment : Fragment() {
         builder.show()
     }
 
+    fun hasLocationPermissions(context: Context): Boolean {
+        val coarseLocationPermission = ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
+        val fineLocationPermission = ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
+
+        return coarseLocationPermission == PackageManager.PERMISSION_GRANTED &&
+                fineLocationPermission == PackageManager.PERMISSION_GRANTED
+    }
+
     private fun showBottomSheetLocationPermission() {
         bottomSheetBinding = BsdLocationPermissionBinding.inflate(layoutInflater)
 
         bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme)
         bottomSheetDialog.setContentView(bottomSheetBinding.root) // Use the binding's root view
         bottomSheetDialog.setOnCancelListener {
-            requireActivity().finish()
+            if (!hasLocationPermissions(requireContext())) {
+                Navigation.findNavController(binding.root).popBackStack()
+            } else {
+                requestLocationPermissions()
+                it.dismiss()
+            }
         }
         bottomSheetDialog.show()
 

@@ -7,19 +7,19 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.alfaresto_customersapp.R
-import com.example.alfaresto_customersapp.databinding.RegisterPageBinding
+import com.example.alfaresto_customersapp.databinding.ActivityRegisterBinding
 import com.example.alfaresto_customersapp.ui.components.loginPage.LoginActivity
-import com.example.alfaresto_customersapp.ui.util.Constants
+import com.example.alfaresto_customersapp.utils.Constants
 
 class RegisterActivity : AppCompatActivity() {
 
-    private lateinit var binding: RegisterPageBinding
+    private lateinit var binding: ActivityRegisterBinding
     private lateinit var viewModel: RegisterViewModel
     private val passwordPatterns = Constants.passwordPatterns
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = RegisterPageBinding.inflate(layoutInflater)
+        binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         viewModel = ViewModelProvider(this)[RegisterViewModel::class.java]

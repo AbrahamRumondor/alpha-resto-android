@@ -495,5 +495,4 @@ class TrackOrderFragment : Fragment() {
         super.onSaveInstanceState(outState)
         binding.mvTrack.onSaveInstanceState(outState)
     }
-
 }
