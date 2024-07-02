@@ -15,6 +15,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.FragmentChatBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -34,6 +35,13 @@ class ChatFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        lifecycleScope.launch {
+            viewModel.isLoading.collectLatest { isLoading ->
+                binding.loadingLayout.progressBar.visibility =
+                    if (isLoading) View.VISIBLE else View.GONE
+            }
+        }
 
         binding.toolbar.apply {
             ivToolbarTitle.visibility = View.GONE
@@ -76,7 +84,10 @@ class ChatFragment : Fragment() {
     private fun addMessageToChatView(message: String, senderId: String) {
         lifecycleScope.launch {
             val userId = viewModel.getUserId()
+            viewModel.setLoadingTrue()
             viewModel.restoID.collectLatest {
+                delay(500)
+                viewModel.setLoadingFalse()
 
                 val layoutId = when (senderId) {
                     userId -> {
