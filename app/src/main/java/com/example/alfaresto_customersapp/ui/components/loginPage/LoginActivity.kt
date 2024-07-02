@@ -11,7 +11,7 @@ import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.LoginPageBinding
 import com.example.alfaresto_customersapp.ui.components.MainActivity
 import com.example.alfaresto_customersapp.ui.components.loginPage.repository.AuthRepositoryImpl
-import com.example.alfaresto_customersapp.ui.components.registerPage.RegisterActivity
+import com.example.alfaresto_customersapp.ui.components.registerPage.RegisterPage
 
 class LoginActivity : AppCompatActivity() {
 
@@ -70,7 +70,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun goToRegisterPage(view: View) {
-        val intent = Intent(view.context.applicationContext, RegisterActivity::class.java)
+        val intent = Intent(view.context.applicationContext, RegisterPage::class.java)
         startActivity(intent)
     }
 

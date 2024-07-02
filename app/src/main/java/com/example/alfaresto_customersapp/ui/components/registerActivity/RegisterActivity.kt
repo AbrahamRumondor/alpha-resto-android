@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.ActivityRegisterBinding
 import com.example.alfaresto_customersapp.ui.components.loginActivity.LoginActivity
-import com.example.alfaresto_customersapp.ui.components.util.Constants
+import com.example.alfaresto_customersapp.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.security.MessageDigest
