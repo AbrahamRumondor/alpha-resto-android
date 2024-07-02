@@ -1,6 +1,7 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.address.addNewAddress
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -187,13 +188,32 @@ class AddNewAddressFragment : Fragment() {
         builder.show()
     }
 
+    fun hasLocationPermissions(context: Context): Boolean {
+        val coarseLocationPermission = ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
+        val fineLocationPermission = ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
+
+        return coarseLocationPermission == PackageManager.PERMISSION_GRANTED &&
+                fineLocationPermission == PackageManager.PERMISSION_GRANTED
+    }
+
     private fun showBottomSheetLocationPermission() {
         bottomSheetBinding = BsdLocationPermissionBinding.inflate(layoutInflater)
 
         bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme)
         bottomSheetDialog.setContentView(bottomSheetBinding.root) // Use the binding's root view
         bottomSheetDialog.setOnCancelListener {
-            requireActivity().finish()
+            if (!hasLocationPermissions(requireContext())) {
+                Navigation.findNavController(binding.root).popBackStack()
+            } else {
+                requestLocationPermissions()
+                it.dismiss()
+            }
         }
         bottomSheetDialog.show()
 
