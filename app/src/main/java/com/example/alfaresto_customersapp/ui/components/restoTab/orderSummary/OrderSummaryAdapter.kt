@@ -4,11 +4,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.alfaresto_customersapp.databinding.CheckoutButtonBinding
-import com.example.alfaresto_customersapp.databinding.OrderAddressBinding
-import com.example.alfaresto_customersapp.databinding.OrderItemBinding
-import com.example.alfaresto_customersapp.databinding.OrderPaymentMethodBinding
-import com.example.alfaresto_customersapp.databinding.OrderTotalPriceBinding
+import com.example.alfaresto_customersapp.databinding.OrderSummaryAddressBinding
+import com.example.alfaresto_customersapp.databinding.OrderSummaryCheckoutButtonBinding
+import com.example.alfaresto_customersapp.databinding.OrderSummaryItemBinding
+import com.example.alfaresto_customersapp.databinding.OrderSummaryPaymentMethodBinding
+import com.example.alfaresto_customersapp.databinding.OrderSummaryTotalPriceBinding
 import com.example.alfaresto_customersapp.domain.model.Address
 import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.domain.model.OrderItem
@@ -48,11 +48,11 @@ class OrderSummaryAdapter :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val bindingAddress = OrderAddressBinding.inflate(inflater, parent, false)
-        val bindingOrderList = OrderItemBinding.inflate(inflater, parent, false)
-        val bindingOrderTotal = OrderTotalPriceBinding.inflate(inflater, parent, false)
-        val bindingPaymentMethod = OrderPaymentMethodBinding.inflate(inflater, parent, false)
-        val bindingCheckoutButton = CheckoutButtonBinding.inflate(inflater, parent, false)
+        val bindingAddress = OrderSummaryAddressBinding.inflate(inflater, parent, false)
+        val bindingOrderList = OrderSummaryItemBinding.inflate(inflater, parent, false)
+        val bindingOrderTotal = OrderSummaryTotalPriceBinding.inflate(inflater, parent, false)
+        val bindingPaymentMethod = OrderSummaryPaymentMethodBinding.inflate(inflater, parent, false)
+        val bindingCheckoutButton = OrderSummaryCheckoutButtonBinding.inflate(inflater, parent, false)
 
         return when (viewType) {
             SHOW_ADDRESS -> OrderAddressViewHolder(
