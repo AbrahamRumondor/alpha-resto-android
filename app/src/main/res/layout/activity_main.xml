@@ -26,16 +26,16 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:backgroundTint="@color/white"
-        android:padding="10dp"
-        android:elevation="10dp"
-
+        android:elevation="@dimen/dimen_10"
         android:outlineAmbientShadowColor="@color/black"
+        android:padding="@dimen/dimen_10"
         app:itemIconTint="@color/bottom_nav_color"
         app:itemTextColor="@color/bottom_nav_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fcv_switch_screen"
-        app:menu="@menu/bottom_navigation_menu" />
+        app:menu="@menu/bottom_navigation_menu"
+        tools:targetApi="p" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

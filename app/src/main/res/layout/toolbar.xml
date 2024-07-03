@@ -10,18 +10,18 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:contentDescription="@string/alfaresto_logo"
-        android:src="@drawable/ic_logo"/>
+        android:src="@drawable/ic_logo" />
 
     <TextView
         android:id="@+id/tv_toolbar_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textColor="@color/mainblack"
         android:fontFamily="@font/bold"
-        android:visibility="gone"
+        android:text="@string/address"
+        android:textColor="@color/mainblack"
         android:textSize="@dimen/font_24"
-        android:text="@string/address" />
+        android:visibility="gone" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -49,10 +49,10 @@
             android:id="@+id/btn_back"
             android:layout_width="@dimen/dimen_50"
             android:layout_height="@dimen/dimen_50"
-            android:visibility="gone"
             android:background="@android:color/transparent"
             android:contentDescription="@string/back_logo"
-            android:src="@drawable/ic_back" />
+            android:src="@drawable/ic_back"
+            android:visibility="gone" />
 
     </RelativeLayout>
 

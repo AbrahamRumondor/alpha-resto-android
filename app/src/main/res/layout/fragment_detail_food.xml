@@ -10,10 +10,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginStart="@dimen/dimen_30"
+        android:layout_marginTop="@dimen/dimen_30"
         app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="15dp"
+        app:cardCornerRadius="@dimen/dimen_15"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -21,11 +21,11 @@
             android:id="@+id/btn_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="7dp"
-            android:layout_marginStart="20dp"
+            android:layout_margin="@dimen/dimen_7"
+            android:layout_marginStart="@dimen/dimen_20"
             android:background="@android:color/transparent"
-            android:paddingVertical="4dp"
-            android:paddingStart="10dp"
+            android:paddingVertical="@dimen/dimen_4"
+            android:paddingStart="@dimen/dimen_10"
             android:src="@drawable/ic_back"
             tools:ignore="ContentDescription,RtlSymmetry" />
 
@@ -43,8 +43,8 @@
 
             <ImageView
                 android:id="@+id/iv_food"
-                android:layout_width="300dp"
-                android:layout_height="300dp"
+                android:layout_width="@dimen/dimen_300"
+                android:layout_height="@dimen/dimen_300"
                 android:src="@drawable/food_img"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -58,7 +58,7 @@
                 android:fontFamily="@font/bold"
                 android:text="@string/food_name"
                 android:textColor="@color/black"
-                android:textSize="28sp"
+                android:textSize="@dimen/font_28"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/iv_food" />
@@ -70,7 +70,7 @@
                 android:fontFamily="@font/bold"
                 android:text="@string/food_price"
                 android:textColor="@color/orange"
-                android:textSize="22sp"
+                android:textSize="@dimen/font_22"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_food_name" />
@@ -79,11 +79,11 @@
                 android:id="@+id/tv_food_desc_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="36dp"
+                android:layout_marginTop="@dimen/dimen_36"
                 android:fontFamily="@font/bold"
                 android:text="@string/food_desc_title"
                 android:textColor="@color/black"
-                android:textSize="17sp"
+                android:textSize="@dimen/font_17"
                 app:layout_constraintEnd_toStartOf="@id/tv_food_price"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@id/cv_resto"
@@ -91,13 +91,13 @@
 
             <TextView
                 android:id="@+id/tv_food_desc"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/dimen_none"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/dimen_16"
                 android:fontFamily="@font/regular"
                 android:text="@string/food_description"
                 android:textColor="@color/black"
-                android:textSize="17sp"
+                android:textSize="@dimen/font_17"
                 app:layout_constraintEnd_toEndOf="@+id/iv_food"
                 app:layout_constraintStart_toStartOf="@+id/tv_food_desc_title"
                 app:layout_constraintTop_toBottomOf="@+id/tv_food_desc_title" />
@@ -105,11 +105,11 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/cv_resto"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_marginHorizontal="30dp"
-                android:layout_marginTop="25dp"
+                android:layout_height="@dimen/dimen_80"
+                android:layout_marginHorizontal="@dimen/dimen_30"
+                android:layout_marginTop="@dimen/dimen_25"
                 app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="5dp"
+                app:cardCornerRadius="@dimen/dimen_5"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_food_desc">
@@ -123,7 +123,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_margin="10dp"
+                        android:layout_margin="@dimen/dimen_10"
                         android:background="@android:color/transparent"
                         android:src="@drawable/ic_logo_alfaresto"
                         tools:ignore="ContentDescription" />
@@ -133,7 +133,7 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
                         android:orientation="vertical"
-                        android:padding="15dp">
+                        android:padding="@dimen/dimen_15">
 
                         <TextView
                             android:layout_width="match_parent"
@@ -142,7 +142,7 @@
                             android:text="@string/phone_resto"
                             android:textAlignment="textEnd"
                             android:textColor="@color/black"
-                            android:textSize="12sp"
+                            android:textSize="@dimen/font_12"
                             tools:ignore="RtlSymmetry" />
 
                         <TextView
@@ -152,7 +152,7 @@
                             android:text="@string/address_resto"
                             android:textAlignment="textEnd"
                             android:textColor="@color/black"
-                            android:textSize="12sp"
+                            android:textSize="@dimen/font_12"
                             tools:ignore="RtlSymmetry" />
 
                         <TextView
@@ -162,7 +162,7 @@
                             android:text="@string/email_resto"
                             android:textAlignment="textEnd"
                             android:textColor="@color/black"
-                            android:textSize="12sp"
+                            android:textSize="@dimen/font_12"
                             tools:ignore="RtlSymmetry" />
                     </LinearLayout>
 
@@ -174,14 +174,14 @@
                 android:id="@+id/btn_add_to_cart"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="85dp"
-                android:layout_marginTop="28dp"
+                android:layout_marginHorizontal="@dimen/dimen_85"
+                android:layout_marginTop="@dimen/dimen_30"
                 android:background="@drawable/add_button"
                 android:fontFamily="@font/bold"
                 android:text="@string/add_to_cart"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="16sp"
+                android:textSize="@dimen/font_16"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.497"
                 app:layout_constraintStart_toStartOf="parent"
@@ -191,7 +191,7 @@
                 android:id="@+id/ll_quantity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="45dp"
+                android:layout_marginTop="@dimen/dimen_45"
                 android:orientation="horizontal"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -200,35 +200,35 @@
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btn_minus"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="@dimen/dimen_50"
+                    android:layout_height="@dimen/dimen_50"
                     android:background="@drawable/add_button"
                     android:fontFamily="@font/bold"
                     android:text="@string/remove_item"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
-                    android:textSize="20sp" />
+                    android:textSize="@dimen/font_20" />
 
                 <TextView
                     android:id="@+id/tv_quantity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="40dp"
+                    android:layout_marginHorizontal="@dimen/dimen_40"
                     android:fontFamily="@font/bold"
                     android:text="@string/_0"
                     android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:textSize="@dimen/font_20" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btn_plus"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="@dimen/dimen_50"
+                    android:layout_height="@dimen/dimen_50"
                     android:background="@drawable/add_button"
                     android:fontFamily="@font/bold"
                     android:text="@string/add_item"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/font_24" />
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

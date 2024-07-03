@@ -100,4 +100,5 @@
     <string name="track_order">Track Order</string>
     <string name="permission_required">Permission Required</string>
     <string name="chat">Chat</string>
+    <string name="none">-</string>
 </resources>

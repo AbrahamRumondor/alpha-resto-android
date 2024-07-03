@@ -42,8 +42,8 @@
         android:layout_width="@dimen/dimen_300"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/dimen_20"
-        android:orientation="horizontal"
         android:gravity="center"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">

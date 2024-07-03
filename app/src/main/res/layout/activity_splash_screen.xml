@@ -5,9 +5,9 @@
 
     <ImageView
         android:id="@+id/iv_splash"
-        android:src="@drawable/splash_screen"
-        android:contentDescription="@string/splash_screen_description"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/splash_screen_description"
+        android:src="@drawable/splash_screen" />
 
 </RelativeLayout>

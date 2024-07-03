@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="@dimen/dimen_220"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/dimen_230"
     android:layout_height="match_parent"
-    app:cardCornerRadius="20dp"
+    app:cardCornerRadius="@dimen/dimen_20"
     app:cardUseCompatPadding="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,14 +15,14 @@
         <ImageView
             android:id="@+id/iv_menu_image"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="@dimen/dimen_none"
             android:layout_marginBottom="@dimen/dimen_10"
             android:contentDescription="@string/menu_image_view"
             android:scaleType="centerCrop"
+            app:layout_constraintBottom_toTopOf="@id/ll_texts"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/ll_texts"
             tools:srcCompat="@tools:sample/avatars" />
 
         <LinearLayout
@@ -40,6 +39,7 @@
                 android:id="@+id/tv_menu_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/bold"
                 android:maxLines="1"
                 android:text="@string/soft_shell_taco"
                 android:textSize="@dimen/font_18"
@@ -49,6 +49,7 @@
                 android:id="@+id/tv_menu_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/semibold"
                 android:text="@string/rp_50_000"
                 android:textSize="@dimen/font_15" />
         </LinearLayout>
@@ -58,66 +59,65 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/menu_add_button"
+            android:fontFamily="@font/bold"
             android:padding="@dimen/dimen_20"
             android:text="@string/add_to_cart"
-            android:visibility="visible"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:fontFamily="@font/bold"
+            android:textSize="@dimen/font_18"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:textSize="@dimen/font_18"  />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clActionButtons"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_35"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/btn_menu_add"
             app:layout_constraintBottom_toBottomOf="@id/btn_menu_add"
-            >
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/btn_menu_add">
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_decrease_order"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/dimen_none"
                 android:layout_height="match_parent"
-                app:layout_constraintDimensionRatio="1:1"
+                android:layout_marginHorizontal="@dimen/dimen_20"
                 android:background="@drawable/ic_decrease_order"
                 android:fontFamily="@font/bold"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:layout_marginHorizontal="20dp"
-                app:layout_constraintStart_toStartOf="parent"
-                android:textSize="20sp" />
+                android:textSize="@dimen/font_20"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/tv_order_qty"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
+                android:layout_marginHorizontal="@dimen/dimen_16"
                 android:fontFamily="@font/bold"
                 android:text="@string/_1"
                 android:textColor="@color/black"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                android:textSize="@dimen/font_18"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:textSize="@dimen/font_18" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_add_order"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/dimen_none"
                 android:layout_height="match_parent"
-                app:layout_constraintDimensionRatio="1:1"
+                android:layout_marginHorizontal="@dimen/dimen_20"
                 android:background="@drawable/ic_add_order"
                 android:fontFamily="@font/bold"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginHorizontal="20dp"
-                android:textSize="24sp" />
+                android:textSize="@dimen/font_24"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
