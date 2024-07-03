@@ -6,46 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <!--    <androidx.cardview.widget.CardView-->
-    <!--        android:id="@+id/buttonLayout"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_gravity="center"-->
-    <!--        android:layout_marginStart="30dp"-->
-    <!--        android:layout_marginTop="30dp"-->
-    <!--        app:cardBackgroundColor="@color/white"-->
-    <!--        app:cardCornerRadius="15dp"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent">-->
-
-    <!--        <ImageButton-->
-    <!--            android:id="@+id/backButton"-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_margin="7dp"-->
-    <!--            android:layout_marginStart="20dp"-->
-    <!--            android:background="@android:color/transparent"-->
-    <!--            android:paddingVertical="4dp"-->
-    <!--            android:paddingStart="10dp"-->
-    <!--            android:src="@drawable/ic_back"-->
-    <!--            tools:ignore="ContentDescription,RtlSymmetry" />-->
-
-    <!--    </androidx.cardview.widget.CardView>-->
-
-    <!--    <TextView-->
-    <!--        android:id="@+id/tv_history_detail"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginTop="33dp"-->
-    <!--        android:fontFamily="@font/bold"-->
-    <!--        android:text="Order Success"-->
-    <!--        android:textColor="@color/black"-->
-    <!--        android:textSize="28sp"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintHorizontal_bias="0.232"-->
-    <!--        app:layout_constraintStart_toEndOf="@+id/buttonLayout"-->
-    <!--        app:layout_constraintTop_toTopOf="parent" />-->
-
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar"
@@ -135,8 +95,6 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     tools:listitem="@layout/item_order_detail" />
-
-
             </LinearLayout>
 
             <View
@@ -145,49 +103,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginHorizontal="30dp"
-                android:layout_marginBottom="10dp"
-                app:layout_constraintBottom_toTopOf="@+id/ll_total"
+                app:layout_constraintTop_toBottomOf="@+id/ll_user_order"
                 tools:layout_editor_absoluteX="30dp" />
 
-            <LinearLayout
-                android:id="@+id/ll_total"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/tv_total"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="30dp"
-                android:layout_marginBottom="@dimen/dimen_10"
-                android:orientation="horizontal"
+                android:layout_marginVertical="@dimen/dimen_10"
+                android:fontFamily="@font/semibold"
+                android:textColor="@color/mainblack"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/divider3"
+                app:layout_constraintStart_toStartOf="@+id/divider2"
+                app:layout_constraintTop_toBottomOf="@+id/divider2" />
+
+            <TextView
+                android:id="@+id/tv_total_price"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/semibold"
+                android:textColor="@color/mainblack"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toTopOf="@+id/divider3"
                 app:layout_constraintEnd_toEndOf="@+id/divider2"
-                app:layout_constraintStart_toStartOf="@+id/divider2">
-
-                <TextView
-                    android:id="@+id/tv_total"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/semibold"
-                    android:text="Total Price"
-                    android:textColor="@color/mainblack"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="@+id/divider2"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/divider2"
-                    app:layout_constraintTop_toBottomOf="@+id/divider2" />
-
-                <TextView
-                    android:id="@+id/tv_total_price"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="170dp"
-                    android:fontFamily="@font/semibold"
-                    android:text="Rp 100.000,-"
-                    android:textColor="@color/mainblack"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="@+id/divider2"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/divider2"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_total" />
-
-            </LinearLayout>
+                app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
             <View
                 android:id="@+id/divider3"
@@ -200,20 +140,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <!--        <TextView-->
-            <!--            android:id="@+id/tv_order_status"-->
-            <!--            android:layout_width="wrap_content"-->
-            <!--            android:layout_height="wrap_content"-->
-            <!--            android:layout_marginTop="10dp"-->
-            <!--            android:fontFamily="@font/semibold"-->
-            <!--            android:text="Order Status:"-->
-            <!--            android:textColor="@color/mainblack"-->
-            <!--            android:textSize="16sp"-->
-            <!--            app:layout_constraintEnd_toEndOf="@+id/divider3"-->
-            <!--            app:layout_constraintHorizontal_bias="0.0"-->
-            <!--            app:layout_constraintStart_toStartOf="@+id/divider3"-->
-            <!--            app:layout_constraintTop_toBottomOf="@+id/divider3" />-->
-
             <LinearLayout
                 android:id="@+id/ll_order_id"
                 android:layout_width="match_parent"
@@ -225,12 +151,10 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
 
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/semibold"
-                    android:text="Order ID: "
                     android:textColor="@color/mainblack"
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -244,7 +168,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:fontFamily="@font/bold"
-                    android:text="#123456"
                     android:textColor="@color/mainblack"
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -264,51 +187,42 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
 
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_time"
+                    tools:ignore="ContentDescription" />
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_marginStart="20dp"
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center_vertical"
-                        android:src="@drawable/ic_time"
-                        tools:ignore="ContentDescription" />
-
-                    <LinearLayout
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:orientation="vertical">
+                        android:fontFamily="@font/semibold"
+                        android:textColor="@color/mainblack"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="@+id/tv_order_status"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_order_status" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/semibold"
-                            android:text="Ordered At"
-                            android:textColor="@color/mainblack"
-                            android:textSize="16sp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.0"
-                            app:layout_constraintStart_toStartOf="@+id/tv_order_status"
-                            app:layout_constraintTop_toBottomOf="@+id/tv_order_status" />
-
-                        <TextView
-                            android:id="@+id/tv_order_date"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:fontFamily="@font/bold"
-                            android:text="DD/MM/YY HH:MM"
-                            android:textColor="@color/mainblack"
-                            android:textSize="16sp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.0"
-                            app:layout_constraintStart_toStartOf="@+id/tv_order_status"
-                            app:layout_constraintTop_toBottomOf="@+id/tv_order_status" />
-
-                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/tv_order_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/bold"
+                        android:textColor="@color/mainblack"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="@+id/tv_order_status"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_order_status" />
                 </LinearLayout>
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

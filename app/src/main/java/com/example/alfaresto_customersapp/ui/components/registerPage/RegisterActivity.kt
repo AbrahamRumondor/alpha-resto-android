@@ -28,7 +28,7 @@ class RegisterActivity : AppCompatActivity() {
             storeAndValidation()
         }
 
-        binding.loginTextView.setOnClickListener {
+        binding.tvLogin.setOnClickListener {
             goToLoginPage()
         }
     }
