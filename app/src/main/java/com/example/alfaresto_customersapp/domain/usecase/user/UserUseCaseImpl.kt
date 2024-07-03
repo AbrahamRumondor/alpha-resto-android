@@ -31,4 +31,8 @@ class UserUseCaseImpl @Inject constructor(
     override fun saveTokenToDB(uid: String, token: String) {
         userRepository.saveTokenToDB(uid, token)
     }
+
+    override suspend fun storeUser(uid: String, user: User) {
+        userRepository.storeUser(uid, user)
+    }
 }

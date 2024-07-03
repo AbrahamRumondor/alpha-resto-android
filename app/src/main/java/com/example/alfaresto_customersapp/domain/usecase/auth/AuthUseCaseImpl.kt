@@ -1,6 +1,7 @@
 package com.example.alfaresto_customersapp.domain.usecase.auth
 
 import com.example.alfaresto_customersapp.domain.repository.AuthRepository
+import com.google.firebase.auth.AuthResult
 import javax.inject.Inject
 
 class AuthUseCaseImpl @Inject constructor(
@@ -9,5 +10,9 @@ class AuthUseCaseImpl @Inject constructor(
 
     override fun getCurrentUserID(): String {
         return authRepository.getCurrentUserID()
+    }
+
+    override suspend fun registerUser(email: String, password: String): AuthResult? {
+        return authRepository.registerUser(email, password)
     }
 }

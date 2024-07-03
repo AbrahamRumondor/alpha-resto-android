@@ -37,5 +37,15 @@ data class UserResponse(
                 address = userResponse.address.map { AddressResponse.transform(it) }
             )
         }
+
+        fun transform(user: User): UserResponse {
+            return UserResponse(
+                id = user.id,
+                name = user.name,
+                noTelp = user.phone,
+                email = user.email,
+                address = user.address.map { AddressResponse.transform(it) }
+            )
+        }
     }
 }

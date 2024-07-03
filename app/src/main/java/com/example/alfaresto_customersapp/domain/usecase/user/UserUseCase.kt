@@ -9,6 +9,7 @@ interface UserUseCase {
     suspend fun getUserAddresses(): StateFlow<List<Address>>
     suspend fun getUserAddressById(addressId: String): Address
     suspend fun makeNewAddress(address: Address)
+    suspend fun storeUser(uid: String, user: User)
 
     //    suspend fun getUserTokens(): StateFlow<List<Token>>
     fun saveTokenToDB(uid: String, token: String)
