@@ -320,11 +320,11 @@ class NotificationForegroundService : Service() {
                 )
                 customView?.setViewVisibility(
                     R.id.iv_on_process,
-                    View.GONE
+                    View.VISIBLE
                 )
                 customView?.setViewVisibility(
                     R.id.iv_on_delivery,
-                    View.GONE
+                    View.VISIBLE
                 )
             }
         }
