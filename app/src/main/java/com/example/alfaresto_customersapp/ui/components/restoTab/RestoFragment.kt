@@ -90,16 +90,16 @@ class RestoFragment : Fragment() {
                     return@collectLatest
                 }
 
-                viewModel.cart.collectLatest { it ->
-                    if (it.isEmpty()) {
-                        setRestoAdapterButtons(it)
+                viewModel.cart.collectLatest { cart ->
+                    if (cart.isEmpty()) {
+                        setRestoAdapterButtons(cart)
                         adapter.submitMenuList(menus)
 
                         return@collectLatest
                     }
 
                     val updatedMenus = menus.map { menu ->
-                        val cartItem = it.find { cart -> cart.menuId == menu.id }
+                        val cartItem = cart.find { it.menuId == menu.id }
                         if (cartItem != null) {
                             menu.copy(orderCartQuantity = cartItem.menuQty)
                         } else {
@@ -107,12 +107,12 @@ class RestoFragment : Fragment() {
                         }
                     }
 
-                    setRestoAdapterButtons(it)
+                    setRestoAdapterButtons(cart)
                     adapter.submitMenuList(updatedMenus)
 
                     viewModel.cartCount.collectLatest {
                         binding.tvCartCount.text = it.toString()
-                        binding.rlCart.visibility = if (it > 0) View.VISIBLE else View.INVISIBLE
+                        binding.rlCart.visibility = if (it != 0) View.VISIBLE else View.INVISIBLE
                     }
                 }
             }
