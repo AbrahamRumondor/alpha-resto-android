@@ -1,6 +1,5 @@
 package com.example.alfaresto_customersapp.data.di
 
-import android.util.Log
 import com.example.alfaresto_customersapp.data.model.AddressResponse
 import com.example.alfaresto_customersapp.data.model.UserResponse
 import com.example.alfaresto_customersapp.domain.model.Address
@@ -61,7 +60,6 @@ class UserRepositoryImpl @Inject constructor(
                 }
             }
 
-        Log.d("addresses urepoimpl", "Addresses: ${addresses.value}")
         return addresses
     }
 

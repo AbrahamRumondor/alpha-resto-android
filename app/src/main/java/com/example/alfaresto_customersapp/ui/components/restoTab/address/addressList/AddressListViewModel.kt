@@ -1,6 +1,5 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.address.addressList
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.alfaresto_customersapp.domain.error.FirestoreCallback
 import com.example.alfaresto_customersapp.domain.model.Address
@@ -83,7 +82,6 @@ class AddressListViewModel @Inject constructor(
                         userUseCase.getUserAddressById(addressId).collectLatest {
                             _selectedAddress.value = it
                         }
-                        Log.d("address", "Address: ${_selectedAddress.value}")
                     } catch (e: Exception) {
                         Timber.tag("test").d(e, "GAGAL FETCH DATA")
                     }

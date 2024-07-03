@@ -1,7 +1,5 @@
 package com.example.alfaresto_customersapp.ui.components.orderHistoryTab
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.alfaresto_customersapp.domain.model.OrderHistory
 import com.example.alfaresto_customersapp.domain.usecase.orderHistory.OrderHistoryUseCase
@@ -18,7 +16,8 @@ class OrderHistoryViewModel @Inject constructor(
     private val orderHistoryUseCase: OrderHistoryUseCase
 ) : LoadStateViewModel() {
 
-    private val _orderHistories: MutableStateFlow<List<OrderHistory>> = MutableStateFlow(emptyList())
+    private val _orderHistories: MutableStateFlow<List<OrderHistory>> =
+        MutableStateFlow(emptyList())
     val orderHistories: StateFlow<List<OrderHistory>> = _orderHistories
 
     init {
