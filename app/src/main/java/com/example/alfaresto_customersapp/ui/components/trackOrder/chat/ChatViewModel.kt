@@ -123,7 +123,6 @@ class ChatViewModel @Inject constructor(
         }
     }
 
-
     private fun sendNotificationToResto(message: String) {
         viewModelScope.launch {
             val messageDto = SendMessageDto(
@@ -152,7 +151,7 @@ class ChatViewModel @Inject constructor(
         return user?.uid ?: ""
     }
 
-    private fun getUserName(): String {
+    fun getUserName(): String {
         val user = FirebaseAuth.getInstance().currentUser
         return user?.displayName ?: ""
     }
