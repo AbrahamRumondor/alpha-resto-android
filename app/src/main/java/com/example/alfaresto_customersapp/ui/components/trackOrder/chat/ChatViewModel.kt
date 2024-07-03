@@ -3,7 +3,6 @@ package com.example.alfaresto_customersapp.ui.components.trackOrder.chat
 import android.content.ContentValues.TAG
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.alfaresto_customersapp.data.remote.pushNotification.NotificationBody
 import com.example.alfaresto_customersapp.data.remote.pushNotification.SendMessageDto
@@ -14,7 +13,6 @@ import com.example.alfaresto_customersapp.ui.components.loadState.LoadStateViewM
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
