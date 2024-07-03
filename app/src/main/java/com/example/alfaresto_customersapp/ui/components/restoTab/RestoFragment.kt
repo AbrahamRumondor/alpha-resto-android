@@ -4,6 +4,8 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -16,18 +18,17 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
-import com.example.alfaresto_customersapp.databinding.ActivityMainBinding
 import com.example.alfaresto_customersapp.databinding.BsdLocationPermissionBinding
 import com.example.alfaresto_customersapp.databinding.FragmentRestoBinding
 import com.example.alfaresto_customersapp.domain.error.FirestoreCallback
 import com.example.alfaresto_customersapp.domain.model.User
+import com.example.alfaresto_customersapp.ui.base.BaseFragment
 import com.example.alfaresto_customersapp.ui.components.listener.MenuListener
 import com.example.alfaresto_customersapp.ui.components.loginPage.LoginActivity
 import com.example.alfaresto_customersapp.ui.components.restoTab.adapter.RestoAdapter
@@ -38,7 +39,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
-class RestoFragment : Fragment() {
+class RestoFragment : BaseFragment() {
     private lateinit var binding: FragmentRestoBinding
     private val viewModel: RestoViewModel by activityViewModels()
     private val adapter by lazy { RestoAdapter() }
@@ -56,6 +57,8 @@ class RestoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+//        connectivityStatus(isNetworkConnected(requireContext()))
 
         binding.rvMenu.let {
             it.adapter = adapter
@@ -288,6 +291,35 @@ class RestoFragment : Fragment() {
             val uri = Uri.fromParts("package", requireActivity().packageName, null)
             intent.setData(uri)
             startActivity(intent)
+        }
+    }
+
+    private fun connectivityStatus(networkConnected: Boolean) {
+        if (!networkConnected) {
+            lifecycleScope.launch {
+                showAlertDialog().setPositiveButton(R.string.retry) { _, _ ->
+                    isNetworkConnected(requireContext())
+                }?.setIcon(android.R.drawable.ic_dialog_alert)?.setOnDismissListener {
+                    isNetworkConnected(requireContext())
+                }?.show()
+            }
+        }
+    }
+
+    fun isNetworkConnected(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val network = connectivityManager.activeNetwork ?: return false
+        val networkCapabilities =
+            connectivityManager.getNetworkCapabilities(network) ?: return false
+
+        return when {
+            networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+            networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+            networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+            else -> {
+                false
+            }
         }
     }
 

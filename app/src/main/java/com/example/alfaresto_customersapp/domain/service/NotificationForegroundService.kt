@@ -11,6 +11,7 @@ import android.graphics.Color
 import android.os.Build
 import android.os.IBinder
 import android.os.Handler
+import android.os.Looper
 import android.widget.RemoteViews
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -87,101 +88,150 @@ class NotificationForegroundService : Service() {
         notificationManagerCompat.notify(1234, builder.build())
     }
 
+    private val onProcessFrames = intArrayOf(
+        R.drawable.fire3,
+        R.drawable.fire4,
+        R.drawable.fire5,
+        R.drawable.fire6,
+        R.drawable.fire5,
+        R.drawable.fire4,
+    )
+
+    private var currentFrameIndex = 0
 
     private fun updateNotification() {
-        SHIPMENT_STATUS.let {
-            customView?.setTextViewText(R.id.notification_title, it)
-            when (it) {
-                "On Delivery" -> {
-                    customView?.setImageViewResource(R.id.iv_dot_one, R.drawable.point_round_orange)
-                    customView?.setImageViewResource(R.id.iv_dot_two, R.drawable.point_round_orange)
-                    customView?.setImageViewResource(
-                        R.id.iv_dot_three,
-                        R.drawable.point_round_orange
-                    )
-                    customView?.setImageViewResource(R.id.iv_dot_four, R.drawable.point_round)
+//        val handler = Handler(Looper.getMainLooper())
+//        handler.postDelayed(object : Runnable {
+//            override fun run() {
+                SHIPMENT_STATUS.let {
+                    customView?.setTextViewText(R.id.notification_title, it)
+                    when (it) {
+                        "On Delivery" -> {
+                            customView?.setImageViewResource(
+                                R.id.iv_dot_one,
+                                R.drawable.point_round_orange
+                            )
+                            customView?.setImageViewResource(
+                                R.id.iv_dot_two,
+                                R.drawable.point_round_orange
+                            )
+                            customView?.setImageViewResource(
+                                R.id.iv_dot_three,
+                                R.drawable.point_round_orange
+                            )
+                            customView?.setImageViewResource(
+                                R.id.iv_dot_four,
+                                R.drawable.point_round
+                            )
 
-                    customView?.setImageViewResource(
-                        R.id.v_line_one,
-                        R.drawable.rectangle_line_orange
-                    )
-                    customView?.setImageViewResource(
-                        R.id.v_line_two,
-                        R.drawable.rectangle_line_orange
-                    )
-                    customView?.setTextViewText(
-                        R.id.notification_text,
-                        getText(R.string.on_delivery)
-                    )
-                    customView?.setImageViewResource(
-                        R.id.v_line_three,
-                        R.drawable.rectangle_line
-                    )
+                            customView?.setImageViewResource(
+                                R.id.v_line_one,
+                                R.drawable.rectangle_line_orange
+                            )
+                            customView?.setImageViewResource(
+                                R.id.v_line_two,
+                                R.drawable.rectangle_line_orange
+                            )
+                            customView?.setTextViewText(
+                                R.id.notification_text,
+                                getText(R.string.on_delivery)
+                            )
+                            customView?.setImageViewResource(
+                                R.id.v_line_three,
+                                R.drawable.rectangle_line
+                            )
+                        }
+
+                        "Delivered" -> {
+                            customView?.setImageViewResource(
+                                R.id.iv_dot_one,
+                                R.drawable.point_round_orange
+                            )
+                            customView?.setImageViewResource(
+                                R.id.iv_dot_two,
+                                R.drawable.point_round_orange
+                            )
+                            customView?.setImageViewResource(
+                                R.id.iv_dot_three,
+                                R.drawable.point_round_orange
+                            )
+                            customView?.setImageViewResource(
+                                R.id.iv_dot_four,
+                                R.drawable.point_round_orange
+                            )
+                            customView?.setImageViewResource(
+                                R.id.v_line_one,
+                                R.drawable.rectangle_line_orange
+                            )
+                            customView?.setImageViewResource(
+                                R.id.v_line_two,
+                                R.drawable.rectangle_line_orange
+                            )
+                            customView?.setImageViewResource(
+                                R.id.v_line_three,
+                                R.drawable.rectangle_line_orange
+                            )
+                            customView?.setTextViewText(
+                                R.id.notification_text,
+                                getText(R.string.delivered)
+                            )
+                        }
+
+                        else -> { // ON PROCESS
+                            customView?.setImageViewResource(
+                                R.id.iv_dot_one,
+                                R.drawable.point_round_orange
+                            )
+                            customView?.setImageViewResource(
+                                R.id.iv_dot_two,
+                                R.drawable.point_round_orange
+                            )
+                            customView?.setImageViewResource(
+                                R.id.iv_dot_three,
+                                R.drawable.point_round
+                            )
+                            customView?.setImageViewResource(
+                                R.id.iv_dot_four,
+                                R.drawable.point_round
+                            )
+                            customView?.setImageViewResource(
+                                R.id.v_line_one,
+                                R.drawable.rectangle_line_orange
+                            )
+                            customView?.setImageViewResource(
+                                R.id.v_line_two,
+                                R.drawable.rectangle_line
+                            )
+                            customView?.setImageViewResource(
+                                R.id.v_line_three,
+                                R.drawable.rectangle_line
+                            )
+                            customView?.setTextViewText(
+                                R.id.notification_text,
+                                getText(R.string.on_process)
+                            )
+
+//                            currentFrameIndex = (currentFrameIndex + 1) % onProcessFrames.size
+//                            customView?.setImageViewResource(
+//                                R.id.iv_ic_on_process,
+//                                onProcessFrames[currentFrameIndex]
+//                            )
+                        }
+                    }
+
+                    if (ActivityCompat.checkSelfPermission(
+                            this@NotificationForegroundService,
+                            Manifest.permission.POST_NOTIFICATIONS
+                        ) != PackageManager.PERMISSION_GRANTED
+                    ) {
+                        return
+                    }
+                    notificationManagerCompat.notify(1234, builder.build())
                 }
-
-                "Delivered" -> {
-                    customView?.setImageViewResource(R.id.iv_dot_one, R.drawable.point_round_orange)
-                    customView?.setImageViewResource(R.id.iv_dot_two, R.drawable.point_round_orange)
-                    customView?.setImageViewResource(
-                        R.id.iv_dot_three,
-                        R.drawable.point_round_orange
-                    )
-                    customView?.setImageViewResource(
-                        R.id.iv_dot_four,
-                        R.drawable.point_round_orange
-                    )
-                    customView?.setImageViewResource(
-                        R.id.v_line_one,
-                        R.drawable.rectangle_line_orange
-                    )
-                    customView?.setImageViewResource(
-                        R.id.v_line_two,
-                        R.drawable.rectangle_line_orange
-                    )
-                    customView?.setImageViewResource(
-                        R.id.v_line_three,
-                        R.drawable.rectangle_line_orange
-                    )
-                    customView?.setTextViewText(
-                        R.id.notification_text,
-                        getText(R.string.delivered)
-                    )
-                }
-
-                else -> { // ON PROCESS
-                    customView?.setImageViewResource(R.id.iv_dot_one, R.drawable.point_round_orange)
-                    customView?.setImageViewResource(R.id.iv_dot_two, R.drawable.point_round_orange)
-                    customView?.setImageViewResource(R.id.iv_dot_three, R.drawable.point_round)
-                    customView?.setImageViewResource(R.id.iv_dot_four, R.drawable.point_round)
-                    customView?.setImageViewResource(
-                        R.id.v_line_one,
-                        R.drawable.rectangle_line_orange
-                    )
-                    customView?.setImageViewResource(
-                        R.id.v_line_two,
-                        R.drawable.rectangle_line
-                    )
-                    customView?.setImageViewResource(
-                        R.id.v_line_three,
-                        R.drawable.rectangle_line
-                    )
-                    customView?.setTextViewText(
-                        R.id.notification_text,
-                        getText(R.string.on_process)
-
-                    )
-                }
-            }
-
-            if (ActivityCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.POST_NOTIFICATIONS
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                return
-            }
-            notificationManagerCompat.notify(1234, builder.build())
-        }
+//
+//                handler.postDelayed(this, 100)
+//            }
+//        }, 1)
     }
 
 

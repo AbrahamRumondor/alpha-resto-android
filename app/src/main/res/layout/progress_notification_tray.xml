@@ -43,7 +43,7 @@
 
             <ImageView
                 android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:src="@drawable/ic_restaurant" />
@@ -55,12 +55,14 @@
                 android:layout_weight="50"
                />
 
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+            <ProgressBar
+                android:id="@+id/iv_ic_on_process"
+                android:layout_width="20dp"
+                android:layout_height="40dp"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                android:src="@drawable/ic_cooking" />
+                android:indeterminateDrawable="@drawable/anim_on_process"
+                />
 
             <TextView
                 android:layout_width="0dp"
@@ -71,7 +73,7 @@
 
             <ImageView
                 android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:src="@drawable/ic_delivery_truck_24" />
@@ -85,7 +87,7 @@
 
             <ImageView
                 android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:src="@drawable/ic_marker_orange" />

@@ -9,10 +9,11 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.FragmentThankYouBinding
+import com.example.alfaresto_customersapp.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ThankYouFragment : Fragment() {
+class ThankYouFragment : BaseFragment() {
 
     private lateinit var binding: FragmentThankYouBinding
     private val args: ThankYouFragmentArgs by navArgs()

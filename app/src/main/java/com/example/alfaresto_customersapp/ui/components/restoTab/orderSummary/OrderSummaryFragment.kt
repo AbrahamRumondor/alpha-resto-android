@@ -13,6 +13,7 @@ import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.databinding.FragmentOrderSummaryBinding
 import com.example.alfaresto_customersapp.databinding.OrderSummaryPaymentMethodBinding
 import com.example.alfaresto_customersapp.domain.model.Menu
+import com.example.alfaresto_customersapp.ui.base.BaseFragment
 import com.example.alfaresto_customersapp.ui.components.listener.OrderSummaryItemListener
 import com.example.alfaresto_customersapp.ui.components.restoTab.address.addressList.AddressListViewModel
 import com.example.alfaresto_customersapp.utils.user.UserConstants.ORDER_CHECKOUT_STATUS
@@ -22,7 +23,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class OrderSummaryFragment : Fragment() {
+class OrderSummaryFragment : BaseFragment() {
 
     private lateinit var binding: FragmentOrderSummaryBinding
     private val orderSummaryViewModel: OrderSummaryViewModel by activityViewModels()
