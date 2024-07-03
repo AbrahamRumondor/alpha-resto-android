@@ -13,4 +13,5 @@ interface UserRepository {
     suspend fun makeNewAddress(uid: String, address: Address)
     suspend fun getUserToken(uid: String): Task<QuerySnapshot>
     fun saveTokenToDB(uid: String, token: String)
+    suspend fun storeUser(uid: String, user: User)
 }

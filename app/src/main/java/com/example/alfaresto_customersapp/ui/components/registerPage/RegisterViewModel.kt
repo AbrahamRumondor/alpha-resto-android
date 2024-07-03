@@ -1,51 +1,47 @@
 package com.example.alfaresto_customersapp.ui.components.registerPage
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.alfaresto_customersapp.domain.model.User
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.alfaresto_customersapp.domain.usecase.auth.AuthUseCase
+import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import java.security.MessageDigest
+import javax.inject.Inject
 
-class RegisterViewModel : ViewModel() {
+@HiltViewModel
+class RegisterViewModel @Inject constructor(
+    private val userUseCase: UserUseCase,
+    private val authUseCase: AuthUseCase
+) : ViewModel() {
 
-    private val auth = FirebaseAuth.getInstance()
-    private val firestore = FirebaseFirestore.getInstance()
-
-    fun registerUser(email: String, name: String, phone: String, password: String, onComplete: (Boolean) -> Unit) {
-        auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener { register ->
-                if (register.isSuccessful) {
-                    val user = auth.currentUser
-                    val id = user?.uid ?: return@addOnCompleteListener
-                    val phone = user.phoneNumber ?: phone
-                    val hashedPassword = hashPassword(password)
-                    val newUser = User(id, name, phone, email, password = hashedPassword)
-                    addToFirestore(newUser) { success ->
-                        onComplete(success)
-                    }
-                } else {
-                    onComplete(false)
-                }
-            }
-    }
-
-    private fun addToFirestore(user: User, onComplete: (Boolean) -> Unit) {
-        val userMap = hashMapOf(
-            "user_email" to user.email,
-            "user_id" to user.id,
-            "user_name" to user.name,
-            "user_no_telp" to user.phone,
-            "user_password" to user.password
-        )
-
-        firestore.collection("users").document(user.id)
-            .set(userMap)
-            .addOnSuccessListener {
+    fun registerUser(
+        email: String,
+        name: String,
+        phone: String,
+        password: String,
+        onComplete: (Boolean) -> Unit
+    ) {
+        viewModelScope.launch {
+            authUseCase.registerUser(email, password)
+            try {
+                val uid = authUseCase.getCurrentUserID()
+                val user = User(
+                    id = uid,
+                    email = email,
+                    name = name,
+                    phone = phone,
+                    password = hashPassword(password)
+                )
+                userUseCase.storeUser(uid, user)
                 onComplete(true)
-            }
-            .addOnFailureListener {
+            } catch (
+                e: Exception
+            ) {
                 onComplete(false)
             }
+        }
     }
 
     private fun hashPassword(password: String): String {
