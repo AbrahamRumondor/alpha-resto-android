@@ -1,7 +1,6 @@
 package com.example.alfaresto_customersapp.data.model
 
 import com.example.alfaresto_customersapp.domain.model.Address
-import com.example.alfaresto_customersapp.domain.model.User
 import com.google.firebase.firestore.PropertyName
 
 

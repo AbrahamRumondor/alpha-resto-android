@@ -25,5 +25,14 @@ class AuthRepositoryImpl @Inject constructor(
             }.await()
     }
 
-
+    override suspend fun loginUser(email: String, password: String): AuthResult? {
+        return auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Result.success(task.result?.user?.uid ?: "")
+                } else {
+                    Result.failure(Exception(task.exception))
+                }
+            }.await()
+    }
 }

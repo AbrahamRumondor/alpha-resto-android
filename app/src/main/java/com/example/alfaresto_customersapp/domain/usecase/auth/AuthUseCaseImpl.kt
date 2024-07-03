@@ -15,4 +15,8 @@ class AuthUseCaseImpl @Inject constructor(
     override suspend fun registerUser(email: String, password: String): AuthResult? {
         return authRepository.registerUser(email, password)
     }
+
+    override suspend fun loginUser(email: String, password: String): AuthResult? {
+        return authRepository.loginUser(email, password)
+    }
 }
