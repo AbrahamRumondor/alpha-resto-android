@@ -21,6 +21,10 @@ class PaymentMethodViewHolder (
             rgPaymentMethod.setOnCheckedChangeListener { _, checkedId ->
                 itemListener?.onRadioButtonClicked(position, checkedId)
             }
+
+            cvPaymentMethod.setOnClickListener {
+                itemListener?.onPaymentMethodClicked(this)
+            }
         }
     }
 }

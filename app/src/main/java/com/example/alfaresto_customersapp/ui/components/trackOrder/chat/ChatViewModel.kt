@@ -13,6 +13,7 @@ import com.example.alfaresto_customersapp.domain.usecase.resto.RestaurantUseCase
 import com.example.alfaresto_customersapp.ui.components.loadState.LoadStateViewModel
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,10 +22,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Named
 
 @HiltViewModel
 class ChatViewModel @Inject constructor(
-    private var firestore: FirebaseFirestore,
+    @Named("ordersRef") private val ordersRef: CollectionReference,
+    private var auth: FirebaseAuth,
     private val fcmApiRepository: FcmApiRepository,
     private val restaurantUseCase: RestaurantUseCase
 ) : LoadStateViewModel() {
@@ -41,7 +44,6 @@ class ChatViewModel @Inject constructor(
     val restoID: StateFlow<String> = _restoID
 
     init {
-        firestore = FirebaseFirestore.getInstance()
         fetchResto()
     }
 
@@ -54,7 +56,7 @@ class ChatViewModel @Inject constructor(
     }
 
     fun sendMessage(userId: String, orderId: String, message: String) {
-        val chatCollection = firestore.collection("orders")
+        val chatCollection = ordersRef
             .document(orderId)
             .collection("chats")
 
@@ -81,7 +83,7 @@ class ChatViewModel @Inject constructor(
         val user = FirebaseAuth.getInstance().currentUser
         val userId = user?.uid
         if (userId != null) {
-            val chatCollection = firestore.collection("orders")
+            val chatCollection = ordersRef
                 .document(orderId)
                 .collection("chats")
 
@@ -147,12 +149,12 @@ class ChatViewModel @Inject constructor(
     }
 
     fun getUserId(): String {
-        val user = FirebaseAuth.getInstance().currentUser
+        val user = auth.currentUser
         return user?.uid ?: ""
     }
 
     fun getUserName(): String {
-        val user = FirebaseAuth.getInstance().currentUser
+        val user = auth.currentUser
         return user?.displayName ?: ""
     }
 }

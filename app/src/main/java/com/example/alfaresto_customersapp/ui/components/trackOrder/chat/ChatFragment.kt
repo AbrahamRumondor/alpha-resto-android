@@ -36,12 +36,12 @@ class ChatFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        lifecycleScope.launch {
-            viewModel.isLoading.collectLatest { isLoading ->
-                binding.loadingLayout.progressBar.visibility =
-                    if (isLoading) View.VISIBLE else View.GONE
-            }
-        }
+//        lifecycleScope.launch {
+//            viewModel.isLoading.collectLatest { isLoading ->
+//                binding.loadingLayout.progressBar.visibility =
+//                    if (isLoading) View.VISIBLE else View.GONE
+//            }
+//        }
 
         binding.toolbar.apply {
             ivToolbarTitle.visibility = View.GONE

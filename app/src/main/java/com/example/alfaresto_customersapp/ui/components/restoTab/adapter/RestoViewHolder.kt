@@ -39,7 +39,7 @@ class RestoViewHolder(
 
                     btnDecreaseOrder -> listener?.onDecreaseItemClicked(position, menuId = menu.id)
 
-                    else -> {
+                    ivMenuImage -> {
                         itemClickListener?.invoke(menu)
                     }
                 }
@@ -49,6 +49,7 @@ class RestoViewHolder(
             btnMenuAdd.setOnClickListener(clickListener)
             btnAddOrder.setOnClickListener(clickListener)
             btnDecreaseOrder.setOnClickListener(clickListener)
+            ivMenuImage.setOnClickListener(clickListener)
         }
     }
 

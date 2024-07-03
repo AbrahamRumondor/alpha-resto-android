@@ -67,7 +67,7 @@ class RestoFragment : BaseFragment() {
 
         lifecycleScope.launch {
             viewModel.isLoading.collectLatest { isLoading ->
-                binding.loadingLayout.progressBar.visibility =
+                binding.loadingLayout.root.visibility =
                     if (isLoading) View.VISIBLE else View.GONE
             }
         }
@@ -135,11 +135,6 @@ class RestoFragment : BaseFragment() {
         binding.toolbar.btnLogout.setOnClickListener {
             viewModel.deleteAllCartItems()
             logoutValidation()
-        }
-
-        binding.rvMenu.setOnClickListener {
-            Navigation.findNavController(requireView())
-                .navigate(R.id.action_resto_fragment_menu_to_detail_fragment)
         }
 
         adapter.setItemClickListener { menu ->

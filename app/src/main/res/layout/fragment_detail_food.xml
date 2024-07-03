@@ -28,28 +28,29 @@
             android:paddingStart="@dimen/dimen_10"
             android:src="@drawable/ic_back"
             tools:ignore="ContentDescription,RtlSymmetry" />
-
     </androidx.cardview.widget.CardView>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cv_button">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/cv_button">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/iv_food"
                 android:layout_width="@dimen/dimen_300"
                 android:layout_height="@dimen/dimen_300"
-                android:src="@drawable/food_img"
+                android:layout_marginTop="@dimen/dimen_20"
+                app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="ContentDescription" />
+                tools:ignore="ContentDescription"
+                tools:srcCompat="@tools:sample/avatars" />
 
             <TextView
                 android:id="@+id/tv_food_name"
@@ -59,9 +60,10 @@
                 android:text="@string/food_name"
                 android:textColor="@color/black"
                 android:textSize="@dimen/font_28"
+                android:layout_marginTop="@dimen/dimen_15"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iv_food" />
+                app:layout_constraintTop_toBottomOf="@id/iv_food" />
 
             <TextView
                 android:id="@+id/tv_food_price"
@@ -73,34 +75,35 @@
                 android:textSize="@dimen/font_22"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_food_name" />
+                app:layout_constraintTop_toBottomOf="@id/tv_food_name" />
 
             <TextView
                 android:id="@+id/tv_food_desc_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dimen_36"
+                android:layout_marginTop="24dp"
                 android:fontFamily="@font/bold"
                 android:text="@string/food_desc_title"
                 android:textColor="@color/black"
                 android:textSize="@dimen/font_17"
-                app:layout_constraintEnd_toStartOf="@id/tv_food_price"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@id/cv_resto"
-                app:layout_constraintTop_toBottomOf="@+id/tv_food_price" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.093"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_food_price" />
 
             <TextView
                 android:id="@+id/tv_food_desc"
-                android:layout_width="@dimen/dimen_none"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dimen_16"
+                android:layout_marginTop="12dp"
                 android:fontFamily="@font/regular"
                 android:text="@string/food_description"
                 android:textColor="@color/black"
                 android:textSize="@dimen/font_17"
-                app:layout_constraintEnd_toEndOf="@+id/iv_food"
-                app:layout_constraintStart_toStartOf="@+id/tv_food_desc_title"
-                app:layout_constraintTop_toBottomOf="@+id/tv_food_desc_title" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.106"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_food_desc_title" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cv_resto"
@@ -112,7 +115,7 @@
                 app:cardCornerRadius="@dimen/dimen_5"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_food_desc">
+                app:layout_constraintTop_toBottomOf="@id/tv_food_desc">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -167,71 +170,7 @@
                     </LinearLayout>
 
                 </LinearLayout>
-
             </androidx.cardview.widget.CardView>
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_add_to_cart"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/dimen_85"
-                android:layout_marginTop="@dimen/dimen_30"
-                android:background="@drawable/add_button"
-                android:fontFamily="@font/bold"
-                android:text="@string/add_to_cart"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="@dimen/font_16"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.497"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cv_resto" />
-
-            <LinearLayout
-                android:id="@+id/ll_quantity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dimen_45"
-                android:orientation="horizontal"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btn_add_to_cart">
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_minus"
-                    android:layout_width="@dimen/dimen_50"
-                    android:layout_height="@dimen/dimen_50"
-                    android:background="@drawable/add_button"
-                    android:fontFamily="@font/bold"
-                    android:text="@string/remove_item"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/font_20" />
-
-                <TextView
-                    android:id="@+id/tv_quantity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/dimen_40"
-                    android:fontFamily="@font/bold"
-                    android:text="@string/_0"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/font_20" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_plus"
-                    android:layout_width="@dimen/dimen_50"
-                    android:layout_height="@dimen/dimen_50"
-                    android:background="@drawable/add_button"
-                    android:fontFamily="@font/bold"
-                    android:text="@string/add_item"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/font_24" />
-            </LinearLayout>
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

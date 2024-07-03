@@ -20,7 +20,6 @@ class DetailFoodFragment : BaseFragment() {
     private val args: DetailFoodFragmentArgs by navArgs()
     private val viewModel: DetailFoodViewModel by viewModels()
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -49,28 +48,6 @@ class DetailFoodFragment : BaseFragment() {
         binding.apply {
             btnBack.setOnClickListener {
                 activity?.supportFragmentManager?.popBackStack()
-            }
-
-            btnAddToCart.setOnClickListener {
-                btnAddToCart.visibility = View.GONE
-                llQuantity.visibility = View.VISIBLE
-                this@DetailFoodFragment.quantity = 1
-                tvQuantity.text = quantity.toString()
-            }
-
-            btnMinus.setOnClickListener {
-                if (quantity > 1) {
-                    quantity--
-                    tvQuantity.text = quantity.toString()
-                } else {
-                    btnAddToCart.visibility = View.VISIBLE
-                    llQuantity.visibility = View.GONE
-                }
-            }
-
-            btnPlus.setOnClickListener {
-                quantity++
-                tvQuantity.text = quantity.toString()
             }
         }
     }
