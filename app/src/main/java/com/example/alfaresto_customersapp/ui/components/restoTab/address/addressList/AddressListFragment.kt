@@ -14,6 +14,7 @@ import com.example.alfaresto_customersapp.databinding.FragmentAddressListBinding
 import com.example.alfaresto_customersapp.ui.base.BaseFragment
 import com.example.alfaresto_customersapp.ui.components.listener.AddressItemListener
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -22,6 +23,8 @@ class AddressListFragment : BaseFragment() {
     private lateinit var binding: FragmentAddressListBinding
     private val addressAdapter by lazy { AddressListAdapter() }
     private val addressListViewModel: AddressListViewModel by activityViewModels()
+
+    private var hasAddress = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,6 +46,17 @@ class AddressListFragment : BaseFragment() {
             addressListViewModel.isLoading.collectLatest { isLoading ->
                 binding.loadingLayout.progressBar.visibility =
                     if (isLoading) View.VISIBLE else View.GONE
+            }
+        }
+
+        hasNoAddress()
+    }
+
+    private fun hasNoAddress() {
+        lifecycleScope.launch {
+            delay(2000)
+            if (!hasAddress) {
+                Toast.makeText(requireContext(), "No addresses found", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -71,10 +85,7 @@ class AddressListFragment : BaseFragment() {
 
         lifecycleScope.launch {
             addressListViewModel.userAddresses.collect { data ->
-                if (data.isEmpty()) {
-                    Toast.makeText(requireContext(), "No addresses found", Toast.LENGTH_SHORT).show()
-                }
-
+                if (data.isNotEmpty()) hasAddress = true
                 addressAdapter.updateData(data)
                 addressAdapter.notifyItemChanged(data.size - 1)
             }

@@ -19,6 +19,7 @@ import com.example.alfaresto_customersapp.ui.base.BaseFragment
 import com.example.alfaresto_customersapp.ui.components.listener.OrderHistoryListener
 import com.example.alfaresto_customersapp.ui.components.orderHistoryTab.adapter.OrderHistoryAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -47,6 +48,7 @@ class OrderHistoryFragment : BaseFragment() {
 
         lifecycleScope.launch {
             viewModel.orderHistories.collectLatest { orderHistories ->
+                delay(500)
                 if (orderHistories.isEmpty()) {
                     Toast.makeText(
                         requireContext(),
