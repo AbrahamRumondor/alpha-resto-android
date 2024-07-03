@@ -1,10 +1,10 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
@@ -29,6 +29,8 @@ class OrderSummaryFragment : BaseFragment() {
     private val orderSummaryViewModel: OrderSummaryViewModel by activityViewModels()
     private val addressListViewModel: AddressListViewModel by activityViewModels()
     private val orderAdapter by lazy { OrderSummaryAdapter() }
+
+    private var checkoutClicked = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -133,11 +135,32 @@ class OrderSummaryFragment : BaseFragment() {
 
             override fun onCheckoutButtonClicked() {
                 // TODO send to firebase
+                if (!checkoutClicked)
                 orderSummaryViewModel.saveOrderInDatabase {
+                    checkoutClicked = true
+                    if (it == null) {
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.failed_checkout_null),
+                            Toast.LENGTH_LONG
+                        ).show()
+                        checkoutClicked = false
+
+                        return@saveOrderInDatabase
+                    } else if (!it) {
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.failed_checkout_false),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+
                     ORDER_CHECKOUT_STATUS = it
-                    val action = OrderSummaryFragmentDirections.actionOrderSummaryFragmentToThankYouFragment(
-                        it
-                    )
+                    val action =
+                        OrderSummaryFragmentDirections.actionOrderSummaryFragmentToThankYouFragment(
+                            it
+                        )
+
                     Navigation.findNavController(binding.root).navigate(action)
                 }
             }

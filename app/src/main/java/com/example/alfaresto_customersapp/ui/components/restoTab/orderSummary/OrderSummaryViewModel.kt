@@ -167,7 +167,7 @@ class OrderSummaryViewModel @Inject constructor(
     }
 
     // TODO 1:userID,addressID,restoID (fetch dr firestore) | 2:menuID (fetch dari firestore)
-    fun saveOrderInDatabase(onResult: (msg: Boolean) -> Unit) {
+    fun saveOrderInDatabase(onResult: (msg: Boolean?) -> Unit) {
         getUserFromDB(object : FirestoreCallback {
             override fun onSuccess(user: User?) {
 
@@ -238,7 +238,7 @@ class OrderSummaryViewModel @Inject constructor(
                         }
                     }
                 } else {
-                    onResult(false)
+                    onResult(null)
                 }
             }
 
