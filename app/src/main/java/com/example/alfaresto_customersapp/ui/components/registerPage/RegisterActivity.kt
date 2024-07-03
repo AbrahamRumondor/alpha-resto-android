@@ -6,7 +6,6 @@ import android.util.Patterns
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.ActivityRegisterBinding
 import com.example.alfaresto_customersapp.ui.components.loginPage.LoginActivity
@@ -29,7 +28,7 @@ class RegisterActivity : AppCompatActivity() {
             storeAndValidation()
         }
 
-        binding.loginTextView.setOnClickListener {
+        binding.tvLogin.setOnClickListener {
             goToLoginPage()
         }
     }
