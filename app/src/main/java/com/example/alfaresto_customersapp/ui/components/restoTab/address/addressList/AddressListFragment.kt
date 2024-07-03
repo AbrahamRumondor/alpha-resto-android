@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -69,9 +70,9 @@ class AddressListFragment : Fragment() {
 
         lifecycleScope.launch {
             addressListViewModel.userAddresses.collect { data ->
-//                if (data.isEmpty()) {
-//                    Toast.makeText(requireContext(), "No addresses found", Toast.LENGTH_SHORT).show()
-//                }
+                if (data.isEmpty()) {
+                    Toast.makeText(requireContext(), "No addresses found", Toast.LENGTH_SHORT).show()
+                }
 
                 addressAdapter.updateData(data)
                 addressAdapter.notifyItemChanged(data.size - 1)

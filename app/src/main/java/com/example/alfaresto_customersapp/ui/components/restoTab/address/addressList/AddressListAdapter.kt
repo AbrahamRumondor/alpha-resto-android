@@ -51,6 +51,7 @@ class AddressListAdapter :
 
     fun updateData(newItems: List<Address>) {
         addresses = newItems
+        notifyItemRangeChanged(0, newItems.size)
     }
 
     fun setItemListener(addressItemListener: AddressItemListener) {
