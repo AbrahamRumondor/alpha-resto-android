@@ -16,6 +16,7 @@ import com.example.alfaresto_customersapp.domain.network.NetworkUtils.warningApp
 import com.example.alfaresto_customersapp.domain.network.networkStatusObserver.ConnectivityObserver
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -96,16 +97,17 @@ class MainActivity : AppCompatActivity() {
                     NetworkUtils.setConnectionToFalse()
                 }
 
-                val connectivityResult = "Connection $it"
-                val snackbar = Snackbar
-                    .make(binding.root, connectivityResult, Snackbar.LENGTH_LONG)
-                snackbar.show()
+//                val connectivityResult = "Connection $it"
+//                val snackbar = Snackbar
+//                    .make(binding.root, connectivityResult, Snackbar.LENGTH_LONG)
+//                snackbar.show()
             }
         }
     }
 
     private fun connectivityStatus() {
         lifecycleScope.launch {
+            delay(1000)
             NetworkUtils.isConnectedToNetwork.distinctUntilChanged()
                 .observe(this@MainActivity, Observer {
                     if (!it && !warningAppear) {

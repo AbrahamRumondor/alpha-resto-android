@@ -11,7 +11,8 @@ import android.graphics.Color
 import android.os.Build
 import android.os.IBinder
 import android.os.Handler
-import android.os.Looper
+import android.view.View
+import android.widget.ProgressBar
 import android.widget.RemoteViews
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -76,6 +77,7 @@ class NotificationForegroundService : Service() {
                     .setCustomBigContentView(view)
                     .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.ic_logo))
             }
+            val a: ProgressBar? = null
         }
 
         if (ActivityCompat.checkSelfPermission(
@@ -88,21 +90,7 @@ class NotificationForegroundService : Service() {
         notificationManagerCompat.notify(1234, builder.build())
     }
 
-    private val onProcessFrames = intArrayOf(
-        R.drawable.fire3,
-        R.drawable.fire4,
-        R.drawable.fire5,
-        R.drawable.fire6,
-        R.drawable.fire5,
-        R.drawable.fire4,
-    )
-
-    private var currentFrameIndex = 0
-
     private fun updateNotification() {
-//        val handler = Handler(Looper.getMainLooper())
-//        handler.postDelayed(object : Runnable {
-//            override fun run() {
                 SHIPMENT_STATUS.let {
                     customView?.setTextViewText(R.id.notification_title, it)
                     when (it) {
@@ -140,6 +128,8 @@ class NotificationForegroundService : Service() {
                                 R.id.v_line_three,
                                 R.drawable.rectangle_line
                             )
+
+                            setAnimationVisibility("On Delivery")
                         }
 
                         "Delivered" -> {
@@ -175,6 +165,8 @@ class NotificationForegroundService : Service() {
                                 R.id.notification_text,
                                 getText(R.string.delivered)
                             )
+
+                            setAnimationVisibility("Delivered")
                         }
 
                         else -> { // ON PROCESS
@@ -211,11 +203,7 @@ class NotificationForegroundService : Service() {
                                 getText(R.string.on_process)
                             )
 
-//                            currentFrameIndex = (currentFrameIndex + 1) % onProcessFrames.size
-//                            customView?.setImageViewResource(
-//                                R.id.iv_ic_on_process,
-//                                onProcessFrames[currentFrameIndex]
-//                            )
+                            setAnimationVisibility("On Process")
                         }
                     }
 
@@ -228,10 +216,118 @@ class NotificationForegroundService : Service() {
                     }
                     notificationManagerCompat.notify(1234, builder.build())
                 }
-//
-//                handler.postDelayed(this, 100)
-//            }
-//        }, 1)
+    }
+
+    private fun setAnimationVisibility(item: String) {
+        when(item){
+            "On Process" -> {
+                customView?.setViewVisibility(
+                    R.id.pb_delivered,
+                    View.GONE
+                )
+                customView?.setViewVisibility(
+                    R.id.pb_on_order,
+                    View.GONE
+                )
+                customView?.setViewVisibility(
+                    R.id.pb_on_process,
+                    View.VISIBLE
+                )
+                customView?.setViewVisibility(
+                    R.id.pb_on_delivery,
+                    View.GONE
+                )
+
+                customView?.setViewVisibility(
+                    R.id.iv_delivered,
+                    View.VISIBLE
+                )
+                customView?.setViewVisibility(
+                    R.id.iv_on_order,
+                    View.VISIBLE
+                )
+                customView?.setViewVisibility(
+                    R.id.iv_on_process,
+                    View.GONE
+                )
+                customView?.setViewVisibility(
+                    R.id.iv_on_delivery,
+                    View.VISIBLE
+                )
+            }
+
+            "On Delivery" -> {
+                customView?.setViewVisibility(
+                    R.id.pb_delivered,
+                    View.GONE
+                )
+                customView?.setViewVisibility(
+                    R.id.pb_on_order,
+                    View.GONE
+                )
+                customView?.setViewVisibility(
+                    R.id.pb_on_process,
+                    View.GONE
+                )
+                customView?.setViewVisibility(
+                    R.id.pb_on_delivery,
+                    View.VISIBLE
+                )
+
+                customView?.setViewVisibility(
+                    R.id.iv_delivered,
+                    View.VISIBLE
+                )
+                customView?.setViewVisibility(
+                    R.id.iv_on_order,
+                    View.VISIBLE
+                )
+                customView?.setViewVisibility(
+                    R.id.iv_on_process,
+                    View.VISIBLE
+                )
+                customView?.setViewVisibility(
+                    R.id.iv_on_delivery,
+                    View.GONE
+                )
+            }
+
+            "Delivered" -> {
+                customView?.setViewVisibility(
+                    R.id.pb_delivered,
+                    View.VISIBLE
+                )
+                customView?.setViewVisibility(
+                    R.id.pb_on_order,
+                    View.GONE
+                )
+                customView?.setViewVisibility(
+                    R.id.pb_on_process,
+                    View.GONE
+                )
+                customView?.setViewVisibility(
+                    R.id.pb_on_delivery,
+                    View.GONE
+                )
+
+                customView?.setViewVisibility(
+                    R.id.iv_delivered,
+                    View.GONE
+                )
+                customView?.setViewVisibility(
+                    R.id.iv_on_order,
+                    View.VISIBLE
+                )
+                customView?.setViewVisibility(
+                    R.id.iv_on_process,
+                    View.GONE
+                )
+                customView?.setViewVisibility(
+                    R.id.iv_on_delivery,
+                    View.GONE
+                )
+            }
+        }
     }
 
 

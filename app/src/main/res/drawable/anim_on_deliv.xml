@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/selected"
+    android:oneshot="false">
+    <item
+        android:drawable="@drawable/rbt1"
+        android:duration="41" />
+    <item
+        android:drawable="@drawable/rbt2"
+        android:duration="41" />
+    <item
+        android:drawable="@drawable/rbt3"
+        android:duration="41" />
+    <item
+        android:drawable="@drawable/rbt4"
+        android:duration="41" />
+    <item
+        android:drawable="@drawable/rbt5"
+        android:duration="41" />
+    <item
+        android:drawable="@drawable/rbt6"
+        android:duration="41" />
+    <item
+        android:drawable="@drawable/rbt7"
+        android:duration="41" />
+    <item
+        android:drawable="@drawable/rbt8"
+        android:duration="41" />
+    <item
+        android:drawable="@drawable/rbt9"
+        android:duration="41" />
+    <item
+        android:drawable="@drawable/rbt10"
+        android:duration="41" />
+    <item
+        android:drawable="@drawable/rbt11"
+        android:duration="41" />
+    <item
+        android:drawable="@drawable/rbt12"
+        android:duration="41" />
+    <item
+        android:drawable="@drawable/rbt13"
+        android:duration="41" />
+    <item
+        android:drawable="@drawable/rbt14"
+        android:duration="41" />
+    <item
+        android:drawable="@drawable/rbt15"
+        android:duration="41" />
+    <item
+        android:drawable="@drawable/rbt16"
+        android:duration="41" />
+    <item
+        android:drawable="@drawable/rbt17"
+        android:duration="41" />
+    <item
+        android:drawable="@drawable/rbt18"
+        android:duration="41" />
+    <item
+        android:drawable="@drawable/rbt19"
+        android:duration="41" />
+    <item
+        android:drawable="@drawable/rbt20"
+        android:duration="41" />
+    <item
+        android:drawable="@drawable/rbt21"
+        android:duration="41" />
+    <item
+        android:drawable="@drawable/rbt22"
+        android:duration="41" />
+    <item
+        android:drawable="@drawable/rbt23"
+        android:duration="41" />
+    <item
+        android:drawable="@drawable/rbt24"
+        android:duration="41" />
+
+
+</animation-list>
