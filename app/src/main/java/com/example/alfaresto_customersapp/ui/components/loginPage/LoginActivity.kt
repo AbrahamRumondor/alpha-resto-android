@@ -10,9 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.LoginPageBinding
 import com.example.alfaresto_customersapp.ui.components.MainActivity
-import com.example.alfaresto_customersapp.ui.components.loginPage.repository.AuthRepositoryImpl
 import com.example.alfaresto_customersapp.ui.components.registerPage.RegisterActivity
-import com.example.alfaresto_customersapp.ui.components.registerPage.RegisterViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

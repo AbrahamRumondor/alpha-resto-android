@@ -24,7 +24,7 @@ data class UserResponse(
     @set:PropertyName("user_address")
     var address: List<AddressResponse> = mutableListOf()
 ) {
-    // Public no-argument constructor required by Firestore
+
     constructor() : this("", "", "", "", mutableListOf())
 
     companion object {
