@@ -108,13 +108,7 @@ class UserRepositoryImpl @Inject constructor(
         val currentUser = usersRef.document(uid)
 
         try {
-            val newUserID = currentUser.collection("users").document().id
-            user.id = newUserID
-
-            currentUser.collection("users")
-                .document(newUserID)
-                .set(UserResponse.transform(user))
-                .await()
+            currentUser.set(UserResponse.transform(user))
         } catch (
             e: Exception
         ) {

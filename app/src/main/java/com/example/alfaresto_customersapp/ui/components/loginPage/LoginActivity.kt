@@ -5,17 +5,21 @@ import android.os.Bundle
 import android.util.Patterns
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.LoginPageBinding
 import com.example.alfaresto_customersapp.ui.components.MainActivity
 import com.example.alfaresto_customersapp.ui.components.loginPage.repository.AuthRepositoryImpl
 import com.example.alfaresto_customersapp.ui.components.registerPage.RegisterActivity
+import com.example.alfaresto_customersapp.ui.components.registerPage.RegisterViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: LoginPageBinding
-    private lateinit var viewModel: LoginViewModel
+    private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,9 +30,6 @@ class LoginActivity : AppCompatActivity() {
             navigateToMainActivity()
             return
         }
-
-        val authRepository = AuthRepositoryImpl()
-        viewModel = LoginViewModel(authRepository)
 
         binding.btnLogin.setOnClickListener {
             validateLogin()
@@ -63,7 +64,7 @@ class LoginActivity : AppCompatActivity() {
             return
         }
 
-        viewModel.login(email, password)
+        viewModel.loginUser(email, password)
     }
 
     private fun goToRegisterPage(view: View) {
