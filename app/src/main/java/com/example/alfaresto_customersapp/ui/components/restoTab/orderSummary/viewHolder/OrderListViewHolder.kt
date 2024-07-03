@@ -4,7 +4,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.alfaresto_customersapp.databinding.OrderSummaryItemBinding
 import com.example.alfaresto_customersapp.domain.model.Menu
-import com.example.alfaresto_customersapp.domain.model.OrderItem
 import com.example.alfaresto_customersapp.ui.components.listener.OrderSummaryItemListener
 
 class OrderListViewHolder(
@@ -30,9 +29,6 @@ class OrderListViewHolder(
                 }
                 ivOrderDecrease.setOnClickListener {
                     itemListener?.onDecreaseItemClicked(position, menu.id)
-                }
-                ivOrderDelete.setOnClickListener {
-                    itemListener?.onDeleteItemClicked(position, menu.id)
                 }
             }
         }
