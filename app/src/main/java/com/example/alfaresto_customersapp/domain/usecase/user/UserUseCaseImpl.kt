@@ -20,7 +20,7 @@ class UserUseCaseImpl @Inject constructor(
         return userRepository.getUserAddresses(authRepository.getCurrentUserID())
     }
 
-    override suspend fun getUserAddressById(addressId: String): Address {
+    override suspend fun getUserAddressById(addressId: String): StateFlow<Address> {
         return userRepository.getUserAddressById(authRepository.getCurrentUserID(), addressId)
     }
 

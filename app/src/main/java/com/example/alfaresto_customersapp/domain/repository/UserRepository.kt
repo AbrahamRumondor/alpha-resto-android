@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 interface UserRepository {
     suspend fun getCurrentUser(uid: String): StateFlow<User>
     suspend fun getUserAddresses(uid: String): StateFlow<List<Address>>
-    suspend fun getUserAddressById(uid: String, addressId: String): Address
+    suspend fun getUserAddressById(uid: String, addressId: String): StateFlow<Address>
     suspend fun makeNewAddress(uid: String, address: Address)
     suspend fun getUserToken(uid: String): Task<QuerySnapshot>
     fun saveTokenToDB(uid: String, token: String)

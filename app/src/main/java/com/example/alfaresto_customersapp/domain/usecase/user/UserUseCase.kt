@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.StateFlow
 interface UserUseCase {
     suspend fun getCurrentUser(): StateFlow<User>
     suspend fun getUserAddresses(): StateFlow<List<Address>>
-    suspend fun getUserAddressById(addressId: String): Address
+    suspend fun getUserAddressById(addressId: String): StateFlow<Address>
     suspend fun makeNewAddress(address: Address)
 
     //    suspend fun getUserTokens(): StateFlow<List<Token>>
