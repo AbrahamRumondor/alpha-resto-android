@@ -79,8 +79,9 @@ class AddressListViewModel @Inject constructor(
             override fun onSuccess(user: User?) {
                 viewModelScope.launch {
                     try {
-                        val address = userUseCase.getUserAddressById(addressId)
-                        _selectedAddress.value = address
+                        userUseCase.getUserAddressById(addressId).collectLatest {
+                            _selectedAddress.value = it
+                        }
                     } catch (e: Exception) {
                         Timber.tag("test").d(e, "GAGAL FETCH DATA")
                     }

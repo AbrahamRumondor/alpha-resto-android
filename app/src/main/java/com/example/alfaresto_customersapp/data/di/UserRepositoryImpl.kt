@@ -25,6 +25,9 @@ class UserRepositoryImpl @Inject constructor(
     private val _addresses = MutableStateFlow<List<Address>>(emptyList())
     private val addresses: StateFlow<List<Address>> = _addresses
 
+    private val _address = MutableStateFlow(Address())
+    private val address: StateFlow<Address> = _address
+
     override suspend fun getCurrentUser(uid: String): StateFlow<User> {
         try {
             val snapshot = usersRef.get().await()
@@ -60,14 +63,24 @@ class UserRepositoryImpl @Inject constructor(
         return addresses
     }
 
-    override suspend fun getUserAddressById(uid: String, addressId: String): Address {
-        return usersRef.document(uid)
+    override suspend fun getUserAddressById(uid: String, addressId: String): StateFlow<Address> {
+        usersRef.document(uid)
             .collection("addresses")
             .document(addressId)
-            .get()
-            .await()
-            .toObject(AddressResponse::class.java)
-            ?.let { AddressResponse.transform(it) } ?: Address()
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    _address.value = Address()
+                    return@addSnapshotListener
+                }
+
+                if (snapshot != null) {
+                    val address = snapshot.toObject(AddressResponse::class.java)
+                        ?.let { AddressResponse.transform(it) }
+                    _address.value = address ?: Address()
+                }
+            }
+
+        return address
     }
 
     override suspend fun makeNewAddress(uid: String, address: Address) {

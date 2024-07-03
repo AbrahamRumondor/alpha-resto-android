@@ -23,7 +23,6 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
-import com.example.alfaresto_customersapp.databinding.ActivityMainBinding
 import com.example.alfaresto_customersapp.databinding.BsdLocationPermissionBinding
 import com.example.alfaresto_customersapp.databinding.FragmentRestoBinding
 import com.example.alfaresto_customersapp.domain.error.FirestoreCallback
@@ -35,7 +34,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @AndroidEntryPoint
 class RestoFragment : Fragment() {
@@ -86,22 +84,22 @@ class RestoFragment : Fragment() {
         })
 
         lifecycleScope.launch {
-            viewModel.menus.collect { menus ->
+            viewModel.menus.collectLatest { menus ->
                 if (menus.isEmpty()) {
-                    Timber.tag("MENU").d("Menus is empty, waiting for data...")
-                    return@collect
+//                    Toast.makeText(requireContext(), "Menu is not available", Toast.LENGTH_LONG).show()
+                    return@collectLatest
                 }
 
-                viewModel.cart.collectLatest { it ->
-                    if (it.isEmpty()) {
-                        setRestoAdapterButtons(it)
+                viewModel.cart.collectLatest { cart ->
+                    if (cart.isEmpty()) {
+                        setRestoAdapterButtons(cart)
                         adapter.submitMenuList(menus)
 
                         return@collectLatest
                     }
 
                     val updatedMenus = menus.map { menu ->
-                        val cartItem = it.find { cart -> cart.menuId == menu.id }
+                        val cartItem = cart.find { it.menuId == menu.id }
                         if (cartItem != null) {
                             menu.copy(orderCartQuantity = cartItem.menuQty)
                         } else {
@@ -109,12 +107,12 @@ class RestoFragment : Fragment() {
                         }
                     }
 
-                    setRestoAdapterButtons(it)
+                    setRestoAdapterButtons(cart)
                     adapter.submitMenuList(updatedMenus)
 
                     viewModel.cartCount.collectLatest {
                         binding.tvCartCount.text = it.toString()
-                        binding.rlCart.visibility = if (it > 0) View.VISIBLE else View.INVISIBLE
+                        binding.rlCart.visibility = if (it != 0) View.VISIBLE else View.INVISIBLE
                     }
                 }
             }

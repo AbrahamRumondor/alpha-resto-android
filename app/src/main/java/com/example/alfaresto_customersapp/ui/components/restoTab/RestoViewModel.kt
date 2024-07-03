@@ -15,6 +15,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -45,9 +46,10 @@ class RestoViewModel @Inject constructor(
         viewModelScope.launch {
             setLoading(true)
             try {
-                val fetchedMenus = menuUseCase.getMenus().value
-                _menus.value = fetchedMenus
-                setLoading(false)
+                menuUseCase.getMenus().collectLatest {
+                    _menus.value = it
+                    setLoading(false)
+                }
             } catch (e: Exception) {
                 Timber.tag("MENU").e("Error fetching menus: %s", e.message)
             }
@@ -57,7 +59,7 @@ class RestoViewModel @Inject constructor(
     private fun fetchCart() {
         viewModelScope.launch {
             try {
-                cartUseCase.getCart().collect {
+                cartUseCase.getCart().collectLatest {
                     _cartCount.value = 0
                     it.map {
                         _cartCount.value += it.menuQty

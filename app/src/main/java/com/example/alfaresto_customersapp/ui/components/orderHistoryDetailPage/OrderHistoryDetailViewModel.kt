@@ -36,7 +36,18 @@ class OrderHistoryDetailViewModel @Inject constructor(
 
     fun fetchOrderHistory(orderId: String) {
         viewModelScope.launch {
-            _orderHistory.value = orderHistoryUseCase.getOrderHistoryByOrderID(orderId)
+            try {
+                setLoading(true)
+                orderHistoryUseCase.getOrderHistories { it ->
+                    val orderHistory = it.find { it.orderId == orderId }
+                    if (orderHistory != null) {
+                        _orderHistory.value = orderHistory
+                    }
+                    setLoading(false)
+                }
+            } catch (e: Exception) {
+                Timber.tag("ORDER_HISTORY_DETAIL").e("Error fetching order history: %s", e.message)
+            }
         }
     }
 
@@ -44,9 +55,11 @@ class OrderHistoryDetailViewModel @Inject constructor(
     private fun fetchUser() {
         viewModelScope.launch {
             try {
+                setLoading(true)
                 userUseCase.getCurrentUser().collectLatest { user ->
                     _user.value = user
                 }
+                setLoading(false)
             } catch (e: Exception) {
                 Timber.tag("ORDER_HISTORY_DETAIL").e("Error fetching user: %s", e.message)
             }
@@ -56,9 +69,11 @@ class OrderHistoryDetailViewModel @Inject constructor(
     fun fetchOrderItems(orderId: String) {
         viewModelScope.launch {
             try {
+                setLoading(true)
                 orderUseCase.getOrderItems(orderId).collectLatest {
                     _orderItems.value = it
                 }
+                setLoading(false)
             } catch (e: Exception) {
                 Timber.tag("ORDER_HISTORY_DETAIL").e("Error fetching order items: %s", e.message)
             }
