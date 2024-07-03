@@ -22,8 +22,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -33,6 +33,7 @@ import com.example.alfaresto_customersapp.databinding.BsdLocationPermissionBindi
 import com.example.alfaresto_customersapp.databinding.FragmentTrackOrderBinding
 import com.example.alfaresto_customersapp.domain.error.OsrmCallback
 import com.example.alfaresto_customersapp.domain.error.RealtimeLocationCallback
+import com.example.alfaresto_customersapp.ui.base.BaseFragment
 import com.example.alfaresto_customersapp.ui.components.restoTab.address.addNewAddress.AddNewAddressFragment.Companion.markersHeight
 import com.example.alfaresto_customersapp.ui.components.restoTab.address.addNewAddress.AddNewAddressFragment.Companion.markersWidth
 import com.example.alfaresto_customersapp.utils.user.UserConstants.SHIPMENT_STATUS
@@ -47,9 +48,10 @@ import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.maps.android.PolyUtil
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class TrackOrderFragment : Fragment() {
+class TrackOrderFragment : BaseFragment() {
 
     private lateinit var binding: FragmentTrackOrderBinding
     private val trackOrderViewModel: TrackOrderViewModel by viewModels()
@@ -488,6 +490,11 @@ class TrackOrderFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         binding.mvTrack.onDestroy()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.mvTrack.onResume()
     }
 
     // cache

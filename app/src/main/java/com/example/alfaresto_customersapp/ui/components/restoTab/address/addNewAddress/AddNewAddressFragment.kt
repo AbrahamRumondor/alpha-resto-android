@@ -22,6 +22,7 @@ import androidx.navigation.Navigation
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.BsdLocationPermissionBinding
 import com.example.alfaresto_customersapp.databinding.FragmentAddNewAddressBinding
+import com.example.alfaresto_customersapp.ui.base.BaseFragment
 import com.example.alfaresto_customersapp.utils.location.LocationGpsUtility
 import com.example.alfaresto_customersapp.utils.location.LocationGpsUtility.locationDialogIsShown
 import com.example.alfaresto_customersapp.utils.location.LocationPermissions
@@ -31,7 +32,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.coroutines.launch
 
-class AddNewAddressFragment : Fragment() {
+class AddNewAddressFragment : BaseFragment() {
 
     private lateinit var binding: FragmentAddNewAddressBinding
     private val addNewAddressViewModel: AddNewAddressViewModel by activityViewModels()

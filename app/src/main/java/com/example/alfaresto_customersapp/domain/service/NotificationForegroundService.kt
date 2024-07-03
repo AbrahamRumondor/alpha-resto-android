@@ -11,6 +11,8 @@ import android.graphics.Color
 import android.os.Build
 import android.os.IBinder
 import android.os.Handler
+import android.view.View
+import android.widget.ProgressBar
 import android.widget.RemoteViews
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -75,6 +77,7 @@ class NotificationForegroundService : Service() {
                     .setCustomBigContentView(view)
                     .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.ic_logo))
             }
+            val a: ProgressBar? = null
         }
 
         if (ActivityCompat.checkSelfPermission(
@@ -87,100 +90,243 @@ class NotificationForegroundService : Service() {
         notificationManagerCompat.notify(1234, builder.build())
     }
 
-
     private fun updateNotification() {
-        SHIPMENT_STATUS.let {
-            customView?.setTextViewText(R.id.notification_title, it)
-            when (it) {
-                "On Delivery" -> {
-                    customView?.setImageViewResource(R.id.iv_dot_one, R.drawable.point_round_orange)
-                    customView?.setImageViewResource(R.id.iv_dot_two, R.drawable.point_round_orange)
-                    customView?.setImageViewResource(
-                        R.id.iv_dot_three,
-                        R.drawable.point_round_orange
-                    )
-                    customView?.setImageViewResource(R.id.iv_dot_four, R.drawable.point_round)
+                SHIPMENT_STATUS.let {
+                    customView?.setTextViewText(R.id.notification_title, it)
+                    when (it) {
+                        "On Delivery" -> {
+                            customView?.setImageViewResource(
+                                R.id.iv_dot_one,
+                                R.drawable.point_round_orange
+                            )
+                            customView?.setImageViewResource(
+                                R.id.iv_dot_two,
+                                R.drawable.point_round_orange
+                            )
+                            customView?.setImageViewResource(
+                                R.id.iv_dot_three,
+                                R.drawable.point_round_orange
+                            )
+                            customView?.setImageViewResource(
+                                R.id.iv_dot_four,
+                                R.drawable.point_round
+                            )
 
-                    customView?.setImageViewResource(
-                        R.id.v_line_one,
-                        R.drawable.rectangle_line_orange
-                    )
-                    customView?.setImageViewResource(
-                        R.id.v_line_two,
-                        R.drawable.rectangle_line_orange
-                    )
-                    customView?.setTextViewText(
-                        R.id.notification_text,
-                        getText(R.string.on_delivery)
-                    )
-                    customView?.setImageViewResource(
-                        R.id.v_line_three,
-                        R.drawable.rectangle_line
-                    )
+                            customView?.setImageViewResource(
+                                R.id.v_line_one,
+                                R.drawable.rectangle_line_orange
+                            )
+                            customView?.setImageViewResource(
+                                R.id.v_line_two,
+                                R.drawable.rectangle_line_orange
+                            )
+                            customView?.setTextViewText(
+                                R.id.notification_text,
+                                getText(R.string.on_delivery)
+                            )
+                            customView?.setImageViewResource(
+                                R.id.v_line_three,
+                                R.drawable.rectangle_line
+                            )
+
+                            setAnimationVisibility("On Delivery")
+                        }
+
+                        "Delivered" -> {
+                            customView?.setImageViewResource(
+                                R.id.iv_dot_one,
+                                R.drawable.point_round_orange
+                            )
+                            customView?.setImageViewResource(
+                                R.id.iv_dot_two,
+                                R.drawable.point_round_orange
+                            )
+                            customView?.setImageViewResource(
+                                R.id.iv_dot_three,
+                                R.drawable.point_round_orange
+                            )
+                            customView?.setImageViewResource(
+                                R.id.iv_dot_four,
+                                R.drawable.point_round_orange
+                            )
+                            customView?.setImageViewResource(
+                                R.id.v_line_one,
+                                R.drawable.rectangle_line_orange
+                            )
+                            customView?.setImageViewResource(
+                                R.id.v_line_two,
+                                R.drawable.rectangle_line_orange
+                            )
+                            customView?.setImageViewResource(
+                                R.id.v_line_three,
+                                R.drawable.rectangle_line_orange
+                            )
+                            customView?.setTextViewText(
+                                R.id.notification_text,
+                                getText(R.string.delivered)
+                            )
+
+                            setAnimationVisibility("Delivered")
+                        }
+
+                        else -> { // ON PROCESS
+                            customView?.setImageViewResource(
+                                R.id.iv_dot_one,
+                                R.drawable.point_round_orange
+                            )
+                            customView?.setImageViewResource(
+                                R.id.iv_dot_two,
+                                R.drawable.point_round_orange
+                            )
+                            customView?.setImageViewResource(
+                                R.id.iv_dot_three,
+                                R.drawable.point_round
+                            )
+                            customView?.setImageViewResource(
+                                R.id.iv_dot_four,
+                                R.drawable.point_round
+                            )
+                            customView?.setImageViewResource(
+                                R.id.v_line_one,
+                                R.drawable.rectangle_line_orange
+                            )
+                            customView?.setImageViewResource(
+                                R.id.v_line_two,
+                                R.drawable.rectangle_line
+                            )
+                            customView?.setImageViewResource(
+                                R.id.v_line_three,
+                                R.drawable.rectangle_line
+                            )
+                            customView?.setTextViewText(
+                                R.id.notification_text,
+                                getText(R.string.on_process)
+                            )
+
+                            setAnimationVisibility("On Process")
+                        }
+                    }
+
+                    if (ActivityCompat.checkSelfPermission(
+                            this@NotificationForegroundService,
+                            Manifest.permission.POST_NOTIFICATIONS
+                        ) != PackageManager.PERMISSION_GRANTED
+                    ) {
+                        return
+                    }
+                    notificationManagerCompat.notify(1234, builder.build())
                 }
+    }
 
-                "Delivered" -> {
-                    customView?.setImageViewResource(R.id.iv_dot_one, R.drawable.point_round_orange)
-                    customView?.setImageViewResource(R.id.iv_dot_two, R.drawable.point_round_orange)
-                    customView?.setImageViewResource(
-                        R.id.iv_dot_three,
-                        R.drawable.point_round_orange
-                    )
-                    customView?.setImageViewResource(
-                        R.id.iv_dot_four,
-                        R.drawable.point_round_orange
-                    )
-                    customView?.setImageViewResource(
-                        R.id.v_line_one,
-                        R.drawable.rectangle_line_orange
-                    )
-                    customView?.setImageViewResource(
-                        R.id.v_line_two,
-                        R.drawable.rectangle_line_orange
-                    )
-                    customView?.setImageViewResource(
-                        R.id.v_line_three,
-                        R.drawable.rectangle_line_orange
-                    )
-                    customView?.setTextViewText(
-                        R.id.notification_text,
-                        getText(R.string.delivered)
-                    )
-                }
+    private fun setAnimationVisibility(item: String) {
+        when(item){
+            "On Process" -> {
+                customView?.setViewVisibility(
+                    R.id.pb_delivered,
+                    View.GONE
+                )
+                customView?.setViewVisibility(
+                    R.id.pb_on_order,
+                    View.GONE
+                )
+                customView?.setViewVisibility(
+                    R.id.pb_on_process,
+                    View.VISIBLE
+                )
+                customView?.setViewVisibility(
+                    R.id.pb_on_delivery,
+                    View.GONE
+                )
 
-                else -> { // ON PROCESS
-                    customView?.setImageViewResource(R.id.iv_dot_one, R.drawable.point_round_orange)
-                    customView?.setImageViewResource(R.id.iv_dot_two, R.drawable.point_round_orange)
-                    customView?.setImageViewResource(R.id.iv_dot_three, R.drawable.point_round)
-                    customView?.setImageViewResource(R.id.iv_dot_four, R.drawable.point_round)
-                    customView?.setImageViewResource(
-                        R.id.v_line_one,
-                        R.drawable.rectangle_line_orange
-                    )
-                    customView?.setImageViewResource(
-                        R.id.v_line_two,
-                        R.drawable.rectangle_line
-                    )
-                    customView?.setImageViewResource(
-                        R.id.v_line_three,
-                        R.drawable.rectangle_line
-                    )
-                    customView?.setTextViewText(
-                        R.id.notification_text,
-                        getText(R.string.on_process)
-
-                    )
-                }
+                customView?.setViewVisibility(
+                    R.id.iv_delivered,
+                    View.VISIBLE
+                )
+                customView?.setViewVisibility(
+                    R.id.iv_on_order,
+                    View.VISIBLE
+                )
+                customView?.setViewVisibility(
+                    R.id.iv_on_process,
+                    View.GONE
+                )
+                customView?.setViewVisibility(
+                    R.id.iv_on_delivery,
+                    View.VISIBLE
+                )
             }
 
-            if (ActivityCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.POST_NOTIFICATIONS
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                return
+            "On Delivery" -> {
+                customView?.setViewVisibility(
+                    R.id.pb_delivered,
+                    View.GONE
+                )
+                customView?.setViewVisibility(
+                    R.id.pb_on_order,
+                    View.GONE
+                )
+                customView?.setViewVisibility(
+                    R.id.pb_on_process,
+                    View.GONE
+                )
+                customView?.setViewVisibility(
+                    R.id.pb_on_delivery,
+                    View.VISIBLE
+                )
+
+                customView?.setViewVisibility(
+                    R.id.iv_delivered,
+                    View.VISIBLE
+                )
+                customView?.setViewVisibility(
+                    R.id.iv_on_order,
+                    View.VISIBLE
+                )
+                customView?.setViewVisibility(
+                    R.id.iv_on_process,
+                    View.VISIBLE
+                )
+                customView?.setViewVisibility(
+                    R.id.iv_on_delivery,
+                    View.GONE
+                )
             }
-            notificationManagerCompat.notify(1234, builder.build())
+
+            "Delivered" -> {
+                customView?.setViewVisibility(
+                    R.id.pb_delivered,
+                    View.VISIBLE
+                )
+                customView?.setViewVisibility(
+                    R.id.pb_on_order,
+                    View.GONE
+                )
+                customView?.setViewVisibility(
+                    R.id.pb_on_process,
+                    View.GONE
+                )
+                customView?.setViewVisibility(
+                    R.id.pb_on_delivery,
+                    View.GONE
+                )
+
+                customView?.setViewVisibility(
+                    R.id.iv_delivered,
+                    View.GONE
+                )
+                customView?.setViewVisibility(
+                    R.id.iv_on_order,
+                    View.VISIBLE
+                )
+                customView?.setViewVisibility(
+                    R.id.iv_on_process,
+                    View.GONE
+                )
+                customView?.setViewVisibility(
+                    R.id.iv_on_delivery,
+                    View.GONE
+                )
+            }
         }
     }
 

@@ -15,15 +15,17 @@ import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.FragmentOrderHistoryBinding
 import com.example.alfaresto_customersapp.domain.model.OrderHistory
 import com.example.alfaresto_customersapp.domain.model.OrderStatus
+import com.example.alfaresto_customersapp.ui.base.BaseFragment
 import com.example.alfaresto_customersapp.ui.components.listener.OrderHistoryListener
 import com.example.alfaresto_customersapp.ui.components.orderHistoryTab.adapter.OrderHistoryAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
-class OrderHistoryFragment : Fragment() {
+class OrderHistoryFragment : BaseFragment() {
 
     private lateinit var binding: FragmentOrderHistoryBinding
     private val viewModel: OrderHistoryViewModel by viewModels()
@@ -46,6 +48,7 @@ class OrderHistoryFragment : Fragment() {
 
         lifecycleScope.launch {
             viewModel.orderHistories.collectLatest { orderHistories ->
+                delay(500)
                 if (orderHistories.isEmpty()) {
                     Toast.makeText(
                         requireContext(),

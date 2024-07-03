@@ -9,10 +9,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.alfaresto_customersapp.databinding.FragmentDetailFoodBinding
+import com.example.alfaresto_customersapp.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class DetailFoodFragment : Fragment() {
+class DetailFoodFragment : BaseFragment() {
 
     private lateinit var binding: FragmentDetailFoodBinding
     private var quantity = 1
