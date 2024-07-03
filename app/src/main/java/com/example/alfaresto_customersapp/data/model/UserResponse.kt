@@ -19,13 +19,9 @@ data class UserResponse(
     @get:PropertyName("user_email")
     @set:PropertyName("user_email")
     var email: String = "",
-
-    @get:PropertyName("user_address")
-    @set:PropertyName("user_address")
-    var address: List<AddressResponse> = mutableListOf()
 ) {
 
-    constructor() : this("", "", "", "", mutableListOf())
+    constructor() : this("", "", "", "")
 
     companion object {
         fun transform(userResponse: UserResponse): User {
@@ -33,8 +29,7 @@ data class UserResponse(
                 id = userResponse.id,
                 name = userResponse.name,
                 phone = userResponse.noTelp,
-                email = userResponse.email,
-                address = userResponse.address.map { AddressResponse.transform(it) }
+                email = userResponse.email
             )
         }
 
@@ -43,8 +38,7 @@ data class UserResponse(
                 id = user.id,
                 name = user.name,
                 noTelp = user.phone,
-                email = user.email,
-                address = user.address.map { AddressResponse.transform(it) }
+                email = user.email
             )
         }
     }

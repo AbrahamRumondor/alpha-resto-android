@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.alfaresto_customersapp.R
-import com.example.alfaresto_customersapp.databinding.LoginPageBinding
+import com.example.alfaresto_customersapp.databinding.ActivityLoginBinding
 import com.example.alfaresto_customersapp.ui.components.MainActivity
 import com.example.alfaresto_customersapp.ui.components.registerPage.RegisterActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -16,12 +16,12 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var binding: LoginPageBinding
+    private lateinit var binding: ActivityLoginBinding
     private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = LoginPageBinding.inflate(layoutInflater)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         if (isLoggedIn()) {
