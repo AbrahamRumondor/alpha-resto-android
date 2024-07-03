@@ -17,6 +17,7 @@ import com.example.alfaresto_customersapp.ui.components.orderHistoryDetailPage.a
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
 class OrderHistoryDetailFragment : BaseFragment() {
@@ -31,12 +32,12 @@ class OrderHistoryDetailFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = OrderHistoryDetailBinding.inflate(inflater, container, false)
+        viewModel.fetchOrderHistory(args.orderId)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.fetchOrderHistory(args.orderId)
 
         setupView()
         setupBackBtn()
@@ -68,6 +69,8 @@ class OrderHistoryDetailFragment : BaseFragment() {
     private fun loadData() {
         lifecycleScope.launch {
             viewModel.orderHistory.collectLatest { orderHistory ->
+                Timber.tag("orhis").d("Order history: $orderHistory")
+
                 binding.apply {
                     tvOrderId.text = orderHistory.orderId
                     tvOrderDate.text = orderHistory.orderDate

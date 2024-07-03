@@ -19,7 +19,9 @@ import com.example.alfaresto_customersapp.ui.base.BaseFragment
 import com.example.alfaresto_customersapp.ui.components.listener.OrderHistoryListener
 import com.example.alfaresto_customersapp.ui.components.orderHistoryTab.adapter.OrderHistoryAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
 class OrderHistoryFragment : BaseFragment() {
@@ -44,15 +46,17 @@ class OrderHistoryFragment : BaseFragment() {
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
         lifecycleScope.launch {
-            viewModel.orderHistories.observe(viewLifecycleOwner) { orderHistories ->
+            viewModel.orderHistories.collectLatest { orderHistories ->
                 if (orderHistories.isEmpty()) {
                     Toast.makeText(
                         requireContext(),
                         "Order History Loaded. There's no order history.",
                         Toast.LENGTH_SHORT
                     ).show()
-                    return@observe
+                    return@collectLatest
                 }
+
+                Timber.tag("OrderHistoryFragment").d("Order histories: $orderHistories")
 
                 adapter.submitList(orderHistories)
                 binding.run {
@@ -95,6 +99,7 @@ class OrderHistoryFragment : BaseFragment() {
                         LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 //                setOnOrderClickListener()
                 }
+
                 orderHistories.map {
                     setOnOrderClickListener()
                 }
