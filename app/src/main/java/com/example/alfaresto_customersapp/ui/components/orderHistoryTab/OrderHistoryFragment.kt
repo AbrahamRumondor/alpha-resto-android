@@ -89,7 +89,7 @@ class OrderHistoryFragment : Fragment() {
                     setOnOrderClickListener()
                 }
 
-                delay(500)
+                delay(1000)
                 if (orderHistories.isEmpty()) {
                     Toast.makeText(
                         requireContext(),
