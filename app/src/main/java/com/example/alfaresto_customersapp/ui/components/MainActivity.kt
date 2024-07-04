@@ -73,6 +73,8 @@ class MainActivity : AppCompatActivity() {
                 else -> showBottomNav()
             }
         }
+
+        setBlockActionListener()
     }
 
     private fun hideBottomNav() {
@@ -98,6 +100,12 @@ class MainActivity : AppCompatActivity() {
                     NetworkUtils.setConnectionToFalse()
                 }
             }
+        }
+    }
+
+    private fun setBlockActionListener() {
+        binding.vBlockActions.setOnClickListener {
+
         }
     }
 
