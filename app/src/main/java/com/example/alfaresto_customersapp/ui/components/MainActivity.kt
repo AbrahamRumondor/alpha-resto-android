@@ -2,6 +2,7 @@ package com.example.alfaresto_customersapp.ui.components
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
@@ -10,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.alfaresto_customersapp.databinding.ActivityMainBinding
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import androidx.paging.LOG_TAG
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.domain.network.NetworkUtils
 import com.example.alfaresto_customersapp.domain.network.NetworkUtils.warningAppear
@@ -61,6 +63,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
+            Timber.tag("abcd").d(destination.id.toString())
             when (destination.id) {
                 R.id.address_list -> hideBottomNav()
                 R.id.add_new_address_fragment -> hideBottomNav()
@@ -90,17 +93,14 @@ class MainActivity : AppCompatActivity() {
                 if (it.toString() == getString(R.string.available) &&
                     NetworkUtils.isConnectedToNetwork.value != true
                 ) {
+                    binding.vBlockActions.visibility = View.GONE
                     NetworkUtils.setConnectionToTrue()
                 } else if (it.toString() != getString(R.string.available) &&
                     NetworkUtils.isConnectedToNetwork.value != false
                 ) {
+                    binding.vBlockActions.visibility = View.VISIBLE
                     NetworkUtils.setConnectionToFalse()
                 }
-
-//                val connectivityResult = "Connection $it"
-//                val snackbar = Snackbar
-//                    .make(binding.root, connectivityResult, Snackbar.LENGTH_LONG)
-//                snackbar.show()
             }
         }
     }
@@ -128,7 +128,6 @@ class MainActivity : AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Connection Lost")
             .setMessage("We currently cannot connect to the internet, please click to retry.")
-            .setCancelable(false)
         return builder
     }
 }

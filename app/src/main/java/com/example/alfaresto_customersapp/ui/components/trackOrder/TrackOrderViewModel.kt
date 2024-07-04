@@ -32,7 +32,6 @@ import javax.inject.Inject
 class TrackOrderViewModel @Inject constructor(
     private val osrmApiRepository: OsrmApiRepository,
     private val orderUseCase: OrderUseCase,
-    private val restaurantUseCase: RestaurantUseCase,
     private val shipmentUseCase: ShipmentUseCase
 ) : ViewModel() {
 
@@ -60,11 +59,6 @@ class TrackOrderViewModel @Inject constructor(
             }
         }
     }
-
-    fun getShipmentById(id: String, items: List<Shipment>): Shipment {
-        return items.find { it.orderID == id } ?: Shipment().copy(statusDelivery = "On Process")
-    }
-
 
     fun getRoute(home: LatLng, driver: LatLng, osrmCallback: OsrmCallback) {
         val call = osrmApiRepository.getRoute(
@@ -105,19 +99,6 @@ class TrackOrderViewModel @Inject constructor(
         val database =
             FirebaseDatabase.getInstance("https://final-project-alfa-default-rtdb.asia-southeast1.firebasedatabase.app")
 
-//        val locationMap = mapOf(
-//            "latitude" to -6.22695,
-//            "longitude" to 106.60729
-//        )
-//
-//        database.reference.child("driver_location").setValue(locationMap)
-//            .addOnSuccessListener {
-//                Log.d("Firebase", "Location daxwta set successfully")
-//            }
-//            .addOnFailureListener { exception ->
-//                Log.e("Firebase", "Failed to set location data", exception)
-//            }
-
         database.getReference("driver_location").addValueEventListener(object :
             ValueEventListener {
 
@@ -141,39 +122,6 @@ class TrackOrderViewModel @Inject constructor(
             }
 
         })
-    }
-
-    fun calculateDistanceBetween(location1: LatLng, location2: LatLng): Float {
-        val results = FloatArray(1)
-        Location.distanceBetween(
-            location1.latitude,
-            location1.longitude,
-            location2.latitude,
-            location2.longitude,
-            results
-        )
-        return results[0] // The distance in meters
-    }
-
-    fun getProgressPercentage(home: LatLng, distance: Double, callback: TrackDistanceCallback) {
-        viewModelScope.launch {
-            try {
-                val restaurant = restaurantUseCase.getRestaurant()
-                restaurant?.let {
-                    val restaurantLatLng = LatLng(restaurant.latitude, restaurant.longitude)
-                    val totalDistance = calculateDistanceBetween(home, restaurantLatLng)
-
-                    val progressPercentage =
-                        (((totalDistance - distance) / totalDistance) * 100).toInt()
-                    callback.onSuccess(
-                        if (progressPercentage < 0) 0
-                        else progressPercentage
-                    )
-                }
-            } catch (e: Exception) {
-                callback.onFailure(e.message.toString())
-            }
-        }
     }
 
     fun getTimeEstimation(duration: Double): String {

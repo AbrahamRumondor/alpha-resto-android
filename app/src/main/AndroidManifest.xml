@@ -61,7 +61,7 @@
             android:exported="true">
         </activity>
         <service
-            android:name=".ui.components.restoTab.orderSummary.pushNotification.PushNotificationService"
+            android:name=".domain.service.pushNotification.PushNotificationService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

@@ -4,18 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.alfaresto_customersapp.databinding.FragmentDetailFoodBinding
-import com.example.alfaresto_customersapp.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class DetailFoodFragment : BaseFragment() {
+class DetailFoodFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailFoodBinding
-    private var quantity = 1
     private val args: DetailFoodFragmentArgs by navArgs()
     private val viewModel: DetailFoodViewModel by viewModels()
 

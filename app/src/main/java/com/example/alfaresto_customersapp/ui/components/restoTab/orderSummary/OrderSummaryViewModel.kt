@@ -179,7 +179,7 @@ class OrderSummaryViewModel @Inject constructor(
 
                 val total = _orders.value[TOTAL] as Pair<Int, Int>
 
-                if (!payment.isNullOrEmpty() && _orders.value.size > 4 && user != null) {
+                if (!payment.isNullOrEmpty() && _orders.value.size > 4 && user != null && USER_ADDRESS != null) {
                     db.runTransaction {
                         USER_ADDRESS?.let { address ->
                             USER_TOKEN?.let { token ->

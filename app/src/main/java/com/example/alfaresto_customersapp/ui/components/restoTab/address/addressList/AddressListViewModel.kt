@@ -24,8 +24,6 @@ class AddressListViewModel @Inject constructor(
     private val _selectedAddress = MutableStateFlow<Address?>(null)
     val selectedAddress: StateFlow<Address?> = _selectedAddress
 
-    private var selectedAddressIdx: Int? = null
-
     init {
         fetchAllAddresses()
     }

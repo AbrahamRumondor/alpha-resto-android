@@ -12,7 +12,6 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.FragmentListAllMenuBinding
-import com.example.alfaresto_customersapp.ui.base.BaseFragment
 import com.example.alfaresto_customersapp.ui.components.listener.MenuListener
 import com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu.adapter.ListAllMenuAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,7 +19,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ListAllMenuFragment : BaseFragment() {
+class ListAllMenuFragment : Fragment() {
     private lateinit var binding: FragmentListAllMenuBinding
     private val viewModel: ListAllMenuViewModel by viewModels()
     private val adapter by lazy { ListAllMenuAdapter() }

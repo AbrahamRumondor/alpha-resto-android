@@ -15,7 +15,6 @@ import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.FragmentOrderHistoryBinding
 import com.example.alfaresto_customersapp.domain.model.OrderHistory
 import com.example.alfaresto_customersapp.domain.model.OrderStatus
-import com.example.alfaresto_customersapp.ui.base.BaseFragment
 import com.example.alfaresto_customersapp.ui.components.listener.OrderHistoryListener
 import com.example.alfaresto_customersapp.ui.components.orderHistoryTab.adapter.OrderHistoryAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,7 +24,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
-class OrderHistoryFragment : BaseFragment() {
+class OrderHistoryFragment : Fragment() {
 
     private lateinit var binding: FragmentOrderHistoryBinding
     private val viewModel: OrderHistoryViewModel by viewModels()

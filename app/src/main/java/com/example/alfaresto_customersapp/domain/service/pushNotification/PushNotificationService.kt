@@ -1,8 +1,7 @@
-package com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.pushNotification
+package com.example.alfaresto_customersapp.domain.service.pushNotification
 
 import com.example.alfaresto_customersapp.domain.model.Token
 import com.example.alfaresto_customersapp.utils.user.UserConstants
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage

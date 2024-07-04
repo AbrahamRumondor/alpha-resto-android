@@ -10,6 +10,7 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
@@ -17,22 +18,16 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.BsdLocationPermissionBinding
 import com.example.alfaresto_customersapp.databinding.FragmentAddNewAddressBinding
-import com.example.alfaresto_customersapp.ui.base.BaseFragment
-import com.example.alfaresto_customersapp.utils.location.LocationGpsUtility
-import com.example.alfaresto_customersapp.utils.location.LocationGpsUtility.locationDialogIsShown
 import com.example.alfaresto_customersapp.utils.location.LocationPermissions
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.coroutines.launch
 
-class AddNewAddressFragment : BaseFragment() {
+class AddNewAddressFragment : Fragment() {
 
     private lateinit var binding: FragmentAddNewAddressBinding
     private val addNewAddressViewModel: AddNewAddressViewModel by activityViewModels()
@@ -40,6 +35,8 @@ class AddNewAddressFragment : BaseFragment() {
     private lateinit var map: GoogleMap
     private lateinit var bottomSheetBinding: BsdLocationPermissionBinding
     private lateinit var bottomSheetDialog: BottomSheetDialog
+
+    private var isSaveClicked = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -70,22 +67,30 @@ class AddNewAddressFragment : BaseFragment() {
     private fun onSaveButtonClicked() {
         binding.run {
             btnSaveAddress.setOnClickListener {
-                val addressLabel = etAddressLabel.text.toString()
-                val addressDetail = etAddressDetail.text.toString()
-                lifecycleScope.launch {
-                    addNewAddressViewModel.saveAddressInDatabase(
-                        addressLabel = addressLabel,
-                        addressDetail = addressDetail
-                    )
+                if (!isSaveClicked) {
+                    isSaveClicked = true
+                    val addressLabel = etAddressLabel.text.toString()
+                    val addressDetail = etAddressDetail.text.toString()
+                    lifecycleScope.launch {
+                        addNewAddressViewModel.saveAddressInDatabase(
+                            addressLabel = addressLabel,
+                            addressDetail = addressDetail
+                        ) {
+                            if (it) {
+                                Navigation.findNavController(binding.root).popBackStack()
+                            } else {
+                                isSaveClicked = false
+                                Toast.makeText(
+                                    requireContext(),
+                                    getString(R.string.failed_create_address),
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        }
+                    }
                 }
-                Navigation.findNavController(it).popBackStack()
             }
         }
-    }
-
-    private fun zoomToLatLng(latLng: LatLng) {
-        val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel)
-        map.animateCamera(cameraUpdate)
     }
 
     private fun enableMyLocation() {
@@ -192,7 +197,7 @@ class AddNewAddressFragment : BaseFragment() {
         builder.show()
     }
 
-    fun hasLocationPermissions(context: Context): Boolean {
+    private fun hasLocationPermissions(context: Context): Boolean {
         val coarseLocationPermission = ContextCompat.checkSelfPermission(
             context,
             Manifest.permission.ACCESS_COARSE_LOCATION
@@ -234,12 +239,6 @@ class AddNewAddressFragment : BaseFragment() {
         binding.mvMap.onResume()
     }
 
-    private fun checkAndShowGpsAlertMessage() {
-        if (!LocationGpsUtility.isLocationEnabled(requireContext()) && !locationDialogIsShown) {
-            LocationGpsUtility.buildAlertMessageNoGps(requireContext(), requireActivity())
-        }
-    }
-
     override fun onStop() {
         super.onStop()
         binding.mvMap.onStop()
@@ -274,7 +273,6 @@ class AddNewAddressFragment : BaseFragment() {
     companion object {
         const val markersWidth = 100
         const val markersHeight = 100
-        const val zoomLevel = 15f
     }
 
 }

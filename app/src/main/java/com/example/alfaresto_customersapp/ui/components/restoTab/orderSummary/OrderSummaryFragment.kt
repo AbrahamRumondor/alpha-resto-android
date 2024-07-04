@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
@@ -13,21 +14,17 @@ import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.databinding.FragmentOrderSummaryBinding
 import com.example.alfaresto_customersapp.databinding.OrderSummaryPaymentMethodBinding
 import com.example.alfaresto_customersapp.domain.model.Menu
-import com.example.alfaresto_customersapp.ui.base.BaseFragment
 import com.example.alfaresto_customersapp.ui.components.listener.OrderSummaryItemListener
-import com.example.alfaresto_customersapp.ui.components.restoTab.address.addressList.AddressListViewModel
-import com.example.alfaresto_customersapp.utils.user.UserConstants.ORDER_CHECKOUT_STATUS
 import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_ADDRESS
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class OrderSummaryFragment : BaseFragment() {
+class OrderSummaryFragment : Fragment() {
 
     private lateinit var binding: FragmentOrderSummaryBinding
     private val orderSummaryViewModel: OrderSummaryViewModel by activityViewModels()
-    private val addressListViewModel: AddressListViewModel by activityViewModels()
     private val orderAdapter by lazy { OrderSummaryAdapter() }
 
     private var checkoutClicked = false
@@ -78,11 +75,10 @@ class OrderSummaryFragment : BaseFragment() {
 
             override fun onAddItemClicked(position: Int, menuId: String) {
                 val addMenu = orderSummaryViewModel.orders.value[position] as? Menu
-                addMenu?.let {
-                    var item: CartEntity? = null
-                    item = cart?.find { it.menuId == menuId }
+                addMenu?.let { menu ->
+                    val item = cart?.find { it.menuId == menuId }
                     orderSummaryViewModel.addOrderQuantity(menuId, item)
-                    it.orderCartQuantity += 1
+                    menu.orderCartQuantity += 1
                     orderAdapter.notifyItemChanged(position)
                     orderAdapter.notifyItemChanged(orderSummaryViewModel.orders.value.size - 3)
                     countTotalItemAndPrice(orders)
@@ -134,33 +130,31 @@ class OrderSummaryFragment : BaseFragment() {
             }
 
             override fun onCheckoutButtonClicked() {
-                if (!checkoutClicked)
-                orderSummaryViewModel.saveOrderInDatabase {
+                if (!checkoutClicked) {
                     checkoutClicked = true
-                    if (it == null) {
-                        Toast.makeText(
-                            requireContext(),
-                            getString(R.string.failed_checkout_null),
-                            Toast.LENGTH_LONG
-                        ).show()
-                        checkoutClicked = false
+                    orderSummaryViewModel.saveOrderInDatabase {
+                        if (it == null) {
+                            checkoutClicked = false
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.failed_checkout_null),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            return@saveOrderInDatabase
+                        } else if (!it) {
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.failed_checkout_false),
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
 
-                        return@saveOrderInDatabase
-                    } else if (!it) {
-                        Toast.makeText(
-                            requireContext(),
-                            getString(R.string.failed_checkout_false),
-                            Toast.LENGTH_LONG
-                        ).show()
+                        val action =
+                            OrderSummaryFragmentDirections.actionOrderSummaryFragmentToThankYouFragment(
+                                it
+                            )
+                        Navigation.findNavController(binding.root).navigate(action)
                     }
-
-                    ORDER_CHECKOUT_STATUS = it
-                    val action =
-                        OrderSummaryFragmentDirections.actionOrderSummaryFragmentToThankYouFragment(
-                            it
-                        )
-
-                    Navigation.findNavController(binding.root).navigate(action)
                 }
             }
         })

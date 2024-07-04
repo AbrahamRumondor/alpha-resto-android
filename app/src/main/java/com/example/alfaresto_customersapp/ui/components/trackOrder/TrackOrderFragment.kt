@@ -2,15 +2,12 @@ package com.example.alfaresto_customersapp.ui.components.trackOrder
 
 import android.Manifest
 import android.app.NotificationChannel
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,8 +19,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -33,7 +30,6 @@ import com.example.alfaresto_customersapp.databinding.BsdLocationPermissionBindi
 import com.example.alfaresto_customersapp.databinding.FragmentTrackOrderBinding
 import com.example.alfaresto_customersapp.domain.error.OsrmCallback
 import com.example.alfaresto_customersapp.domain.error.RealtimeLocationCallback
-import com.example.alfaresto_customersapp.ui.base.BaseFragment
 import com.example.alfaresto_customersapp.ui.components.restoTab.address.addNewAddress.AddNewAddressFragment.Companion.markersHeight
 import com.example.alfaresto_customersapp.ui.components.restoTab.address.addNewAddress.AddNewAddressFragment.Companion.markersWidth
 import com.example.alfaresto_customersapp.utils.user.UserConstants.SHIPMENT_STATUS
@@ -48,10 +44,9 @@ import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.maps.android.PolyUtil
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class TrackOrderFragment : BaseFragment() {
+class TrackOrderFragment : Fragment() {
 
     private lateinit var binding: FragmentTrackOrderBinding
     private val trackOrderViewModel: TrackOrderViewModel by viewModels()
@@ -85,6 +80,7 @@ class TrackOrderFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+//        checkNotificationPermission(true)
 
         SHIPMENT_STATUS = "On Process"
 
@@ -170,7 +166,6 @@ class TrackOrderFragment : BaseFragment() {
                     polylines = map.addPolyline(polylineOptions)
                     binding.tvEstimatedTime.text =
                         trackOrderViewModel.getTimeEstimation(routeResponse.routes[0].duration)
-//                    observeNotificationLocationDistance(home, it.routes[0].distance)
                 }
 
                 setOrderMarker(home, driver)
@@ -267,108 +262,6 @@ class TrackOrderFragment : BaseFragment() {
         }
     }
 
-//    private fun createNotification() {
-//        notificationManagerCompat =
-//            NotificationManagerCompat.from(requireContext().applicationContext)
-//
-//        customView = RemoteViews(context?.packageName, R.layout.progress_notification_tray)
-//
-//        customView?.let { view ->
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//                notificationChannel =
-//                    NotificationChannel(channelId, description, NotificationManager.IMPORTANCE_HIGH)
-//                notificationChannel.enableLights(true)
-//                notificationChannel.lightColor = Color.GREEN
-//                notificationChannel.enableVibration(false)
-//                notificationManagerCompat.createNotificationChannel(notificationChannel)
-//
-//                builder = NotificationCompat.Builder(requireContext(), channelId)
-//                    .setSmallIcon(R.drawable.ic_launcher_background)
-//                    .setCustomContentView(view)
-//                    .setCustomBigContentView(view)
-//                    .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.ic_logo))
-//            } else {
-//                builder = NotificationCompat.Builder(requireContext())
-//                    .setSmallIcon(R.drawable.ic_launcher_background)
-//                    .setCustomContentView(view)
-//                    .setCustomBigContentView(view)
-//                    .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.ic_logo))
-//            }
-//        }
-//
-////        builder.setProgress(progressMax, progressCurrent, false)
-//        checkNotificationPermission(true)
-//        notificationManagerCompat.notify(1234, builder.build())
-//    }
-
-//    private fun updateNotificationCustomView(shipment: Shipment) {
-//        customView?.setTextViewText(R.id.notification_title, shipment.statusDelivery)
-//        when (shipment.statusDelivery) {
-//            "On Delivery" -> {
-//                customView?.setImageViewResource(R.id.iv_dot_one, R.drawable.point_round_orange)
-//                customView?.setImageViewResource(R.id.iv_dot_two, R.drawable.point_round_orange)
-//                customView?.setImageViewResource(R.id.iv_dot_three, R.drawable.point_round_orange)
-//                customView?.setImageViewResource(R.id.v_line_one, R.drawable.rectangle_line_orange)
-//                customView?.setImageViewResource(R.id.v_line_two, R.drawable.rectangle_line_orange)
-//                customView?.setTextViewText(
-//                    R.id.notification_text,
-//                    "Track your order progress here!"
-//                )
-//            }
-//
-//            "Delivered" -> {
-//                customView?.setImageViewResource(R.id.iv_dot_one, R.drawable.point_round_orange)
-//                customView?.setImageViewResource(R.id.iv_dot_two, R.drawable.point_round_orange)
-//                customView?.setImageViewResource(R.id.iv_dot_three, R.drawable.point_round_orange)
-//                customView?.setImageViewResource(R.id.iv_dot_four, R.drawable.point_round_orange)
-//                customView?.setImageViewResource(R.id.v_line_one, R.drawable.rectangle_line_orange)
-//                customView?.setImageViewResource(R.id.v_line_two, R.drawable.rectangle_line_orange)
-//                customView?.setImageViewResource(
-//                    R.id.v_line_three,
-//                    R.drawable.rectangle_line_orange
-//                )
-//                customView?.setTextViewText(
-//                    R.id.notification_text,
-//                    "Track your order progress here!"
-//                )
-//            }
-//
-//            else -> { // ON PROCESS
-//                customView?.setImageViewResource(R.id.iv_dot_one, R.drawable.point_round_orange)
-//                customView?.setImageViewResource(R.id.iv_dot_two, R.drawable.point_round_orange)
-//                customView?.setImageViewResource(R.id.v_line_one, R.drawable.rectangle_line_orange)
-//                customView?.setTextViewText(
-//                    R.id.notification_text,
-//                    "Track your order progress here!"
-//                )
-//            }
-//        }
-//        checkNotificationPermission(true)
-//        notificationManagerCompat.notify(1234, builder.build())
-//    }
-
-//    private fun observeNotificationLocationDistance(home: LatLng, distance: Double) {
-//        checkNotificationPermission(false)
-//        if (progressCurrent <= progressMax) {
-//            trackOrderViewModel.getProgressPercentage(home, distance, object : TrackDistanceCallback {
-//                override fun onSuccess(progressPercentage: Int) {
-//                    Log.d("test", progressPercentage.toString())
-//                    progressCurrent = progressPercentage
-//                }
-//
-//                override fun onFailure(string: String?) {
-//                    Toast.makeText(requireContext(), string, Toast.LENGTH_LONG).show()
-//                }
-//            })
-////            builder.setProgress(progressMax, progressCurrent, false)
-//            notificationManagerCompat.notify(1234, builder.build())
-//        } else {
-////            builder.setContentText("Download complete")
-////                .setProgress(0, 0, false)
-//            notificationManagerCompat.notify(1234, builder.build())
-//        }
-//    }
-
     private fun checkNotificationPermission(firstTime: Boolean) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && firstTime) {
             if (ActivityCompat.checkSelfPermission(
@@ -392,11 +285,9 @@ class TrackOrderFragment : BaseFragment() {
                 }
 
                 else -> {
-                    // No location access granted
                     if (!shouldShowLocationPermissionRationale()) {
-                        showBottomSheetLocationPermission()
-                    } else {
                         showDialogForPermission()
+                    } else {
                     }
                 }
             }
@@ -449,23 +340,23 @@ class TrackOrderFragment : BaseFragment() {
         builder.show()
     }
 
-    private fun showBottomSheetLocationPermission() {
-        bottomSheetBinding = BsdLocationPermissionBinding.inflate(layoutInflater)
-
-        bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme)
-        bottomSheetDialog.setContentView(bottomSheetBinding.root) // Use the binding's root view
-        bottomSheetDialog.setOnCancelListener {
-            it.dismiss()
-        }
-        bottomSheetDialog.show()
-
-        bottomSheetBinding.btnToSettings.setOnClickListener {
-            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-            val uri = Uri.fromParts("package", requireActivity().packageName, null)
-            intent.setData(uri)
-            startActivity(intent)
-        }
-    }
+//    private fun showBottomSheetLocationPermission() {
+//        bottomSheetBinding = BsdLocationPermissionBinding.inflate(layoutInflater)
+//
+//        bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme)
+//        bottomSheetDialog.setContentView(bottomSheetBinding.root) // Use the binding's root view
+//        bottomSheetDialog.setOnCancelListener {
+//            it.dismiss()
+//        }
+//        bottomSheetDialog.show()
+//
+//        bottomSheetBinding.btnToSettings.setOnClickListener {
+//            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+//            val uri = Uri.fromParts("package", requireActivity().packageName, null)
+//            intent.setData(uri)
+//            startActivity(intent)
+//        }
+//    }
 
     override fun onStop() {
         super.onStop()

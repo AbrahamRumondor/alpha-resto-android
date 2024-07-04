@@ -2,7 +2,6 @@ package com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.v
 
 import androidx.recyclerview.widget.RecyclerView
 import com.example.alfaresto_customersapp.databinding.OrderSummaryTotalPriceBinding
-import com.example.alfaresto_customersapp.ui.components.listener.OrderSummaryItemListener
 
 class OrderTotalViewHolder (
     private val view: OrderSummaryTotalPriceBinding,

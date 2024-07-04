@@ -26,6 +26,6 @@ class OrderHistoryDetailItemsAdapter : RecyclerView.Adapter<OrderHistoryDetailIt
 
     fun submitOrderHistoryDetailItemsList(orderHistoryDetailItemsList: List<OrderItem>) {
         this.orderHistoryDetailItemsList = orderHistoryDetailItemsList
-        notifyDataSetChanged()
+        notifyItemRangeChanged(0, orderHistoryDetailItemsList.size)
     }
 }

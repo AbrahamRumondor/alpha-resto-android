@@ -23,7 +23,7 @@ class AddNewAddressViewModel @Inject constructor(
 //    private val context: Context
 ) : ViewModel() {
     private val _chosenLatLng = MutableLiveData<LatLng?>()
-    var chosenLatLng: LiveData<LatLng?> = _chosenLatLng
+    private var chosenLatLng: LiveData<LatLng?> = _chosenLatLng
 
     init {
         fetchCurrentUser()
@@ -41,7 +41,7 @@ class AddNewAddressViewModel @Inject constructor(
         _chosenLatLng.value = latlng
     }
 
-    suspend fun saveAddressInDatabase(addressLabel: String?, addressDetail: String?) {
+    suspend fun saveAddressInDatabase(addressLabel: String?, addressDetail: String?, onResult: (Boolean) -> Unit) {
         if (!addressLabel.isNullOrEmpty() && !addressDetail.isNullOrEmpty()) {
             chosenLatLng.value?.let { latlng ->
                 try {
@@ -58,10 +58,14 @@ class AddNewAddressViewModel @Inject constructor(
                         "Address added successfully",
                         Toast.LENGTH_SHORT
                     ).show()
+                    onResult(true)
                 } catch (e: Exception) {
+                    onResult(false)
                     Timber.tag("test").d(e.toString())
                 }
             }
+        } else {
+            onResult(false)
         }
     }
 }

@@ -1,8 +1,6 @@
 package com.example.alfaresto_customersapp.ui.components.listener
 
-import android.view.View
 import com.example.alfaresto_customersapp.databinding.OrderSummaryPaymentMethodBinding
-import com.example.alfaresto_customersapp.domain.model.Address
 
 interface OrderSummaryItemListener {
     fun onAddressClicked(position: Int)
