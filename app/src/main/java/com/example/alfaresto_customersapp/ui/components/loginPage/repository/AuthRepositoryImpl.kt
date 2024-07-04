@@ -11,8 +11,9 @@ class AuthRepositoryImpl : AuthRepository {
                 if (task.isSuccessful) {
                     callback(true)
                 }
+                callback(false)
             }
-            .addOnFailureListener { e ->
+            .addOnFailureListener {
                 callback(false)
             }
     }
