@@ -21,7 +21,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @AndroidEntryPoint
 class OrderHistoryFragment : Fragment() {
@@ -56,8 +55,6 @@ class OrderHistoryFragment : Fragment() {
                     ).show()
                     return@collectLatest
                 }
-
-                Timber.tag("OrderHistoryFragment").d("Order histories: $orderHistories")
 
                 adapter.submitList(orderHistories)
                 binding.run {
@@ -96,9 +93,6 @@ class OrderHistoryFragment : Fragment() {
                     }
 
                     adapter.submitList(sortedOrderHistories)
-                    rvOrderHistory.layoutManager =
-                        LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-//                setOnOrderClickListener()
                 }
 
                 orderHistories.map {

@@ -14,9 +14,9 @@ import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.OrderHistoryDetailBinding
 import com.example.alfaresto_customersapp.ui.components.orderHistoryDetailPage.adapter.OrderHistoryDetailItemsAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @AndroidEntryPoint
 class OrderHistoryDetailFragment : Fragment() {
@@ -68,8 +68,7 @@ class OrderHistoryDetailFragment : Fragment() {
     private fun loadData() {
         lifecycleScope.launch {
             viewModel.orderHistory.collectLatest { orderHistory ->
-                Timber.tag("orhis").d("Order history: $orderHistory")
-
+                delay(500)
                 binding.apply {
                     tvOrderId.text = orderHistory.orderId
                     tvOrderDate.text = orderHistory.orderDate

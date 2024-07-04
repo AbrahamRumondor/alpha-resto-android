@@ -86,7 +86,6 @@ class AddressListFragment : Fragment() {
             addressListViewModel.userAddresses.collect { data ->
                 if (data.isNotEmpty()) hasAddress = true
                 addressAdapter.updateData(data)
-                addressAdapter.notifyItemChanged(data.size - 1)
             }
         }
 

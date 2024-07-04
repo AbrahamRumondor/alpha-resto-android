@@ -68,7 +68,6 @@ class TrackOrderFragment : Fragment() {
     private lateinit var bottomSheetBinding: BsdLocationPermissionBinding
     private lateinit var bottomSheetDialog: BottomSheetDialog
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

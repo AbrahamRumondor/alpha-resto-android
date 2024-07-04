@@ -1,22 +1,19 @@
 package com.example.alfaresto_customersapp.ui.components
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.lifecycleScope
-import com.example.alfaresto_customersapp.databinding.ActivityMainBinding
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import androidx.paging.LOG_TAG
 import com.example.alfaresto_customersapp.R
+import com.example.alfaresto_customersapp.databinding.ActivityMainBinding
 import com.example.alfaresto_customersapp.domain.network.NetworkUtils
 import com.example.alfaresto_customersapp.domain.network.NetworkUtils.warningAppear
 import com.example.alfaresto_customersapp.domain.network.networkStatusObserver.ConnectivityObserver
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -89,7 +86,6 @@ class MainActivity : AppCompatActivity() {
     private fun checkConnectivityStatus() {
         lifecycleScope.launch {
             connectivityObserver.observe().collectLatest {
-                Timber.tag("test").d("$it")
                 if (it.toString() == getString(R.string.available) &&
                     NetworkUtils.isConnectedToNetwork.value != true
                 ) {

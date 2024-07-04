@@ -17,6 +17,7 @@ import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.ui.components.listener.OrderSummaryItemListener
 import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_ADDRESS
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -46,6 +47,7 @@ class OrderSummaryFragment : Fragment() {
         lifecycleScope.launch {
             orderSummaryViewModel.carts.collectLatest { carts ->
                 orderSummaryViewModel.menus.collectLatest { menus ->
+                    delay(500)
                     val orders = carts.mapNotNull { cartOrder ->
                         menus.find {
                             it.id == cartOrder.menuId && cartOrder.menuQty > 0
@@ -54,9 +56,7 @@ class OrderSummaryFragment : Fragment() {
                     binding.rvOrderSummary.adapter = orderAdapter
                     orderAdapter.submitOrderList(
                         orderSummaryViewModel.makeOrders(
-                            orders = orders,
-                            total = countTotalItemAndPrice(orders),
-                            address = USER_ADDRESS
+                            orders = orders, total = countTotalItemAndPrice(orders), address = USER_ADDRESS
                         )
                     )
                     setOrderSummaryListener(orders, carts)
@@ -90,8 +90,7 @@ class OrderSummaryFragment : Fragment() {
                 addMenu?.let {
                     if (it.orderCartQuantity > 0) {
                         it.orderCartQuantity -= 1
-                        var item: CartEntity? = null
-                        item = cart?.find { it.menuId == menuId }
+                        val item: CartEntity? = cart?.find { it.menuId == menuId }
                         orderSummaryViewModel.decreaseOrderQuantity(menuId, item)
                         if (it.orderCartQuantity == 0) {
                             removeMenu(position, menuId)

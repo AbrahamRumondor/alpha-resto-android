@@ -11,6 +11,7 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
@@ -32,6 +33,7 @@ import com.example.alfaresto_customersapp.ui.components.loginPage.LoginActivity
 import com.example.alfaresto_customersapp.ui.components.restoTab.adapter.RestoAdapter
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -85,12 +87,15 @@ class RestoFragment : Fragment() {
 
         lifecycleScope.launch {
             viewModel.menus.collectLatest { menus ->
+                delay(500)
                 if (menus.isEmpty()) {
-//                    Toast.makeText(requireContext(), "Menu is not available", Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(), "Menu is not available", Toast.LENGTH_LONG)
+                        .show()
                     return@collectLatest
                 }
 
                 viewModel.cart.collectLatest { cart ->
+                    delay(500)
                     if (cart.isEmpty()) {
                         setRestoAdapterButtons(cart)
                         adapter.submitMenuList(menus)
