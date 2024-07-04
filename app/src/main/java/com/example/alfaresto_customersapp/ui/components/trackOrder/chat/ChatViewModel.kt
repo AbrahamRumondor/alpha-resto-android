@@ -3,13 +3,15 @@ package com.example.alfaresto_customersapp.ui.components.trackOrder.chat
 import android.content.ContentValues.TAG
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.alfaresto_customersapp.data.remote.pushNotification.NotificationBody
 import com.example.alfaresto_customersapp.data.remote.pushNotification.SendMessageDto
 import com.example.alfaresto_customersapp.domain.error.Result
+import com.example.alfaresto_customersapp.domain.model.Chat
 import com.example.alfaresto_customersapp.domain.repository.FcmApiRepository
+import com.example.alfaresto_customersapp.domain.usecase.order.OrderUseCase
 import com.example.alfaresto_customersapp.domain.usecase.resto.RestaurantUseCase
-import com.example.alfaresto_customersapp.ui.components.loadState.LoadStateViewModel
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
@@ -27,8 +29,9 @@ class ChatViewModel @Inject constructor(
     @Named("ordersRef") private val ordersRef: CollectionReference,
     private var auth: FirebaseAuth,
     private val fcmApiRepository: FcmApiRepository,
-    private val restaurantUseCase: RestaurantUseCase
-) : LoadStateViewModel() {
+    private val restaurantUseCase: RestaurantUseCase,
+    val orderUseCase: OrderUseCase
+) : ViewModel() {
 
     private var chatListener: ListenerRegistration? = null
 
@@ -36,7 +39,7 @@ class ChatViewModel @Inject constructor(
     val messages: LiveData<List<Pair<String, String>>> get() = _messages
 
     private val _restoToken: MutableStateFlow<String> = MutableStateFlow("")
-    val restoToken: StateFlow<String> = _restoToken
+    private val restoToken: StateFlow<String> = _restoToken
 
     private val _restoID: MutableStateFlow<String> = MutableStateFlow("")
     val restoID: StateFlow<String> = _restoID
@@ -45,48 +48,34 @@ class ChatViewModel @Inject constructor(
         fetchResto()
     }
 
-    fun setLoadingTrue() {
-        setLoading(true)
-    }
-
-    fun setLoadingFalse() {
-        setLoading(false)
-    }
-
     fun sendMessage(userId: String, orderId: String, message: String) {
-        val chatCollection = ordersRef
-            .document(orderId)
-            .collection("chats")
-
-        val dateFormatted = Timestamp.now().toDate()
-
-        val data: HashMap<String, Any> = hashMapOf(
-            "date_send" to dateFormatted,
-            "message" to message,
-            "sender_id" to userId,
-            "user_name" to "Customer"
-        )
-
-        chatCollection.add(data)
-            .addOnSuccessListener {
-                sendNotificationToResto("New message from customer: $message")
-                Timber.tag(TAG).d("Message sent with ID: %s", orderId)
-            }
-            .addOnFailureListener { e ->
+        viewModelScope.launch {
+            try {
+                val order = orderUseCase.getOrderByID(orderId)
+                if (order != null) {
+                    orderUseCase.addChatMessage(
+                        orderId,
+                        Chat(
+                            date = Timestamp.now(),
+                            message = message,
+                            senderId = userId,
+                            userName = getUserName()
+                        )
+                    )
+                    sendNotificationToResto("New message from customer: $message")
+                } else {
+                    Timber.tag(TAG).w("Order not found")
+                }
+            } catch (e: Exception) {
                 Timber.tag(TAG).w(e, "Error sending message")
             }
+        }
     }
 
-    fun listenForMessages(orderId: String) {
-        val user = FirebaseAuth.getInstance().currentUser
-        val userId = user?.uid
-        if (userId != null) {
-            val chatCollection = ordersRef
-                .document(orderId)
-                .collection("chats")
-
-            chatListener = chatCollection.orderBy("date_send")
-                .addSnapshotListener { snapshots, e ->
+    fun listenForMessages(orderId: String, orderUseCase: OrderUseCase) {
+        chatListener = ordersRef.document(orderId).collection("chats")
+            .orderBy("date_send")
+            .addSnapshotListener { snapshots, e ->
                 if (e != null) {
                     Timber.tag(TAG).w(e, "Listen failed.")
                     return@addSnapshotListener
@@ -104,9 +93,27 @@ class ChatViewModel @Inject constructor(
                         }
                     }
                     _messages.postValue(messages)
+
+                    viewModelScope.launch {
+                        try {
+                            val lastMessage = snapshots.documents.lastOrNull()?.getString("message") ?: ""
+                            val lastSenderId = snapshots.documents.lastOrNull()?.getString("sender_id") ?: ""
+                            lastSenderId == getUserId()
+                            orderUseCase.addChatMessage(
+                                orderId,
+                                Chat(
+                                    date = Timestamp.now(),
+                                    message = lastMessage,
+                                    senderId = lastSenderId,
+                                    userName = getUserName()
+                                )
+                            )
+                        } catch (e: Exception) {
+                            Timber.tag(TAG).w(e, "Error adding chat message")
+                        }
+                    }
                 }
             }
-        }
     }
 
     private fun fetchResto() {
@@ -133,7 +140,7 @@ class ChatViewModel @Inject constructor(
                 )
             )
 
-            when (val result = fcmApiRepository.sendMessage(messageDto)) {
+            when (fcmApiRepository.sendMessage(messageDto)) {
                 is Result.Success -> {
                     Timber.tag("test").d("FCM SENT")
                 }
@@ -141,6 +148,7 @@ class ChatViewModel @Inject constructor(
                 is Result.Error -> {
                     Timber.tag("test").d("FCM FAILED")
                 }
+
             }
 
         }
@@ -151,7 +159,7 @@ class ChatViewModel @Inject constructor(
         return user?.uid ?: ""
     }
 
-    fun getUserName(): String {
+    private fun getUserName(): String {
         val user = auth.currentUser
         return user?.displayName ?: ""
     }

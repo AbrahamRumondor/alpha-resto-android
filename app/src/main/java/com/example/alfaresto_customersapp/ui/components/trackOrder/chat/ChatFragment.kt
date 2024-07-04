@@ -36,13 +36,6 @@ class ChatFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        lifecycleScope.launch {
-//            viewModel.isLoading.collectLatest { isLoading ->
-//                binding.loadingLayout.progressBar.visibility =
-//                    if (isLoading) View.VISIBLE else View.GONE
-//            }
-//        }
-
         binding.toolbar.apply {
             ivToolbarTitle.visibility = View.GONE
             tvToolbarText.visibility = View.VISIBLE
@@ -62,7 +55,7 @@ class ChatFragment : Fragment() {
             return
         }
 
-        viewModel.listenForMessages(orderId)
+        viewModel.listenForMessages(orderId, viewModel.orderUseCase)
 
         binding.imgBtnSend.setOnClickListener {
             val message = binding.etChatInput.text.toString()
@@ -85,17 +78,15 @@ class ChatFragment : Fragment() {
     private fun addMessageToChatView(message: String, senderId: String) {
         lifecycleScope.launch {
             val userId = viewModel.getUserId()
-            viewModel.setLoadingTrue()
-            viewModel.restoID.collectLatest {
+            viewModel.restoID.collectLatest { restoId ->
                 delay(500)
-                viewModel.setLoadingFalse()
 
                 val layoutId = when (senderId) {
                     userId -> {
                         R.layout.customer_chat
                     }
 
-                    it -> {
+                    restoId -> {
                         R.layout.resto_chat
                     }
 
@@ -115,9 +106,5 @@ class ChatFragment : Fragment() {
                 }
             }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
     }
 }

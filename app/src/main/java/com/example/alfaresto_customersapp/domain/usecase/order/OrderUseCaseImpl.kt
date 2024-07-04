@@ -2,6 +2,7 @@ package com.example.alfaresto_customersapp.domain.usecase.order
 
 import com.example.alfaresto_customersapp.data.model.OrderItemResponse
 import com.example.alfaresto_customersapp.data.model.OrderResponse
+import com.example.alfaresto_customersapp.domain.model.Chat
 import com.example.alfaresto_customersapp.domain.model.Order
 import com.example.alfaresto_customersapp.domain.model.OrderItem
 import com.example.alfaresto_customersapp.domain.repository.AuthRepository
@@ -44,5 +45,21 @@ class OrderUseCaseImpl @Inject constructor(
 
     override suspend fun getOrderItems(orderId: String): StateFlow<List<OrderItem>> {
         return orderRepository.getOrderItems(orderId)
+    }
+
+    override suspend fun getOrderByID(orderId: String): Order? {
+        return orderRepository.getOrderByID(orderId)
+    }
+
+    override suspend fun addChatMessage(
+        orderId: String,
+        messageData: Chat
+    ): Result<Unit> {
+        return try {
+            orderRepository.addChatMessage(orderId, messageData)
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 }

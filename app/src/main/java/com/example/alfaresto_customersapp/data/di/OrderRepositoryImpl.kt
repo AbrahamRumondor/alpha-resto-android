@@ -2,6 +2,7 @@ package com.example.alfaresto_customersapp.data.di
 
 import com.example.alfaresto_customersapp.data.model.OrderItemResponse
 import com.example.alfaresto_customersapp.data.model.OrderResponse
+import com.example.alfaresto_customersapp.domain.model.Chat
 import com.example.alfaresto_customersapp.domain.model.Order
 import com.example.alfaresto_customersapp.domain.model.OrderItem
 import com.example.alfaresto_customersapp.domain.repository.OrderRepository
@@ -122,5 +123,12 @@ class OrderRepositoryImpl @Inject constructor(
             orderItems.value = emptyList()
         }
         return orderItems
+    }
+
+    override suspend fun addChatMessage(
+        orderId: String,
+        messageData: Chat
+    ) {
+        ordersRef.document(orderId).collection("chats").add(messageData).await()
     }
 }
