@@ -52,4 +52,5 @@
     <dimen name="font_13">13sp</dimen>
     <dimen name="dimen_200">200dp</dimen>
     <dimen name="dimen_175">175dp</dimen>
+    <dimen name="font_30">30sp</dimen>
 </resources>

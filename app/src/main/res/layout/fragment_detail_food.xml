@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_button"
@@ -42,8 +43,8 @@
 
             <ImageView
                 android:id="@+id/iv_food"
-                android:layout_width="@dimen/dimen_300"
-                android:layout_height="@dimen/dimen_300"
+                android:layout_width="@dimen/dimen_250"
+                android:layout_height="@dimen/dimen_250"
                 android:layout_marginTop="@dimen/dimen_20"
                 android:scaleType="centerCrop"
                 app:layout_constraintDimensionRatio="1:1"
@@ -57,11 +58,11 @@
                 android:id="@+id/tv_food_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_15"
                 android:fontFamily="@font/bold"
                 android:text="@string/food_name"
                 android:textColor="@color/black"
-                android:textSize="@dimen/font_28"
-                android:layout_marginTop="@dimen/dimen_15"
+                android:textSize="@dimen/font_26"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/iv_food" />
@@ -82,29 +83,29 @@
                 android:id="@+id/tv_food_desc_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="32dp"
                 android:fontFamily="@font/bold"
                 android:text="@string/food_desc_title"
                 android:textColor="@color/black"
                 android:textSize="@dimen/font_17"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.093"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/cv_resto"
                 app:layout_constraintTop_toBottomOf="@id/tv_food_price" />
 
             <TextView
                 android:id="@+id/tv_food_desc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="8dp"
                 android:fontFamily="@font/regular"
                 android:text="@string/food_description"
                 android:textColor="@color/black"
                 android:textSize="@dimen/font_17"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.106"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_food_desc_title" />
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/tv_food_desc_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_food_desc_title" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cv_resto"

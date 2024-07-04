@@ -7,4 +7,5 @@
         <item name="android:layout_marginTop">@dimen/dimen_20</item>
         <item name="android:src">@drawable/ic_logo</item>
     </style>
+
 </resources>

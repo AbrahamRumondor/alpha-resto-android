@@ -35,8 +35,10 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:text="@string/delivered_text"
+                android:fontFamily="@font/bold"
+                android:textColor="@color/mainblack"
                 android:textStyle="bold"
-                android:textSize="40sp"
+                android:textSize="@dimen/font_26"
                 />
 
 

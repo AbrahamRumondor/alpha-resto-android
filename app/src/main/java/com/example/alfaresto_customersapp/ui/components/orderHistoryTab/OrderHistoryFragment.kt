@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -40,50 +39,27 @@ class OrderHistoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        toolbarSetup()
+
         binding.rvOrderHistory.adapter = adapter
         binding.rvOrderHistory.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
         lifecycleScope.launch {
             viewModel.orderHistories.collectLatest { orderHistories ->
-                adapter.submitList(orderHistories)
-                binding.run {
-                    var sortedOrderHistories: List<OrderHistory> =
-                        orderHistories.sortedByDescending {
-                            it.orderDate
-                        } // default is latest
-
-                    btnLatest.setOnClickListener {
-                        sortedOrderHistories = orderHistories.sortedByDescending {
-                            it.orderDate
-                        }
-                        btnLatest.background =
-                            ContextCompat.getDrawable(requireContext(), R.drawable.button_radius)
-                        btnLatest.alpha = 1.0F
-                        btnOldest.background = ContextCompat.getDrawable(
-                            requireContext(),
-                            R.drawable.button_radius_gray
-                        )
-                        btnOldest.alpha = 0.5F
-                        adapter.submitList(sortedOrderHistories)
+                binding.toolbar.toggleSort.setOnCheckedChangeListener { _, isChecked ->
+                    val sortedOrderHistories = if (isChecked) {
+                        orderHistories.sortedByDescending { it.orderDate }
+                    } else {
+                        orderHistories.sortedBy { it.orderDate }
                     }
-                    btnOldest.setOnClickListener {
-                        sortedOrderHistories = orderHistories.sortedBy {
-                            it.orderDate
-                        }
-                        btnOldest.background =
-                            ContextCompat.getDrawable(requireContext(), R.drawable.button_radius)
-                        btnOldest.alpha = 1.0F
-                        btnLatest.background = ContextCompat.getDrawable(
-                            requireContext(),
-                            R.drawable.button_radius_gray
-                        )
-                        btnLatest.alpha = 0.5F
-                        adapter.submitList(sortedOrderHistories)
-                    }
-
                     adapter.submitList(sortedOrderHistories)
+                    updateToggleButtonIcon(isChecked)
                 }
+
+                binding.toolbar.toggleSort.isChecked = true
+                adapter.submitList(orderHistories.sortedByDescending { it.orderDate })
+                updateToggleButtonIcon(true)
 
                 orderHistories.map {
                     setOnOrderClickListener()
@@ -100,6 +76,22 @@ class OrderHistoryFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun toolbarSetup() {
+        binding.toolbar.apply {
+            tvToolbarText.visibility = View.VISIBLE
+            tvToolbarText.text = getString(R.string.order_history)
+            btnLogout.visibility = View.GONE
+            ivToolbarTitle.visibility = View.GONE
+            toggleSort.visibility = View.VISIBLE
+            toggleSortLayout.visibility = View.VISIBLE
+        }
+    }
+
+    private fun updateToggleButtonIcon(isChecked: Boolean) {
+        val iconRes = if (isChecked) R.drawable.ic_sort_latest else R.drawable.ic_sort_oldest
+        binding.toolbar.toggleSort.setCompoundDrawablesWithIntrinsicBounds(0, iconRes, 0, 0)
     }
 
     private fun setOnOrderClickListener() {
