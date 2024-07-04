@@ -16,7 +16,7 @@ class RestoViewHolder(
     fun bind(menu: Menu, position: Int, listener: MenuListener?, itemClickListener: ((Menu) -> Unit)?) {
         binding.run {
             tvMenuName.text = menu.name
-            tvMenuPrice.text = menu.price.toString()
+            tvMenuPrice.text = menu.formattedPrice()
             tvOrderQty.text = menu.orderCartQuantity.toString()
 
             Glide.with(root)

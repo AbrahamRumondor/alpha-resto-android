@@ -16,23 +16,22 @@
 
         <TextView
             android:id="@+id/tv_order_date"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/dimen_175"
             android:layout_height="wrap_content"
             android:fontFamily="@font/bold"
-            android:text="@string/add_to_cart"
-            android:textSize="@dimen/font_24"
-            android:textStyle="bold"
+            android:text="@string/date"
+            android:textSize="@dimen/font_17"
             app:layout_constraintBottom_toTopOf="@+id/middle_guideline"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_order_price"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/dimen_100"
             android:layout_height="wrap_content"
             android:fontFamily="@font/semibold"
-            android:textSize="@dimen/font_24"
-            android:textStyle="bold"
+            android:textSize="@dimen/font_20"
+            android:layout_marginStart="@dimen/dimen_40"
             app:layout_constraintBottom_toTopOf="@+id/middle_guideline"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -49,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/semibold"
-            android:textSize="@dimen/font_18"
+            android:textSize="@dimen/font_20"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/middle_guideline" />

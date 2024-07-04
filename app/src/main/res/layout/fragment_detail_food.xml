@@ -45,6 +45,7 @@
                 android:layout_width="@dimen/dimen_300"
                 android:layout_height="@dimen/dimen_300"
                 android:layout_marginTop="@dimen/dimen_20"
+                android:scaleType="centerCrop"
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

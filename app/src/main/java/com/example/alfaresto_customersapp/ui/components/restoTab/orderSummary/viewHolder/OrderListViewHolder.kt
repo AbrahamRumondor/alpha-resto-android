@@ -16,7 +16,7 @@ class OrderListViewHolder(
             if (menu != null) {
                 tvFoodTitle.text = menu.name
                 tvFoodDesc.text = menu.description
-                tvFoodPrice.text = menu.price.toString()
+                tvFoodPrice.text = menu.formattedPrice()
                 tvFoodQty.text = menu.orderCartQuantity.toString()
 
                 Glide.with(root)

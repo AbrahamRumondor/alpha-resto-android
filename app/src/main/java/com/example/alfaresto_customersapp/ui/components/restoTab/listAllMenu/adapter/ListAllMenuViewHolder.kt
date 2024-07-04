@@ -21,7 +21,7 @@ class ListAllMenuViewHolder(
     ) {
         binding.run {
             tvMenuName.text = menu.name
-            tvMenuPrice.text = menu.price.toString()
+            tvMenuPrice.text = menu.formattedPrice()
             tvOrderQty.text = menu.orderCartQuantity.toString()
 
             Glide.with(root)

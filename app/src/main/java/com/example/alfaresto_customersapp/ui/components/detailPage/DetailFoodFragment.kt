@@ -32,7 +32,7 @@ class DetailFoodFragment : Fragment() {
         viewModel.menu.observe(viewLifecycleOwner) { menu ->
             binding.apply {
                 tvFoodName.text = menu.name
-                tvFoodPrice.text = menu.price.toString()
+                tvFoodPrice.text = menu.formattedPrice()
                 tvFoodDesc.text = menu.description
                 Glide.with(this@DetailFoodFragment)
                     .load(menu.image)
