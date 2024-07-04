@@ -8,10 +8,10 @@ class AuthRepositoryImpl : AuthRepository {
     override fun login(email: String, password: String, callback: (Boolean) -> Unit) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
+                callback(false)
                 if (task.isSuccessful) {
                     callback(true)
                 }
-                callback(false)
             }
             .addOnFailureListener {
                 callback(false)

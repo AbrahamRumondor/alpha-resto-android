@@ -7,20 +7,20 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.alfaresto_customersapp.R
-import com.example.alfaresto_customersapp.databinding.LoginPageBinding
-import com.example.alfaresto_customersapp.ui.components.mainActivity.MainActivity
+import com.example.alfaresto_customersapp.databinding.ActivityLoginBinding
 import com.example.alfaresto_customersapp.ui.components.loginPage.repository.AuthRepositoryImpl
+import com.example.alfaresto_customersapp.ui.components.mainActivity.MainActivity
 import com.example.alfaresto_customersapp.ui.components.registerPage.RegisterActivity
 import com.example.alfaresto_customersapp.ui.util.Constants
 
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var binding: LoginPageBinding
+    private lateinit var binding: ActivityLoginBinding
     private lateinit var viewModel: LoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = LoginPageBinding.inflate(layoutInflater)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         if (isLoggedIn()) {

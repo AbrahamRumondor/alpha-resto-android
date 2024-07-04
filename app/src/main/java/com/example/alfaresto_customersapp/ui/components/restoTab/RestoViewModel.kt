@@ -5,8 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.alfaresto_customersapp.domain.model.Menu
-import com.example.alfaresto_customersapp.domain.usecase.MenuUseCase
+import com.example.alfaresto_customersapp.domain.usecase.menu.MenuUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,13 +25,12 @@ class RestoViewModel @Inject constructor(
 
     private fun fetchMenus() {
         viewModelScope.launch {
-            menuUseCase.getMenus().observeForever { menus ->
-                if (menus.isEmpty()) {
-                    return@observeForever
+            menuUseCase.getMenus().collectLatest {
+                if (it.isEmpty()) {
+                    return@collectLatest
                 }
-                _menus.value = menus
+                _menus.value = it
             }
         }
     }
-
 }
