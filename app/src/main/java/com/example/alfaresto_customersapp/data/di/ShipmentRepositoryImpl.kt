@@ -54,7 +54,7 @@ class ShipmentRepositoryImpl @Inject constructor(
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
                     _shipment.value = Shipment().copy(statusDelivery = "On Process")
-                    UserConstants.SHIPMENT_STATUS = "On Process"
+                    UserConstants.SHIPMENT_STATUS.postValue("On Process")
                     return@addSnapshotListener
                 }
 
@@ -63,13 +63,12 @@ class ShipmentRepositoryImpl @Inject constructor(
                     shipmentResponse?.let {
                         val shipment = ShipmentResponse.transform(it)
                         _shipment.value = shipment
-                        UserConstants.SHIPMENT_STATUS = shipment.statusDelivery
+                        UserConstants.SHIPMENT_STATUS.postValue(shipment.statusDelivery)
                         startForegroundService()
                     }
                 } else {
                     _shipment.value = Shipment().copy(statusDelivery = "On Process")
-                    UserConstants.SHIPMENT_STATUS = "On Process"
-
+                    UserConstants.SHIPMENT_STATUS.postValue("On Process")
                 }
             }
 
