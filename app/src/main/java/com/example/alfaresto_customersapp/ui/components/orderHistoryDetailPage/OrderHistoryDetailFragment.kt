@@ -7,12 +7,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.OrderHistoryDetailBinding
+import com.example.alfaresto_customersapp.domain.model.OrderStatus
 import com.example.alfaresto_customersapp.ui.components.orderHistoryDetailPage.adapter.OrderHistoryDetailItemsAdapter
+import com.example.alfaresto_customersapp.ui.components.orderHistoryTab.OrderHistoryFragmentDirections
+import com.example.alfaresto_customersapp.utils.user.UserConstants
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -41,6 +45,7 @@ class OrderHistoryDetailFragment : Fragment() {
         setupView()
         setupBackBtn()
         loadData()
+        onStatusChangeToDelivery()
     }
 
     private fun setupView() {
@@ -74,6 +79,7 @@ class OrderHistoryDetailFragment : Fragment() {
                     tvOrderDate.text = orderHistory.orderDate
                     tvTotalPrice.text = String.format("Rp %,d", orderHistory.orderTotalPrice)
                     tvUserAddress.text = orderHistory.addressLabel
+                    tvOrderStatus.text = args.orderStatus
                 }
 
                 viewModel.fetchOrderItems(orderHistory.orderId)
@@ -88,6 +94,20 @@ class OrderHistoryDetailFragment : Fragment() {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private fun onStatusChangeToDelivery() {
+        UserConstants.SHIPMENT_STATUS.observe(viewLifecycleOwner) {
+            if (it == "On Delivery") {
+                val action =
+                    OrderHistoryDetailFragmentDirections.actionOrderHistoryDetailFragmentToTrackOrderFragment(
+                        orderId = args.orderId,
+                        shipmentId = it
+                    )
+                Navigation.findNavController(binding.root)
+                    .navigate(action)
             }
         }
     }

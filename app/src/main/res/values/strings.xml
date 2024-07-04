@@ -102,6 +102,8 @@
     <string name="chat">Chat</string>
     <string name="available">Available</string>
     <string name="retry">Retry</string>
+    <string name="on_delivery_text">On Delivery</string>
+    <string name="delivered_text">Delivered</string>
     <string name="failed_checkout_null">Checkout Failed, make sure to fill the needed fields</string>
     <string name="failed_create_address">Creating new address failed, make sure to fill the needed fields</string>
     <string name="failed_checkout_false">Checkout Failed, there are problems when processing your orders…</string>

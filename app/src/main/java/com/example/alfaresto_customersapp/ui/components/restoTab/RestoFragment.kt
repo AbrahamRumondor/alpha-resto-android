@@ -88,13 +88,14 @@ class RestoFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.menus.collectLatest { menus ->
                 viewModel.cart.collectLatest { cart ->
-                    delay(500)
-                    if (cart.isEmpty()) {
-                        setRestoAdapterButtons(cart)
-                        adapter.submitMenuList(menus)
-
-                        return@collectLatest
-                    }
+//                    delay(500)
+//                    if (cart.isEmpty()) {
+//                        setRestoAdapterButtons(cart)
+//                        adapter.submitMenuList(menus)
+//                        Toast.makeText(requireContext(), "Menu is not available", Toast.LENGTH_LONG)
+//                            .show()
+//                        return@collectLatest
+//                    }
 
                     val updatedMenus = menus.map { menu ->
                         val cartItem = cart.find { it.menuId == menu.id }

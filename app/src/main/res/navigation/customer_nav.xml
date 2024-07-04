@@ -51,6 +51,10 @@
         <action
             android:id="@+id/action_order_history_detail_fragment_to_order_history_fragment"
             app:destination="@id/order_history_fragment" />
+        <action
+            android:id="@+id/action_order_history_detail_fragment_to_track_order_fragment"
+            app:destination="@id/track_order_fragment" />
+        <argument android:name="orderStatus" />
     </fragment>
 
     <fragment
@@ -154,6 +158,9 @@
         <argument
             android:name="shipmentId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_track_order_fragment_to_order_history_detail_fragment"
+            app:destination="@id/order_history_detail_fragment" />
     </fragment>
 
     <fragment

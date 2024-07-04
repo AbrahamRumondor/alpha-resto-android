@@ -89,7 +89,7 @@ class OrderHistoryFragment : Fragment() {
                     setOnOrderClickListener()
                 }
 
-                delay(500)
+                delay(1000)
                 if (orderHistories.isEmpty()) {
                     Toast.makeText(
                         requireContext(),
@@ -105,15 +105,27 @@ class OrderHistoryFragment : Fragment() {
     private fun setOnOrderClickListener() {
         adapter.setItemListener(object : OrderHistoryListener {
             override fun onOrderClicked(orderHistory: OrderHistory) {
-                val action = if (orderHistory.orderStatus == OrderStatus.DELIVERED) {
-                    OrderHistoryFragmentDirections.actionOrderHistoryFragmentToOrderHistoryDetailFragment(
-                        orderId = orderHistory.orderId
-                    )
-                } else {
-                    OrderHistoryFragmentDirections.actionOrderHistoryFragmentToTrackOrderFragment(
-                        orderId = orderHistory.orderId,
-                        shipmentId = orderHistory.id
-                    )
+                val action = when(orderHistory.orderStatus) {
+                    OrderStatus.ON_DELIVERY -> {
+                        OrderHistoryFragmentDirections.actionOrderHistoryFragmentToTrackOrderFragment(
+                            orderId = orderHistory.orderId,
+                            shipmentId = orderHistory.id
+                        )
+                    }
+
+                    OrderStatus.ON_PROCESS -> {
+                        OrderHistoryFragmentDirections.actionOrderHistoryFragmentToOrderHistoryDetailFragment(
+                            orderId = orderHistory.orderId,
+                            orderStatus = "On Process"
+                        )
+                    }
+
+                    else -> {
+                        OrderHistoryFragmentDirections.actionOrderHistoryFragmentToOrderHistoryDetailFragment(
+                            orderId = orderHistory.orderId,
+                            orderStatus = "Delivered"
+                        )
+                    }
                 }
 
                 Navigation.findNavController(binding.root)

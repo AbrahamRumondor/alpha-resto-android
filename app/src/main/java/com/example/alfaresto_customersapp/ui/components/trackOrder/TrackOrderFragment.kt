@@ -30,8 +30,10 @@ import com.example.alfaresto_customersapp.databinding.BsdLocationPermissionBindi
 import com.example.alfaresto_customersapp.databinding.FragmentTrackOrderBinding
 import com.example.alfaresto_customersapp.domain.error.OsrmCallback
 import com.example.alfaresto_customersapp.domain.error.RealtimeLocationCallback
+import com.example.alfaresto_customersapp.ui.components.orderHistoryDetailPage.OrderHistoryDetailFragmentDirections
 import com.example.alfaresto_customersapp.ui.components.restoTab.address.addNewAddress.AddNewAddressFragment.Companion.markersHeight
 import com.example.alfaresto_customersapp.ui.components.restoTab.address.addNewAddress.AddNewAddressFragment.Companion.markersWidth
+import com.example.alfaresto_customersapp.utils.user.UserConstants
 import com.example.alfaresto_customersapp.utils.user.UserConstants.SHIPMENT_STATUS
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -81,7 +83,7 @@ class TrackOrderFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 //        checkNotificationPermission(true)
 
-        SHIPMENT_STATUS = "On Process"
+        SHIPMENT_STATUS.postValue("On Delivery")
 
         binding.toolbar.apply {
             btnLogout.visibility = View.GONE
@@ -103,18 +105,13 @@ class TrackOrderFragment : Fragment() {
                 order?.let { myOrder ->
                     val home = LatLng(myOrder.latitude, myOrder.longitude)
 
-//                    trackOrderViewModel.getShipmentById(args.shipmentId)
-
                     tvOrderStatusBody.text = getText(R.string.on_process_status)
 
                     trackOrderViewModel.getShipmentById(args.shipmentId)
-                    trackOrderViewModel.shipment.observe(viewLifecycleOwner) {
-                        tvOrderStatusBody.text = it.statusDelivery
-                    }
+                    tvOrderStatusBody.text = getString(R.string.on_delivery_text)
 
                     tvAddressDetail.text = myOrder.fullAddress
 
-//                    mvTrack.onCreate(savedInstanceState)
                     mvTrack.getMapAsync {
                         map = it
                         setMapIdleListener()
@@ -130,6 +127,22 @@ class TrackOrderFragment : Fragment() {
                         )
                     Navigation.findNavController(requireView()).navigate(action)
                 }
+
+                onStatusChangeToDelivery()
+            }
+        }
+    }
+
+    private fun onStatusChangeToDelivery() {
+        SHIPMENT_STATUS.observe(viewLifecycleOwner) {
+            if (it == getString(R.string.delivered_text)) {
+                val action =
+                    TrackOrderFragmentDirections.actionTrackOrderFragmentToOrderHistoryDetailFragment(
+                        orderId = args.orderId,
+                        orderStatus = getString(R.string.delivered_text)
+                    )
+                Navigation.findNavController(binding.root)
+                    .navigate(action)
             }
         }
     }
