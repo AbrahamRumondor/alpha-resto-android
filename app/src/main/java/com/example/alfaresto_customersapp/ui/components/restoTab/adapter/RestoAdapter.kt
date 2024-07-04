@@ -1,6 +1,5 @@
 package com.example.alfaresto_customersapp.ui.components.restoTab.adapter
 
-import android.util.Log
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.alfaresto_customersapp.domain.model.Menu
@@ -24,6 +23,7 @@ class RestoAdapter : RecyclerView.Adapter<RestoViewHolder>() {
 
     fun submitMenuList(menuList: List<Menu>) {
         this.menuList = menuList
+        notifyItemRangeChanged(0, menuList.size)
     }
 
 }

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.FragmentRestoBinding
 import com.example.alfaresto_customersapp.ui.components.restoTab.adapter.RestoAdapter
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,6 +32,9 @@ class RestoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val auth = FirebaseAuth.getInstance()
+        val user = auth.currentUser
+
         binding.rvMenu.let {
             it.adapter = adapter
             it.layoutManager =
@@ -40,12 +44,13 @@ class RestoFragment : Fragment() {
         viewModel.menus.observe(viewLifecycleOwner) { menus ->
             if (menus.isEmpty()) {
                 Log.d("RestoFragment", "Menus is empty, waiting for data...")
-                // Optionally, you can show a loading state or handle the empty case
                 return@observe
             }
 
             adapter.submitMenuList(menus)
         }
+
+        binding.tvGreetings.text = "hi, ${user?.email?.split("@")?.get(0)}"
 
         binding.btnAllMenu.setOnClickListener {
             Navigation.findNavController(view)
