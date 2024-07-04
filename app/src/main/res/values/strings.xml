@@ -104,6 +104,6 @@
     <string name="retry">Retry</string>
     <string name="failed_checkout_null">Checkout Failed, make sure to fill the needed fields</string>
     <string name="failed_create_address">Creating new address failed, make sure to fill the needed fields</string>
-    <string name="failed_checkout_false">Checkout Failed, there are problems when processing your orders...</string>
+    <string name="failed_checkout_false">Checkout Failed, there are problems when processing your orders…</string>
     <string name="date">Date</string>
 </resources>

@@ -1,8 +1,6 @@
 package com.example.alfaresto_customersapp.domain.model
 
-import java.text.NumberFormat
 import java.util.Date
-import java.util.Locale
 
 data class Order(
     val id: String = "",
