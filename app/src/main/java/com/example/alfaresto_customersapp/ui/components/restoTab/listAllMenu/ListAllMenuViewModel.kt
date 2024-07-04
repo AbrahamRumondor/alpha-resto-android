@@ -16,10 +16,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
+import javax.inject.Named
 
 @HiltViewModel
 class ListAllMenuViewModel @Inject constructor(
-    private val menusRef: CollectionReference
+    @Named("menusRef") private val menusRef: CollectionReference
 ) : ViewModel() {
 
     private val _searchQuery = MutableStateFlow<String?>(null)

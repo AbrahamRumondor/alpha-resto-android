@@ -12,5 +12,5 @@ data class Menu(
 
     // specific application use
     val isSelected: Boolean = false,
-    val orderCartQuantity: Int = 0,
+    var orderCartQuantity: Int = 0,
 )
