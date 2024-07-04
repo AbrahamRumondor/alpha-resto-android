@@ -87,13 +87,6 @@ class RestoFragment : Fragment() {
 
         lifecycleScope.launch {
             viewModel.menus.collectLatest { menus ->
-                delay(500)
-                if (menus.isEmpty()) {
-                    Toast.makeText(requireContext(), "Menu is not available", Toast.LENGTH_LONG)
-                        .show()
-                    return@collectLatest
-                }
-
                 viewModel.cart.collectLatest { cart ->
                     delay(500)
                     if (cart.isEmpty()) {
@@ -119,6 +112,12 @@ class RestoFragment : Fragment() {
                         binding.tvCartCount.text = it.toString()
                         binding.rlCart.visibility = if (it != 0) View.VISIBLE else View.INVISIBLE
                     }
+                }
+                delay(500)
+                if (menus.isEmpty()) {
+                    Toast.makeText(requireContext(), "Menu is not available", Toast.LENGTH_LONG)
+                        .show()
+                    return@collectLatest
                 }
             }
         }

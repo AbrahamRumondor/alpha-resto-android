@@ -46,16 +46,6 @@ class OrderHistoryFragment : Fragment() {
 
         lifecycleScope.launch {
             viewModel.orderHistories.collectLatest { orderHistories ->
-                delay(500)
-                if (orderHistories.isEmpty()) {
-                    Toast.makeText(
-                        requireContext(),
-                        "Order History Loaded. There's no order history.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    return@collectLatest
-                }
-
                 adapter.submitList(orderHistories)
                 binding.run {
                     var sortedOrderHistories: List<OrderHistory> =
@@ -97,6 +87,16 @@ class OrderHistoryFragment : Fragment() {
 
                 orderHistories.map {
                     setOnOrderClickListener()
+                }
+
+                delay(500)
+                if (orderHistories.isEmpty()) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Order History Loaded. There's no order history.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@collectLatest
                 }
             }
         }
