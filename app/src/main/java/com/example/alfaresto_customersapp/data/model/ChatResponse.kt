@@ -7,9 +7,9 @@ import com.google.firebase.firestore.PropertyName
 data class ChatResponse(
     val id: String = "",
 
-    @get:PropertyName("date")
-    @set:PropertyName("date")
-    var date: Timestamp = Timestamp.now(),
+    @get:PropertyName("date_send")
+    @set:PropertyName("date_send")
+    var dateSend: Timestamp = Timestamp.now(),
 
     @get:PropertyName("message")
     @set:PropertyName("message")
@@ -23,13 +23,25 @@ data class ChatResponse(
     @set:PropertyName("user_name")
     var userName: String = "",
 ) {
+
+    constructor() : this("", Timestamp.now(), "", "", "")
+
     companion object {
         fun transform(itemResponse: ChatResponse): Chat {
             return Chat(
-                date = itemResponse.date,
+                dateSend = itemResponse.dateSend,
                 message = itemResponse.message,
                 senderId = itemResponse.senderId,
                 userName = itemResponse.userName
+            )
+        }
+
+        fun transform(item: Chat): ChatResponse {
+            return ChatResponse(
+                dateSend = item.dateSend,
+                message = item.message,
+                senderId = item.senderId,
+                userName = item.userName
             )
         }
     }

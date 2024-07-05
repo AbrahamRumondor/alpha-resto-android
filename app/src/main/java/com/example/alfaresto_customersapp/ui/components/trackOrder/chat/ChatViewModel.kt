@@ -1,42 +1,41 @@
 package com.example.alfaresto_customersapp.ui.components.trackOrder.chat
 
 import android.content.ContentValues.TAG
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.alfaresto_customersapp.data.remote.pushNotification.NotificationBody
 import com.example.alfaresto_customersapp.data.remote.pushNotification.SendMessageDto
 import com.example.alfaresto_customersapp.domain.error.Result
 import com.example.alfaresto_customersapp.domain.model.Chat
+import com.example.alfaresto_customersapp.domain.model.User
 import com.example.alfaresto_customersapp.domain.repository.FcmApiRepository
+import com.example.alfaresto_customersapp.domain.usecase.auth.AuthUseCase
 import com.example.alfaresto_customersapp.domain.usecase.order.OrderUseCase
 import com.example.alfaresto_customersapp.domain.usecase.resto.RestaurantUseCase
+import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase
 import com.google.firebase.Timestamp
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.ListenerRegistration
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
-import javax.inject.Named
 
 @HiltViewModel
 class ChatViewModel @Inject constructor(
-    @Named("ordersRef") private val ordersRef: CollectionReference,
-    private var auth: FirebaseAuth,
     private val fcmApiRepository: FcmApiRepository,
     private val restaurantUseCase: RestaurantUseCase,
-    val orderUseCase: OrderUseCase
+    private val orderUseCase: OrderUseCase,
+    private val authUseCase: AuthUseCase,
+    private val userUseCase: UserUseCase
 ) : ViewModel() {
 
     private var chatListener: ListenerRegistration? = null
 
-    private val _messages = MutableLiveData<List<Pair<String, String>>>()
-    val messages: LiveData<List<Pair<String, String>>> get() = _messages
+    private val _messages: MutableStateFlow<List<Chat>> = MutableStateFlow(emptyList())
+    val messages: StateFlow<List<Chat>> get() = _messages
 
     private val _restoToken: MutableStateFlow<String> = MutableStateFlow("")
     private val restoToken: StateFlow<String> = _restoToken
@@ -44,76 +43,50 @@ class ChatViewModel @Inject constructor(
     private val _restoID: MutableStateFlow<String> = MutableStateFlow("")
     val restoID: StateFlow<String> = _restoID
 
+    private val _user: MutableStateFlow<User> = MutableStateFlow(User())
+    val user: StateFlow<User> = _user
+
+    private val _orderId = MutableStateFlow("")
+    val orderId: StateFlow<String> = _orderId
+
     init {
         fetchResto()
+        getUserId()
+        getUser()
+        getMessages()
     }
 
-    fun sendMessage(userId: String, orderId: String, message: String) {
+    fun setOrderId(orderId: String) {
+        _orderId.value = orderId
+    }
+
+    fun sendMessage(message: String) {
         viewModelScope.launch {
             try {
-                val order = orderUseCase.getOrderByID(orderId)
-                if (order != null) {
-                    orderUseCase.addChatMessage(
-                        orderId,
-                        Chat(
-                            date = Timestamp.now(),
-                            message = message,
-                            senderId = userId,
-                            userName = getUserName()
-                        )
+                orderUseCase.addChatMessage(
+                    orderId.value,
+                    Chat(
+                        dateSend = Timestamp.now(),
+                        message = message,
+                        senderId = user.value.id,
+                        userName = user.value.name
                     )
-                    sendNotificationToResto("New message from customer: $message")
-                } else {
-                    Timber.tag(TAG).w("Order not found")
-                }
+                )
+                sendNotificationToResto("New message from customer: $message")
             } catch (e: Exception) {
                 Timber.tag(TAG).w(e, "Error sending message")
             }
         }
     }
 
-    fun listenForMessages(orderId: String, orderUseCase: OrderUseCase) {
-        chatListener = ordersRef.document(orderId).collection("chats")
-            .orderBy("date_send")
-            .addSnapshotListener { snapshots, e ->
-                if (e != null) {
-                    Timber.tag(TAG).w(e, "Listen failed.")
-                    return@addSnapshotListener
-                }
-
-                if (snapshots != null) {
-                    val messages = mutableListOf<Pair<String, String>>()
-                    for (doc in snapshots.documentChanges) {
-                        if (doc.type == com.google.firebase.firestore.DocumentChange.Type.ADDED) {
-                            val message = doc.document.getString("message")
-                            val senderId = doc.document.getString("sender_id")
-                            if (message != null && senderId != null) {
-                                messages.add(Pair(message, senderId))
-                            }
-                        }
-                    }
-                    _messages.postValue(messages)
-
-                    viewModelScope.launch {
-                        try {
-                            val lastMessage = snapshots.documents.lastOrNull()?.getString("message") ?: ""
-                            val lastSenderId = snapshots.documents.lastOrNull()?.getString("sender_id") ?: ""
-                            lastSenderId == getUserId()
-                            orderUseCase.addChatMessage(
-                                orderId,
-                                Chat(
-                                    date = Timestamp.now(),
-                                    message = lastMessage,
-                                    senderId = lastSenderId,
-                                    userName = getUserName()
-                                )
-                            )
-                        } catch (e: Exception) {
-                            Timber.tag(TAG).w(e, "Error adding chat message")
-                        }
-                    }
+    private fun getMessages() {
+        viewModelScope.launch {
+            orderId.collectLatest {
+                orderUseCase.getChatMessages(orderId.value).collectLatest {
+                    _messages.value = it
                 }
             }
+        }
     }
 
     private fun fetchResto() {
@@ -148,19 +121,17 @@ class ChatViewModel @Inject constructor(
                 is Result.Error -> {
                     Timber.tag("test").d("FCM FAILED")
                 }
-
             }
-
         }
     }
 
-    fun getUserId(): String {
-        val user = auth.currentUser
-        return user?.uid ?: ""
+    private fun getUserId(): String {
+        return authUseCase.getCurrentUserID()
     }
 
-    private fun getUserName(): String {
-        val user = auth.currentUser
-        return user?.displayName ?: ""
+    private fun getUser() {
+        viewModelScope.launch {
+            _user.value = userUseCase.getCurrentUser().value
+        }
     }
 }

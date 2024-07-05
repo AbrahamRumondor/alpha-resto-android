@@ -17,5 +17,5 @@ interface OrderUseCase {
     suspend fun getOrderItems(orderId: String): StateFlow<List<OrderItem>>
     suspend fun getOrderByID(orderId: String): Order?
     suspend fun addChatMessage(orderId: String, messageData: Chat): Result<Unit>
-
+    suspend fun getChatMessages(orderId: String): StateFlow<List<Chat>>
 }

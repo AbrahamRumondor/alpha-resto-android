@@ -1,5 +1,6 @@
 package com.example.alfaresto_customersapp.data.di
 
+import com.example.alfaresto_customersapp.data.model.ChatResponse
 import com.example.alfaresto_customersapp.data.model.OrderItemResponse
 import com.example.alfaresto_customersapp.data.model.OrderResponse
 import com.example.alfaresto_customersapp.domain.model.Chat
@@ -23,6 +24,10 @@ class OrderRepositoryImpl @Inject constructor(
 
     private val _orderList = MutableStateFlow<List<Order>>(emptyList())
     private val orderList: StateFlow<List<Order>> = _orderList
+
+    private val _chatMessages = MutableStateFlow<List<Chat>>(emptyList())
+    private val chatMessages: StateFlow<List<Chat>> = _chatMessages
+
     private var currentSize = 0
 
     override suspend fun getOrders(): StateFlow<List<Order>> {
@@ -129,6 +134,41 @@ class OrderRepositoryImpl @Inject constructor(
         orderId: String,
         messageData: Chat
     ) {
-        ordersRef.document(orderId).collection("chats").add(messageData).await()
+        ordersRef.document(orderId).collection("chats").add(ChatResponse.transform(messageData))
+            .addOnSuccessListener {
+                Timber.tag("OrderRepositoryImpl").d("SUCCESS ON CHAT INSERTION")
+            }
+            .addOnFailureListener { Timber.tag("OrderRepositoryImpl").d("ERROR ON CHAT INSERTION") }
+    }
+
+    override suspend fun getChatMessages(orderId: String): StateFlow<List<Chat>> {
+        try {
+            ordersRef.document(orderId).collection("chats").orderBy("date_send")
+                .addSnapshotListener { value, error ->
+                    if (error != null) {
+                        _chatMessages.value = emptyList()
+                        Timber.tag("OrderRepositoryImpl").d("Error getting chat messages")
+                        return@addSnapshotListener
+                    }
+
+                    val chatList = mutableListOf<Chat>()
+                    if (value != null) {
+                        for (doc in value) {
+                            if (doc.exists()) {
+                                val chat = doc.toObject(ChatResponse::class.java).let {
+                                    ChatResponse.transform(it)
+                                }
+                                chatList.add(chat)
+                            }
+                        }
+                    }
+
+                    _chatMessages.value = chatList
+                }
+        } catch (e: Exception) {
+            _chatMessages.value = emptyList()
+        }
+
+        return chatMessages
     }
 }

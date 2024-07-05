@@ -9,6 +9,7 @@ import com.example.alfaresto_customersapp.domain.repository.AuthRepository
 import com.example.alfaresto_customersapp.domain.repository.OrderRepository
 import com.example.alfaresto_customersapp.domain.repository.UserRepository
 import kotlinx.coroutines.flow.StateFlow
+import timber.log.Timber
 import javax.inject.Inject
 
 class OrderUseCaseImpl @Inject constructor(
@@ -61,5 +62,10 @@ class OrderUseCaseImpl @Inject constructor(
         } catch (e: Exception) {
             Result.failure(e)
         }
+    }
+
+    override suspend fun getChatMessages(orderId: String): StateFlow<List<Chat>> {
+        Timber.tag("order usecaseimpl").d("getChatMessages")
+        return orderRepository.getChatMessages(orderId)
     }
 }

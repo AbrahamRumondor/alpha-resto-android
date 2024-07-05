@@ -1,4 +1,4 @@
-package com.example.alfaresto_customersapp.ui.components.detailPage
+package com.example.alfaresto_customersapp.ui.components.detailFoodPage
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

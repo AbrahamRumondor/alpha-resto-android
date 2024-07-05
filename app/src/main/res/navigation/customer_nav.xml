@@ -165,7 +165,7 @@
 
     <fragment
         android:id="@+id/detail_food_fragment"
-        android:name="com.example.alfaresto_customersapp.ui.components.detailPage.DetailFoodFragment"
+        android:name="com.example.alfaresto_customersapp.ui.components.detailFoodPage.DetailFoodFragment"
         android:label="fragment_food_detail"
         tools:layout="@layout/fragment_detail_food">
         <argument

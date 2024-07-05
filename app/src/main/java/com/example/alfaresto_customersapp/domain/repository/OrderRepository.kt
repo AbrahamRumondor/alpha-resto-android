@@ -18,4 +18,5 @@ interface OrderRepository {
     suspend fun getOrderByID(orderId: String): Order?
     suspend fun getOrderItems(orderId: String): StateFlow<List<OrderItem>>
     suspend fun addChatMessage(orderId: String, messageData: Chat)
+    suspend fun getChatMessages(orderId: String): StateFlow<List<Chat>>
 }
