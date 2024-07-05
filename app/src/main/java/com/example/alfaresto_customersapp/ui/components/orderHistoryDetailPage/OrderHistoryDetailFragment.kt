@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -44,6 +45,7 @@ class OrderHistoryDetailFragment : Fragment() {
 
         setupView()
         setupBackBtn()
+        onEmbeddedBackPressed()
         loadData()
         onStatusChangeToDelivery()
     }
@@ -66,8 +68,17 @@ class OrderHistoryDetailFragment : Fragment() {
 
     private fun setupBackBtn() {
         binding.toolbar.btnBack.setOnClickListener {
-            findNavController().popBackStack()
+            findNavController().popBackStack(R.id.order_history_fragment, false)
         }
+    }
+
+    private fun onEmbeddedBackPressed() {
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().popBackStack(R.id.order_history_fragment, false)
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
 
     private fun loadData() {

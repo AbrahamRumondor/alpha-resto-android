@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RemoteViews
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
@@ -96,8 +97,9 @@ class TrackOrderFragment : Fragment() {
         val orderId = args.orderId
         binding.run {
             toolbar.btnBack.setOnClickListener {
-                findNavController().popBackStack()
+                findNavController().popBackStack(R.id.order_history_fragment, false)
             }
+            onEmbeddedBackPressed()
 
             trackOrderViewModel.order.observe(viewLifecycleOwner) { orderList ->
                 val order = orderList.find { it.id == orderId }
@@ -131,6 +133,15 @@ class TrackOrderFragment : Fragment() {
                 onStatusChangeToDelivery()
             }
         }
+    }
+
+    private fun onEmbeddedBackPressed() {
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().popBackStack(R.id.order_history_fragment, false)
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
 
     private fun onStatusChangeToDelivery() {
