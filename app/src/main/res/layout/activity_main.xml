@@ -8,6 +8,15 @@
     android:background="@color/semiwhite"
     tools:context=".ui.components.MainActivity">
 
+    <TextView
+        android:id="@+id/email"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/user_email"
+        android:gravity="center"
+        android:textSize="24sp"
+        />
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fcv_switch_screen"
         android:name="androidx.navigation.fragment.NavHostFragment"
