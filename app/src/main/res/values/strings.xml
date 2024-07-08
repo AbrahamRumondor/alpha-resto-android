@@ -110,4 +110,6 @@
     <string name="failed_checkout_false">Failed, there are problems processing your orders…</string>
     <string name="date">Date</string>
     <string name="new_address_success">Address added successfully</string>
+    <string name="order_id">Order ID :</string>
+    <string name="ordered_at">Ordered at :</string>
 </resources>
