@@ -114,4 +114,5 @@
     <string name="ordered_at">Ordered at :</string>
     <string name="items">" items"</string>
     <string name="status">STATUS</string>
+    <string name="best_seller">Best Seller</string>
 </resources>
