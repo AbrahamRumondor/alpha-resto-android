@@ -93,7 +93,7 @@
     <string name="tempat_kerja">Tempat Kerja</string>
     <string name="total">Total</string>
     <string name="user_email">User Email</string>
-    <string name="we_re_sorry_we_need_your_location_permission_to_use_this_app">We\'re sorry we need your location permission to use this app</string>
+    <string name="we_re_sorry_we_need_your_location_permission_to_use_this_app">We\'re sorry we need location permission for this app</string>
     <string name="welcome_back">Welcome Back !</string>
     <string name="yes">Yes</string>
     <string name="your_driver_is_on_the_way">your driver is on the way</string>
@@ -105,7 +105,9 @@
     <string name="on_delivery_text">On Delivery</string>
     <string name="delivered_text">Delivered</string>
     <string name="failed_checkout_null">Checkout Failed, make sure to fill the needed fields</string>
-    <string name="failed_create_address">Creating new address failed, make sure to fill the needed fields</string>
-    <string name="failed_checkout_false">Checkout Failed, there are problems when processing your orders…</string>
+    <string name="failed_create_address">Failed, make sure to fill the needed fields</string>
+    <string name="too_far_address">Sorry, the designated place is too far…</string>
+    <string name="failed_checkout_false">Failed, there are problems processing your orders…</string>
     <string name="date">Date</string>
+    <string name="new_address_success">Address added successfully</string>
 </resources>

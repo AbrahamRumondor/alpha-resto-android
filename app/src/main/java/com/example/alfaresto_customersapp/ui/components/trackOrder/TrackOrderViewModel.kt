@@ -79,7 +79,6 @@ class TrackOrderViewModel @Inject constructor(
             override fun onFailure(call: Call<RouteResponse>, t: Throwable) {
                 osrmCallback.onFailure(t.message)
             }
-
         })
     }
 

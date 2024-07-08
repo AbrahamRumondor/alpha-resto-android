@@ -80,11 +80,6 @@ class AddNewAddressFragment : Fragment() {
                                 Navigation.findNavController(binding.root).popBackStack()
                             } else {
                                 isSaveClicked = false
-                                Toast.makeText(
-                                    requireContext(),
-                                    getString(R.string.failed_create_address),
-                                    Toast.LENGTH_LONG
-                                ).show()
                             }
                         }
                     }
