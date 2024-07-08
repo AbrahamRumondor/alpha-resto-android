@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -16,7 +17,6 @@ import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.OrderHistoryDetailBinding
 import com.example.alfaresto_customersapp.domain.model.OrderStatus
 import com.example.alfaresto_customersapp.ui.components.orderHistoryDetailPage.adapter.OrderHistoryDetailItemsAdapter
-import com.example.alfaresto_customersapp.ui.components.orderHistoryTab.OrderHistoryFragmentDirections
 import com.example.alfaresto_customersapp.utils.user.UserConstants
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -90,7 +90,15 @@ class OrderHistoryDetailFragment : Fragment() {
                     tvOrderDate.text = orderHistory.orderDate
                     tvTotalPrice.text = String.format("Rp %,d", orderHistory.orderTotalPrice)
                     tvUserAddress.text = orderHistory.addressLabel
-                    tvOrderStatus.text = args.orderStatus
+                    tvStatus.text = args.orderStatus
+                    orderHistory.orderStatus.name.let { status ->
+                        val colorRes = when (status) {
+                            OrderStatus.DELIVERED.name -> R.drawable.delivered_shape
+                            OrderStatus.ON_DELIVERY.name -> R.drawable.on_delivery_shape
+                            else -> R.drawable.on_process_shape
+                        }
+                        tvStatus.background = AppCompatResources.getDrawable(root.context, colorRes)
+                    }
                 }
 
                 viewModel.fetchOrderItems(orderHistory.orderId)

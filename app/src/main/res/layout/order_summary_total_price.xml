@@ -40,6 +40,17 @@
         app:layout_constraintTop_toTopOf="@id/tv_total_title" />
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dimen_3"
+        android:fontFamily="@font/semibold"
+        android:text="@string/items"
+        android:textColor="@android:color/darker_gray"
+        app:layout_constraintBottom_toBottomOf="@id/tv_total_title"
+        app:layout_constraintStart_toEndOf="@+id/tv_total_order_qty"
+        app:layout_constraintTop_toTopOf="@id/tv_total_title" />
+
+    <TextView
         android:id="@+id/tv_total_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -91,7 +91,7 @@
     <string name="splash_screen_description">Splash Screen</string>
     <string name="strip">-</string>
     <string name="tempat_kerja">Tempat Kerja</string>
-    <string name="total">Total</string>
+    <string name="total">Total Price : </string>
     <string name="user_email">User Email</string>
     <string name="we_re_sorry_we_need_your_location_permission_to_use_this_app">We\'re sorry we need location permission for this app</string>
     <string name="welcome_back">Welcome Back !</string>
@@ -112,4 +112,6 @@
     <string name="new_address_success">Address added successfully</string>
     <string name="order_id">Order ID :</string>
     <string name="ordered_at">Ordered at :</string>
+    <string name="items">" items"</string>
+    <string name="status">STATUS</string>
 </resources>
