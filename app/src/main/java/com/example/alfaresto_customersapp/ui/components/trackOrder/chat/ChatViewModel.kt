@@ -72,7 +72,7 @@ class ChatViewModel @Inject constructor(
                         userName = user.value.name
                     )
                 )
-                sendNotificationToResto("New message from customer: $message")
+                sendNotificationToResto("[${user.value.name}]: $message")
             } catch (e: Exception) {
                 Timber.tag(TAG).w(e, "Error sending message")
             }
