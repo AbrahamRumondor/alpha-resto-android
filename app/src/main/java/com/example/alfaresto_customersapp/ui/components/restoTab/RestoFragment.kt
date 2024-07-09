@@ -31,6 +31,7 @@ import com.example.alfaresto_customersapp.domain.model.User
 import com.example.alfaresto_customersapp.ui.components.listener.MenuListener
 import com.example.alfaresto_customersapp.ui.components.loginPage.LoginActivity
 import com.example.alfaresto_customersapp.ui.components.restoTab.adapter.RestoAdapter
+import com.example.alfaresto_customersapp.utils.Constants
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -170,19 +171,19 @@ class RestoFragment : Fragment() {
 
     private fun logoutValidation() {
         AlertDialog.Builder(requireContext())
-            .setTitle("Confirmation")
-            .setMessage("Are you sure you want to logout?")
-            .setPositiveButton("Logout") { _, _ ->
+            .setTitle(getString(R.string.logout_confirmation_title))
+            .setMessage(getString(R.string.logout_confirmation_message))
+            .setPositiveButton(getString(R.string.logout)) { _, _ ->
                 logout()
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton(getString(R.string.cancel), null)
             .show()
     }
 
     private fun logout() {
-        val sharedPreferences = requireContext().getSharedPreferences("login", Context.MODE_PRIVATE)
+        val sharedPreferences = requireContext().getSharedPreferences(Constants.login, Context.MODE_PRIVATE)
         with(sharedPreferences.edit()) {
-            putBoolean("isLoggedIn", false)
+            putBoolean(Constants.isLoggedIn, false)
             apply()
         }
 
