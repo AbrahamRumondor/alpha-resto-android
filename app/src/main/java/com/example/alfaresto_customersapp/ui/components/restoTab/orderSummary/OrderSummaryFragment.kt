@@ -132,6 +132,18 @@ class OrderSummaryFragment : Fragment() {
             }
 
             override fun onCheckoutButtonClicked() {
+                val currentTime = orderSummaryViewModel.getCurrentTime()
+                val isClosed = currentTime >= orderSummaryViewModel.restoClosedHour.value
+
+                if (isClosed) {
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.restaurant_closed),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return
+                }
+
                 if (!checkoutClicked) {
                     AlertDialog.Builder(requireContext())
                         .setTitle(getString(R.string.checkout_confirmation))

@@ -6,4 +6,5 @@ interface RestaurantUseCase {
     suspend fun getRestaurantId(): String
     suspend fun getRestaurantToken(): String
     suspend fun getRestaurant(): Restaurant?
+    suspend fun getRestaurantClosedHour(): String
 }

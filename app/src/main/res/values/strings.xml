@@ -122,6 +122,7 @@
     <string name="checkout_confirmation_message">Do you want to continue checkout process?</string>
     <string name="complain_text">Any issue? Complaint here.</string>
     <string name="complain">Complain</string>
+    <string name="restaurant_closed">Alfa Resto is closed</string>
     <string name="logout_confirmation_title">Logout confirmation</string>
     <string name="logout_confirmation_message">Are you sure you want to logout?</string>
     <string name="logout">Logout</string>
