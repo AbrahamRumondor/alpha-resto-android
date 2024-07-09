@@ -65,7 +65,9 @@ class ChatFragment : Fragment() {
             val message = binding.etChatInput.text.toString()
             if (message.isNotEmpty()) {
                 viewModel.sendMessage(message)
-                binding.etChatInput.text.clear()
+                binding.etChatInput.apply {
+                    text.clear()
+                }
             } else {
                 Toast.makeText(requireContext(), "Message cannot be empty", Toast.LENGTH_SHORT)
                     .show()
@@ -74,9 +76,12 @@ class ChatFragment : Fragment() {
 
         lifecycleScope.launch {
             viewModel.messages.collectLatest { messages ->
-                adapter.submitList(messages)
-                Timber.d("Messages: $messages")
-                binding.rvChat.scrollToPosition(messages.size - 1)
+                adapter.submitList(messages) {
+                    Timber.d("Messages: $messages")
+                    binding.rvChat.post {
+                        binding.rvChat.scrollToPosition(adapter.itemCount - 1)
+                    }
+                }
             }
         }
     }

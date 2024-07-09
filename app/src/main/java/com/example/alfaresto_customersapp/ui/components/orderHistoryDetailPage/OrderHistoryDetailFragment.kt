@@ -48,6 +48,7 @@ class OrderHistoryDetailFragment : Fragment() {
         setupView()
         setupBackBtn()
         onEmbeddedBackPressed()
+        chatButtonSetup()
         loadData()
         onStatusChangeToDelivery()
     }
@@ -83,6 +84,16 @@ class OrderHistoryDetailFragment : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
 
+    private fun chatButtonSetup() {
+        binding.btnChat.setOnClickListener {
+            val action =
+                OrderHistoryDetailFragmentDirections.actionOrderHistoryDetailFragmentToChatFragment(
+                    args.orderId
+                )
+            Navigation.findNavController(binding.root).navigate(action)
+        }
+    }
+
     private fun loadData() {
         lifecycleScope.launch {
             viewModel.orderHistory.collectLatest { orderHistory ->
@@ -104,16 +115,6 @@ class OrderHistoryDetailFragment : Fragment() {
                             tvUserName.text = user.name
                             tvUserPhone.text = user.phone
                         }
-                    }
-
-                    binding.btnChat.setOnClickListener {
-                        Log.d("OrderHistoryDetailFragment", "Chat button clicked")
-                        val action =
-                            OrderHistoryDetailFragmentDirections.actionOrderHistoryDetailFragmentToChatFragment(
-                                orderId = args.orderId
-                            )
-                        Log.d("OrderHistoryDetailFragment", "Navigating to ChatFragment with orderId: ${args.orderId}")
-                        Navigation.findNavController(requireView()).navigate(action)
                     }
                 }
             }
