@@ -23,7 +23,6 @@ class OrderSummaryAdapter :
 
     private var items: MutableList<Any?> = mutableListOf()
     private var orderSummaryItemListener: OrderSummaryItemListener? = null
-    private var orderItems: List<OrderItem> = listOf()
 
     private val SHOW_ADDRESS = 0
     private val SHOW_ORDER_LIST = 1
