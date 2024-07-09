@@ -69,6 +69,7 @@
                 android:layout_marginHorizontal="@dimen/dimen_16"
                 android:fontFamily="@font/bold"
                 android:padding="@dimen/dimen_8"
+                android:textColor="@color/mainblack"
                 android:textAlignment="center"
                 android:textSize="@dimen/font_18"
                 android:textStyle="bold" />

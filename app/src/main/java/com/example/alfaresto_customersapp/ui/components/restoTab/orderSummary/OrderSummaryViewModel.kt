@@ -208,6 +208,7 @@ class OrderSummaryViewModel @Inject constructor(
                                             menuPrice = menu.price,
                                             menuImage = menu.image
                                         )
+                                        val formattedPrice = orderItem.formattedPrice()
                                         val orderItemResponse =
                                             OrderItemResponse.toResponse(orderItem)
                                         orderUseCase.setOrderItem(
@@ -273,6 +274,10 @@ class OrderSummaryViewModel @Inject constructor(
                 }
 
                 is Error -> {
+                    Timber.tag("test").d("FCM FAILED")
+                }
+
+                else -> {
                     Timber.tag("test").d("FCM FAILED")
                 }
             }

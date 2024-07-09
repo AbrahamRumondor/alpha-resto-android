@@ -10,6 +10,7 @@ import com.example.alfaresto_customersapp.databinding.OrderSummaryPaymentMethodB
 import com.example.alfaresto_customersapp.databinding.OrderSummaryTotalPriceBinding
 import com.example.alfaresto_customersapp.domain.model.Address
 import com.example.alfaresto_customersapp.domain.model.Menu
+import com.example.alfaresto_customersapp.domain.model.OrderItem
 import com.example.alfaresto_customersapp.ui.components.listener.OrderSummaryItemListener
 import com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.viewHolder.CheckoutButtonViewHolder
 import com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.viewHolder.OrderAddressViewHolder
@@ -22,6 +23,7 @@ class OrderSummaryAdapter :
 
     private var items: MutableList<Any?> = mutableListOf()
     private var orderSummaryItemListener: OrderSummaryItemListener? = null
+    private var orderItems: List<OrderItem> = listOf()
 
     private val SHOW_ADDRESS = 0
     private val SHOW_ORDER_LIST = 1
