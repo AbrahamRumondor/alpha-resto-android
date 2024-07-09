@@ -25,7 +25,6 @@
 
         <TextView
             android:id="@+id/tv_menu_name"
-            android:text="@string/order_id_1234567890"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/bold"
@@ -34,7 +33,6 @@
 
         <TextView
             android:id="@+id/tv_menu_desc"
-            android:text="@string/add_to_cart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/semibold"
@@ -48,7 +46,6 @@
 
             <TextView
                 android:id="@+id/tv_menu_price"
-                android:text="@string/soft_shell_taco"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"

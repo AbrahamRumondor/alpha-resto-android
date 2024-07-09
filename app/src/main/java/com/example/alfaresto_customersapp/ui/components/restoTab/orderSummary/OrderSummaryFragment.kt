@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -56,7 +57,9 @@ class OrderSummaryFragment : Fragment() {
                     binding.rvOrderSummary.adapter = orderAdapter
                     orderAdapter.submitOrderList(
                         orderSummaryViewModel.makeOrders(
-                            orders = orders, total = countTotalItemAndPrice(orders), address = USER_ADDRESS
+                            orders = orders,
+                            total = countTotalItemAndPrice(orders),
+                            address = USER_ADDRESS
                         )
                     )
                     setOrderSummaryListener(orders, carts)
@@ -130,33 +133,46 @@ class OrderSummaryFragment : Fragment() {
 
             override fun onCheckoutButtonClicked() {
                 if (!checkoutClicked) {
-                    checkoutClicked = true
-                    orderSummaryViewModel.saveOrderInDatabase {
-                        if (it == null) {
-                            checkoutClicked = false
-                            Toast.makeText(
-                                requireContext(),
-                                getString(R.string.failed_checkout_null),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            return@saveOrderInDatabase
-                        } else if (!it) {
-                            Toast.makeText(
-                                requireContext(),
-                                getString(R.string.failed_checkout_false),
-                                Toast.LENGTH_LONG
-                            ).show()
+                    AlertDialog.Builder(requireContext())
+                        .setTitle(getString(R.string.checkout_confirmation))
+                        .setMessage(getString(R.string.checkout_confirmation_message))
+                        .setNegativeButton(getString(R.string.no)) { dialog, _ ->
+                            dialog.dismiss()
                         }
-
-                        val action =
-                            OrderSummaryFragmentDirections.actionOrderSummaryFragmentToThankYouFragment(
-                                it
-                            )
-                        Navigation.findNavController(binding.root).navigate(action)
-                    }
+                        .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                            checkout()
+                        }
+                        .show()
                 }
             }
         })
+    }
+
+    private fun checkout() {
+        checkoutClicked = true
+        orderSummaryViewModel.saveOrderInDatabase {
+            if (it == null) {
+                checkoutClicked = false
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.failed_checkout_null),
+                    Toast.LENGTH_SHORT
+                ).show()
+                return@saveOrderInDatabase
+            } else if (!it) {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.failed_checkout_false),
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+
+            val action =
+                OrderSummaryFragmentDirections.actionOrderSummaryFragmentToThankYouFragment(
+                    it
+                )
+            Navigation.findNavController(binding.root).navigate(action)
+        }
     }
 
     private fun removeMenu(position: Int, menuId: String) {
