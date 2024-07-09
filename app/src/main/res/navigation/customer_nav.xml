@@ -45,16 +45,19 @@
         android:name="com.example.alfaresto_customersapp.ui.components.orderHistoryDetailPage.OrderHistoryDetailFragment"
         android:label="fragment_order_history_detail"
         tools:layout="@layout/order_history_detail">
-        <argument
-            android:name="orderId"
-            app:argType="string" />
         <action
             android:id="@+id/action_order_history_detail_fragment_to_order_history_fragment"
             app:destination="@id/order_history_fragment" />
         <action
             android:id="@+id/action_order_history_detail_fragment_to_track_order_fragment"
             app:destination="@id/track_order_fragment" />
+        <action
+            android:id="@+id/action_order_history_detail_fragment_to_chat_fragment"
+            app:destination="@id/chat_fragment" />
         <argument android:name="orderStatus" />
+        <argument
+            android:name="orderId"
+            app:argType="string" />
     </fragment>
 
     <fragment
@@ -148,7 +151,7 @@
             app:destination="@id/resto_fragment" />
         <action
             android:id="@+id/action_track_order_fragment_to_chat_fragment"
-            app:destination="@id/chat_fragment"/>
+            app:destination="@id/chat_fragment" />
         <action
             android:id="@+id/action_list_all_menu_fragment_to_detail_fragment"
             app:destination="@id/detail_food_fragment" />

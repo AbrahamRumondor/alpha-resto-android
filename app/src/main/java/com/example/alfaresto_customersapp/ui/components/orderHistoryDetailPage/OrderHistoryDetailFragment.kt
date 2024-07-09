@@ -1,6 +1,7 @@
 package com.example.alfaresto_customersapp.ui.components.orderHistoryDetailPage
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.OrderHistoryDetailBinding
 import com.example.alfaresto_customersapp.domain.model.OrderStatus
 import com.example.alfaresto_customersapp.ui.components.orderHistoryDetailPage.adapter.OrderHistoryDetailItemsAdapter
+import com.example.alfaresto_customersapp.ui.components.trackOrder.TrackOrderFragmentDirections
 import com.example.alfaresto_customersapp.utils.user.UserConstants
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -56,7 +58,7 @@ class OrderHistoryDetailFragment : Fragment() {
             btnBack.visibility = View.VISIBLE
             ivToolbarTitle.visibility = View.GONE
             tvToolbarText.visibility = View.VISIBLE
-            tvToolbarText.text = getString(R.string.order_detail)
+            tvToolbarText.text = args.orderStatus
         }
 
         binding.rvOrderItems.let {
@@ -90,15 +92,6 @@ class OrderHistoryDetailFragment : Fragment() {
                     tvOrderDate.text = orderHistory.orderDate
                     tvTotalPrice.text = String.format("Rp %,d", orderHistory.orderTotalPrice)
                     tvUserAddress.text = orderHistory.addressLabel
-                    tvStatus.text = args.orderStatus
-                    orderHistory.orderStatus.name.let { status ->
-                        val colorRes = when (status) {
-                            OrderStatus.DELIVERED.name -> R.drawable.delivered_shape
-                            OrderStatus.ON_DELIVERY.name -> R.drawable.on_delivery_shape
-                            else -> R.drawable.on_process_shape
-                        }
-                        tvStatus.background = AppCompatResources.getDrawable(root.context, colorRes)
-                    }
                 }
 
                 viewModel.fetchOrderItems(orderHistory.orderId)
@@ -111,6 +104,16 @@ class OrderHistoryDetailFragment : Fragment() {
                             tvUserName.text = user.name
                             tvUserPhone.text = user.phone
                         }
+                    }
+
+                    binding.btnChat.setOnClickListener {
+                        Log.d("OrderHistoryDetailFragment", "Chat button clicked")
+                        val action =
+                            OrderHistoryDetailFragmentDirections.actionOrderHistoryDetailFragmentToChatFragment(
+                                orderId = args.orderId
+                            )
+                        Log.d("OrderHistoryDetailFragment", "Navigating to ChatFragment with orderId: ${args.orderId}")
+                        Navigation.findNavController(requireView()).navigate(action)
                     }
                 }
             }
