@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/dimen_10"
     android:orientation="horizontal">
 
     <ImageView
@@ -11,6 +12,7 @@
         android:layout_height="@dimen/dimen_80"
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="@dimen/dimen_10"
+        android:scaleType="centerCrop"
         android:src="@drawable/ic_cart"
         tools:ignore="ContentDescription" />
 
