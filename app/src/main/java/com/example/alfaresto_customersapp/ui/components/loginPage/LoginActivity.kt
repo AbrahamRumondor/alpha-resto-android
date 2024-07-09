@@ -11,6 +11,7 @@ import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.ActivityLoginBinding
 import com.example.alfaresto_customersapp.ui.components.MainActivity
 import com.example.alfaresto_customersapp.ui.components.registerPage.RegisterActivity
+import com.example.alfaresto_customersapp.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -77,16 +78,16 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun saveLoginStatus(isLoggedIn: Boolean) {
-        val sharedPreferences = getSharedPreferences("login", MODE_PRIVATE)
+        val sharedPreferences = getSharedPreferences(Constants.login, MODE_PRIVATE)
         with(sharedPreferences.edit()) {
-            putBoolean("isLoggedIn", isLoggedIn)
+            putBoolean(Constants.isLoggedIn, isLoggedIn)
             apply()
         }
     }
 
     private fun isLoggedIn(): Boolean {
-        val sharedPreferences = getSharedPreferences("login", MODE_PRIVATE)
-        return sharedPreferences.getBoolean("isLoggedIn", false)
+        val sharedPreferences = getSharedPreferences(Constants.login, MODE_PRIVATE)
+        return sharedPreferences.getBoolean(Constants.isLoggedIn, false)
     }
 }
 
