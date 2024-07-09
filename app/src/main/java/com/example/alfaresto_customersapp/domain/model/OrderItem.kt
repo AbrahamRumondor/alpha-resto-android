@@ -5,4 +5,6 @@ data class OrderItem(
     val menuName: String = "",
     val quantity: Int = 0,
     val menuPrice: Int = 0,
+
+    val menuImage: String = "",
 )

@@ -18,17 +18,23 @@ data class OrderItemResponse(
 
     @get:PropertyName("menu_price")
     @set:PropertyName("menu_price")
-    var menuPrice: Int = 0
+    var menuPrice: Int = 0,
+
+    @get:PropertyName("menu_image")
+    @set:PropertyName("menu_image")
+    var menuImage: String = ""
 ) {
-    constructor() : this("", "", 0, 0)
+    constructor() : this("", "", 0, 0, "")
 
     companion object {
         fun transform(orderItemResponse: OrderItemResponse): OrderItem {
-            return OrderItem(
+            val newOrderItem = OrderItem()
+            return newOrderItem.copy(
                 id = orderItemResponse.id,
                 menuName = orderItemResponse.menuName,
                 quantity = orderItemResponse.quantity,
-                menuPrice = orderItemResponse.menuPrice
+                menuPrice = orderItemResponse.menuPrice,
+                menuImage = orderItemResponse.menuImage
             )
         }
 
@@ -38,7 +44,8 @@ data class OrderItemResponse(
                 id = orderItem.id,
                 menuName = orderItem.menuName,
                 quantity = orderItem.quantity,
-                menuPrice = orderItem.menuPrice
+                menuPrice = orderItem.menuPrice,
+                menuImage = orderItem.menuImage
             )
         }
     }

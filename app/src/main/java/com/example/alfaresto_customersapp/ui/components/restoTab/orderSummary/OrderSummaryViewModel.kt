@@ -65,6 +65,7 @@ class OrderSummaryViewModel @Inject constructor(
     init {
         fetchMenus()
         fetchCart()
+        fetchResto()
     }
 
     fun setPayment(method: String) {
@@ -90,12 +91,6 @@ class OrderSummaryViewModel @Inject constructor(
         _orders.value = orderList
 
         return orderList
-    }
-
-    init {
-        fetchMenus()
-        fetchCart()
-        fetchResto()
     }
 
     private fun fetchResto() {
@@ -135,7 +130,7 @@ class OrderSummaryViewModel @Inject constructor(
         }
     }
 
-    fun insertMenu(menuId: String, menuQty: Int) {
+    private fun insertMenu(menuId: String, menuQty: Int) {
         viewModelScope.launch {
             val cartEntity = CartEntity(menuId = menuId, menuQty = menuQty)
             cartUseCase.insertMenu(cartEntity)
@@ -201,14 +196,17 @@ class OrderSummaryViewModel @Inject constructor(
                                 val orderToFirebase = OrderResponse.toResponse(order)
                                 orderUseCase.setOrder(order.id, orderToFirebase)
 
+                                Timber.tag("orsum").d("ORDERS: ${orders.value}")
+
                                 for (i in 1..<TOTAL) {
                                     val menu = _orders.value[i] as Menu
-                                    menu?.let {
+                                    menu.let {
                                         val orderItem = OrderItem(
                                             id = getOrderItemDocumentId(order.id),
                                             menuName = menu.name,
                                             quantity = menu.orderCartQuantity,
-                                            menuPrice = menu.price
+                                            menuPrice = menu.price,
+                                            menuImage = menu.image
                                         )
                                         val orderItemResponse =
                                             OrderItemResponse.toResponse(orderItem)
