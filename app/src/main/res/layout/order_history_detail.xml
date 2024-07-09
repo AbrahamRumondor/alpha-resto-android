@@ -25,7 +25,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_order_detail"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="@dimen/dimen_none">
 
             <TextView
                 android:id="@+id/tv_user_name"
@@ -88,27 +88,6 @@
                 android:layout_marginTop="@dimen/dimen_20"
                 app:layout_constraintTop_toBottomOf="@+id/tv_user_address"
                 tools:layout_editor_absoluteX="30dp" />
-
-            <!--            <LinearLayout-->
-            <!--                android:id="@+id/ll_user_order"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginHorizontal="@dimen/dimen_28"-->
-            <!--                android:layout_marginBottom="@dimen/dimen_20"-->
-            <!--                android:orientation="horizontal"-->
-            <!--                android:padding="@dimen/dimen_10"-->
-            <!--                app:layout_constraintBottom_toTopOf="@+id/divider2"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@+id/divider1">-->
-
-            <!--                <androidx.recyclerview.widget.RecyclerView-->
-            <!--                    android:id="@+id/rv_order_items"-->
-            <!--                    android:layout_width="match_parent"-->
-            <!--                    android:layout_height="wrap_content"-->
-            <!--                    android:layout_margin="@dimen/dimen_5"-->
-            <!--                    tools:listitem="@layout/item_order_detail" />-->
-            <!--            </LinearLayout>-->
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_order_items"
@@ -212,10 +191,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/dimen_30"
+                android:layout_marginTop="@dimen/dimen_20"
                 android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ll_order_id">
 
                 <ImageView
                     android:layout_width="@dimen/dimen_40"
@@ -257,7 +237,36 @@
                         app:layout_constraintTop_toBottomOf="@+id/tv_order_status" />
                 </LinearLayout>
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_complain"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dimen_30"
+                android:layout_marginTop="@dimen/dimen_30"
+                android:fontFamily="@font/semibold"
+                android:gravity="center"
+                android:text="Any issue? Complaint here."
+                android:textColor="@color/mainblack"
+                android:textSize="@dimen/font_14"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ll_order_date" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dimen_30"
+                android:layout_marginVertical="@dimen/dimen_15"
+                android:backgroundTint="@color/red"
+                android:text="Complain"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_complain" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

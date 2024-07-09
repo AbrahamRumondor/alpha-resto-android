@@ -13,4 +13,5 @@
     <color name="border_color_gray">#EEEEEE</color>
     <color name="dark_gray">#9796A1</color>
     <color name="light_gray">#DEDEDE</color>
+    <color name="red">#D30000</color>
 </resources>
