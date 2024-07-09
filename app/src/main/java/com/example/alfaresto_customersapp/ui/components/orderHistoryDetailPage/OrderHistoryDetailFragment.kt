@@ -1,12 +1,10 @@
 package com.example.alfaresto_customersapp.ui.components.orderHistoryDetailPage
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -16,9 +14,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.OrderHistoryDetailBinding
-import com.example.alfaresto_customersapp.domain.model.OrderStatus
 import com.example.alfaresto_customersapp.ui.components.orderHistoryDetailPage.adapter.OrderHistoryDetailItemsAdapter
-import com.example.alfaresto_customersapp.ui.components.trackOrder.TrackOrderFragmentDirections
 import com.example.alfaresto_customersapp.utils.user.UserConstants
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
