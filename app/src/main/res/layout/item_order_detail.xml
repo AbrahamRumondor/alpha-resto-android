@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -10,59 +11,58 @@
         android:id="@+id/iv_menu_image"
         android:layout_width="@dimen/dimen_80"
         android:layout_height="@dimen/dimen_80"
-        android:layout_gravity="center_vertical"
-        android:layout_marginEnd="@dimen/dimen_10"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_cart"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription" />
 
-    <LinearLayout
-        android:layout_width="@dimen/dimen_none"
+    <TextView
+        android:id="@+id/tv_menu_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/bold"
+        android:text="@string/soft_shell_taco"
+        android:textColor="@color/mainblack"
+        android:textSize="@dimen/font_16"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_menu_qty"
+        app:layout_constraintEnd_toStartOf="@+id/tv_menu_qty"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toEndOf="@+id/iv_menu_image"
+        app:layout_constraintTop_toTopOf="@+id/iv_menu_image" />
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/tv_menu_desc"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:fontFamily="@font/semibold"-->
+    <!--        android:text="@string/soft_shell_taco"-->
+    <!--        android:textColor="@color/mainblack"-->
+    <!--        android:textSize="@dimen/font_16" />-->
+
+    <TextView
+        android:id="@+id/tv_menu_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/semibold"
+        android:text="@string/soft_shell_taco"
+        android:textColor="@color/mainblack"
+        android:textSize="@dimen/font_16"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_menu_image"
+        app:layout_constraintStart_toStartOf="@+id/tv_menu_name"
+        app:layout_constraintTop_toTopOf="@+id/tv_menu_qty" />
+
+    <TextView
+        android:id="@+id/tv_menu_qty"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/tv_menu_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/bold"
-            android:textColor="@color/mainblack"
-            android:textSize="@dimen/font_16" />
-
-        <TextView
-            android:id="@+id/tv_menu_desc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/semibold"
-            android:textColor="@color/mainblack"
-            android:textSize="@dimen/font_16" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tv_menu_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:fontFamily="@font/semibold"
-                android:textColor="@color/mainblack"
-                android:textSize="@dimen/font_16" />
-
-            <TextView
-                android:id="@+id/tv_menu_qty"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="@dimen/dimen_120"
-                android:fontFamily="@font/bold"
-                android:textColor="@color/mainblack"
-                android:textSize="@dimen/font_16" />
-
-        </LinearLayout>
-    </LinearLayout>
-</LinearLayout>
+        android:fontFamily="@font/bold"
+        android:text="@string/soft_shell_taco"
+        android:textColor="@color/mainblack"
+        android:textSize="@dimen/font_16"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
