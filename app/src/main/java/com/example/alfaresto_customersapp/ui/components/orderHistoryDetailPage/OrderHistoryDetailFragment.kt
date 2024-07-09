@@ -1,5 +1,7 @@
 package com.example.alfaresto_customersapp.ui.components.orderHistoryDetailPage
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -46,6 +48,7 @@ class OrderHistoryDetailFragment : Fragment() {
         onEmbeddedBackPressed()
         chatButtonSetup()
         loadData()
+        complainButtonHandle()
         onStatusChangeToDelivery()
     }
 
@@ -87,6 +90,32 @@ class OrderHistoryDetailFragment : Fragment() {
                     args.orderId
                 )
             Navigation.findNavController(binding.root).navigate(action)
+        }
+    }
+
+    private fun complainButtonHandle() {
+        val statusOrder = args.orderStatus
+        val orderId = args.orderId
+        binding.apply {
+            if (statusOrder == "Delivered") {
+                tvComplain.visibility = View.VISIBLE
+                btnComplain.visibility = View.VISIBLE
+                btnComplain.setOnClickListener {
+                    val intent = Intent(Intent.ACTION_SENDTO).apply {
+                        data =
+                            Uri.parse("mailto:")
+                        putExtra(
+                            Intent.EXTRA_EMAIL,
+                            arrayOf("kelshairaa@gmail.com")
+                        )
+                        putExtra(
+                            Intent.EXTRA_SUBJECT,
+                            "Keluhan tentang Pesanan. Order ID: #$orderId"
+                        )
+                    }
+                    startActivity(intent)
+                }
+            }
         }
     }
 
