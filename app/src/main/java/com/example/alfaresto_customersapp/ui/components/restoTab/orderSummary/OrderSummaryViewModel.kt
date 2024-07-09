@@ -25,6 +25,7 @@ import com.example.alfaresto_customersapp.domain.usecase.shipment.ShipmentUseCas
 import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase
 import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_ADDRESS
 import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_TOKEN
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -62,6 +63,9 @@ class OrderSummaryViewModel @Inject constructor(
     private val _restoToken: MutableStateFlow<String> = MutableStateFlow("")
     val restoToken: StateFlow<String> = _restoToken
 
+    private val _restoClosedHour: MutableStateFlow<String> = MutableStateFlow("")
+    val restoClosedHour: StateFlow<String> = _restoClosedHour
+
     init {
         fetchMenus()
         fetchCart()
@@ -96,11 +100,16 @@ class OrderSummaryViewModel @Inject constructor(
     private fun fetchResto() {
         viewModelScope.launch {
             try {
+                Timber.tag("closing").d("Fetching resto")
                 val restoID = restaurantUseCase.getRestaurantId()
                 _restoID.value = restoID
 
                 val restoToken = restaurantUseCase.getRestaurantToken()
                 _restoToken.value = restoToken
+
+                val restoClosedHour = restaurantUseCase.getRestaurantClosedHour()
+                _restoClosedHour.value = restoClosedHour
+                Timber.tag("closing").d("Closing time: $restoClosedHour")
             } catch (e: Exception) {
                 Timber.tag("RESTO").e("Error fetching resto: %s", e.message)
             }
@@ -276,8 +285,12 @@ class OrderSummaryViewModel @Inject constructor(
                     Timber.tag("test").d("FCM FAILED")
                 }
             }
-
         }
     }
 
+    fun getCurrentTime(): String {
+        val date = Timestamp.now().toDate().toString()
+        val time = date.substring(11, 16)
+        return time
+    }
 }

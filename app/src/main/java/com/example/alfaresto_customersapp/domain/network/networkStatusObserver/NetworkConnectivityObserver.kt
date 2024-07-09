@@ -3,11 +3,9 @@ package com.example.alfaresto_customersapp.domain.network.networkStatusObserver
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
-import com.example.alfaresto_customersapp.domain.network.networkStatusObserver.ConnectivityObserver
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton

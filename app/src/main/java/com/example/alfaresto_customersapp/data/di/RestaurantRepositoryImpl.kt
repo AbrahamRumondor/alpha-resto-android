@@ -54,4 +54,19 @@ class RestaurantRepositoryImpl @Inject constructor(
             null
         }
     }
+
+    override suspend fun getRestaurantClosedHour(): String {
+        return try {
+            val snapshot = restosRef.get().await()
+            val resto = snapshot.toObjects(RestaurantResponse::class.java)
+                .firstOrNull()
+
+            val closingTime = resto?.let { RestaurantResponse.transform(it).closingTime }
+
+            closingTime.toString()
+        } catch (e: Exception) {
+            Timber.tag("RestaurantRepositoryImpl").e(e, "Error fetching restaurant")
+            ""
+        }
+    }
 }
