@@ -195,6 +195,8 @@ class TrackOrderFragment : Fragment() {
     private fun setLocationUpdatesListener(home: LatLng) {
         trackOrderViewModel.getLocationUpdates(object : RealtimeLocationCallback {
             override fun onSuccess(driverLatLng: LatLng) {
+                zoomToLatLng(home, driverLatLng)
+
                 setOnFocusLocationButtonClickListener(home, driverLatLng)
                 setRouting(home = home, driver = driverLatLng)
             }

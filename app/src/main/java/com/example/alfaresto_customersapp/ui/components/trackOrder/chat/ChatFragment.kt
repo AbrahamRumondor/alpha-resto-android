@@ -62,15 +62,7 @@ class ChatFragment : Fragment() {
             btnLogout.visibility = View.GONE
             btnBack.visibility = View.VISIBLE
             btnBack.setOnClickListener {
-                if (
-                    findNavController().currentBackStack.value.size > 1
-                ) {
-                    findNavController().popBackStack()
-                    return@setOnClickListener
-                } else {
-                    Navigation.findNavController(binding.root)
-                        .navigate(R.id.action_chat_fragment_to_order_history_fragment)
-                }
+                findNavController().navigateUp()
             }
             onEmbeddedBackPressed()
         }
@@ -106,7 +98,7 @@ class ChatFragment : Fragment() {
     }
 
     private fun setConnectionBehaviour() {
-        if (NetworkUtils.isConnectedToNetwork.value == false){
+        if (NetworkUtils.isConnectedToNetwork.value == false) {
             binding.inclInternet.root.visibility = View.VISIBLE
             binding.clBase.visibility = View.GONE
             Toast.makeText(requireContext(), "No internet", Toast.LENGTH_SHORT).show()
@@ -120,15 +112,7 @@ class ChatFragment : Fragment() {
         val callback = object : OnBackPressedCallback(true) {
             @SuppressLint("RestrictedApi")
             override fun handleOnBackPressed() {
-                if (
-                    findNavController().currentBackStack.value.size > 1
-                ) {
-                    findNavController().popBackStack()
-                    return
-                } else {
-                    Navigation.findNavController(binding.root)
-                        .navigate(R.id.action_chat_fragment_to_order_history_fragment)
-                }
+                findNavController().navigateUp()
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
