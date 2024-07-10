@@ -9,7 +9,8 @@ data class OrderHistory(
     val orderDate: String = "",
     val orderTotalPrice: Int = 0,
     val addressLabel: String = "",
-    val orderStatus: OrderStatus = OrderStatus.ON_PROCESS
+    val orderStatus: OrderStatus = OrderStatus.ON_PROCESS,
+    val orderNotes: String = ""
 ) {
     fun formattedPrice(): String {
         return "Rp ${

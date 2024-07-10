@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.alfaresto_customersapp.databinding.OrderSummaryAddressBinding
 import com.example.alfaresto_customersapp.databinding.OrderSummaryCheckoutButtonBinding
 import com.example.alfaresto_customersapp.databinding.OrderSummaryItemBinding
+import com.example.alfaresto_customersapp.databinding.OrderSummaryNotesBinding
 import com.example.alfaresto_customersapp.databinding.OrderSummaryPaymentMethodBinding
 import com.example.alfaresto_customersapp.databinding.OrderSummaryTotalPriceBinding
 import com.example.alfaresto_customersapp.domain.model.Address
@@ -14,6 +15,7 @@ import com.example.alfaresto_customersapp.ui.components.listener.OrderSummaryIte
 import com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.viewHolder.CheckoutButtonViewHolder
 import com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.viewHolder.OrderAddressViewHolder
 import com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.viewHolder.OrderListViewHolder
+import com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.viewHolder.OrderNotesViewHolder
 import com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.viewHolder.OrderTotalViewHolder
 import com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.viewHolder.PaymentMethodViewHolder
 
@@ -27,7 +29,8 @@ class OrderSummaryAdapter :
     private val SHOW_ORDER_LIST = 1
     private val SHOW_ORDER_TOTAL = 2
     private val SHOW_PAYMENT_METHOD = 3
-    private val SHOW_CHECKOUT_BUTTON = 4
+    private val SHOW_NOTES = 4
+    private val SHOW_CHECKOUT_BUTTON = 5
 
     override fun getItemViewType(position: Int): Int {
         return when (items[position]) {
@@ -36,6 +39,7 @@ class OrderSummaryAdapter :
             is Pair<*, *> -> SHOW_ORDER_TOTAL
             is String -> when (items[position] as String) {
                 "payment_method" -> SHOW_PAYMENT_METHOD
+                "notes" -> SHOW_NOTES
                 "checkout" -> SHOW_CHECKOUT_BUTTON
                 else -> throw IllegalArgumentException("Invalid string type")
             }
@@ -50,7 +54,9 @@ class OrderSummaryAdapter :
         val bindingOrderList = OrderSummaryItemBinding.inflate(inflater, parent, false)
         val bindingOrderTotal = OrderSummaryTotalPriceBinding.inflate(inflater, parent, false)
         val bindingPaymentMethod = OrderSummaryPaymentMethodBinding.inflate(inflater, parent, false)
-        val bindingCheckoutButton = OrderSummaryCheckoutButtonBinding.inflate(inflater, parent, false)
+        val bindingNotes = OrderSummaryNotesBinding.inflate(inflater, parent, false)
+        val bindingCheckoutButton =
+            OrderSummaryCheckoutButtonBinding.inflate(inflater, parent, false)
 
         return when (viewType) {
             SHOW_ADDRESS -> OrderAddressViewHolder(
@@ -66,6 +72,8 @@ class OrderSummaryAdapter :
                 orderSummaryItemListener,
                 viewType
             )
+
+            SHOW_NOTES -> OrderNotesViewHolder(bindingNotes, orderSummaryItemListener)
 
             SHOW_CHECKOUT_BUTTON -> CheckoutButtonViewHolder(
                 bindingCheckoutButton,
@@ -83,6 +91,7 @@ class OrderSummaryAdapter :
             is Pair<*, *> -> (holder as OrderTotalViewHolder).bind(item as Pair<Int, Int>)
             is String -> when (item) {
                 "payment_method" -> (holder as PaymentMethodViewHolder).bind()
+                "notes" -> (holder as OrderNotesViewHolder).bind()
                 "checkout" -> (holder as CheckoutButtonViewHolder).bind()
             }
         }

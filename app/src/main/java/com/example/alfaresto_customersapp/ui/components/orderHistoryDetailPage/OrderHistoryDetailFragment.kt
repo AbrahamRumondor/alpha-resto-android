@@ -128,6 +128,7 @@ class OrderHistoryDetailFragment : Fragment() {
                     tvOrderDate.text = orderHistory.orderDate
                     tvTotalPrice.text = String.format("Rp %,d", orderHistory.orderTotalPrice)
                     tvUserAddress.text = orderHistory.addressLabel
+                    tvNotesText.text = orderHistory.orderNotes
                 }
 
                 viewModel.fetchOrderItems(orderHistory.orderId)

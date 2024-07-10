@@ -51,9 +51,11 @@ data class OrderResponse(
 
     val latitude: Double = 0.0,
     val longitude: Double = 0.0,
+
+    val notes: String = ""
 ) {
 
-    constructor() : this("", "", "", "", "", "", Date(), "", 0, "", "", 0.0, 0.0)
+    constructor() : this("", "", "", "", "", "", Date(), "", 0, "", "", 0.0, 0.0, "")
 
     companion object {
         fun transform(orderResponse: OrderResponse): Order {
@@ -70,7 +72,8 @@ data class OrderResponse(
                 longitude = orderResponse.longitude,
                 userId = orderResponse.userId,
                 userToken = orderResponse.userToken,
-                restoToken = orderResponse.restoToken
+                restoToken = orderResponse.restoToken,
+                notes = orderResponse.notes
             )
         }
 
@@ -89,7 +92,8 @@ data class OrderResponse(
                 longitude = order.longitude,
                 userId = order.userId,
                 userToken = order.userToken,
-                restoToken = order.restoToken
+                restoToken = order.restoToken,
+                notes = order.notes
             )
         }
     }

@@ -21,6 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
 class OrderSummaryFragment : Fragment() {
@@ -129,6 +130,11 @@ class OrderSummaryFragment : Fragment() {
                         rgPaymentMethod.visibility = View.GONE
                     }
                 }
+            }
+
+            override fun onNotesFilled(notes: String) {
+                Timber.tag("notes fr").d("notes: $notes")
+                orderSummaryViewModel.setNotes(notes)
             }
 
             override fun onCheckoutButtonClicked() {

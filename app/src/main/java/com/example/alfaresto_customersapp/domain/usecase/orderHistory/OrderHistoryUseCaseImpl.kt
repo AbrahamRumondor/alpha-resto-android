@@ -45,7 +45,8 @@ class OrderHistoryUseCaseImpl @Inject constructor(
                                 else -> OrderStatus.ON_PROCESS
                             },
                             orderId = order.id,
-                            id = shipment?.id ?: ""
+                            id = shipment?.id ?: "",
+                            orderNotes = order.notes
                         )
                     }
 

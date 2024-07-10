@@ -73,7 +73,12 @@ class OrderSummaryViewModel @Inject constructor(
     }
 
     fun setPayment(method: String) {
-        _orders.value[orders.value.size - 2] = method
+        _orders.value[orders.value.size - 3] = method
+    }
+
+    fun setNotes(notes: String) {
+        Timber.tag("notes setvm").d("Notes: $notes")
+        _orders.value[orders.value.size - 2] = notes
     }
 
     fun removeOrder(position: Int, menuId: String): Int {
@@ -88,7 +93,7 @@ class OrderSummaryViewModel @Inject constructor(
         address: Address?, orders: List<Menu>, total: Pair<Int, Int>
     ): MutableList<Any?> {
         val orderList = mutableListOf(
-            address, total, "payment_method", "checkout"
+            address, total, "payment_method", "notes", "checkout"
         )
 
         orderList.addAll(1, orders)
@@ -175,13 +180,18 @@ class OrderSummaryViewModel @Inject constructor(
         getUserFromDB(object : FirestoreCallback {
             override fun onSuccess(user: User?) {
 
-                val PAYMENT_METHOD = _orders.value.size - 2
-                val TOTAL = orders.value.size - 3
+                val NOTES = orders.value.size - 2
+                val PAYMENT_METHOD = orders.value.size - 3
+                val TOTAL = orders.value.size - 4
+
+                val notes =
+                    if (_orders.value[NOTES] != "notes") _orders.value[NOTES].toString() else "gada"
+//                val notes = orders.value[NOTES].toString()
 
                 val payment =
-                    if (_orders.value[PAYMENT_METHOD].toString() == "COD" || _orders.value[PAYMENT_METHOD].toString() == "GOPAY") _orders.value[PAYMENT_METHOD].toString() else null
+                    if (orders.value[PAYMENT_METHOD].toString() == "COD" || orders.value[PAYMENT_METHOD].toString() == "GOPAY") orders.value[PAYMENT_METHOD].toString() else null
 
-                val total = _orders.value[TOTAL] as Pair<Int, Int>
+                val total = orders.value[TOTAL] as Pair<Int, Int>
 
                 if (!payment.isNullOrEmpty() && _orders.value.size > 4 && user != null && USER_ADDRESS != null) {
                     db.runTransaction {
@@ -200,12 +210,11 @@ class OrderSummaryViewModel @Inject constructor(
                                     latitude = address.latitude,
                                     longitude = address.longitude,
                                     userToken = token,
-                                    restoToken = restoToken.value
+                                    restoToken = restoToken.value,
+                                    notes = notes
                                 )
                                 val orderToFirebase = OrderResponse.toResponse(order)
                                 orderUseCase.setOrder(order.id, orderToFirebase)
-
-                                Timber.tag("orsum").d("ORDERS: ${orders.value}")
 
                                 for (i in 1..<TOTAL) {
                                     val menu = _orders.value[i] as Menu
@@ -240,6 +249,7 @@ class OrderSummaryViewModel @Inject constructor(
                                 viewModelScope.launch {
                                     cartUseCase.deleteAllMenus()
                                 }
+
                                 onResult(true)
                             }
                         }

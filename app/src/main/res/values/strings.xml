@@ -125,4 +125,6 @@
     <string name="logout_confirmation_message">Are you sure you want to logout?</string>
     <string name="logout">Logout</string>
     <string name="cancel">Cancel</string>
+    <string name="notes_hint">Add special instructions for your order</string>
+    <string name="notes">Order Notes :</string>
 </resources>
