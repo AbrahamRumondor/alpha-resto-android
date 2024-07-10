@@ -1,4 +1,4 @@
-package com.example.alfaresto_customersapp.ui.components.restoTab.address.addNewAddress
+package com.example.alfaresto_customersapp.ui.components.address.addNewAddress
 
 import android.util.Log
 import android.widget.Toast
@@ -11,6 +11,7 @@ import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.data.remote.response.RouteResponse
 import com.example.alfaresto_customersapp.domain.error.OsrmCallback
 import com.example.alfaresto_customersapp.domain.model.Address
+import com.example.alfaresto_customersapp.domain.network.NetworkUtils
 import com.example.alfaresto_customersapp.domain.repository.OsrmApiRepository
 import com.example.alfaresto_customersapp.domain.usecase.resto.RestaurantUseCase
 import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase
@@ -73,6 +74,16 @@ class AddNewAddressViewModel @Inject constructor(
             Toast.makeText(
                 firebaseContext,
                 firebaseContext.getString(R.string.failed_create_address),
+                Toast.LENGTH_LONG
+            ).show()
+            onResult(false)
+            return
+        }
+
+        if (NetworkUtils.isConnectedToNetwork.value == false) {
+            Toast.makeText(
+                firebaseContext,
+                firebaseContext.getString(R.string.no_internet),
                 Toast.LENGTH_LONG
             ).show()
             onResult(false)

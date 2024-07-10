@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -16,6 +17,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.OrderHistoryDetailBinding
+import com.example.alfaresto_customersapp.domain.network.NetworkUtils
 import com.example.alfaresto_customersapp.ui.components.orderHistoryDetailPage.adapter.OrderHistoryDetailItemsAdapter
 import com.example.alfaresto_customersapp.utils.user.UserConstants
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,6 +52,22 @@ class OrderHistoryDetailFragment : Fragment() {
         loadData()
         complainButtonHandle()
         onStatusChangeToDelivery()
+
+        setConnectionBehaviour()
+        binding.inclInternet.btnInetTryAgain.setOnClickListener {
+            setConnectionBehaviour()
+        }
+    }
+
+    private fun setConnectionBehaviour() {
+        if (NetworkUtils.isConnectedToNetwork.value == false){
+            binding.inclInternet.root.visibility = View.VISIBLE
+            binding.clBase.visibility = View.GONE
+            Toast.makeText(requireContext(), "No internet", Toast.LENGTH_SHORT).show()
+        } else {
+            binding.inclInternet.root.visibility = View.GONE
+            binding.clBase.visibility = View.VISIBLE
+        }
     }
 
     private fun setupView() {
@@ -70,14 +88,28 @@ class OrderHistoryDetailFragment : Fragment() {
 
     private fun setupBackBtn() {
         binding.toolbar.btnBack.setOnClickListener {
-            findNavController().popBackStack(R.id.order_history_fragment, false)
+            if (
+                findNavController().popBackStack(R.id.order_history_fragment, false)
+            ) {
+                return@setOnClickListener
+            } else {
+                Navigation.findNavController(binding.root)
+                    .navigate(R.id.action_order_history_detail_fragment_to_order_history_fragment)
+            }
         }
     }
 
     private fun onEmbeddedBackPressed() {
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                findNavController().popBackStack(R.id.order_history_fragment, false)
+                if (
+                    findNavController().popBackStack(R.id.order_history_fragment, false)
+                ) {
+                    return
+                } else {
+                    Navigation.findNavController(binding.root)
+                        .navigate(R.id.action_order_history_detail_fragment_to_order_history_fragment)
+                }
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
@@ -128,6 +160,7 @@ class OrderHistoryDetailFragment : Fragment() {
                     tvOrderDate.text = orderHistory.orderDate
                     tvTotalPrice.text = String.format("Rp %,d", orderHistory.orderTotalPrice)
                     tvUserAddress.text = orderHistory.addressLabel
+                    tvNotesText.text = orderHistory.orderNotes
                 }
 
                 viewModel.fetchOrderItems(orderHistory.orderId)
@@ -147,15 +180,17 @@ class OrderHistoryDetailFragment : Fragment() {
     }
 
     private fun onStatusChangeToDelivery() {
-        UserConstants.SHIPMENT_STATUS.observe(viewLifecycleOwner) {
-            if (it == "On Delivery") {
-                val action =
-                    OrderHistoryDetailFragmentDirections.actionOrderHistoryDetailFragmentToTrackOrderFragment(
-                        orderId = args.orderId,
-                        shipmentId = it
-                    )
-                Navigation.findNavController(binding.root)
-                    .navigate(action)
+        UserConstants.SHIPMENT.observe(viewLifecycleOwner) {
+            if (it.orderID == args.orderId) {
+                if (it.statusDelivery == "On Delivery") {
+                    val action =
+                        OrderHistoryDetailFragmentDirections.actionOrderHistoryDetailFragmentToTrackOrderFragment(
+                            orderId = args.orderId,
+//                        shipmentId = it
+                        )
+                    Navigation.findNavController(binding.root)
+                        .navigate(action)
+                }
             }
         }
     }

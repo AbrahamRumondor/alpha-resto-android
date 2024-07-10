@@ -1,4 +1,4 @@
-package com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.viewHolder
+package com.example.alfaresto_customersapp.ui.components.orderSummary.viewHolder
 
 import androidx.recyclerview.widget.RecyclerView
 import com.example.alfaresto_customersapp.databinding.OrderSummaryCheckoutButtonBinding

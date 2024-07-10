@@ -5,7 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".ui.components.restoTab.orderSummary.OrderSummaryFragment">
+    tools:context=".ui.components.orderSummary.OrderSummaryFragment">
+
+    <include
+        android:id="@+id/incl_internet"
+        layout="@layout/no_internet_connection"
+        android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_order_summary"

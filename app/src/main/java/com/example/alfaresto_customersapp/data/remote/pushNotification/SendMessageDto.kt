@@ -7,5 +7,6 @@ data class SendMessageDto(
 
 data class NotificationBody(
     val title: String,
-    val body: String
+    val body: String,
+    val link: String
 )

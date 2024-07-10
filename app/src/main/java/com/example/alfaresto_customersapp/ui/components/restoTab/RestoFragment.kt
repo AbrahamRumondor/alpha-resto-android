@@ -28,6 +28,7 @@ import com.example.alfaresto_customersapp.databinding.BsdLocationPermissionBindi
 import com.example.alfaresto_customersapp.databinding.FragmentRestoBinding
 import com.example.alfaresto_customersapp.domain.error.FirestoreCallback
 import com.example.alfaresto_customersapp.domain.model.User
+import com.example.alfaresto_customersapp.domain.network.NetworkUtils
 import com.example.alfaresto_customersapp.ui.components.listener.MenuListener
 import com.example.alfaresto_customersapp.ui.components.loginPage.LoginActivity
 import com.example.alfaresto_customersapp.ui.components.restoTab.adapter.RestoAdapter
@@ -156,17 +157,34 @@ class RestoFragment : Fragment() {
     private fun setRestoAdapterButtons(cart: List<CartEntity>?) {
         adapter.setItemListener(object : MenuListener {
             override fun onAddItemClicked(position: Int, menuId: String) {
-                val item: CartEntity? = cart?.find { it.menuId == menuId }
-                viewModel.addOrderQuantity(menuId, item)
-                adapter.notifyItemChanged(position)
+                if (!noInternetConnection()) {
+                    val item: CartEntity? = cart?.find { it.menuId == menuId }
+                    viewModel.addOrderQuantity(menuId, item)
+                    adapter.notifyItemChanged(position)
+                }
             }
 
             override fun onDecreaseItemClicked(position: Int, menuId: String) {
-                val item: CartEntity? = cart?.find { it.menuId == menuId }
-                viewModel.decreaseOrderQuantity(menuId, item)
-                adapter.notifyItemChanged(position)
+                if (!noInternetConnection()) {
+                    val item: CartEntity? = cart?.find { it.menuId == menuId }
+                    viewModel.decreaseOrderQuantity(menuId, item)
+                    adapter.notifyItemChanged(position)
+                }
             }
         })
+    }
+
+    fun noInternetConnection(): Boolean {
+         return if (NetworkUtils.isConnectedToNetwork.value == false) {
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.no_internet),
+                Toast.LENGTH_SHORT
+            ).show()
+            true
+        } else {
+             false
+         }
     }
 
     private fun logoutValidation() {

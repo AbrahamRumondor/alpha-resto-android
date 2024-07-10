@@ -5,80 +5,92 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".ui.components.restoTab.listAllMenu.ListAllMenuFragment">
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/tv_toolbar_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="@font/semibold"
-            android:textColor="@color/black"
-            android:textSize="@dimen/font_24" />
-
-        <RelativeLayout
-            android:id="@+id/rl_cart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginEnd="@dimen/dimen_12">
-
-            <ImageButton
-                android:id="@+id/btn_cart"
-                android:layout_width="@dimen/dimen_50"
-                android:layout_height="@dimen/dimen_50"
-                android:background="@android:color/transparent"
-                android:contentDescription="@string/cartlogo"
-                android:src="@drawable/ic_cart" />
-
-            <TextView
-                android:id="@+id/tv_cart_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@id/btn_cart"
-                android:layout_alignEnd="@id/btn_cart"
-                android:background="@drawable/badge_circle"
-                android:paddingHorizontal="@dimen/dimen_10"
-                android:text="@string/_0"
-                android:textColor="@color/black"
-                android:textSize="@dimen/font_12" />
-
-        </RelativeLayout>
-
-
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/sv_search_menu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dimen_16"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-    </androidx.appcompat.widget.Toolbar>
+    tools:context=".ui.components.listAllMenu.ListAllMenuFragment">
 
     <include
-        android:id="@+id/loading_layout"
-        layout="@layout/loading_layout" />
+        android:id="@+id/incl_internet"
+        layout="@layout/no_internet_connection"
+        android:visibility="gone" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_list_all_menu"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/dimen_none"
-        android:layout_marginHorizontal="@dimen/dimen_15"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:spanCount="2"
-        tools:listitem="@layout/all_menu_item" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_base"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tv_toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/semibold"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_24" />
+
+            <RelativeLayout
+                android:id="@+id/rl_cart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/dimen_12">
+
+                <ImageButton
+                    android:id="@+id/btn_cart"
+                    android:layout_width="@dimen/dimen_50"
+                    android:layout_height="@dimen/dimen_50"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/cartlogo"
+                    android:src="@drawable/ic_cart" />
+
+                <TextView
+                    android:id="@+id/tv_cart_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/btn_cart"
+                    android:layout_alignEnd="@id/btn_cart"
+                    android:background="@drawable/badge_circle"
+                    android:paddingHorizontal="@dimen/dimen_10"
+                    android:text="@string/_0"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/font_12" />
+
+            </RelativeLayout>
+
+
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/sv_search_menu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dimen_16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <include
+            android:id="@+id/loading_layout"
+            layout="@layout/loading_layout" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_list_all_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dimen_none"
+            android:layout_marginHorizontal="@dimen/dimen_15"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:spanCount="2"
+            tools:listitem="@layout/all_menu_item" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

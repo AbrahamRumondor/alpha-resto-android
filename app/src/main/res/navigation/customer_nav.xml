@@ -5,6 +5,8 @@
     android:id="@+id/customer_nav"
     app:startDestination="@id/resto_fragment">
 
+
+
     <fragment
         android:id="@+id/resto_fragment"
         android:name="com.example.alfaresto_customersapp.ui.components.restoTab.RestoFragment"
@@ -54,15 +56,19 @@
         <action
             android:id="@+id/action_order_history_detail_fragment_to_chat_fragment"
             app:destination="@id/chat_fragment" />
-        <argument android:name="orderStatus" />
+        <argument android:name="orderStatus"
+            app:argType="string" />
         <argument
             android:name="orderId"
             app:argType="string" />
+        <deepLink
+            android:id="@+id/dl_to_detail_order"
+            app:uri="example://customers/orderdetail/{orderStatus}/{orderId}" />
     </fragment>
 
     <fragment
         android:id="@+id/order_summary_fragment"
-        android:name="com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.OrderSummaryFragment"
+        android:name="com.example.alfaresto_customersapp.ui.components.orderSummary.OrderSummaryFragment"
         android:label="fragment_order_summary"
         tools:layout="@layout/fragment_order_summary">
         <action
@@ -88,7 +94,7 @@
 
     <fragment
         android:id="@+id/address_list"
-        android:name="com.example.alfaresto_customersapp.ui.components.restoTab.address.addressList.AddressListFragment"
+        android:name="com.example.alfaresto_customersapp.ui.components.address.addressList.AddressListFragment"
         android:label="fragment_address_list"
         tools:layout="@layout/fragment_address_list">
         <action
@@ -98,13 +104,13 @@
 
     <fragment
         android:id="@+id/add_new_address_fragment"
-        android:name="com.example.alfaresto_customersapp.ui.components.restoTab.address.addNewAddress.AddNewAddressFragment"
+        android:name="com.example.alfaresto_customersapp.ui.components.address.addNewAddress.AddNewAddressFragment"
         android:label="fragment_add_new_address"
         tools:layout="@layout/fragment_add_new_address" />
 
     <fragment
         android:id="@+id/list_all_menu_fragment"
-        android:name="com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu.ListAllMenuFragment"
+        android:name="com.example.alfaresto_customersapp.ui.components.listAllMenu.ListAllMenuFragment"
         android:label="fragment_list_all_menu"
         tools:layout="@layout/fragment_list_all_menu">
 
@@ -158,12 +164,12 @@
         <argument
             android:name="orderId"
             app:argType="string" />
-        <argument
-            android:name="shipmentId"
-            app:argType="string" />
         <action
             android:id="@+id/action_track_order_fragment_to_order_history_detail_fragment"
             app:destination="@id/order_history_detail_fragment" />
+        <deepLink
+            android:id="@+id/dl_to_track"
+            app:uri="example://customers/trackorder/{orderId}" />
     </fragment>
 
     <fragment
@@ -196,6 +202,12 @@
         <argument
             android:name="orderId"
             app:argType="string" />
+        <deepLink
+            android:id="@+id/dl_to_chat"
+            app:uri="example://customers/chat/{orderId}" />
+        <action
+            android:id="@+id/action_chat_fragment_to_order_history_fragment"
+            app:destination="@id/order_history_fragment" />
     </fragment>
     <fragment
         android:id="@+id/thank_you_fragment"

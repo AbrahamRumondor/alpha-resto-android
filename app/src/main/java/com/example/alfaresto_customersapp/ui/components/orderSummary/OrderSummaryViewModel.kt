@@ -1,7 +1,8 @@
-package com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary
+package com.example.alfaresto_customersapp.ui.components.orderSummary
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.data.model.OrderItemResponse
 import com.example.alfaresto_customersapp.data.model.OrderResponse
@@ -16,6 +17,7 @@ import com.example.alfaresto_customersapp.domain.model.Order
 import com.example.alfaresto_customersapp.domain.model.OrderItem
 import com.example.alfaresto_customersapp.domain.model.Shipment
 import com.example.alfaresto_customersapp.domain.model.User
+import com.example.alfaresto_customersapp.domain.network.NetworkUtils
 import com.example.alfaresto_customersapp.domain.repository.FcmApiRepository
 import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
 import com.example.alfaresto_customersapp.domain.usecase.menu.MenuUseCase
@@ -73,7 +75,12 @@ class OrderSummaryViewModel @Inject constructor(
     }
 
     fun setPayment(method: String) {
-        _orders.value[orders.value.size - 2] = method
+        _orders.value[orders.value.size - 3] = method
+    }
+
+    fun setNotes(notes: String) {
+        Timber.tag("notes setvm").d("Notes: $notes")
+        _orders.value[orders.value.size - 2] = notes
     }
 
     fun removeOrder(position: Int, menuId: String): Int {
@@ -88,7 +95,7 @@ class OrderSummaryViewModel @Inject constructor(
         address: Address?, orders: List<Menu>, total: Pair<Int, Int>
     ): MutableList<Any?> {
         val orderList = mutableListOf(
-            address, total, "payment_method", "checkout"
+            address, total, "payment_method", "notes", "checkout"
         )
 
         orderList.addAll(1, orders)
@@ -171,17 +178,27 @@ class OrderSummaryViewModel @Inject constructor(
     }
 
     // TODO 1:userID,addressID,restoID (fetch dr firestore) | 2:menuID (fetch dari firestore)
-    fun saveOrderInDatabase(onResult: (msg: Boolean?) -> Unit) {
+    fun saveOrderInDatabase(onResult: (msg: Int?) -> Unit) {
         getUserFromDB(object : FirestoreCallback {
             override fun onSuccess(user: User?) {
 
-                val PAYMENT_METHOD = _orders.value.size - 2
-                val TOTAL = orders.value.size - 3
+                val NOTES = orders.value.size - 2
+                val PAYMENT_METHOD = orders.value.size - 3
+                val TOTAL = orders.value.size - 4
+
+                val notes =
+                    if (_orders.value[NOTES] != "notes") _orders.value[NOTES].toString() else "gada"
+//                val notes = orders.value[NOTES].toString()
 
                 val payment =
-                    if (_orders.value[PAYMENT_METHOD].toString() == "COD" || _orders.value[PAYMENT_METHOD].toString() == "GOPAY") _orders.value[PAYMENT_METHOD].toString() else null
+                    if (orders.value[PAYMENT_METHOD].toString() == "COD" || orders.value[PAYMENT_METHOD].toString() == "GOPAY") orders.value[PAYMENT_METHOD].toString() else null
 
-                val total = _orders.value[TOTAL] as Pair<Int, Int>
+                val total = orders.value[TOTAL] as Pair<Int, Int>
+
+                if (NetworkUtils.isConnectedToNetwork.value == false) {
+                    onResult(R.string.no_internet)
+                    return
+                }
 
                 if (!payment.isNullOrEmpty() && _orders.value.size > 4 && user != null && USER_ADDRESS != null) {
                     db.runTransaction {
@@ -200,12 +217,11 @@ class OrderSummaryViewModel @Inject constructor(
                                     latitude = address.latitude,
                                     longitude = address.longitude,
                                     userToken = token,
-                                    restoToken = restoToken.value
+                                    restoToken = restoToken.value,
+                                    notes = notes
                                 )
                                 val orderToFirebase = OrderResponse.toResponse(order)
                                 orderUseCase.setOrder(order.id, orderToFirebase)
-
-                                Timber.tag("orsum").d("ORDERS: ${orders.value}")
 
                                 for (i in 1..<TOTAL) {
                                     val menu = _orders.value[i] as Menu
@@ -228,7 +244,7 @@ class OrderSummaryViewModel @Inject constructor(
                                 viewModelScope.launch {
                                     shipmentUseCase.createShipment(
                                         Shipment(
-                                            orderID = orderId, statusDelivery = "On Process"
+                                            orderID = orderId, statusDelivery = "On Process", userId = user.id
                                         )
                                     )
                                 }
@@ -240,17 +256,17 @@ class OrderSummaryViewModel @Inject constructor(
                                 viewModelScope.launch {
                                     cartUseCase.deleteAllMenus()
                                 }
-                                onResult(true)
+                                onResult(null)
                             }
                         }
                     }
                 } else {
-                    onResult(null)
+                    onResult(R.string.failed_checkout_null)
                 }
             }
 
             override fun onFailure(exception: Exception) {
-                onResult(false)
+                onResult(R.string.failed_checkout_false)
             }
         })
     }
@@ -272,7 +288,7 @@ class OrderSummaryViewModel @Inject constructor(
         viewModelScope.launch {
             val messageDto = SendMessageDto(
                 to = restoToken.value, notification = NotificationBody(
-                    title = "New Message", body = "There's new order. Check your Resto App"
+                    title = "New Message", body = "There's new order. Check your Resto App", link = "alfaresto://order"
                 )
             )
 

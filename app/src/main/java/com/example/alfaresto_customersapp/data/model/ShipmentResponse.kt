@@ -12,6 +12,10 @@ data class ShipmentResponse(
     @set:PropertyName("order_id")
     var orderID: String = "",
 
+    @get:PropertyName("user_id")
+    @set:PropertyName("user_id")
+    var userId: String = "",
+
     @get:PropertyName("status_delivery")
     @set:PropertyName("status_delivery")
     var statusDelivery: String = "",
@@ -29,7 +33,8 @@ data class ShipmentResponse(
             return Shipment(
                 id = shipmentResponse.id,
                 orderID = shipmentResponse.orderID,
-                statusDelivery = shipmentResponse.statusDelivery
+                statusDelivery = shipmentResponse.statusDelivery,
+                userId = shipmentResponse.userId
             )
         }
 
@@ -37,7 +42,8 @@ data class ShipmentResponse(
             return ShipmentResponse(
                 id = shipment.id,
                 orderID = shipment.orderID,
-                statusDelivery = shipment.statusDelivery
+                statusDelivery = shipment.statusDelivery,
+                userId = shipment.userId
             )
         }
     }

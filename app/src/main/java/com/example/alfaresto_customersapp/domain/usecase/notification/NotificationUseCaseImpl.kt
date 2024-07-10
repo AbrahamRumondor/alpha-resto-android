@@ -46,8 +46,9 @@ class NotificationUseCaseImpl @Inject constructor(
         val messageDto = SendMessageDto(
             to = token,
             notification = NotificationBody(
-                title = "New Message",
-                body = message
+                title = "New Order",
+                body = message,
+                link = "alfaresto://order"
             )
         )
 
