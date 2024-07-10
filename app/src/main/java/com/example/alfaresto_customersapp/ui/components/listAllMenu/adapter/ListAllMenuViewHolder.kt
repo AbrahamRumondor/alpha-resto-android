@@ -1,4 +1,4 @@
-package com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu.adapter
+package com.example.alfaresto_customersapp.ui.components.listAllMenu.adapter
 
 import android.view.LayoutInflater
 import android.view.View

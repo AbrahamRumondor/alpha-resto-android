@@ -7,13 +7,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.alfaresto_customersapp.data.model.ShipmentResponse
 import com.example.alfaresto_customersapp.domain.model.Shipment
+import com.example.alfaresto_customersapp.domain.model.User
 import com.example.alfaresto_customersapp.domain.repository.ShipmentRepository
 import com.example.alfaresto_customersapp.domain.service.NotificationForegroundService
+import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase
 import com.example.alfaresto_customersapp.utils.user.UserConstants
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Named
@@ -54,7 +58,7 @@ class ShipmentRepositoryImpl @Inject constructor(
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
                     _shipment.value = Shipment().copy(statusDelivery = "On Process")
-                    UserConstants.SHIPMENT_STATUS.postValue("On Process")
+                    UserConstants.SHIPMENT.postValue(Shipment().copy(statusDelivery = "On Process"))
                     return@addSnapshotListener
                 }
 
@@ -63,16 +67,59 @@ class ShipmentRepositoryImpl @Inject constructor(
                     shipmentResponse?.let {
                         val shipment = ShipmentResponse.transform(it)
                         _shipment.value = shipment
-                        UserConstants.SHIPMENT_STATUS.postValue(shipment.statusDelivery)
-                        startForegroundService()
+                        UserConstants.SHIPMENT.postValue(shipment)
+//                        startForegroundService(shipmentId = shipment.id, orderId = shipment.orderID, orderStatus = shipment.statusDelivery)
                     }
                 } else {
                     _shipment.value = Shipment().copy(statusDelivery = "On Process")
-                    UserConstants.SHIPMENT_STATUS.postValue("On Process")
+                    UserConstants.SHIPMENT.postValue(Shipment().copy(statusDelivery = "On Process"))
                 }
             }
 
         return shipment
+    }
+
+    override fun observeShipmentChanges(user: User) {
+        listenerRegistration = shipmentsRef.addSnapshotListener { snapshots, e ->
+            if (e != null) {
+                // Handle the error
+                return@addSnapshotListener
+            }
+
+            for (docChange in snapshots!!.documentChanges) {
+                when (docChange.type) {
+                    DocumentChange.Type.ADDED -> {
+                        // A new document was added
+                        val newDoc = docChange.document
+                    }
+
+                    DocumentChange.Type.MODIFIED -> {
+                        // An existing document was modified
+                        val modifiedDoc = docChange.document
+                        val shipmentResponse = modifiedDoc.toObject(ShipmentResponse::class.java)
+                        val shipment = ShipmentResponse.transform(shipmentResponse)
+                        UserConstants.SHIPMENT.postValue(shipment)
+
+                        notifyUser(shipment, user)
+                    }
+
+                    DocumentChange.Type.REMOVED -> {
+                        // An existing document was removed
+                        val removedDoc = docChange.document
+                    }
+                }
+            }
+        }
+    }
+
+    private fun notifyUser(shipment: Shipment, user: User) {
+        if (shipment.userId == user.id) {
+            startForegroundService(
+                shipmentId = shipment.id,
+                orderId = shipment.orderID,
+                orderStatus = shipment.statusDelivery
+            )
+        }
     }
 
     override suspend fun createShipment(shipment: Shipment) {
@@ -85,15 +132,23 @@ class ShipmentRepositoryImpl @Inject constructor(
             .addOnFailureListener { Timber.tag("TEST").d("ERROR ON ORDER INSERTION") }
 
         getShipmentById(newShipmentId)
-        startForegroundService()
+        startForegroundService(
+            shipmentId = shipment.id,
+            orderId = shipment.orderID,
+            orderStatus = shipment.statusDelivery
+        )
     }
 
     private fun generateShipmentId(): String {
         return shipmentsRef.document().id
     }
 
-    private fun startForegroundService() {
+    private fun startForegroundService(orderId: String, shipmentId: String, orderStatus: String) {
         val serviceIntent = Intent(context, NotificationForegroundService::class.java)
+        serviceIntent.putExtra("orderId", orderId)
+        serviceIntent.putExtra("shipmentId", shipmentId)
+        serviceIntent.putExtra("orderStatus", orderStatus)
+
         ContextCompat.startForegroundService(context, serviceIntent)
     }
 

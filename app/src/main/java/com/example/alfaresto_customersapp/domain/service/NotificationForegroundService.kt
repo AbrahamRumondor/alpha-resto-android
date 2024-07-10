@@ -3,6 +3,7 @@ package com.example.alfaresto_customersapp.domain.service
 import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -11,6 +12,7 @@ import android.graphics.Color
 import android.os.Build
 import android.os.IBinder
 import android.os.Handler
+import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.RemoteViews
@@ -18,7 +20,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.alfaresto_customersapp.R
-import com.example.alfaresto_customersapp.utils.user.UserConstants.SHIPMENT_STATUS
+import com.example.alfaresto_customersapp.ui.components.MainActivity
+import timber.log.Timber
 
 @Suppress("DEPRECATION")
 class NotificationForegroundService : Service() {
@@ -36,8 +39,6 @@ class NotificationForegroundService : Service() {
         super.onCreate()
         notificationManagerCompat = NotificationManagerCompat.from(this)
         createNotification()
-        updateNotification()
-        startForeground(1234, builder.build())
 
         handler.postDelayed({
             stopForeground(true)
@@ -46,7 +47,11 @@ class NotificationForegroundService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        updateNotification()
+        val orderId = intent?.getStringExtra("orderId")
+        val shipmentId = intent?.getStringExtra("shipmentId")
+        val orderStatus = intent?.getStringExtra("orderStatus")
+
+        updateNotification(orderId, shipmentId, orderStatus)
         return START_STICKY
     }
 
@@ -77,7 +82,6 @@ class NotificationForegroundService : Service() {
                     .setCustomBigContentView(view)
                     .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.ic_logo))
             }
-            val a: ProgressBar? = null
         }
 
         if (ActivityCompat.checkSelfPermission(
@@ -90,10 +94,31 @@ class NotificationForegroundService : Service() {
         notificationManagerCompat.notify(1234, builder.build())
     }
 
-    private fun updateNotification() {
-                SHIPMENT_STATUS.value.let {
-                    customView?.setTextViewText(R.id.notification_title, it)
-                    when (it) {
+    private fun updateNotification(orderId: String?, shipmentId: String?, orderStatus: String?) {
+
+        Timber.tag("NULLL").d(orderId + ", " + shipmentId + ", " + orderStatus)
+
+        orderId?.let { order ->
+            shipmentId?.let { shipment ->
+                orderStatus?.let { orderStatus ->
+
+                    val intent = Intent(this, MainActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        putExtra("navigate_to_fragment", orderStatus)
+                        putExtra("orderId", order)
+                        putExtra("shipmentId", shipment)
+                    }
+                    val pendingIntent = PendingIntent.getActivity(
+                        this,
+                        0,
+                        intent,
+                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                    )
+
+                    builder.setContentIntent(pendingIntent)
+
+                    customView?.setTextViewText(R.id.notification_title, orderStatus)
+                    when (orderStatus) {
                         "On Delivery" -> {
                             customView?.setImageViewResource(
                                 R.id.iv_dot_one,
@@ -215,11 +240,14 @@ class NotificationForegroundService : Service() {
                         return
                     }
                     notificationManagerCompat.notify(1234, builder.build())
+                    startForeground(1234, builder.build())
                 }
+            }
+        }
     }
 
     private fun setAnimationVisibility(item: String) {
-        when(item){
+        when (item) {
             "On Process" -> {
                 customView?.setViewVisibility(
                     R.id.pb_delivered,

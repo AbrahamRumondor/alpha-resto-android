@@ -1,6 +1,7 @@
 package com.example.alfaresto_customersapp.ui.components.trackOrder.chat
 
 import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.alfaresto_customersapp.data.remote.pushNotification.NotificationBody
@@ -63,8 +64,9 @@ class ChatViewModel @Inject constructor(
     fun sendMessage(message: String) {
         viewModelScope.launch {
             try {
+                val orderId = orderId.value
                 orderUseCase.addChatMessage(
-                    orderId.value,
+                    orderId,
                     Chat(
                         dateSend = Timestamp.now(),
                         message = message,
@@ -72,7 +74,7 @@ class ChatViewModel @Inject constructor(
                         userName = user.value.name
                     )
                 )
-                sendNotificationToResto("[${user.value.name}]: $message")
+                sendNotificationToResto("[${user.value.name}]: $message", orderId)
             } catch (e: Exception) {
                 Timber.tag(TAG).w(e, "Error sending message")
             }
@@ -103,13 +105,16 @@ class ChatViewModel @Inject constructor(
         }
     }
 
-    private fun sendNotificationToResto(message: String) {
+    private fun sendNotificationToResto(message: String, orderId: String) {
         viewModelScope.launch {
+            Log.d("notiv", orderId)
+            val link = "alfaresto://chat?order_id=${orderId}"
             val messageDto = SendMessageDto(
                 to = restoToken.value,
                 notification = NotificationBody(
                     title = "Customer",
                     body = message,
+                    link = link
                 )
             )
 

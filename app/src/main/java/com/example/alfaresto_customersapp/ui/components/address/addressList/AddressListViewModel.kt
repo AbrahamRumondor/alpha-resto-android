@@ -1,4 +1,4 @@
-package com.example.alfaresto_customersapp.ui.components.restoTab.address.addressList
+package com.example.alfaresto_customersapp.ui.components.address.addressList
 
 import androidx.lifecycle.viewModelScope
 import com.example.alfaresto_customersapp.domain.error.FirestoreCallback

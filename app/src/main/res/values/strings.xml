@@ -128,6 +128,10 @@
     <string name="logout">Logout</string>
     <string name="cancel">Cancel</string>
     <string name="canceled">Canceled</string>
+    <string name="no_internet">Disconnected, please check your connection</string>
+    <string name="no_internet_connection">No internet Connection</string>
+    <string name="your_internet_connection_is_currently_not_available_please_check_or_try_again">Your internet connection is currently not available please check or try again.</string>
+    <string name="try_again">Try again</string>
     <string name="notes_hint">Add special instructions for your order</string>
     <string name="notes">Order Notes :</string>
 </resources>

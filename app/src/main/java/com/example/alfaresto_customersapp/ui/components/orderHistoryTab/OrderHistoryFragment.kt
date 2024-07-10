@@ -1,5 +1,7 @@
 package com.example.alfaresto_customersapp.ui.components.orderHistoryTab
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,12 +16,14 @@ import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.FragmentOrderHistoryBinding
 import com.example.alfaresto_customersapp.domain.model.OrderHistory
 import com.example.alfaresto_customersapp.domain.model.OrderStatus
+import com.example.alfaresto_customersapp.domain.network.NetworkUtils
 import com.example.alfaresto_customersapp.ui.components.listener.OrderHistoryListener
 import com.example.alfaresto_customersapp.ui.components.orderHistoryTab.adapter.OrderHistoryAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
 class OrderHistoryFragment : Fragment() {
@@ -97,11 +101,20 @@ class OrderHistoryFragment : Fragment() {
     private fun setOnOrderClickListener() {
         adapter.setItemListener(object : OrderHistoryListener {
             override fun onOrderClicked(orderHistory: OrderHistory) {
-                val action = when(orderHistory.orderStatus) {
+                if (NetworkUtils.isConnectedToNetwork.value == false) {
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.no_internet),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return
+                }
+
+                val action = when (orderHistory.orderStatus) {
                     OrderStatus.ON_DELIVERY -> {
                         OrderHistoryFragmentDirections.actionOrderHistoryFragmentToTrackOrderFragment(
                             orderId = orderHistory.orderId,
-                            shipmentId = orderHistory.id
+//                            shipmentId = orderHistory.id
                         )
                     }
 
@@ -119,7 +132,6 @@ class OrderHistoryFragment : Fragment() {
                         )
                     }
                 }
-
                 Navigation.findNavController(binding.root)
                     .navigate(action)
             }
