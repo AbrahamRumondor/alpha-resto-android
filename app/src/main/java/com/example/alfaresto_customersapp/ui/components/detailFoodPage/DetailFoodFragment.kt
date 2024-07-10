@@ -1,5 +1,7 @@
 package com.example.alfaresto_customersapp.ui.components.detailFoodPage
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -46,6 +48,19 @@ class DetailFoodFragment : Fragment() {
         binding.apply {
             btnBack.setOnClickListener {
                 activity?.supportFragmentManager?.popBackStack()
+            }
+            tvRestoEmail.setOnClickListener {
+                val email = tvRestoEmail.text.toString()
+                val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
+                    data = Uri.parse("mailto:$email")
+                }
+                startActivity(Intent.createChooser(emailIntent, "Send email"))
+            }
+            tvRestoPhone.setOnClickListener {
+                val phoneNumber = tvRestoPhone.text.toString()
+                val dialIntent = Intent(Intent.ACTION_DIAL)
+                dialIntent.data = Uri.parse("tel:$phoneNumber")
+                startActivity(dialIntent)
             }
         }
     }
