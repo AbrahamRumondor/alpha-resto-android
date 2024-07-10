@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -12,6 +13,7 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.FragmentListAllMenuBinding
+import com.example.alfaresto_customersapp.domain.network.NetworkUtils
 import com.example.alfaresto_customersapp.ui.components.listener.MenuListener
 import com.example.alfaresto_customersapp.ui.components.listAllMenu.adapter.ListAllMenuAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -46,6 +48,22 @@ class ListAllMenuFragment : Fragment() {
                 binding.tvCartCount.text = it.toString()
                 binding.rlCart.visibility = if (it > 0) View.VISIBLE else View.INVISIBLE
             }
+        }
+
+        setConnectionBehaviour()
+        binding.inclInternet.btnInetTryAgain.setOnClickListener {
+            setConnectionBehaviour()
+        }
+    }
+
+    private fun setConnectionBehaviour() {
+        if (NetworkUtils.isConnectedToNetwork.value == false) {
+            binding.inclInternet.root.visibility = View.VISIBLE
+            binding.clBase.visibility = View.GONE
+            Toast.makeText(requireContext(), "No internet", Toast.LENGTH_SHORT).show()
+        } else {
+            binding.inclInternet.root.visibility = View.GONE
+            binding.clBase.visibility = View.VISIBLE
         }
     }
 
@@ -88,16 +106,20 @@ class ListAllMenuFragment : Fragment() {
     private fun setMenusAdapterButtons() {
         adapter.setItemListener(object : MenuListener {
             override fun onAddItemClicked(position: Int, menuId: String) {
-                viewModel.getCartByMenuId(menuId) {
-                    viewModel.addOrderQuantity(menuId, it)
-                    adapter.notifyItemChanged(position)
+                if (!noInternetConnection()) {
+                    viewModel.getCartByMenuId(menuId) {
+                        viewModel.addOrderQuantity(menuId, it)
+                        adapter.notifyItemChanged(position)
+                    }
                 }
             }
 
             override fun onDecreaseItemClicked(position: Int, menuId: String) {
-                viewModel.getCartByMenuId(menuId) {
-                    viewModel.decreaseOrderQuantity(it)
-                    adapter.notifyItemChanged(position)
+                if (!noInternetConnection()) {
+                    viewModel.getCartByMenuId(menuId) {
+                        viewModel.decreaseOrderQuantity(it)
+                        adapter.notifyItemChanged(position)
+                    }
                 }
             }
         })
@@ -111,6 +133,19 @@ class ListAllMenuFragment : Fragment() {
                 image = menu.image
             )
             Navigation.findNavController(requireView()).navigate(action)
+        }
+    }
+
+    fun noInternetConnection(): Boolean {
+        return if (NetworkUtils.isConnectedToNetwork.value == false) {
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.no_internet),
+                Toast.LENGTH_SHORT
+            ).show()
+            true
+        } else {
+            false
         }
     }
 

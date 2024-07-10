@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.FragmentAddressListBinding
+import com.example.alfaresto_customersapp.domain.network.NetworkUtils
 import com.example.alfaresto_customersapp.ui.components.listener.AddressItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -49,6 +50,21 @@ class AddressListFragment : Fragment() {
         }
 
         hasNoAddress()
+        setConnectionBehaviour()
+        binding.inclInternet.btnInetTryAgain.setOnClickListener {
+            setConnectionBehaviour()
+        }
+    }
+
+    private fun setConnectionBehaviour() {
+        if (NetworkUtils.isConnectedToNetwork.value == false){
+            binding.inclInternet.root.visibility = View.VISIBLE
+            binding.clBase.visibility = View.GONE
+            Toast.makeText(requireContext(), "No internet", Toast.LENGTH_SHORT).show()
+        } else {
+            binding.inclInternet.root.visibility = View.GONE
+            binding.clBase.visibility = View.VISIBLE
+        }
     }
 
     private fun hasNoAddress() {

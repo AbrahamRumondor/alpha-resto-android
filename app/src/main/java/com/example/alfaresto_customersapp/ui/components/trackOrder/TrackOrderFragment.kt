@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RemoteViews
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -31,6 +32,7 @@ import com.example.alfaresto_customersapp.databinding.BsdLocationPermissionBindi
 import com.example.alfaresto_customersapp.databinding.FragmentTrackOrderBinding
 import com.example.alfaresto_customersapp.domain.error.OsrmCallback
 import com.example.alfaresto_customersapp.domain.error.RealtimeLocationCallback
+import com.example.alfaresto_customersapp.domain.network.NetworkUtils
 import com.example.alfaresto_customersapp.ui.components.orderHistoryDetailPage.OrderHistoryDetailFragmentDirections
 import com.example.alfaresto_customersapp.ui.components.address.addNewAddress.AddNewAddressFragment.Companion.markersHeight
 import com.example.alfaresto_customersapp.ui.components.address.addNewAddress.AddNewAddressFragment.Companion.markersWidth
@@ -139,6 +141,22 @@ class TrackOrderFragment : Fragment() {
 
                 onStatusChangeToDelivery()
             }
+        }
+
+        setConnectionBehaviour()
+        binding.inclInternet.btnInetTryAgain.setOnClickListener {
+            setConnectionBehaviour()
+        }
+    }
+
+    private fun setConnectionBehaviour() {
+        if (NetworkUtils.isConnectedToNetwork.value == false) {
+            binding.inclInternet.root.visibility = View.VISIBLE
+            binding.clBase.visibility = View.GONE
+            Toast.makeText(requireContext(), "No internet", Toast.LENGTH_SHORT).show()
+        } else {
+            binding.inclInternet.root.visibility = View.GONE
+            binding.clBase.visibility = View.VISIBLE
         }
     }
 

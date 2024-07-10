@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -16,6 +17,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.OrderHistoryDetailBinding
+import com.example.alfaresto_customersapp.domain.network.NetworkUtils
 import com.example.alfaresto_customersapp.ui.components.orderHistoryDetailPage.adapter.OrderHistoryDetailItemsAdapter
 import com.example.alfaresto_customersapp.utils.user.UserConstants
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,6 +52,22 @@ class OrderHistoryDetailFragment : Fragment() {
         loadData()
         complainButtonHandle()
         onStatusChangeToDelivery()
+
+        setConnectionBehaviour()
+        binding.inclInternet.btnInetTryAgain.setOnClickListener {
+            setConnectionBehaviour()
+        }
+    }
+
+    private fun setConnectionBehaviour() {
+        if (NetworkUtils.isConnectedToNetwork.value == false){
+            binding.inclInternet.root.visibility = View.VISIBLE
+            binding.clBase.visibility = View.GONE
+            Toast.makeText(requireContext(), "No internet", Toast.LENGTH_SHORT).show()
+        } else {
+            binding.inclInternet.root.visibility = View.GONE
+            binding.clBase.visibility = View.VISIBLE
+        }
     }
 
     private fun setupView() {

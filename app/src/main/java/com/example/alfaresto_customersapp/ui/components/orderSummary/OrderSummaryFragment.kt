@@ -15,6 +15,7 @@ import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.databinding.FragmentOrderSummaryBinding
 import com.example.alfaresto_customersapp.databinding.OrderSummaryPaymentMethodBinding
 import com.example.alfaresto_customersapp.domain.model.Menu
+import com.example.alfaresto_customersapp.domain.network.NetworkUtils
 import com.example.alfaresto_customersapp.ui.components.listener.OrderSummaryItemListener
 import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_ADDRESS
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,6 +43,22 @@ class OrderSummaryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         populateOrderSummaryAdapter()
+
+        setConnectionBehaviour()
+        binding.inclInternet.btnInetTryAgain.setOnClickListener {
+            setConnectionBehaviour()
+        }
+    }
+
+    private fun setConnectionBehaviour() {
+        if (NetworkUtils.isConnectedToNetwork.value == false) {
+            binding.inclInternet.root.visibility = View.VISIBLE
+            binding.rvOrderSummary.visibility = View.GONE
+            Toast.makeText(requireContext(), "No internet", Toast.LENGTH_SHORT).show()
+        } else {
+            binding.inclInternet.root.visibility = View.GONE
+            binding.rvOrderSummary.visibility = View.VISIBLE
+        }
     }
 
     private fun populateOrderSummaryAdapter() {
@@ -77,37 +94,43 @@ class OrderSummaryFragment : Fragment() {
             }
 
             override fun onAddItemClicked(position: Int, menuId: String) {
-                val addMenu = orderSummaryViewModel.orders.value[position] as? Menu
-                addMenu?.let { menu ->
-                    val item = cart?.find { it.menuId == menuId }
-                    orderSummaryViewModel.addOrderQuantity(menuId, item)
-                    menu.orderCartQuantity += 1
-                    orderAdapter.notifyItemChanged(position)
-                    orderAdapter.notifyItemChanged(orderSummaryViewModel.orders.value.size - 3)
-                    countTotalItemAndPrice(orders)
+                if (!noInternetConnection()) {
+                    val addMenu = orderSummaryViewModel.orders.value[position] as? Menu
+                    addMenu?.let { menu ->
+                        val item = cart?.find { it.menuId == menuId }
+                        orderSummaryViewModel.addOrderQuantity(menuId, item)
+                        menu.orderCartQuantity += 1
+                        orderAdapter.notifyItemChanged(position)
+                        orderAdapter.notifyItemChanged(orderSummaryViewModel.orders.value.size - 3)
+                        countTotalItemAndPrice(orders)
+                    }
                 }
             }
 
             override fun onDecreaseItemClicked(position: Int, menuId: String) {
-                val addMenu = orderSummaryViewModel.orders.value[position] as? Menu
-                addMenu?.let {
-                    if (it.orderCartQuantity > 0) {
-                        it.orderCartQuantity -= 1
-                        val item: CartEntity? = cart?.find { it.menuId == menuId }
-                        orderSummaryViewModel.decreaseOrderQuantity(menuId, item)
-                        if (it.orderCartQuantity == 0) {
-                            removeMenu(position, menuId)
-                        } else {
-                            orderAdapter.notifyItemChanged(position)
+                if (!noInternetConnection()) {
+                    val addMenu = orderSummaryViewModel.orders.value[position] as? Menu
+                    addMenu?.let {
+                        if (it.orderCartQuantity > 0) {
+                            it.orderCartQuantity -= 1
+                            val item: CartEntity? = cart?.find { it.menuId == menuId }
+                            orderSummaryViewModel.decreaseOrderQuantity(menuId, item)
+                            if (it.orderCartQuantity == 0) {
+                                removeMenu(position, menuId)
+                            } else {
+                                orderAdapter.notifyItemChanged(position)
+                            }
                         }
+                        countTotalItemAndPrice(orders)
+                        orderAdapter.notifyItemChanged(orderSummaryViewModel.orders.value.size - 3)
                     }
-                    countTotalItemAndPrice(orders)
-                    orderAdapter.notifyItemChanged(orderSummaryViewModel.orders.value.size - 3)
                 }
             }
 
             override fun onDeleteItemClicked(position: Int, menuId: String) {
-                removeMenu(position, menuId)
+                if (!noInternetConnection()) {
+                    removeMenu(position, menuId)
+                }
             }
 
             override fun onRadioButtonClicked(position: Int, id: Int) {
@@ -132,32 +155,47 @@ class OrderSummaryFragment : Fragment() {
             }
 
             override fun onCheckoutButtonClicked() {
-                val currentTime = orderSummaryViewModel.getCurrentTime()
-                val isClosed = currentTime >= orderSummaryViewModel.restoClosedHour.value
+                if (!noInternetConnection()) {
+                    val currentTime = orderSummaryViewModel.getCurrentTime()
+                    val isClosed = currentTime >= orderSummaryViewModel.restoClosedHour.value
 
-                if (isClosed) {
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.restaurant_closed),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    return
-                }
+                    if (isClosed) {
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.restaurant_closed),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        return
+                    }
 
-                if (!checkoutClicked) {
-                    AlertDialog.Builder(requireContext())
-                        .setTitle(getString(R.string.checkout_confirmation))
-                        .setMessage(getString(R.string.checkout_confirmation_message))
-                        .setNegativeButton(getString(R.string.no)) { dialog, _ ->
-                            dialog.dismiss()
-                        }
-                        .setPositiveButton(getString(R.string.yes)) { _, _ ->
-                            checkout()
-                        }
-                        .show()
+                    if (!checkoutClicked) {
+                        AlertDialog.Builder(requireContext())
+                            .setTitle(getString(R.string.checkout_confirmation))
+                            .setMessage(getString(R.string.checkout_confirmation_message))
+                            .setNegativeButton(getString(R.string.no)) { dialog, _ ->
+                                dialog.dismiss()
+                            }
+                            .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                                checkout()
+                            }
+                            .show()
+                    }
                 }
             }
         })
+    }
+
+    fun noInternetConnection(): Boolean {
+        return if (NetworkUtils.isConnectedToNetwork.value == false) {
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.no_internet),
+                Toast.LENGTH_SHORT
+            ).show()
+            true
+        } else {
+            false
+        }
     }
 
     private fun checkout() {

@@ -47,7 +47,6 @@ class MainActivity : AppCompatActivity() {
         mainActivityViewModel.observeMyShipments()
 
         checkConnectivityStatus()
-        connectivityStatus()
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fcv_switch_screen) as NavHostFragment
@@ -155,12 +154,12 @@ class MainActivity : AppCompatActivity() {
                 if (it.toString() == getString(R.string.available) &&
                     NetworkUtils.isConnectedToNetwork.value != true
                 ) {
-                    binding.vBlockActions.visibility = View.GONE
+//                    binding.vBlockActions.visibility = View.GONE
                     NetworkUtils.setConnectionToTrue()
                 } else if (it.toString() != getString(R.string.available) &&
                     NetworkUtils.isConnectedToNetwork.value != false
                 ) {
-                    binding.vBlockActions.visibility = View.VISIBLE
+//                    binding.vBlockActions.visibility = View.VISIBLE
                     NetworkUtils.setConnectionToFalse()
                 }
             }
@@ -173,24 +172,24 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun connectivityStatus() {
-        lifecycleScope.launch {
-            delay(1000)
-            NetworkUtils.isConnectedToNetwork.distinctUntilChanged()
-                .observe(this@MainActivity, Observer {
-                    if (!it && !warningAppear) {
-                        warningAppear = true
-                        showAlertDialog().setPositiveButton(R.string.retry) { _, _ ->
-                            warningAppear = false
-                        }?.setIcon(android.R.drawable.ic_dialog_alert)?.setOnDismissListener {
-                            warningAppear = false
-                            connectivityStatus()
-                        }?.show()
-                    }
-                })
-        }
-
-    }
+//    private fun connectivityStatus() {
+//        lifecycleScope.launch {
+//            delay(1000)
+//            NetworkUtils.isConnectedToNetwork.distinctUntilChanged()
+//                .observe(this@MainActivity, Observer {
+//                    if (!it && !warningAppear) {
+//                        warningAppear = true
+//                        showAlertDialog().setPositiveButton(R.string.retry) { _, _ ->
+//                            warningAppear = false
+//                        }?.setIcon(android.R.drawable.ic_dialog_alert)?.setOnDismissListener {
+//                            warningAppear = false
+//                            connectivityStatus()
+//                        }?.show()
+//                    }
+//                })
+//        }
+//
+//    }
 
     private fun showAlertDialog(): AlertDialog.Builder {
         val builder = AlertDialog.Builder(this)

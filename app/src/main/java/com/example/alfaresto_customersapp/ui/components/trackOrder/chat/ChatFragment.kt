@@ -16,6 +16,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.FragmentChatBinding
+import com.example.alfaresto_customersapp.domain.network.NetworkUtils
 import com.example.alfaresto_customersapp.ui.components.trackOrder.chat.adapter.ChatAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -96,6 +97,22 @@ class ChatFragment : Fragment() {
                     }
                 }
             }
+        }
+
+        setConnectionBehaviour()
+        binding.inclInternet.btnInetTryAgain.setOnClickListener {
+            setConnectionBehaviour()
+        }
+    }
+
+    private fun setConnectionBehaviour() {
+        if (NetworkUtils.isConnectedToNetwork.value == false){
+            binding.inclInternet.root.visibility = View.VISIBLE
+            binding.clBase.visibility = View.GONE
+            Toast.makeText(requireContext(), "No internet", Toast.LENGTH_SHORT).show()
+        } else {
+            binding.inclInternet.root.visibility = View.GONE
+            binding.clBase.visibility = View.VISIBLE
         }
     }
 
