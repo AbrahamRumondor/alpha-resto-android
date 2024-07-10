@@ -2,6 +2,7 @@ package com.example.alfaresto_customersapp.ui.components.orderSummary
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.data.model.OrderItemResponse
 import com.example.alfaresto_customersapp.data.model.OrderResponse
@@ -16,6 +17,7 @@ import com.example.alfaresto_customersapp.domain.model.Order
 import com.example.alfaresto_customersapp.domain.model.OrderItem
 import com.example.alfaresto_customersapp.domain.model.Shipment
 import com.example.alfaresto_customersapp.domain.model.User
+import com.example.alfaresto_customersapp.domain.network.NetworkUtils
 import com.example.alfaresto_customersapp.domain.repository.FcmApiRepository
 import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
 import com.example.alfaresto_customersapp.domain.usecase.menu.MenuUseCase
@@ -171,7 +173,7 @@ class OrderSummaryViewModel @Inject constructor(
     }
 
     // TODO 1:userID,addressID,restoID (fetch dr firestore) | 2:menuID (fetch dari firestore)
-    fun saveOrderInDatabase(onResult: (msg: Boolean?) -> Unit) {
+    fun saveOrderInDatabase(onResult: (msg: Int?) -> Unit) {
         getUserFromDB(object : FirestoreCallback {
             override fun onSuccess(user: User?) {
 
@@ -182,6 +184,11 @@ class OrderSummaryViewModel @Inject constructor(
                     if (_orders.value[PAYMENT_METHOD].toString() == "COD" || _orders.value[PAYMENT_METHOD].toString() == "GOPAY") _orders.value[PAYMENT_METHOD].toString() else null
 
                 val total = _orders.value[TOTAL] as Pair<Int, Int>
+
+                if (NetworkUtils.isConnectedToNetwork.value == false) {
+                    onResult(R.string.no_internet)
+                    return
+                }
 
                 if (!payment.isNullOrEmpty() && _orders.value.size > 4 && user != null && USER_ADDRESS != null) {
                     db.runTransaction {
@@ -240,17 +247,17 @@ class OrderSummaryViewModel @Inject constructor(
                                 viewModelScope.launch {
                                     cartUseCase.deleteAllMenus()
                                 }
-                                onResult(true)
+                                onResult(null)
                             }
                         }
                     }
                 } else {
-                    onResult(null)
+                    onResult(R.string.failed_checkout_null)
                 }
             }
 
             override fun onFailure(exception: Exception) {
-                onResult(false)
+                onResult(R.string.failed_checkout_false)
             }
         })
     }

@@ -16,6 +16,7 @@ import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.FragmentOrderHistoryBinding
 import com.example.alfaresto_customersapp.domain.model.OrderHistory
 import com.example.alfaresto_customersapp.domain.model.OrderStatus
+import com.example.alfaresto_customersapp.domain.network.NetworkUtils
 import com.example.alfaresto_customersapp.ui.components.listener.OrderHistoryListener
 import com.example.alfaresto_customersapp.ui.components.orderHistoryTab.adapter.OrderHistoryAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -100,6 +101,15 @@ class OrderHistoryFragment : Fragment() {
     private fun setOnOrderClickListener() {
         adapter.setItemListener(object : OrderHistoryListener {
             override fun onOrderClicked(orderHistory: OrderHistory) {
+                if (NetworkUtils.isConnectedToNetwork.value == false) {
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.no_internet),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return
+                }
+
                 val action = when (orderHistory.orderStatus) {
                     OrderStatus.ON_DELIVERY -> {
                         OrderHistoryFragmentDirections.actionOrderHistoryFragmentToTrackOrderFragment(

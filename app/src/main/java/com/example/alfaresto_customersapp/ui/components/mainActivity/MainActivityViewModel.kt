@@ -21,8 +21,4 @@ class MainActivityViewModel @Inject constructor(
             }
         }
     }
-
-    fun setUser() {
-
-    }
 }

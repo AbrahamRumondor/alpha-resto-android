@@ -163,25 +163,18 @@ class OrderSummaryFragment : Fragment() {
     private fun checkout() {
         checkoutClicked = true
         orderSummaryViewModel.saveOrderInDatabase {
-            if (it == null) {
+            if (it != null) {
                 checkoutClicked = false
                 Toast.makeText(
                     requireContext(),
-                    getString(R.string.failed_checkout_null),
+                    getString(it),
                     Toast.LENGTH_SHORT
-                ).show()
-                return@saveOrderInDatabase
-            } else if (!it) {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.failed_checkout_false),
-                    Toast.LENGTH_LONG
                 ).show()
             }
 
             val action =
                 OrderSummaryFragmentDirections.actionOrderSummaryFragmentToThankYouFragment(
-                    it
+                    it == null
                 )
             Navigation.findNavController(binding.root).navigate(action)
         }
