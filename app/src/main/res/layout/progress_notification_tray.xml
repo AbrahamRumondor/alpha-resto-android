@@ -62,16 +62,7 @@
                 android:layout_width="@dimen/dimen_none"
                 android:layout_height="@dimen/dimen_3"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="50" />
-
-            <ProgressBar
-                android:id="@+id/pb_on_process"
-                android:layout_width="@dimen/dimen_20"
-                android:layout_height="@dimen/dimen_40"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:indeterminateDrawable="@drawable/anim_on_process"
-                />
+                android:layout_weight="65" />
 
             <ImageView
                 android:layout_width="@dimen/dimen_30"
@@ -82,6 +73,14 @@
                 android:visibility="gone"
                 android:src="@drawable/ic_cooking" />
 
+            <ProgressBar
+                android:id="@+id/pb_on_process"
+                android:layout_width="@dimen/dimen_20"
+                android:layout_height="@dimen/dimen_40"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:indeterminateDrawable="@drawable/anim_on_process" />
+
             <TextView
                 android:layout_width="@dimen/dimen_none"
                 android:layout_height="@dimen/dimen_3"
@@ -90,20 +89,20 @@
 
             <ProgressBar
                 android:id="@+id/pb_on_delivery"
-                android:layout_width="@dimen/dimen_30"
-                android:layout_height="@dimen/dimen_40"
+                android:layout_width="@dimen/dimen_60"
+                android:layout_height="@dimen/dimen_30"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:indeterminateDrawable="@drawable/anim_on_deliv" />
 
             <ImageView
-                android:layout_width="@dimen/dimen_30"
-                android:layout_height="@dimen/dimen_40"
+                android:layout_width="@dimen/dimen_60"
+                android:layout_height="@dimen/dimen_30"
                 android:id="@+id/iv_on_delivery"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:visibility="gone"
-                android:src="@drawable/rbt1" />
+                android:src="@drawable/ic_delivery_1" />
 
             <TextView
                 android:layout_width="@dimen/dimen_none"
