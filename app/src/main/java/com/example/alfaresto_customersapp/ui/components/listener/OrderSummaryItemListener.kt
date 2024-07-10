@@ -9,6 +9,7 @@ interface OrderSummaryItemListener {
     fun onDeleteItemClicked(position: Int, menuId: String)
     fun onRadioButtonClicked(position: Int, id: Int)
     fun onPaymentMethodClicked(view: OrderSummaryPaymentMethodBinding)
+    fun onNotesFilled(notes: String)
     fun onCheckoutButtonClicked()
     // uses {} for default implementation (so dont have to impelemnts).
 }

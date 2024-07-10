@@ -46,7 +46,8 @@ class OrderHistoryUseCaseImpl @Inject constructor(
                                 else -> OrderStatus.CANCELED
                             },
                             orderId = order.id,
-                            id = shipment?.id ?: ""
+                            id = shipment?.id ?: "",
+                            orderNotes = order.notes
                         )
                     }
 
