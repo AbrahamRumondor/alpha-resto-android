@@ -33,8 +33,11 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/dimen_80"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cv_button">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -110,11 +113,12 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/cv_resto"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen_80"
+                android:layout_height="@dimen/dimen_95"
                 android:layout_marginHorizontal="@dimen/dimen_30"
-                android:layout_marginTop="@dimen/dimen_25"
+                android:layout_marginVertical="@dimen/dimen_25"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="@dimen/dimen_5"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_food_desc">
@@ -135,14 +139,16 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:orientation="vertical"
-                        android:padding="@dimen/dimen_15">
+                        android:layout_marginEnd="@dimen/dimen_10"
+                        android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/tv_resto_phone"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:autoLink="phone"
                             android:fontFamily="@font/regular"
                             android:text="@string/phone_resto"
                             android:textAlignment="textEnd"
@@ -151,18 +157,22 @@
                             tools:ignore="RtlSymmetry" />
 
                         <TextView
+                            android:id="@+id/tv_resto_address"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/regular"
                             android:text="@string/address_resto"
                             android:textAlignment="textEnd"
+                            android:autoLink="map"
                             android:textColor="@color/black"
                             android:textSize="@dimen/font_12"
                             tools:ignore="RtlSymmetry" />
 
                         <TextView
+                            android:id="@+id/tv_resto_email"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:autoLink="email"
                             android:fontFamily="@font/regular"
                             android:text="@string/email_resto"
                             android:textAlignment="textEnd"

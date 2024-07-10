@@ -11,6 +11,7 @@ import com.example.alfaresto_customersapp.databinding.OrderSummaryPaymentMethodB
 import com.example.alfaresto_customersapp.databinding.OrderSummaryTotalPriceBinding
 import com.example.alfaresto_customersapp.domain.model.Address
 import com.example.alfaresto_customersapp.domain.model.Menu
+import com.example.alfaresto_customersapp.domain.model.OrderItem
 import com.example.alfaresto_customersapp.ui.components.listener.OrderSummaryItemListener
 import com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.viewHolder.CheckoutButtonViewHolder
 import com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.viewHolder.OrderAddressViewHolder

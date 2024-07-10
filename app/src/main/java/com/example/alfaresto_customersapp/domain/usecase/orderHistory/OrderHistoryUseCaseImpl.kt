@@ -42,7 +42,8 @@ class OrderHistoryUseCaseImpl @Inject constructor(
                             orderStatus = when (shipment?.statusDelivery) {
                                 "Delivered" -> OrderStatus.DELIVERED
                                 "On Delivery" -> OrderStatus.ON_DELIVERY
-                                else -> OrderStatus.ON_PROCESS
+                                "On Process" -> OrderStatus.ON_PROCESS
+                                else -> OrderStatus.CANCELED
                             },
                             orderId = order.id,
                             id = shipment?.id ?: "",

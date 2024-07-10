@@ -53,4 +53,6 @@
     <dimen name="dimen_200">200dp</dimen>
     <dimen name="dimen_175">175dp</dimen>
     <dimen name="font_30">30sp</dimen>
+    <dimen name="dimen_90">90dp</dimen>
+    <dimen name="dimen_95">95dp</dimen>
 </resources>

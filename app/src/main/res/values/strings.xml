@@ -61,6 +61,8 @@
     <string name="no">No</string>
     <string name="ok">OK</string>
     <string name="oldest">Oldest</string>
+    <string name="on_delivery_status">On Delivery</string>
+    <string name="delivered_status">Delivered</string>
     <string name="on_delivery">Your order is currently on delivery, track the driver in App</string>
     <string name="on_process">Your order is currently on process, waiting for Admin to accept…</string>
     <string name="on_process_status">On Process</string>
@@ -125,6 +127,7 @@
     <string name="logout_confirmation_message">Are you sure you want to logout?</string>
     <string name="logout">Logout</string>
     <string name="cancel">Cancel</string>
+    <string name="canceled">Canceled</string>
     <string name="notes_hint">Add special instructions for your order</string>
     <string name="notes">Order Notes :</string>
 </resources>

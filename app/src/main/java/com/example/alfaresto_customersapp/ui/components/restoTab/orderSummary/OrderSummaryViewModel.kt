@@ -294,6 +294,10 @@ class OrderSummaryViewModel @Inject constructor(
                 is Error -> {
                     Timber.tag("test").d("FCM FAILED")
                 }
+
+                else -> {
+                    Timber.tag("test").d("FCM FAILED")
+                }
             }
         }
     }
