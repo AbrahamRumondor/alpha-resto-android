@@ -20,7 +20,15 @@ class RestaurantUseCaseImpl @Inject constructor(
         return restaurantRepository.getRestaurant()
     }
 
+    override suspend fun getRestaurantOpenHour(): String {
+        return restaurantRepository.getRestaurantOpenHour()
+    }
+
     override suspend fun getRestaurantClosedHour(): String {
         return restaurantRepository.getRestaurantClosedHour()
+    }
+
+    override suspend fun isRestaurantClosedTemporary(): Boolean {
+        return restaurantRepository.isRestaurantClosedTemporary()
     }
 }

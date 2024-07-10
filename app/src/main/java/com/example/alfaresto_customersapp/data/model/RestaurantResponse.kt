@@ -46,7 +46,11 @@ data class RestaurantResponse(
 
     @get:PropertyName("longitude")
     @set:PropertyName("longitude")
-    var longitude: Double = 0.0
+    var longitude: Double = 0.0,
+
+    @get:PropertyName("is_temporary_close")
+    @set:PropertyName("is_temporary_close")
+    var isTemporaryClose: Boolean = false
 ) {
     companion object {
         fun transform(resto: RestaurantResponse): Restaurant {
@@ -62,7 +66,8 @@ data class RestaurantResponse(
                 image = resto.image,
                 token = resto.token,
                 latitude = resto.latitude,
-                longitude = resto.longitude
+                longitude = resto.longitude,
+                isTemporaryClose = resto.isTemporaryClose
             )
         }
     }

@@ -21,7 +21,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @AndroidEntryPoint
 class OrderSummaryFragment : Fragment() {
@@ -133,13 +132,12 @@ class OrderSummaryFragment : Fragment() {
             }
 
             override fun onNotesFilled(notes: String) {
-                Timber.tag("notes fr").d("notes: $notes")
                 orderSummaryViewModel.setNotes(notes)
             }
 
             override fun onCheckoutButtonClicked() {
                 val currentTime = orderSummaryViewModel.getCurrentTime()
-                val isClosed = currentTime >= orderSummaryViewModel.restoClosedHour.value
+                val isClosed = orderSummaryViewModel.isRestoClosed(currentTime)
 
                 if (isClosed) {
                     Toast.makeText(

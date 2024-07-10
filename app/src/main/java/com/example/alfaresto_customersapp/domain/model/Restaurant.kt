@@ -1,7 +1,5 @@
 package com.example.alfaresto_customersapp.domain.model
 
-import com.google.firebase.firestore.PropertyName
-
 data class Restaurant(
     val id: String = "",
     val email: String = "",
@@ -14,6 +12,7 @@ data class Restaurant(
     val token: String = "",
     var latitude: Double = 0.0,
     var longitude: Double = 0.0,
+    var isTemporaryClose: Boolean = false,
 
     val isShown: Boolean = false
 )

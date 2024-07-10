@@ -63,8 +63,14 @@ class OrderSummaryViewModel @Inject constructor(
     private val _restoToken: MutableStateFlow<String> = MutableStateFlow("")
     val restoToken: StateFlow<String> = _restoToken
 
+    private val _restoOpenHour: MutableStateFlow<String> = MutableStateFlow("")
+    private val restoOpenHour: StateFlow<String> = _restoOpenHour
+
     private val _restoClosedHour: MutableStateFlow<String> = MutableStateFlow("")
-    val restoClosedHour: StateFlow<String> = _restoClosedHour
+    private val restoClosedHour: StateFlow<String> = _restoClosedHour
+
+    private val _restoIsClosedTemporarily: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    private val restoIsClosedTemporarily: StateFlow<Boolean> = _restoIsClosedTemporarily
 
     init {
         fetchMenus()
@@ -105,20 +111,37 @@ class OrderSummaryViewModel @Inject constructor(
     private fun fetchResto() {
         viewModelScope.launch {
             try {
-                Timber.tag("closing").d("Fetching resto")
                 val restoID = restaurantUseCase.getRestaurantId()
                 _restoID.value = restoID
 
                 val restoToken = restaurantUseCase.getRestaurantToken()
                 _restoToken.value = restoToken
 
+                val restoOpenHour = restaurantUseCase.getRestaurantOpenHour()
+                _restoOpenHour.value = restoOpenHour
+
                 val restoClosedHour = restaurantUseCase.getRestaurantClosedHour()
                 _restoClosedHour.value = restoClosedHour
-                Timber.tag("closing").d("Closing time: $restoClosedHour")
+
+                val isClosedTemporarily = restaurantUseCase.isRestaurantClosedTemporary()
+                _restoIsClosedTemporarily.value = isClosedTemporarily
             } catch (e: Exception) {
                 Timber.tag("RESTO").e("Error fetching resto: %s", e.message)
             }
         }
+    }
+
+    fun isRestoClosed(currentTime: String): Boolean {
+        Timber.tag("RESTOO").d("Current Time: $currentTime")
+        Timber.tag("RESTOO").d("Resto Open Hour: ${restoOpenHour.value}")
+        Timber.tag("RESTOO").d("Resto Closed Hour: ${restoClosedHour.value}")
+        Timber.tag("RESTOO").d("Resto Is Closed Temporarily: ${restoIsClosedTemporarily.value}")
+
+        Timber.tag("RESTOO").d("condi 1: ${currentTime >= restoClosedHour.value}")
+        Timber.tag("RESTOO").d("condi 2: ${currentTime < restoOpenHour.value}")
+        Timber.tag("RESTOO").d("condi 3: ${restoIsClosedTemporarily.value}")
+
+        return currentTime >= restoClosedHour.value || currentTime < restoOpenHour.value || restoIsClosedTemporarily.value
     }
 
     private fun fetchMenus() {
