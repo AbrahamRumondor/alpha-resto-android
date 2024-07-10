@@ -1,4 +1,4 @@
-package com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary
+package com.example.alfaresto_customersapp.ui.components.orderSummary
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -48,7 +48,7 @@ class OrderSummaryFragment : Fragment() {
         lifecycleScope.launch {
             orderSummaryViewModel.carts.collectLatest { carts ->
                 orderSummaryViewModel.menus.collectLatest { menus ->
-                    delay(500)
+//                    delay(500)
                     val orders = carts.mapNotNull { cartOrder ->
                         menus.find {
                             it.id == cartOrder.menuId && cartOrder.menuQty > 0

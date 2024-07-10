@@ -1,4 +1,4 @@
-package com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary
+package com.example.alfaresto_customersapp.ui.components.orderSummary
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -228,7 +228,7 @@ class OrderSummaryViewModel @Inject constructor(
                                 viewModelScope.launch {
                                     shipmentUseCase.createShipment(
                                         Shipment(
-                                            orderID = orderId, statusDelivery = "On Process"
+                                            orderID = orderId, statusDelivery = "On Process", userId = user.id
                                         )
                                     )
                                 }
@@ -272,7 +272,7 @@ class OrderSummaryViewModel @Inject constructor(
         viewModelScope.launch {
             val messageDto = SendMessageDto(
                 to = restoToken.value, notification = NotificationBody(
-                    title = "New Message", body = "There's new order. Check your Resto App"
+                    title = "New Message", body = "There's new order. Check your Resto App", link = "alfaresto://order"
                 )
             )
 

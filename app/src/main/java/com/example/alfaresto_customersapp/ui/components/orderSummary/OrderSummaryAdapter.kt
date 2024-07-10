@@ -1,4 +1,4 @@
-package com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary
+package com.example.alfaresto_customersapp.ui.components.orderSummary
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -12,11 +12,11 @@ import com.example.alfaresto_customersapp.domain.model.Address
 import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.domain.model.OrderItem
 import com.example.alfaresto_customersapp.ui.components.listener.OrderSummaryItemListener
-import com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.viewHolder.CheckoutButtonViewHolder
-import com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.viewHolder.OrderAddressViewHolder
-import com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.viewHolder.OrderListViewHolder
-import com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.viewHolder.OrderTotalViewHolder
-import com.example.alfaresto_customersapp.ui.components.restoTab.orderSummary.viewHolder.PaymentMethodViewHolder
+import com.example.alfaresto_customersapp.ui.components.orderSummary.viewHolder.CheckoutButtonViewHolder
+import com.example.alfaresto_customersapp.ui.components.orderSummary.viewHolder.OrderAddressViewHolder
+import com.example.alfaresto_customersapp.ui.components.orderSummary.viewHolder.OrderListViewHolder
+import com.example.alfaresto_customersapp.ui.components.orderSummary.viewHolder.OrderTotalViewHolder
+import com.example.alfaresto_customersapp.ui.components.orderSummary.viewHolder.PaymentMethodViewHolder
 
 class OrderSummaryAdapter :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {

@@ -1,4 +1,4 @@
-package com.example.alfaresto_customersapp.ui.components.restoTab.address.addressList
+package com.example.alfaresto_customersapp.ui.components.address.addressList
 
 import android.os.Bundle
 import android.view.LayoutInflater

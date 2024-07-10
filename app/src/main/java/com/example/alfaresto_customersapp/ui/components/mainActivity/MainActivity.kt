@@ -1,12 +1,17 @@
 package com.example.alfaresto_customersapp.ui.components
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.alfaresto_customersapp.R
@@ -14,6 +19,7 @@ import com.example.alfaresto_customersapp.databinding.ActivityMainBinding
 import com.example.alfaresto_customersapp.domain.network.NetworkUtils
 import com.example.alfaresto_customersapp.domain.network.NetworkUtils.warningAppear
 import com.example.alfaresto_customersapp.domain.network.networkStatusObserver.ConnectivityObserver
+import com.example.alfaresto_customersapp.ui.components.mainActivity.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -26,55 +32,113 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
+    private val mainActivityViewModel: MainActivityViewModel by viewModels()
+
     @Inject
     lateinit var connectivityObserver: ConnectivityObserver
+
+    private var navController: NavController? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        mainActivityViewModel.observeMyShipments()
+
         checkConnectivityStatus()
         connectivityStatus()
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fcv_switch_screen) as NavHostFragment
-        val navController = navHostFragment.navController
+        navController = navHostFragment.navController
 
-        binding.bnvCustomerNavigation.setupWithNavController(navController)
+        navController?.let { navController ->
+            binding.bnvCustomerNavigation.setupWithNavController(navController)
 
-        binding.bnvCustomerNavigation.setOnItemSelectedListener {
-            when (it.itemId) {
-                R.id.resto_fragment -> {
-                    navController.navigate(R.id.resto_fragment)
-                    true
+            binding.bnvCustomerNavigation.setOnItemSelectedListener {
+                when (it.itemId) {
+                    R.id.resto_fragment -> {
+                        navController.navigate(R.id.resto_fragment)
+                        true
+                    }
+
+                    R.id.order_history_fragment -> {
+                        navController.navigate(R.id.order_history_fragment)
+                        true
+                    }
+
+                    else -> false
                 }
+            }
 
-                R.id.order_history_fragment -> {
-                    navController.navigate(R.id.order_history_fragment)
-                    true
+            navController.addOnDestinationChangedListener { _, destination, _ ->
+                Timber.tag("abcd").d(destination.id.toString())
+                when (destination.id) {
+                    R.id.address_list -> hideBottomNav()
+                    R.id.add_new_address_fragment -> hideBottomNav()
+                    R.id.thank_you_fragment -> hideBottomNav()
+                    R.id.track_order_fragment -> hideBottomNav()
+                    R.id.order_history_detail_fragment -> hideBottomNav()
+                    R.id.chat_fragment -> hideBottomNav()
+                    R.id.detail_food_fragment -> hideBottomNav()
+                    R.id.chat_fragment -> hideBottomNav()
+                    else -> showBottomNav()
                 }
+            }
 
-                else -> false
+            setBlockActionListener()
+            handleIntent(intent)
+            handleDeepLinkIntent(intent)
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleIntent(intent)
+        handleDeepLinkIntent(intent)
+    }
+
+    private fun handleIntent(intent: Intent) {
+        val orderId = intent.getStringExtra("orderId")
+        val shipmentId = intent.getStringExtra("shipmentId")
+
+        when (intent.getStringExtra("navigate_to_fragment")) {
+            "On Delivery" -> {
+                val bundle = Bundle().apply {
+                    putString("orderId", orderId)
+                    putString("shipmentId", shipmentId)
+                }
+                navController?.navigate(R.id.track_order_fragment, bundle)
+            }
+
+            "On Process" -> {
+                val bundle = Bundle().apply {
+                    putString("orderId", orderId)
+                    putString("orderStatus", "On Process")
+                }
+                navController?.navigate(R.id.order_history_detail_fragment, bundle)
+            }
+
+            "Delivered" -> {
+                val bundle = Bundle().apply {
+                    putString("orderId", orderId)
+                    putString("orderStatus", "Delivered")
+                }
+                navController?.navigate(R.id.order_history_detail_fragment, bundle)
             }
         }
+    }
 
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            Timber.tag("abcd").d(destination.id.toString())
-            when (destination.id) {
-                R.id.address_list -> hideBottomNav()
-                R.id.add_new_address_fragment -> hideBottomNav()
-                R.id.thank_you_fragment -> hideBottomNav()
-                R.id.track_order_fragment -> hideBottomNav()
-                R.id.order_history_detail_fragment -> hideBottomNav()
-                R.id.chat_fragment -> hideBottomNav()
-                R.id.detail_food_fragment -> hideBottomNav()
-                R.id.chat_fragment -> hideBottomNav()
-                else -> showBottomNav()
+    private fun handleDeepLinkIntent(intent: Intent?) {
+        val link = intent?.getStringExtra("link")
+        Log.d("notiv", "link: $link")
+        if (link != null) {
+            val newIntent = Intent(Intent.ACTION_VIEW, Uri.parse(link)).apply {
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
             }
+            navController?.handleDeepLink(newIntent)
         }
-
-        setBlockActionListener()
     }
 
     private fun hideBottomNav() {
@@ -128,7 +192,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun showAlertDialog(): AlertDialog.Builder {
+    private fun showAlertDialog(): AlertDialog.Builder {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Connection Lost")
             .setMessage("We currently cannot connect to the internet, please click to retry.")

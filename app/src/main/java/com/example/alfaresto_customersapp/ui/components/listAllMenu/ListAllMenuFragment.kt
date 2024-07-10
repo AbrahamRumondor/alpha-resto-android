@@ -1,4 +1,4 @@
-package com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu
+package com.example.alfaresto_customersapp.ui.components.listAllMenu
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.FragmentListAllMenuBinding
 import com.example.alfaresto_customersapp.ui.components.listener.MenuListener
-import com.example.alfaresto_customersapp.ui.components.restoTab.listAllMenu.adapter.ListAllMenuAdapter
+import com.example.alfaresto_customersapp.ui.components.listAllMenu.adapter.ListAllMenuAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

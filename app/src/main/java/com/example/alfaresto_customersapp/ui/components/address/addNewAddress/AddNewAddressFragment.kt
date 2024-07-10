@@ -1,4 +1,4 @@
-package com.example.alfaresto_customersapp.ui.components.restoTab.address.addNewAddress
+package com.example.alfaresto_customersapp.ui.components.address.addNewAddress
 
 import android.Manifest
 import android.content.Context
