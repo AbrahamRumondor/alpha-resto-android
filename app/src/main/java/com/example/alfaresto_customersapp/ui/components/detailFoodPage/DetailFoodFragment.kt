@@ -58,9 +58,18 @@ class DetailFoodFragment : Fragment() {
             }
             tvRestoPhone.setOnClickListener {
                 val phoneNumber = tvRestoPhone.text.toString()
-                val dialIntent = Intent(Intent.ACTION_DIAL)
-                dialIntent.data = Uri.parse("tel:$phoneNumber")
+                val dialIntent = Intent(Intent.ACTION_DIAL).apply {
+                    data = Uri.parse("tel:$phoneNumber")
+                }
                 startActivity(dialIntent)
+            }
+            tvRestoAddress.setOnClickListener {
+                val address = tvRestoAddress.text.toString()
+                val addressIntent = Intent(Intent.ACTION_VIEW).apply {
+                    data = Uri.parse("geo:0,0?q=${Uri.encode(address)}")
+                }
+                addressIntent.setPackage("com.google.android.apps.maps")
+                startActivity(addressIntent)
             }
         }
     }

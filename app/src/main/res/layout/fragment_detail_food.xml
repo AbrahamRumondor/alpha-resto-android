@@ -163,6 +163,7 @@
                             android:fontFamily="@font/regular"
                             android:text="@string/address_resto"
                             android:textAlignment="textEnd"
+                            android:autoLink="map"
                             android:textColor="@color/black"
                             android:textSize="@dimen/font_12"
                             tools:ignore="RtlSymmetry" />
