@@ -1,6 +1,7 @@
 package com.example.alfaresto_customersapp.data.model
 
 import com.example.alfaresto_customersapp.domain.model.Menu
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.PropertyName
 
 data class MenuResponse(
@@ -28,10 +29,14 @@ data class MenuResponse(
 
     @get:PropertyName("resto_id")
     @set:PropertyName("resto_id")
-    var restoId: String = ""
+    var restoId: String = "",
+
+    @get:PropertyName("date_created")
+    @set:PropertyName("date_created")
+    var dateCreated: Timestamp = Timestamp.now()
 ) {
     // Public no-argument constructor required by Firestore
-    constructor() : this("", "", "", "", 0, 0, "")
+    constructor() : this("", "", "", "", 0, 0, "", Timestamp.now())
 
     companion object {
         fun transform(itemResponse: MenuResponse): Menu {
@@ -42,7 +47,8 @@ data class MenuResponse(
                 name = itemResponse.name,
                 price = itemResponse.price,
                 stock = itemResponse.stock,
-                restoId = itemResponse.restoId
+                restoId = itemResponse.restoId,
+                dateCreated = itemResponse.dateCreated
             )
         }
     }

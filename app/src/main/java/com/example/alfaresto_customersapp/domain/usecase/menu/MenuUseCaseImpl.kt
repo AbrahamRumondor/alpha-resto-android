@@ -12,4 +12,8 @@ class MenuUseCaseImpl @Inject constructor(
     override suspend fun getMenus(): StateFlow<List<Menu>> {
         return menuRepository.getMenus()
     }
+
+    override suspend fun getNewMenus(): StateFlow<List<Menu>> {
+        return menuRepository.getNewMenus()
+    }
 }

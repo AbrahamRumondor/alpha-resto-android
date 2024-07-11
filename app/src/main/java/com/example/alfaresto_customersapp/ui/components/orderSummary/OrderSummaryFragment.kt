@@ -19,7 +19,6 @@ import com.example.alfaresto_customersapp.domain.network.NetworkUtils
 import com.example.alfaresto_customersapp.ui.components.listener.OrderSummaryItemListener
 import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_ADDRESS
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -162,7 +161,6 @@ class OrderSummaryFragment : Fragment() {
                 if (!noInternetConnection()) {
                     val currentTime = orderSummaryViewModel.getCurrentTime()
                     val isClosed = orderSummaryViewModel.isRestoClosed(currentTime)
-
 
                     if (isClosed) {
                         Toast.makeText(

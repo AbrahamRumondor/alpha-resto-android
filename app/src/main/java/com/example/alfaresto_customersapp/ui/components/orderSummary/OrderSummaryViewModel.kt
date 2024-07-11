@@ -201,8 +201,7 @@ class OrderSummaryViewModel @Inject constructor(
                 val TOTAL = orders.value.size - 4
 
                 val notes =
-                    if (_orders.value[NOTES] != "notes") _orders.value[NOTES].toString() else "gada"
-//                val notes = orders.value[NOTES].toString()
+                    if (_orders.value[NOTES] != "notes") _orders.value[NOTES].toString() else ""
 
                 val payment =
                     if (orders.value[PAYMENT_METHOD].toString() == "COD" || orders.value[PAYMENT_METHOD].toString() == "GOPAY") orders.value[PAYMENT_METHOD].toString() else null
@@ -258,7 +257,9 @@ class OrderSummaryViewModel @Inject constructor(
                                 viewModelScope.launch {
                                     shipmentUseCase.createShipment(
                                         Shipment(
-                                            orderID = orderId, statusDelivery = "On Process", userId = user.id
+                                            orderID = orderId,
+                                            statusDelivery = "On Process",
+                                            userId = user.id
                                         )
                                     )
                                 }
@@ -302,7 +303,9 @@ class OrderSummaryViewModel @Inject constructor(
         viewModelScope.launch {
             val messageDto = SendMessageDto(
                 to = restoToken.value, notification = NotificationBody(
-                    title = "New Message", body = "There's new order. Check your Resto App", link = "alfaresto://order"
+                    title = "New Message",
+                    body = "There's new order. Check your Resto App",
+                    link = "alfaresto://order"
                 )
             )
 
