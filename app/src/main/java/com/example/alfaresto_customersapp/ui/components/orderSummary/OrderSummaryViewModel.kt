@@ -134,16 +134,7 @@ class OrderSummaryViewModel @Inject constructor(
     }
 
     fun isRestoClosed(currentTime: String): Boolean {
-        Timber.tag("RESTOO").d("Current Time: $currentTime")
-        Timber.tag("RESTOO").d("Resto Open Hour: ${restoOpenHour.value}")
-        Timber.tag("RESTOO").d("Resto Closed Hour: ${restoClosedHour.value}")
-        Timber.tag("RESTOO").d("Resto Is Closed Temporarily: ${restoIsClosedTemporarily.value}")
-
-        Timber.tag("RESTOO").d("condi 1: ${currentTime >= restoClosedHour.value}")
-        Timber.tag("RESTOO").d("condi 2: ${currentTime < restoOpenHour.value}")
-        Timber.tag("RESTOO").d("condi 3: ${restoIsClosedTemporarily.value}")
-
-        return currentTime >= restoClosedHour.value || currentTime < restoOpenHour.value || restoIsClosedTemporarily.value
+        return (currentTime >= restoClosedHour.value && currentTime < restoOpenHour.value) || restoIsClosedTemporarily.value
     }
 
     private fun fetchMenus() {
