@@ -109,6 +109,10 @@ class ChatViewModel @Inject constructor(
         viewModelScope.launch {
             Log.d("notiv", orderId)
             val link = "alfaresto://chat?order_id=${orderId}"
+
+            val newToken = restaurantUseCase.getRestaurantToken()
+            _restoToken.value = newToken
+
             val messageDto = SendMessageDto(
                 to = restoToken.value,
                 notification = NotificationBody(

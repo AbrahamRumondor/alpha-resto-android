@@ -258,7 +258,9 @@ class OrderSummaryViewModel @Inject constructor(
                                 viewModelScope.launch {
                                     shipmentUseCase.createShipment(
                                         Shipment(
-                                            orderID = orderId, statusDelivery = "On Process", userId = user.id
+                                            orderID = orderId,
+                                            statusDelivery = "On Process",
+                                            userId = user.id
                                         )
                                     )
                                 }
@@ -300,9 +302,14 @@ class OrderSummaryViewModel @Inject constructor(
 //        onResult: (msg: Boolean) -> Unit
     ) {
         viewModelScope.launch {
+            val newToken = restaurantUseCase.getRestaurantToken()
+            _restoToken.value = newToken
+
             val messageDto = SendMessageDto(
                 to = restoToken.value, notification = NotificationBody(
-                    title = "New Message", body = "There's new order. Check your Resto App", link = "alfaresto://order"
+                    title = "New Message",
+                    body = "There's new order. Check your Resto App",
+                    link = "alfaresto://order"
                 )
             )
 
