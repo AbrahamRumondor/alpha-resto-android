@@ -34,6 +34,8 @@ import com.example.alfaresto_customersapp.ui.components.loginPage.LoginActivity
 import com.example.alfaresto_customersapp.ui.components.restoTab.adapter.RestoAdapter
 import com.example.alfaresto_customersapp.utils.Constants
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.Firebase
+import com.google.firebase.messaging.messaging
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -199,6 +201,8 @@ class RestoFragment : Fragment() {
     }
 
     private fun logout() {
+        Firebase.messaging.deleteToken()
+
         val sharedPreferences = requireContext().getSharedPreferences(Constants.login, Context.MODE_PRIVATE)
         with(sharedPreferences.edit()) {
             putBoolean(Constants.isLoggedIn, false)

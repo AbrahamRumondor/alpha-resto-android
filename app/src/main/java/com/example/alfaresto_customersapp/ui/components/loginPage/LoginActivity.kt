@@ -12,6 +12,8 @@ import com.example.alfaresto_customersapp.databinding.ActivityLoginBinding
 import com.example.alfaresto_customersapp.ui.components.MainActivity
 import com.example.alfaresto_customersapp.ui.components.registerPage.RegisterActivity
 import com.example.alfaresto_customersapp.utils.Constants
+import com.google.firebase.Firebase
+import com.google.firebase.messaging.messaging
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -24,7 +26,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        
         if (isLoggedIn()) {
             navigateToMainActivity()
             return
