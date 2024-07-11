@@ -102,7 +102,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:visibility="gone"
-                android:src="@drawable/ic_delivery_1" />
+                android:src="@drawable/ic_delivery_gray" />
 
             <TextView
                 android:layout_width="@dimen/dimen_none"
