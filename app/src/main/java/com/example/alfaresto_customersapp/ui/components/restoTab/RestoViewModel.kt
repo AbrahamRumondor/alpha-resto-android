@@ -2,7 +2,7 @@ package com.example.alfaresto_customersapp.ui.components.restoTab
 
 import androidx.lifecycle.viewModelScope
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
-import com.example.alfaresto_customersapp.domain.error.FirestoreCallback
+import com.example.alfaresto_customersapp.domain.callbacks.FirestoreCallback
 import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.domain.model.User
 import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase

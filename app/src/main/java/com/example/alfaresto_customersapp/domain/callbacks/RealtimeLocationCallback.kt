@@ -1,4 +1,4 @@
-package com.example.alfaresto_customersapp.domain.error
+package com.example.alfaresto_customersapp.domain.callbacks
 
 import com.google.android.gms.maps.model.LatLng
 

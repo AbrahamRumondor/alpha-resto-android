@@ -1,7 +1,7 @@
 package com.example.alfaresto_customersapp.ui.components.address.addressList
 
 import androidx.lifecycle.viewModelScope
-import com.example.alfaresto_customersapp.domain.error.FirestoreCallback
+import com.example.alfaresto_customersapp.domain.callbacks.FirestoreCallback
 import com.example.alfaresto_customersapp.domain.model.Address
 import com.example.alfaresto_customersapp.domain.model.User
 import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase

@@ -1,4 +1,4 @@
-package com.example.alfaresto_customersapp.data.di
+package com.example.alfaresto_customersapp.ui.di
 
 import android.app.Application
 import android.content.Context

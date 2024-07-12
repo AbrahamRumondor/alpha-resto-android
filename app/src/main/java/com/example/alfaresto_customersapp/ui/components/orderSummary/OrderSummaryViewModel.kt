@@ -8,7 +8,7 @@ import com.example.alfaresto_customersapp.data.model.OrderItemResponse
 import com.example.alfaresto_customersapp.data.model.OrderResponse
 import com.example.alfaresto_customersapp.data.remote.response.pushNotification.NotificationBody
 import com.example.alfaresto_customersapp.data.remote.response.pushNotification.SendMessageDto
-import com.example.alfaresto_customersapp.domain.error.FirestoreCallback
+import com.example.alfaresto_customersapp.domain.callbacks.FirestoreCallback
 import com.example.alfaresto_customersapp.domain.error.Result.Error
 import com.example.alfaresto_customersapp.domain.error.Result.Success
 import com.example.alfaresto_customersapp.domain.model.Address
