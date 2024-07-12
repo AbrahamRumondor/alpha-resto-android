@@ -1,4 +1,4 @@
-package com.example.alfaresto_customersapp.domain.service
+package com.example.alfaresto_customersapp.ui.service
 
 import android.Manifest
 import android.app.NotificationChannel

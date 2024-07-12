@@ -32,7 +32,7 @@ import com.example.alfaresto_customersapp.databinding.BsdLocationPermissionBindi
 import com.example.alfaresto_customersapp.databinding.FragmentTrackOrderBinding
 import com.example.alfaresto_customersapp.domain.callbacks.OsrmCallback
 import com.example.alfaresto_customersapp.domain.callbacks.RealtimeLocationCallback
-import com.example.alfaresto_customersapp.domain.network.NetworkUtils
+import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.alfaresto_customersapp.ui.components.address.addNewAddress.AddNewAddressFragment.Companion.markersHeight
 import com.example.alfaresto_customersapp.ui.components.address.addNewAddress.AddNewAddressFragment.Companion.markersWidth
 import com.example.alfaresto_customersapp.utils.singleton.UserInfo.SHIPMENT

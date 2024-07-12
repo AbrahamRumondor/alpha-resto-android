@@ -96,14 +96,14 @@
             android:screenOrientation="nosensor"></activity>
 
         <service
-            android:name=".domain.service.pushNotification.PushNotificationService"
+            android:name=".ui.service.pushNotification.PushNotificationService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
         <service
-            android:name=".domain.service.NotificationForegroundService"
+            android:name=".ui.service.NotificationForegroundService"
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="dataSync">
