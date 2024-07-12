@@ -17,7 +17,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.OrderHistoryDetailBinding
-import com.example.alfaresto_customersapp.domain.network.NetworkUtils
+import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.alfaresto_customersapp.ui.components.orderHistoryDetailPage.adapter.OrderHistoryDetailItemsAdapter
 import com.example.alfaresto_customersapp.utils.singleton.UserInfo
 import dagger.hilt.android.AndroidEntryPoint
@@ -157,7 +157,7 @@ class OrderHistoryDetailFragment : Fragment() {
                 delay(500)
                 binding.apply {
                     tvOrderId.text = orderHistory.orderId
-                    tvOrderDate.text = orderHistory.orderDate
+                    tvOrderDate.text = orderHistory.orderDate.toString()
                     tvTotalPrice.text = String.format("Rp %,d", orderHistory.orderTotalPrice)
                     tvUserAddress.text = orderHistory.addressLabel
                     tvNotesText.text = orderHistory.orderNotes

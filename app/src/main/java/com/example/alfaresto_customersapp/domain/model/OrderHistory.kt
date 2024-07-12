@@ -1,12 +1,13 @@
 package com.example.alfaresto_customersapp.domain.model
 
 import java.text.NumberFormat
+import java.util.Date
 import java.util.Locale
 
 data class OrderHistory(
     val id: String = "",
     val orderId: String = "",
-    val orderDate: String = "",
+    val orderDate: Date = Date(),
     val orderTotalPrice: Int = 0,
     val addressLabel: String = "",
     val orderStatus: OrderStatus = OrderStatus.ON_PROCESS,

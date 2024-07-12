@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.alfaresto_customersapp.data.remote.response.osrm.RouteResponse
-import com.example.alfaresto_customersapp.domain.error.OsrmCallback
-import com.example.alfaresto_customersapp.domain.error.RealtimeLocationCallback
+import com.example.alfaresto_customersapp.domain.callbacks.OsrmCallback
+import com.example.alfaresto_customersapp.domain.callbacks.RealtimeLocationCallback
 import com.example.alfaresto_customersapp.domain.model.Order
 import com.example.alfaresto_customersapp.domain.model.Shipment
 import com.example.alfaresto_customersapp.domain.repository.OsrmApiRepository

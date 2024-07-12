@@ -12,7 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.alfaresto_customersapp.databinding.FragmentDetailFoodBinding
-import com.example.alfaresto_customersapp.domain.network.NetworkUtils
+import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

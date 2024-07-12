@@ -8,7 +8,7 @@ import com.example.alfaresto_customersapp.data.model.OrderItemResponse
 import com.example.alfaresto_customersapp.data.model.OrderResponse
 import com.example.alfaresto_customersapp.data.remote.response.pushNotification.NotificationBody
 import com.example.alfaresto_customersapp.data.remote.response.pushNotification.SendMessageDto
-import com.example.alfaresto_customersapp.domain.error.FirestoreCallback
+import com.example.alfaresto_customersapp.domain.callbacks.FirestoreCallback
 import com.example.alfaresto_customersapp.domain.error.Result.Error
 import com.example.alfaresto_customersapp.domain.error.Result.Success
 import com.example.alfaresto_customersapp.domain.model.Address
@@ -17,7 +17,7 @@ import com.example.alfaresto_customersapp.domain.model.Order
 import com.example.alfaresto_customersapp.domain.model.OrderItem
 import com.example.alfaresto_customersapp.domain.model.Shipment
 import com.example.alfaresto_customersapp.domain.model.User
-import com.example.alfaresto_customersapp.domain.network.NetworkUtils
+import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.alfaresto_customersapp.domain.repository.FcmApiRepository
 import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
 import com.example.alfaresto_customersapp.domain.usecase.menu.MenuUseCase

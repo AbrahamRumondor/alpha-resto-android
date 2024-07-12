@@ -7,9 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.data.remote.response.osrm.RouteResponse
-import com.example.alfaresto_customersapp.domain.error.OsrmCallback
+import com.example.alfaresto_customersapp.domain.callbacks.OsrmCallback
 import com.example.alfaresto_customersapp.domain.model.Address
-import com.example.alfaresto_customersapp.domain.network.NetworkUtils
+import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.alfaresto_customersapp.domain.repository.OsrmApiRepository
 import com.example.alfaresto_customersapp.domain.usecase.resto.RestaurantUseCase
 import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase

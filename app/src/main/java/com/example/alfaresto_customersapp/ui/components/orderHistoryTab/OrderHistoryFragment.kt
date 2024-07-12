@@ -16,7 +16,7 @@ import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.FragmentOrderHistoryBinding
 import com.example.alfaresto_customersapp.domain.model.OrderHistory
 import com.example.alfaresto_customersapp.domain.model.OrderStatus
-import com.example.alfaresto_customersapp.domain.network.NetworkUtils
+import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.alfaresto_customersapp.ui.components.listener.OrderHistoryListener
 import com.example.alfaresto_customersapp.ui.components.orderHistoryTab.adapter.OrderHistoryAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,6 +51,11 @@ class OrderHistoryFragment : Fragment() {
 
         lifecycleScope.launch {
             viewModel.orderHistories.collectLatest { orderHistories ->
+
+                binding.toolbar.toggleSort.isChecked = true
+                adapter.submitList(orderHistories.sortedByDescending { it.orderDate })
+                updateToggleButtonIcon(true)
+
                 binding.toolbar.toggleSort.setOnCheckedChangeListener { _, isChecked ->
                     val sortedOrderHistories = if (isChecked) {
                         orderHistories.sortedByDescending { it.orderDate }
@@ -60,10 +65,6 @@ class OrderHistoryFragment : Fragment() {
                     adapter.submitList(sortedOrderHistories)
                     updateToggleButtonIcon(isChecked)
                 }
-
-                binding.toolbar.toggleSort.isChecked = true
-                adapter.submitList(orderHistories.sortedByDescending { it.orderDate })
-                updateToggleButtonIcon(true)
 
                 orderHistories.map {
                     setOnOrderClickListener()

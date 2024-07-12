@@ -1,4 +1,4 @@
-package com.example.alfaresto_customersapp.domain.service.pushNotification
+package com.example.alfaresto_customersapp.ui.service.pushNotification
 
 import android.Manifest
 import android.app.NotificationChannel

@@ -15,7 +15,7 @@ import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.databinding.FragmentOrderSummaryBinding
 import com.example.alfaresto_customersapp.databinding.OrderSummaryPaymentMethodBinding
 import com.example.alfaresto_customersapp.domain.model.Menu
-import com.example.alfaresto_customersapp.domain.network.NetworkUtils
+import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.alfaresto_customersapp.ui.components.listener.OrderSummaryItemListener
 import com.example.alfaresto_customersapp.utils.singleton.UserInfo.USER_ADDRESS
 import dagger.hilt.android.AndroidEntryPoint

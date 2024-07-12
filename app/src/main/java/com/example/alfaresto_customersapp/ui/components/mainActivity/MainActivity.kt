@@ -16,9 +16,9 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.ActivityMainBinding
-import com.example.alfaresto_customersapp.domain.network.NetworkUtils
-import com.example.alfaresto_customersapp.domain.network.NetworkUtils.warningAppear
-import com.example.alfaresto_customersapp.domain.network.networkStatusObserver.ConnectivityObserver
+import com.example.alfaresto_customersapp.data.network.NetworkUtils
+import com.example.alfaresto_customersapp.data.network.NetworkUtils.warningAppear
+import com.example.alfaresto_customersapp.data.network.networkStatusObserver.ConnectivityObserver
 import com.example.alfaresto_customersapp.ui.components.mainActivity.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay

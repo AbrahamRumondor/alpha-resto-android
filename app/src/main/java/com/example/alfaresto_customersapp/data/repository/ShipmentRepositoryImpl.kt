@@ -9,7 +9,7 @@ import com.example.alfaresto_customersapp.data.model.ShipmentResponse
 import com.example.alfaresto_customersapp.domain.model.Shipment
 import com.example.alfaresto_customersapp.domain.model.User
 import com.example.alfaresto_customersapp.domain.repository.ShipmentRepository
-import com.example.alfaresto_customersapp.domain.service.NotificationForegroundService
+import com.example.alfaresto_customersapp.ui.service.NotificationForegroundService
 import com.example.alfaresto_customersapp.utils.singleton.UserInfo
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentChange

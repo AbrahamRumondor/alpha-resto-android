@@ -1,4 +1,4 @@
-package com.example.alfaresto_customersapp.domain.network.networkStatusObserver
+package com.example.alfaresto_customersapp.data.network.networkStatusObserver
 
 import kotlinx.coroutines.flow.Flow
 

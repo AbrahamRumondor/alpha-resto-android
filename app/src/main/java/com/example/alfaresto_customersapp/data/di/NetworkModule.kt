@@ -1,8 +1,8 @@
-package com.example.alfaresto_customersapp.domain.network.di
+package com.example.alfaresto_customersapp.data.di
 
 import android.content.Context
-import com.example.alfaresto_customersapp.domain.network.networkStatusObserver.ConnectivityObserver
-import com.example.alfaresto_customersapp.domain.network.networkStatusObserver.NetworkConnectivityObserver
+import com.example.alfaresto_customersapp.data.network.networkStatusObserver.ConnectivityObserver
+import com.example.alfaresto_customersapp.data.network.networkStatusObserver.NetworkConnectivityObserver
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

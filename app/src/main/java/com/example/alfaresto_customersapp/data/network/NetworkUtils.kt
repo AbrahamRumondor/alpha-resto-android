@@ -1,4 +1,4 @@
-package com.example.alfaresto_customersapp.domain.network
+package com.example.alfaresto_customersapp.data.network
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
