@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".ui.components.orderHistoryTab.OrderHistoryFragment">
+    tools:context=".ui.components.orderHistoryPage.OrderHistoryFragment">
 
     <include
         android:id="@+id/loading_layout"

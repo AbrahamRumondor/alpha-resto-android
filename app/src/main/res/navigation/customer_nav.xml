@@ -9,7 +9,7 @@
 
     <fragment
         android:id="@+id/resto_fragment"
-        android:name="com.example.alfaresto_customersapp.ui.components.restoTab.RestoFragment"
+        android:name="com.example.alfaresto_customersapp.ui.components.restoPage.RestoFragment"
         android:label="fragment_resto"
         tools:layout="@layout/fragment_resto">
         <action
@@ -28,7 +28,7 @@
 
     <fragment
         android:id="@+id/order_history_fragment"
-        android:name="com.example.alfaresto_customersapp.ui.components.orderHistoryTab.OrderHistoryFragment"
+        android:name="com.example.alfaresto_customersapp.ui.components.orderHistoryPage.OrderHistoryFragment"
         android:label="fragment_order_history"
         tools:layout="@layout/fragment_order_history">
         <action
@@ -68,7 +68,7 @@
 
     <fragment
         android:id="@+id/order_summary_fragment"
-        android:name="com.example.alfaresto_customersapp.ui.components.orderSummary.OrderSummaryFragment"
+        android:name="com.example.alfaresto_customersapp.ui.components.orderSummaryPage.OrderSummaryFragment"
         android:label="fragment_order_summary"
         tools:layout="@layout/fragment_order_summary">
         <action
@@ -94,7 +94,7 @@
 
     <fragment
         android:id="@+id/address_list"
-        android:name="com.example.alfaresto_customersapp.ui.components.address.addressList.AddressListFragment"
+        android:name="com.example.alfaresto_customersapp.ui.components.addressPage.addressList.AddressListFragment"
         android:label="fragment_address_list"
         tools:layout="@layout/fragment_address_list">
         <action
@@ -104,13 +104,13 @@
 
     <fragment
         android:id="@+id/add_new_address_fragment"
-        android:name="com.example.alfaresto_customersapp.ui.components.address.addNewAddress.AddNewAddressFragment"
+        android:name="com.example.alfaresto_customersapp.ui.components.addressPage.addNewAddress.AddNewAddressFragment"
         android:label="fragment_add_new_address"
         tools:layout="@layout/fragment_add_new_address" />
 
     <fragment
         android:id="@+id/list_all_menu_fragment"
-        android:name="com.example.alfaresto_customersapp.ui.components.listAllMenu.ListAllMenuFragment"
+        android:name="com.example.alfaresto_customersapp.ui.components.listAllMenuPage.ListAllMenuFragment"
         android:label="fragment_list_all_menu"
         tools:layout="@layout/fragment_list_all_menu">
 
@@ -143,7 +143,7 @@
 
     <fragment
         android:id="@+id/track_order_fragment"
-        android:name="com.example.alfaresto_customersapp.ui.components.trackOrder.TrackOrderFragment"
+        android:name="com.example.alfaresto_customersapp.ui.components.trackOrderPage.TrackOrderFragment"
         android:label="fragment_track_order"
         tools:layout="@layout/fragment_track_order">
         <action
@@ -196,7 +196,7 @@
 
     <fragment
         android:id="@+id/chat_fragment"
-        android:name="com.example.alfaresto_customersapp.ui.components.trackOrder.chat.ChatFragment"
+        android:name="com.example.alfaresto_customersapp.ui.components.trackOrderPage.chat.ChatFragment"
         android:label="fragment_chat"
         tools:layout="@layout/fragment_chat">
         <argument
@@ -211,7 +211,7 @@
     </fragment>
     <fragment
         android:id="@+id/thank_you_fragment"
-        android:name="com.example.alfaresto_customersapp.ui.components.restoTab.ThankYouFragment"
+        android:name="com.example.alfaresto_customersapp.ui.components.restoPage.ThankYouFragment"
         android:label="fragment_thank_you"
         tools:layout="@layout/fragment_thank_you">
         <argument
