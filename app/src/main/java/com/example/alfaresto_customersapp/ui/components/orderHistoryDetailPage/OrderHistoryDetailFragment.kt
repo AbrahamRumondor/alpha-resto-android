@@ -157,7 +157,7 @@ class OrderHistoryDetailFragment : Fragment() {
                 delay(500)
                 binding.apply {
                     tvOrderId.text = orderHistory.orderId
-                    tvOrderDate.text = orderHistory.orderDate.toString()
+                    tvOrderDate.text = orderHistory.formattedDate()
                     tvTotalPrice.text = String.format("Rp %,d", orderHistory.orderTotalPrice)
                     tvUserAddress.text = orderHistory.addressLabel
                     tvNotesText.text = orderHistory.orderNotes

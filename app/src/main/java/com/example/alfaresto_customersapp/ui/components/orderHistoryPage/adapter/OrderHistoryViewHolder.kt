@@ -15,7 +15,7 @@ class OrderHistoryViewHolder(
 
     fun bind(order: OrderHistory, listener: OrderHistoryListener?) {
         binding.run {
-            tvOrderDate.text = order.orderDate.toString()
+            tvOrderDate.text = order.formattedDate()
             tvOrderPrice.text = order.formattedPrice()
             tvOrderAddress.text = order.addressLabel
             order.orderStatus.name.let { status ->
