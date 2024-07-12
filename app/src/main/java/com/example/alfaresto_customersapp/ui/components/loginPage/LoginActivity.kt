@@ -11,9 +11,7 @@ import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.ActivityLoginBinding
 import com.example.alfaresto_customersapp.ui.components.MainActivity
 import com.example.alfaresto_customersapp.ui.components.registerPage.RegisterActivity
-import com.example.alfaresto_customersapp.utils.Constants
-import com.google.firebase.Firebase
-import com.google.firebase.messaging.messaging
+import com.example.alfaresto_customersapp.utils.singleton.Constants
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

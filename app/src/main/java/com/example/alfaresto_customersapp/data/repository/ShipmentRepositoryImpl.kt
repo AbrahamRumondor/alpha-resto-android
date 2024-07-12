@@ -1,4 +1,4 @@
-package com.example.alfaresto_customersapp.data.di
+package com.example.alfaresto_customersapp.data.repository
 
 import android.content.Context
 import android.content.Intent
@@ -10,14 +10,12 @@ import com.example.alfaresto_customersapp.domain.model.Shipment
 import com.example.alfaresto_customersapp.domain.model.User
 import com.example.alfaresto_customersapp.domain.repository.ShipmentRepository
 import com.example.alfaresto_customersapp.domain.service.NotificationForegroundService
-import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase
-import com.example.alfaresto_customersapp.utils.user.UserConstants
+import com.example.alfaresto_customersapp.utils.singleton.UserInfo
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Named
@@ -58,7 +56,7 @@ class ShipmentRepositoryImpl @Inject constructor(
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
                     _shipment.value = Shipment().copy(statusDelivery = "On Process")
-                    UserConstants.SHIPMENT.postValue(Shipment().copy(statusDelivery = "On Process"))
+                    UserInfo.SHIPMENT.postValue(Shipment().copy(statusDelivery = "On Process"))
                     return@addSnapshotListener
                 }
 
@@ -67,12 +65,12 @@ class ShipmentRepositoryImpl @Inject constructor(
                     shipmentResponse?.let {
                         val shipment = ShipmentResponse.transform(it)
                         _shipment.value = shipment
-                        UserConstants.SHIPMENT.postValue(shipment)
+                        UserInfo.SHIPMENT.postValue(shipment)
 //                        startForegroundService(shipmentId = shipment.id, orderId = shipment.orderID, orderStatus = shipment.statusDelivery)
                     }
                 } else {
                     _shipment.value = Shipment().copy(statusDelivery = "On Process")
-                    UserConstants.SHIPMENT.postValue(Shipment().copy(statusDelivery = "On Process"))
+                    UserInfo.SHIPMENT.postValue(Shipment().copy(statusDelivery = "On Process"))
                 }
             }
 
@@ -98,7 +96,7 @@ class ShipmentRepositoryImpl @Inject constructor(
                         val modifiedDoc = docChange.document
                         val shipmentResponse = modifiedDoc.toObject(ShipmentResponse::class.java)
                         val shipment = ShipmentResponse.transform(shipmentResponse)
-                        UserConstants.SHIPMENT.postValue(shipment)
+                        UserInfo.SHIPMENT.postValue(shipment)
 
                         notifyUser(shipment, user)
                     }

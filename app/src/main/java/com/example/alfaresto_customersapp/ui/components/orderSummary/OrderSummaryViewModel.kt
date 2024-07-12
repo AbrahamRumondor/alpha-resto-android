@@ -6,8 +6,8 @@ import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.data.model.OrderItemResponse
 import com.example.alfaresto_customersapp.data.model.OrderResponse
-import com.example.alfaresto_customersapp.data.remote.pushNotification.NotificationBody
-import com.example.alfaresto_customersapp.data.remote.pushNotification.SendMessageDto
+import com.example.alfaresto_customersapp.data.remote.response.pushNotification.NotificationBody
+import com.example.alfaresto_customersapp.data.remote.response.pushNotification.SendMessageDto
 import com.example.alfaresto_customersapp.domain.error.FirestoreCallback
 import com.example.alfaresto_customersapp.domain.error.Result.Error
 import com.example.alfaresto_customersapp.domain.error.Result.Success
@@ -25,8 +25,8 @@ import com.example.alfaresto_customersapp.domain.usecase.order.OrderUseCase
 import com.example.alfaresto_customersapp.domain.usecase.resto.RestaurantUseCase
 import com.example.alfaresto_customersapp.domain.usecase.shipment.ShipmentUseCase
 import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase
-import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_ADDRESS
-import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_TOKEN
+import com.example.alfaresto_customersapp.utils.singleton.UserInfo.USER_ADDRESS
+import com.example.alfaresto_customersapp.utils.singleton.UserInfo.USER_TOKEN
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -133,8 +133,10 @@ class OrderSummaryViewModel @Inject constructor(
         }
     }
 
-    fun isRestoClosed(currentTime: String): Boolean {
-        return (currentTime >= restoClosedHour.value && currentTime < restoOpenHour.value) || restoIsClosedTemporarily.value
+    fun isRestoClosed(currentTime: String, onResult: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            onResult((currentTime >= restoClosedHour.value && currentTime < restoOpenHour.value) || restaurantUseCase.isRestaurantClosedTemporary())
+        }
     }
 
     private fun fetchMenus() {

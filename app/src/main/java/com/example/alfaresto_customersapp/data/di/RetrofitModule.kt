@@ -2,7 +2,7 @@ package com.example.alfaresto_customersapp.data.di
 
 import com.example.alfaresto_customersapp.data.remote.retrofit.FcmApi
 import com.example.alfaresto_customersapp.data.remote.retrofit.OsrmApi
-import com.example.alfaresto_customersapp.utils.Constants.SERVER_IP
+import com.example.alfaresto_customersapp.utils.singleton.Constants.SERVER_IP
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

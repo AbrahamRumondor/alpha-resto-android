@@ -1,4 +1,4 @@
-package com.example.alfaresto_customersapp.data.di
+package com.example.alfaresto_customersapp.data.repository
 
 import com.example.alfaresto_customersapp.data.model.ChatResponse
 import com.example.alfaresto_customersapp.data.model.OrderItemResponse

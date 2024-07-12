@@ -1,11 +1,7 @@
-package com.example.alfaresto_customersapp.data.remote.osrm
+package com.example.alfaresto_customersapp.data.repository
 
-import com.example.alfaresto_customersapp.data.remote.response.RouteResponse
-import com.example.alfaresto_customersapp.data.remote.retrofit.FcmApi
+import com.example.alfaresto_customersapp.data.remote.response.osrm.RouteResponse
 import com.example.alfaresto_customersapp.data.remote.retrofit.OsrmApi
-import com.example.alfaresto_customersapp.domain.error.DataError
-import com.example.alfaresto_customersapp.domain.error.Result
-import com.example.alfaresto_customersapp.domain.repository.FcmApiRepository
 import com.example.alfaresto_customersapp.domain.repository.OsrmApiRepository
 import retrofit2.Call
 import javax.inject.Inject

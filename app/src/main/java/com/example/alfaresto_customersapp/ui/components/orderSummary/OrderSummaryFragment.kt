@@ -17,9 +17,8 @@ import com.example.alfaresto_customersapp.databinding.OrderSummaryPaymentMethodB
 import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.domain.network.NetworkUtils
 import com.example.alfaresto_customersapp.ui.components.listener.OrderSummaryItemListener
-import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_ADDRESS
+import com.example.alfaresto_customersapp.utils.singleton.UserInfo.USER_ADDRESS
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -161,29 +160,32 @@ class OrderSummaryFragment : Fragment() {
             override fun onCheckoutButtonClicked() {
                 if (!noInternetConnection()) {
                     val currentTime = orderSummaryViewModel.getCurrentTime()
-                    val isClosed = orderSummaryViewModel.isRestoClosed(currentTime)
+                    var isClosed = false
 
+                    orderSummaryViewModel.isRestoClosed(currentTime) {
+                        isClosed = it
 
-                    if (isClosed) {
-                        Toast.makeText(
-                            requireContext(),
-                            getString(R.string.restaurant_closed),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        return
-                    }
+                        if (isClosed) {
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.restaurant_closed),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            return@isRestoClosed
+                        }
 
-                    if (!checkoutClicked) {
-                        AlertDialog.Builder(requireContext())
-                            .setTitle(getString(R.string.checkout_confirmation))
-                            .setMessage(getString(R.string.checkout_confirmation_message))
-                            .setNegativeButton(getString(R.string.no)) { dialog, _ ->
-                                dialog.dismiss()
-                            }
-                            .setPositiveButton(getString(R.string.yes)) { _, _ ->
-                                checkout()
-                            }
-                            .show()
+                        if (!checkoutClicked) {
+                            AlertDialog.Builder(requireContext())
+                                .setTitle(getString(R.string.checkout_confirmation))
+                                .setMessage(getString(R.string.checkout_confirmation_message))
+                                .setNegativeButton(getString(R.string.no)) { dialog, _ ->
+                                    dialog.dismiss()
+                                }
+                                .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                                    checkout()
+                                }
+                                .show()
+                        }
                     }
                 }
             }

@@ -4,8 +4,8 @@ import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.alfaresto_customersapp.data.remote.pushNotification.NotificationBody
-import com.example.alfaresto_customersapp.data.remote.pushNotification.SendMessageDto
+import com.example.alfaresto_customersapp.data.remote.response.pushNotification.NotificationBody
+import com.example.alfaresto_customersapp.data.remote.response.pushNotification.SendMessageDto
 import com.example.alfaresto_customersapp.domain.error.Result
 import com.example.alfaresto_customersapp.domain.model.Chat
 import com.example.alfaresto_customersapp.domain.model.User

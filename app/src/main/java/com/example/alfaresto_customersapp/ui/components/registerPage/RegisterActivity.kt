@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.ActivityRegisterBinding
 import com.example.alfaresto_customersapp.ui.components.loginPage.LoginActivity
-import com.example.alfaresto_customersapp.utils.Constants
+import com.example.alfaresto_customersapp.utils.singleton.Constants
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

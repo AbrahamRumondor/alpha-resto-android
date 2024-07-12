@@ -7,7 +7,7 @@ import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.AddressItemBinding
 import com.example.alfaresto_customersapp.domain.model.Address
 import com.example.alfaresto_customersapp.ui.components.listener.AddressItemListener
-import com.example.alfaresto_customersapp.utils.user.UserConstants
+import com.example.alfaresto_customersapp.utils.singleton.UserInfo
 
 class AddressListAdapter :
     RecyclerView.Adapter<AddressListAdapter.AddressListViewHolder>() {
@@ -28,7 +28,7 @@ class AddressListAdapter :
                 }
 
                 cvAddress.setOnClickListener {
-                    UserConstants.USER_ADDRESS = address
+                    UserInfo.USER_ADDRESS = address
                     addressItemListener?.onAddressClicked(position, addressId = address.id)
                 }
             }

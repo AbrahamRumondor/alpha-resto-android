@@ -1,14 +1,7 @@
 package com.example.alfaresto_customersapp.domain.repository
 
-import com.example.alfaresto_customersapp.data.remote.pushNotification.SendMessageDto
-import com.example.alfaresto_customersapp.data.remote.response.RouteResponse
-import com.example.alfaresto_customersapp.domain.error.DataError
-import com.example.alfaresto_customersapp.domain.error.FirestoreCallback
-import com.example.alfaresto_customersapp.domain.error.OsrmCallback
-import com.example.alfaresto_customersapp.domain.error.Result
+import com.example.alfaresto_customersapp.data.remote.response.osrm.RouteResponse
 import retrofit2.Call
-import retrofit2.http.Path
-import retrofit2.http.Query
 
 interface OsrmApiRepository {
     fun getRoute(

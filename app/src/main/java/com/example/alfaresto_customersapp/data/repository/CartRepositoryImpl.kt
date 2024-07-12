@@ -1,4 +1,4 @@
-package com.example.alfaresto_customersapp.data.local.room.repository
+package com.example.alfaresto_customersapp.data.repository
 
 import androidx.lifecycle.LiveData
 import com.example.alfaresto_customersapp.data.local.room.CartDao

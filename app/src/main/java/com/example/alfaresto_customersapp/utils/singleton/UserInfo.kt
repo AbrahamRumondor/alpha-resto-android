@@ -1,11 +1,10 @@
-package com.example.alfaresto_customersapp.utils.user
+package com.example.alfaresto_customersapp.utils.singleton
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.alfaresto_customersapp.domain.model.Address
 import com.example.alfaresto_customersapp.domain.model.Shipment
 
-object UserConstants {
+object UserInfo {
     var USER_TOKEN: String? = null
     var USER_ADDRESS : Address? = null
     var USER_ID: String? = null

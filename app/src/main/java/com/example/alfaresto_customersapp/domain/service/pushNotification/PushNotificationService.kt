@@ -9,25 +9,20 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.graphics.Color
-import android.icu.text.CaseMap.Title
 import android.net.Uri
 import android.os.Build
 import android.util.Log
-import android.widget.RemoteViews
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat
-import androidx.paging.LOG_TAG
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.domain.model.Token
 import com.example.alfaresto_customersapp.ui.components.MainActivity
-import com.example.alfaresto_customersapp.utils.user.UserConstants
+import com.example.alfaresto_customersapp.utils.singleton.UserInfo
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.AndroidEntryPoint
-import retrofit2.http.Body
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -45,7 +40,7 @@ class PushNotificationService : FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         sendTokenToFirestore(token)
-        UserConstants.USER_TOKEN = token
+        UserInfo.USER_TOKEN = token
     }
 
     override fun onMessageReceived(message: RemoteMessage) {

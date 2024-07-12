@@ -19,7 +19,7 @@ import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.OrderHistoryDetailBinding
 import com.example.alfaresto_customersapp.domain.network.NetworkUtils
 import com.example.alfaresto_customersapp.ui.components.orderHistoryDetailPage.adapter.OrderHistoryDetailItemsAdapter
-import com.example.alfaresto_customersapp.utils.user.UserConstants
+import com.example.alfaresto_customersapp.utils.singleton.UserInfo
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -180,7 +180,7 @@ class OrderHistoryDetailFragment : Fragment() {
     }
 
     private fun onStatusChangeToDelivery() {
-        UserConstants.SHIPMENT.observe(viewLifecycleOwner) {
+        UserInfo.SHIPMENT.observe(viewLifecycleOwner) {
             if (it.orderID == args.orderId) {
                 if (it.statusDelivery == "On Delivery") {
                     val action =

@@ -1,19 +1,16 @@
 package com.example.alfaresto_customersapp.ui.components.trackOrder
 
-import android.location.Location
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.alfaresto_customersapp.data.remote.response.RouteResponse
+import com.example.alfaresto_customersapp.data.remote.response.osrm.RouteResponse
 import com.example.alfaresto_customersapp.domain.error.OsrmCallback
 import com.example.alfaresto_customersapp.domain.error.RealtimeLocationCallback
-import com.example.alfaresto_customersapp.domain.error.TrackDistanceCallback
 import com.example.alfaresto_customersapp.domain.model.Order
 import com.example.alfaresto_customersapp.domain.model.Shipment
 import com.example.alfaresto_customersapp.domain.repository.OsrmApiRepository
 import com.example.alfaresto_customersapp.domain.usecase.order.OrderUseCase
-import com.example.alfaresto_customersapp.domain.usecase.resto.RestaurantUseCase
 import com.example.alfaresto_customersapp.domain.usecase.shipment.ShipmentUseCase
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds

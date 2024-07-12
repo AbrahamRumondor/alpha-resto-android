@@ -1,4 +1,4 @@
-package com.example.alfaresto_customersapp.data.remote.pushNotification
+package com.example.alfaresto_customersapp.data.remote.response.pushNotification
 
 data class SendMessageDto(
     val to: String?,

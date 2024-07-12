@@ -1,8 +1,8 @@
 package com.example.alfaresto_customersapp.domain.usecase.notification
 
 import com.example.alfaresto_customersapp.data.model.TokenResponse
-import com.example.alfaresto_customersapp.data.remote.pushNotification.NotificationBody
-import com.example.alfaresto_customersapp.data.remote.pushNotification.SendMessageDto
+import com.example.alfaresto_customersapp.data.remote.response.pushNotification.NotificationBody
+import com.example.alfaresto_customersapp.data.remote.response.pushNotification.SendMessageDto
 import com.example.alfaresto_customersapp.domain.error.Result
 import com.example.alfaresto_customersapp.domain.repository.AuthRepository
 import com.example.alfaresto_customersapp.domain.repository.FcmApiRepository

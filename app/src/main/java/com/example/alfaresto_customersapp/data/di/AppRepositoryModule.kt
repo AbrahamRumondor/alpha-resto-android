@@ -1,6 +1,12 @@
 package com.example.alfaresto_customersapp.data.di
 
-import com.example.alfaresto_customersapp.data.local.room.repository.CartRepositoryImpl
+import com.example.alfaresto_customersapp.data.repository.CartRepositoryImpl
+import com.example.alfaresto_customersapp.data.repository.AuthRepositoryImpl
+import com.example.alfaresto_customersapp.data.repository.MenuRepositoryImpl
+import com.example.alfaresto_customersapp.data.repository.OrderRepositoryImpl
+import com.example.alfaresto_customersapp.data.repository.RestaurantRepositoryImpl
+import com.example.alfaresto_customersapp.data.repository.ShipmentRepositoryImpl
+import com.example.alfaresto_customersapp.data.repository.UserRepositoryImpl
 import com.example.alfaresto_customersapp.domain.repository.AuthRepository
 import com.example.alfaresto_customersapp.domain.repository.CartRepository
 import com.example.alfaresto_customersapp.domain.repository.MenuRepository

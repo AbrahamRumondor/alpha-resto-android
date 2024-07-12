@@ -1,4 +1,4 @@
-package com.example.alfaresto_customersapp.data.remote.response
+package com.example.alfaresto_customersapp.data.remote.response.osrm
 
 import com.google.gson.annotations.SerializedName
 

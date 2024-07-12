@@ -1,7 +1,6 @@
 package com.example.alfaresto_customersapp.domain.error
 
-import com.example.alfaresto_customersapp.data.remote.response.RouteResponse
-import com.example.alfaresto_customersapp.domain.model.User
+import com.example.alfaresto_customersapp.data.remote.response.osrm.RouteResponse
 
 interface OsrmCallback {
     fun onSuccess(routeResponse: RouteResponse?)

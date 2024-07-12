@@ -126,6 +126,14 @@ class MainActivity : AppCompatActivity() {
                 }
                 navController?.navigate(R.id.order_history_detail_fragment, bundle)
             }
+
+            "Cancelled" -> {
+                val bundle = Bundle().apply {
+                    putString("orderId", orderId)
+                    putString("orderStatus", "Cancelled")
+                }
+                navController?.navigate(R.id.order_history_detail_fragment, bundle)
+            }
         }
     }
 

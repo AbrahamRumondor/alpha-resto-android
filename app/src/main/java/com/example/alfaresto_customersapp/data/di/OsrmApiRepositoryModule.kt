@@ -1,8 +1,6 @@
 package com.example.alfaresto_customersapp.data.di
 
-import com.example.alfaresto_customersapp.data.remote.osrm.OsrmApiRepositoryImpl
-import com.example.alfaresto_customersapp.data.remote.pushNotification.FcmApiRepositoryImpl
-import com.example.alfaresto_customersapp.domain.repository.FcmApiRepository
+import com.example.alfaresto_customersapp.data.repository.OsrmApiRepositoryImpl
 import com.example.alfaresto_customersapp.domain.repository.OsrmApiRepository
 import dagger.Binds
 import dagger.Module

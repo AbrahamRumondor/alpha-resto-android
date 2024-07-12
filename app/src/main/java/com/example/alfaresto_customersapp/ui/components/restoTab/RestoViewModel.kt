@@ -9,7 +9,7 @@ import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
 import com.example.alfaresto_customersapp.domain.usecase.menu.MenuUseCase
 import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase
 import com.example.alfaresto_customersapp.ui.components.loadState.LoadStateViewModel
-import com.example.alfaresto_customersapp.utils.user.UserConstants.USER_TOKEN
+import com.example.alfaresto_customersapp.utils.singleton.UserInfo.USER_TOKEN
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow

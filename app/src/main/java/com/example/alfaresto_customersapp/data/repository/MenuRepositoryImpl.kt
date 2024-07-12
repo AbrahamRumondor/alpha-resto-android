@@ -1,4 +1,4 @@
-package com.example.alfaresto_customersapp.data.di
+package com.example.alfaresto_customersapp.data.repository
 
 import com.example.alfaresto_customersapp.data.model.MenuResponse
 import com.example.alfaresto_customersapp.domain.model.Menu

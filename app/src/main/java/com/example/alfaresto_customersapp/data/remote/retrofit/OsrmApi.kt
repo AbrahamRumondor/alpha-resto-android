@@ -1,6 +1,6 @@
 package com.example.alfaresto_customersapp.data.remote.retrofit
 
-import com.example.alfaresto_customersapp.data.remote.response.RouteResponse
+import com.example.alfaresto_customersapp.data.remote.response.osrm.RouteResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
