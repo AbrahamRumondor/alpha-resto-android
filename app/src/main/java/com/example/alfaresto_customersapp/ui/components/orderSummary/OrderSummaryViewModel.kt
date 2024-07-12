@@ -203,8 +203,7 @@ class OrderSummaryViewModel @Inject constructor(
                 val TOTAL = orders.value.size - 4
 
                 val notes =
-                    if (_orders.value[NOTES] != "notes") _orders.value[NOTES].toString() else "gada"
-//                val notes = orders.value[NOTES].toString()
+                    if (_orders.value[NOTES] != "notes") _orders.value[NOTES].toString() else ""
 
                 val payment =
                     if (orders.value[PAYMENT_METHOD].toString() == "COD" || orders.value[PAYMENT_METHOD].toString() == "GOPAY") orders.value[PAYMENT_METHOD].toString() else null

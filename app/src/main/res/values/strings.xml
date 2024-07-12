@@ -116,7 +116,7 @@
     <string name="ordered_at">Ordered at :</string>
     <string name="items">" items"</string>
     <string name="status">STATUS</string>
-    <string name="best_seller">Best Seller</string>
+    <string name="new_menu">New Menu</string>
     <string name="alfa_resto">Alfa Resto</string>
     <string name="checkout_confirmation">Checkout Order</string>
     <string name="checkout_confirmation_message">Do you want to continue checkout process?</string>

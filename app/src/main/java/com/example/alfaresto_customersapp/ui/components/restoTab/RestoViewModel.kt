@@ -46,7 +46,7 @@ class RestoViewModel @Inject constructor(
         viewModelScope.launch {
             setLoading(true)
             try {
-                menuUseCase.getMenus().collectLatest {
+                menuUseCase.getNewMenus().collectLatest {
                     _menus.value = it
                     setLoading(false)
                 }

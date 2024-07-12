@@ -5,4 +5,5 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface MenuUseCase {
     suspend fun getMenus(): StateFlow<List<Menu>>
+    suspend fun getNewMenus(): StateFlow<List<Menu>>
 }
