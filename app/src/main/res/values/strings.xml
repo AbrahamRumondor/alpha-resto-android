@@ -64,6 +64,7 @@
     <string name="on_delivery_status">On Delivery</string>
     <string name="delivered_status">Delivered</string>
     <string name="on_delivery">Your order is currently on delivery, track the driver in App</string>
+    <string name="order_notif_cancelled">Looks like we have some problem, sorry we must cancel your order 🥲</string>
     <string name="on_process">Your order is currently on process, waiting for Admin to accept…</string>
     <string name="on_process_status">On Process</string>
     <string name="order_detail">Order Detail</string>
@@ -127,7 +128,7 @@
     <string name="logout_confirmation_message">Are you sure you want to logout?</string>
     <string name="logout">Logout</string>
     <string name="cancel">Cancel</string>
-    <string name="canceled">Canceled</string>
+    <string name="canceled">Cancelled</string>
     <string name="no_internet">Disconnected, please check your connection</string>
     <string name="no_internet_connection">No internet Connection</string>
     <string name="your_internet_connection_is_currently_not_available_please_check_or_try_again">Your internet connection is currently not available please check or try again.</string>

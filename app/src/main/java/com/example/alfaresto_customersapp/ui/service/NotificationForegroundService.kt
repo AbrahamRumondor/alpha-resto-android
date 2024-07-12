@@ -119,7 +119,16 @@ class NotificationForegroundService : Service() {
 
                     customView?.setTextViewText(R.id.notification_title, orderStatus)
                     when (orderStatus) {
+                        "Cancelled" -> {
+                            customView?.setTextViewText(
+                                R.id.notification_text,
+                                getText(R.string.order_notif_cancelled)
+                            )
+                            customView?.setViewVisibility(R.id.rl_progression, View.GONE)
+                        }
+
                         "On Delivery" -> {
+                            customView?.setViewVisibility(R.id.rl_progression, View.VISIBLE)
                             customView?.setImageViewResource(
                                 R.id.iv_dot_one,
                                 R.drawable.point_round_orange
@@ -158,6 +167,8 @@ class NotificationForegroundService : Service() {
                         }
 
                         "Delivered" -> {
+                            customView?.setViewVisibility(R.id.rl_progression, View.VISIBLE)
+
                             customView?.setImageViewResource(
                                 R.id.iv_dot_one,
                                 R.drawable.point_round_orange
@@ -195,6 +206,8 @@ class NotificationForegroundService : Service() {
                         }
 
                         else -> { // ON PROCESS
+                            customView?.setViewVisibility(R.id.rl_progression, View.VISIBLE)
+
                             customView?.setImageViewResource(
                                 R.id.iv_dot_one,
                                 R.drawable.point_round_orange

@@ -190,6 +190,8 @@ class OrderHistoryDetailFragment : Fragment() {
                         )
                     Navigation.findNavController(binding.root)
                         .navigate(action)
+                } else if (it.statusDelivery == "Cancelled") {
+                    binding.toolbar.tvToolbarText.text = getString(R.string.canceled)
                 }
             }
         }
