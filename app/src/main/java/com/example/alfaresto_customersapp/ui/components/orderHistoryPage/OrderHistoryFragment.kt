@@ -16,6 +16,8 @@ import com.example.alfaresto_customersapp.domain.model.OrderHistory
 import com.example.alfaresto_customersapp.domain.model.OrderStatus
 import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.alfaresto_customersapp.ui.components.listener.OrderHistoryListener
+import com.example.alfaresto_customersapp.ui.components.mainActivity.MainActivity.Companion.DELIVERED
+import com.example.alfaresto_customersapp.ui.components.mainActivity.MainActivity.Companion.ON_PROCESS
 import com.example.alfaresto_customersapp.ui.components.orderHistoryPage.adapter.OrderHistoryAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -71,7 +73,7 @@ class OrderHistoryFragment : Fragment() {
                 if (orderHistories.isEmpty()) {
                     Toast.makeText(
                         requireContext(),
-                        "Order History Loaded. There's no order history.",
+                        getString(R.string.no_order_history),
                         Toast.LENGTH_SHORT
                     ).show()
                     return@collectLatest
@@ -119,14 +121,14 @@ class OrderHistoryFragment : Fragment() {
                     OrderStatus.ON_PROCESS -> {
                         OrderHistoryFragmentDirections.actionOrderHistoryFragmentToOrderHistoryDetailFragment(
                             orderId = orderHistory.orderId,
-                            orderStatus = "On Process"
+                            orderStatus = ON_PROCESS
                         )
                     }
 
                     else -> {
                         OrderHistoryFragmentDirections.actionOrderHistoryFragmentToOrderHistoryDetailFragment(
                             orderId = orderHistory.orderId,
-                            orderStatus = "Delivered"
+                            orderStatus = DELIVERED
                         )
                     }
                 }

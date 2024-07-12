@@ -60,7 +60,7 @@ class ListAllMenuFragment : Fragment() {
         if (NetworkUtils.isConnectedToNetwork.value == false) {
             binding.inclInternet.root.visibility = View.VISIBLE
             binding.clBase.visibility = View.GONE
-            Toast.makeText(requireContext(), "No internet", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.no_internet), Toast.LENGTH_SHORT).show()
         } else {
             binding.inclInternet.root.visibility = View.GONE
             binding.clBase.visibility = View.VISIBLE

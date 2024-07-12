@@ -271,7 +271,7 @@ class AddNewAddressFragment : Fragment() {
 
         bottomSheetBinding.btnToSettings.setOnClickListener {
             val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-            val uri = Uri.fromParts("package", requireActivity().packageName, null)
+            val uri = Uri.fromParts(schemePackage, requireActivity().packageName, null)
             intent.setData(uri)
             startActivity(intent)
         }
@@ -316,6 +316,7 @@ class AddNewAddressFragment : Fragment() {
     companion object {
         const val markersWidth = 100
         const val markersHeight = 100
+        const val schemePackage = "package"
     }
 
 }

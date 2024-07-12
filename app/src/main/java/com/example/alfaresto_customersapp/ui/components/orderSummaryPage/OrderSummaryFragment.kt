@@ -53,7 +53,7 @@ class OrderSummaryFragment : Fragment() {
         if (NetworkUtils.isConnectedToNetwork.value == false) {
             binding.inclInternet.root.visibility = View.VISIBLE
             binding.rvOrderSummary.visibility = View.GONE
-            Toast.makeText(requireContext(), "No internet", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.no_internet), Toast.LENGTH_SHORT).show()
         } else {
             binding.inclInternet.root.visibility = View.GONE
             binding.rvOrderSummary.visibility = View.VISIBLE
@@ -134,9 +134,9 @@ class OrderSummaryFragment : Fragment() {
 
             override fun onRadioButtonClicked(position: Int, id: Int) {
                 val payment = if (id == R.id.rb_cod) {
-                    "COD"
+                    COD
                 } else {
-                    "GOPAY"
+                    GOPAY
                 }
                 orderSummaryViewModel.setPayment(payment)
             }
@@ -242,5 +242,10 @@ class OrderSummaryFragment : Fragment() {
 //            findNavController().popBackStack()
 //        }
         return Pair(totalItem, totalPrice)
+    }
+
+    companion object {
+        const val COD = "COD"
+        const val GOPAY = "GOPAY"
     }
 }

@@ -25,6 +25,9 @@ import com.example.alfaresto_customersapp.domain.usecase.order.OrderUseCase
 import com.example.alfaresto_customersapp.domain.usecase.resto.RestaurantUseCase
 import com.example.alfaresto_customersapp.domain.usecase.shipment.ShipmentUseCase
 import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase
+import com.example.alfaresto_customersapp.ui.components.mainActivity.MainActivity.Companion.ON_PROCESS
+import com.example.alfaresto_customersapp.ui.components.orderSummaryPage.OrderSummaryFragment.Companion.COD
+import com.example.alfaresto_customersapp.ui.components.orderSummaryPage.OrderSummaryFragment.Companion.GOPAY
 import com.example.alfaresto_customersapp.utils.singleton.UserInfo.USER_ADDRESS
 import com.example.alfaresto_customersapp.utils.singleton.UserInfo.USER_TOKEN
 import com.google.firebase.Timestamp
@@ -206,7 +209,7 @@ class OrderSummaryViewModel @Inject constructor(
                     if (_orders.value[NOTES] != "notes") _orders.value[NOTES].toString() else ""
 
                 val payment =
-                    if (orders.value[PAYMENT_METHOD].toString() == "COD" || orders.value[PAYMENT_METHOD].toString() == "GOPAY") orders.value[PAYMENT_METHOD].toString() else null
+                    if (orders.value[PAYMENT_METHOD].toString() == COD || orders.value[PAYMENT_METHOD].toString() == GOPAY) orders.value[PAYMENT_METHOD].toString() else null
 
                 val total = orders.value[TOTAL] as Pair<Int, Int>
 
@@ -260,15 +263,13 @@ class OrderSummaryViewModel @Inject constructor(
                                     shipmentUseCase.createShipment(
                                         Shipment(
                                             orderID = orderId,
-                                            statusDelivery = "On Process",
+                                            statusDelivery = ON_PROCESS,
                                             userId = user.id
                                         )
                                     )
                                 }
 
-                                sendNotificationToResto(
-//                                    onResult
-                                )
+                                sendNotificationToResto()
 
                                 viewModelScope.launch {
                                     cartUseCase.deleteAllMenus()
@@ -299,18 +300,16 @@ class OrderSummaryViewModel @Inject constructor(
         }
     }
 
-    private fun sendNotificationToResto(
-//        onResult: (msg: Boolean) -> Unit
-    ) {
+    private fun sendNotificationToResto() {
         viewModelScope.launch {
             val newToken = restaurantUseCase.getRestaurantToken()
             _restoToken.value = newToken
 
             val messageDto = SendMessageDto(
                 to = restoToken.value, notification = NotificationBody(
-                    title = "New Message",
-                    body = "There's new order. Check your Resto App",
-                    link = "alfaresto://order"
+                    title = fcmOrderTitle,
+                    body = fcmOrderBody,
+                    link = fcmOrderLink
                 )
             )
 
@@ -334,5 +333,11 @@ class OrderSummaryViewModel @Inject constructor(
         val date = Timestamp.now().toDate().toString()
         val time = date.substring(11, 16)
         return time
+    }
+
+    companion object {
+        const val fcmOrderTitle = "New Order"
+        const val fcmOrderBody = "There's new order. Check your Resto App"
+        const val fcmOrderLink = "alfaresto://order"
     }
 }

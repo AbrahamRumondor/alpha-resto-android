@@ -17,7 +17,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.domain.model.Token
-import com.example.alfaresto_customersapp.ui.components.MainActivity
+import com.example.alfaresto_customersapp.ui.components.mainActivity.MainActivity
 import com.example.alfaresto_customersapp.utils.singleton.UserInfo
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessagingService

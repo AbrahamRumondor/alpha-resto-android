@@ -37,7 +37,11 @@ class ChatFragment : Fragment() {
         binding = FragmentChatBinding.inflate(inflater, container, false)
 
         if (args.orderId.isEmpty()) {
-            Toast.makeText(requireContext(), "Order ID is missing", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.order_id_missing),
+                Toast.LENGTH_SHORT
+            ).show()
             Navigation.findNavController(binding.root).popBackStack()
         }
 
@@ -46,7 +50,6 @@ class ChatFragment : Fragment() {
         return binding.root
     }
 
-    @SuppressLint("RestrictedApi")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -74,7 +77,11 @@ class ChatFragment : Fragment() {
                     text.clear()
                 }
             } else {
-                Toast.makeText(requireContext(), "Message cannot be empty", Toast.LENGTH_SHORT)
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.message_cannot_empty),
+                    Toast.LENGTH_SHORT
+                )
                     .show()
             }
         }
@@ -100,7 +107,8 @@ class ChatFragment : Fragment() {
         if (NetworkUtils.isConnectedToNetwork.value == false) {
             binding.inclInternet.root.visibility = View.VISIBLE
             binding.clBase.visibility = View.GONE
-            Toast.makeText(requireContext(), "No internet", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.no_internet), Toast.LENGTH_SHORT)
+                .show()
         } else {
             binding.inclInternet.root.visibility = View.GONE
             binding.clBase.visibility = View.VISIBLE
@@ -109,7 +117,6 @@ class ChatFragment : Fragment() {
 
     private fun onEmbeddedBackPressed() {
         val callback = object : OnBackPressedCallback(true) {
-            @SuppressLint("RestrictedApi")
             override fun handleOnBackPressed() {
                 findNavController().navigateUp()
             }

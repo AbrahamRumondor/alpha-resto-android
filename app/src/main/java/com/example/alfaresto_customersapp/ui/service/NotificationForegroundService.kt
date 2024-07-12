@@ -12,15 +12,13 @@ import android.graphics.Color
 import android.os.Build
 import android.os.IBinder
 import android.os.Handler
-import android.util.Log
 import android.view.View
-import android.widget.ProgressBar
 import android.widget.RemoteViews
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.alfaresto_customersapp.R
-import com.example.alfaresto_customersapp.ui.components.MainActivity
+import com.example.alfaresto_customersapp.ui.components.mainActivity.MainActivity
 import timber.log.Timber
 
 @Suppress("DEPRECATION")

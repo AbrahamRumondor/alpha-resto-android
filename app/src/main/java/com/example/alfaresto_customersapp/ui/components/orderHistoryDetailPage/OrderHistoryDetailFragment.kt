@@ -18,6 +18,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.OrderHistoryDetailBinding
 import com.example.alfaresto_customersapp.data.network.NetworkUtils
+import com.example.alfaresto_customersapp.ui.components.mainActivity.MainActivity.Companion.CANCELLED
+import com.example.alfaresto_customersapp.ui.components.mainActivity.MainActivity.Companion.DELIVERED
+import com.example.alfaresto_customersapp.ui.components.mainActivity.MainActivity.Companion.ON_DELIVERY
 import com.example.alfaresto_customersapp.ui.components.orderHistoryDetailPage.adapter.OrderHistoryDetailItemsAdapter
 import com.example.alfaresto_customersapp.utils.singleton.UserInfo
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,7 +47,6 @@ class OrderHistoryDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupView()
         setupBackBtn()
         onEmbeddedBackPressed()
@@ -60,10 +62,11 @@ class OrderHistoryDetailFragment : Fragment() {
     }
 
     private fun setConnectionBehaviour() {
-        if (NetworkUtils.isConnectedToNetwork.value == false){
+        if (NetworkUtils.isConnectedToNetwork.value == false) {
             binding.inclInternet.root.visibility = View.VISIBLE
             binding.clBase.visibility = View.GONE
-            Toast.makeText(requireContext(), "No internet", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.no_internet), Toast.LENGTH_SHORT)
+                .show()
         } else {
             binding.inclInternet.root.visibility = View.GONE
             binding.clBase.visibility = View.VISIBLE
@@ -129,7 +132,7 @@ class OrderHistoryDetailFragment : Fragment() {
         val statusOrder = args.orderStatus
         val orderId = args.orderId
         binding.apply {
-            if (statusOrder == "Delivered") {
+            if (statusOrder == DELIVERED) {
                 tvComplain.visibility = View.VISIBLE
                 btnComplain.visibility = View.VISIBLE
                 btnComplain.setOnClickListener {
@@ -182,7 +185,7 @@ class OrderHistoryDetailFragment : Fragment() {
     private fun onStatusChangeToDelivery() {
         UserInfo.SHIPMENT.observe(viewLifecycleOwner) {
             if (it.orderID == args.orderId) {
-                if (it.statusDelivery == "On Delivery") {
+                if (it.statusDelivery == ON_DELIVERY) {
                     val action =
                         OrderHistoryDetailFragmentDirections.actionOrderHistoryDetailFragmentToTrackOrderFragment(
                             orderId = args.orderId,
@@ -190,7 +193,7 @@ class OrderHistoryDetailFragment : Fragment() {
                         )
                     Navigation.findNavController(binding.root)
                         .navigate(action)
-                } else if (it.statusDelivery == "Cancelled") {
+                } else if (it.statusDelivery == CANCELLED) {
                     binding.toolbar.tvToolbarText.text = getString(R.string.canceled)
                 }
             }

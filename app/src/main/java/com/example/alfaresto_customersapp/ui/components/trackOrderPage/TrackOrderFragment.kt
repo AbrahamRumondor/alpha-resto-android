@@ -151,7 +151,7 @@ class TrackOrderFragment : Fragment() {
         if (NetworkUtils.isConnectedToNetwork.value == false) {
             binding.inclInternet.root.visibility = View.VISIBLE
             binding.clBase.visibility = View.GONE
-            Toast.makeText(requireContext(), "No internet", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.no_internet), Toast.LENGTH_SHORT).show()
         } else {
             binding.inclInternet.root.visibility = View.GONE
             binding.clBase.visibility = View.VISIBLE
@@ -396,24 +396,6 @@ class TrackOrderFragment : Fragment() {
             }
         builder.show()
     }
-
-//    private fun showBottomSheetLocationPermission() {
-//        bottomSheetBinding = BsdLocationPermissionBinding.inflate(layoutInflater)
-//
-//        bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme)
-//        bottomSheetDialog.setContentView(bottomSheetBinding.root) // Use the binding's root view
-//        bottomSheetDialog.setOnCancelListener {
-//            it.dismiss()
-//        }
-//        bottomSheetDialog.show()
-//
-//        bottomSheetBinding.btnToSettings.setOnClickListener {
-//            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-//            val uri = Uri.fromParts("package", requireActivity().packageName, null)
-//            intent.setData(uri)
-//            startActivity(intent)
-//        }
-//    }
 
     override fun onStop() {
         super.onStop()

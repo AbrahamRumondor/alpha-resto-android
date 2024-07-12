@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.FragmentDetailFoodBinding
 import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import dagger.hilt.android.AndroidEntryPoint
@@ -85,7 +86,7 @@ class DetailFoodFragment : Fragment() {
         if (NetworkUtils.isConnectedToNetwork.value == false){
             binding.inclInternet.root.visibility = View.VISIBLE
             binding.clBase.visibility = View.GONE
-            Toast.makeText(requireContext(), "No internet", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.no_internet), Toast.LENGTH_SHORT).show()
         } else {
             binding.inclInternet.root.visibility = View.GONE
             binding.clBase.visibility = View.VISIBLE

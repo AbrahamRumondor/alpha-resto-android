@@ -31,11 +31,11 @@ class ThankYouFragment : Fragment() {
             val checkoutStatus = args.checkoutStatus
 
             tvOrderTitle.apply {
-                text = if (checkoutStatus) "Order Success!" else "Order Failed..."
+                text = if (checkoutStatus) getString(R.string.order_success) else getString(R.string.order_failed)
             }
 
             tvOrderBody.apply {
-                text = if (checkoutStatus) "Please wait for your order" else ""
+                text = if (checkoutStatus) getString(R.string.please_wait_order) else ""
             }
 
             btnProceed.setOnClickListener {

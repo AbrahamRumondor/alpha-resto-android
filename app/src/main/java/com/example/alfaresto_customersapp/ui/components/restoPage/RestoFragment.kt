@@ -29,6 +29,7 @@ import com.example.alfaresto_customersapp.databinding.FragmentRestoBinding
 import com.example.alfaresto_customersapp.domain.callbacks.FirestoreCallback
 import com.example.alfaresto_customersapp.domain.model.User
 import com.example.alfaresto_customersapp.data.network.NetworkUtils
+import com.example.alfaresto_customersapp.ui.components.addressPage.addNewAddress.AddNewAddressFragment.Companion.schemePackage
 import com.example.alfaresto_customersapp.ui.components.listener.MenuListener
 import com.example.alfaresto_customersapp.ui.components.loginPage.LoginActivity
 import com.example.alfaresto_customersapp.ui.components.restoPage.adapter.RestoAdapter
@@ -92,14 +93,6 @@ class RestoFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.menus.collectLatest { menus ->
                 viewModel.cart.collectLatest { cart ->
-//                    delay(500)
-//                    if (cart.isEmpty()) {
-//                        setRestoAdapterButtons(cart)
-//                        adapter.submitMenuList(menus)
-//                        Toast.makeText(requireContext(), "Menu is not available", Toast.LENGTH_LONG)
-//                            .show()
-//                        return@collectLatest
-//                    }
 
                     val updatedMenus = menus.map { menu ->
                         val cartItem = cart.find { it.menuId == menu.id }
@@ -120,7 +113,7 @@ class RestoFragment : Fragment() {
                 }
                 delay(500)
                 if (menus.isEmpty()) {
-                    Toast.makeText(requireContext(), "Menu is not available", Toast.LENGTH_LONG)
+                    Toast.makeText(requireContext(), getString(R.string.menu_not_available), Toast.LENGTH_LONG)
                         .show()
                     return@collectLatest
                 }
@@ -306,7 +299,7 @@ class RestoFragment : Fragment() {
 
         bottomSheetBinding.btnToSettings.setOnClickListener {
             val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-            val uri = Uri.fromParts("package", requireActivity().packageName, null)
+            val uri = Uri.fromParts(schemePackage, requireActivity().packageName, null)
             intent.setData(uri)
             startActivity(intent)
         }

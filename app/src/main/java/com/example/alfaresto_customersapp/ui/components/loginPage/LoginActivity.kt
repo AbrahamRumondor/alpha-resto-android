@@ -9,7 +9,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.ActivityLoginBinding
-import com.example.alfaresto_customersapp.ui.components.MainActivity
+import com.example.alfaresto_customersapp.ui.components.mainActivity.MainActivity
 import com.example.alfaresto_customersapp.ui.components.registerPage.RegisterActivity
 import com.example.alfaresto_customersapp.utils.singleton.Constants
 import dagger.hilt.android.AndroidEntryPoint

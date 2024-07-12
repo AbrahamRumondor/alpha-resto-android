@@ -60,6 +60,12 @@
     <string name="name">Name</string>
     <string name="no">No</string>
     <string name="ok">OK</string>
+    <string name="message_cannot_empty">Message cannot be empty</string>
+    <string name="order_id_missing">"Order Id is missing</string>
+    <string name="order_success">Order Success!</string>
+    <string name="order_failed">Order Failed…</string>
+    <string name="please_wait_order">Please wait for your order</string>
+    <string name="menu_not_available">Menu is not available</string>
     <string name="oldest">Oldest</string>
     <string name="on_delivery_status">On Delivery</string>
     <string name="delivered_status">Delivered</string>
@@ -129,7 +135,9 @@
     <string name="logout">Logout</string>
     <string name="cancel">Cancel</string>
     <string name="canceled">Cancelled</string>
-    <string name="no_internet">Disconnected, please check your connection</string>
+    <string name="no_internet">No internet, please check your connection</string>
+    <string name="no_address">No addresses found</string>
+    <string name="no_order_history">Order History Loaded. There\'s no order history.</string>
     <string name="no_internet_connection">No internet Connection</string>
     <string name="your_internet_connection_is_currently_not_available_please_check_or_try_again">Your internet connection is currently not available please check or try again.</string>
     <string name="try_again">Try again</string>

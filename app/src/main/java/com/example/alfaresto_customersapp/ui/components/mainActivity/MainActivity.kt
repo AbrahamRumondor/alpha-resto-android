@@ -1,4 +1,4 @@
-package com.example.alfaresto_customersapp.ui.components
+package com.example.alfaresto_customersapp.ui.components.mainActivity
 
 import android.content.Intent
 import android.net.Uri
@@ -6,10 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
-import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -17,11 +14,8 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.ActivityMainBinding
 import com.example.alfaresto_customersapp.data.network.NetworkUtils
-import com.example.alfaresto_customersapp.data.network.NetworkUtils.warningAppear
 import com.example.alfaresto_customersapp.data.network.networkStatusObserver.ConnectivityObserver
-import com.example.alfaresto_customersapp.ui.components.mainActivity.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -99,38 +93,38 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleIntent(intent: Intent) {
-        val orderId = intent.getStringExtra("orderId")
-        val shipmentId = intent.getStringExtra("shipmentId")
+        val orderId = intent.getStringExtra(intentOrderId)
+        val shipmentId = intent.getStringExtra(intentShipmentId)
 
-        when (intent.getStringExtra("navigate_to_fragment")) {
-            "On Delivery" -> {
+        when (intent.getStringExtra(navigateToFragment)) {
+            ON_DELIVERY -> {
                 val bundle = Bundle().apply {
-                    putString("orderId", orderId)
-                    putString("shipmentId", shipmentId)
+                    putString(intentOrderId, orderId)
+                    putString(intentShipmentId, shipmentId)
                 }
                 navController?.navigate(R.id.track_order_fragment, bundle)
             }
 
-            "On Process" -> {
+            ON_PROCESS -> {
                 val bundle = Bundle().apply {
-                    putString("orderId", orderId)
-                    putString("orderStatus", "On Process")
+                    putString(intentOrderId, orderId)
+                    putString(intentOrderStatus, ON_PROCESS)
                 }
                 navController?.navigate(R.id.order_history_detail_fragment, bundle)
             }
 
-            "Delivered" -> {
+            DELIVERED -> {
                 val bundle = Bundle().apply {
-                    putString("orderId", orderId)
-                    putString("orderStatus", "Delivered")
+                    putString(intentOrderId, orderId)
+                    putString(intentOrderStatus, DELIVERED)
                 }
                 navController?.navigate(R.id.order_history_detail_fragment, bundle)
             }
 
-            "Cancelled" -> {
+            CANCELLED -> {
                 val bundle = Bundle().apply {
-                    putString("orderId", orderId)
-                    putString("orderStatus", "Cancelled")
+                    putString(intentOrderId, orderId)
+                    putString(intentOrderStatus, CANCELLED)
                 }
                 navController?.navigate(R.id.order_history_detail_fragment, bundle)
             }
@@ -138,7 +132,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleDeepLinkIntent(intent: Intent?) {
-        val link = intent?.getStringExtra("link")
+        val link = intent?.getStringExtra(intentLink)
         Log.d("notiv", "link: $link")
         if (link != null) {
             val newIntent = Intent(Intent.ACTION_VIEW, Uri.parse(link)).apply {
@@ -180,29 +174,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-//    private fun connectivityStatus() {
-//        lifecycleScope.launch {
-//            delay(1000)
-//            NetworkUtils.isConnectedToNetwork.distinctUntilChanged()
-//                .observe(this@MainActivity, Observer {
-//                    if (!it && !warningAppear) {
-//                        warningAppear = true
-//                        showAlertDialog().setPositiveButton(R.string.retry) { _, _ ->
-//                            warningAppear = false
-//                        }?.setIcon(android.R.drawable.ic_dialog_alert)?.setOnDismissListener {
-//                            warningAppear = false
-//                            connectivityStatus()
-//                        }?.show()
-//                    }
-//                })
-//        }
-//
-//    }
-
-    private fun showAlertDialog(): AlertDialog.Builder {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Connection Lost")
-            .setMessage("We currently cannot connect to the internet, please click to retry.")
-        return builder
+    companion object {
+        const val ON_DELIVERY = "On Delivery"
+        const val ON_PROCESS = "On Process"
+        const val DELIVERED = "Delivered"
+        const val CANCELLED = "Cancelled"
+        const val intentOrderId = "orderId"
+        const val intentShipmentId = "shipmentId"
+        const val intentOrderStatus = "orderStatus"
+        const val navigateToFragment = "navigate_to_fragment"
+        const val intentLink = "link"
     }
 }

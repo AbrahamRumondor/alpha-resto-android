@@ -71,7 +71,7 @@ class AddressListFragment : Fragment() {
         lifecycleScope.launch {
             delay(2000)
             if (!hasAddress) {
-                Toast.makeText(requireContext(), "No addresses found", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.no_address), Toast.LENGTH_SHORT).show()
             }
         }
     }
