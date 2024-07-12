@@ -7,9 +7,12 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -51,18 +54,46 @@ class AddNewAddressFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         requestLocationPermissions()
         binding.mvMap.onCreate(savedInstanceState)
-
+        inputAction()
         setConnectionBehaviour()
         binding.inclInternet.btnInetTryAgain.setOnClickListener {
             setConnectionBehaviour()
         }
     }
 
+    private fun inputAction() {
+        binding.apply {
+            etAddressLabel.setOnEditorActionListener { _, actionId, event ->
+                if (actionId == EditorInfo.IME_ACTION_NEXT ||
+                    event?.action == KeyEvent.ACTION_DOWN && event.keyCode == KeyEvent.KEYCODE_ENTER
+                ) {
+                    binding.etAddressDetail.requestFocus()
+                    true
+                } else {
+                    false
+                }
+            }
+            etAddressDetail.setOnEditorActionListener { _, actionId, event ->
+                if (actionId == EditorInfo.IME_ACTION_DONE ||
+                    (event != null && event.action == KeyEvent.ACTION_DOWN && event.keyCode == KeyEvent.KEYCODE_ENTER)
+                ) {
+                    val imm =
+                        context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(view?.windowToken, 0)
+                    true
+                } else {
+                    false
+                }
+            }
+        }
+    }
+
     private fun setConnectionBehaviour() {
-        if (NetworkUtils.isConnectedToNetwork.value == false){
+        if (NetworkUtils.isConnectedToNetwork.value == false) {
             binding.inclInternet.root.visibility = View.VISIBLE
             binding.clBase.visibility = View.GONE
-            Toast.makeText(requireContext(), getString(R.string.no_internet), Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.no_internet), Toast.LENGTH_SHORT)
+                .show()
         } else {
             binding.inclInternet.root.visibility = View.GONE
             binding.clBase.visibility = View.VISIBLE
