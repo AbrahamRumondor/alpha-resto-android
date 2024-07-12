@@ -43,7 +43,7 @@
     <string name="greetings">Hi, %1$s</string>
     <string name="guest">Guest</string>
     <string name="hello">Hello,</string>
-    <string name="hi_bella">Hi, Bella!</string>
+    <string name="hi_user">Hi, User!</string>
     <string name="icon_proceed">Icon_Proceed</string>
     <string name="latest">Latest</string>
     <string name="list_all_menu">List All Menu</string>

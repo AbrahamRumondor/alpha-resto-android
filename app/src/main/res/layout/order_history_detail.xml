@@ -29,8 +29,10 @@
             android:layout_height="@dimen/dimen_none"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar">
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            app:layout_constraintVertical_bias="0.0">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_order_detail"
@@ -134,65 +136,66 @@
                     app:layout_constraintStart_toStartOf="@+id/divider2"
                     app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
-            <TextView
-                android:id="@+id/tv_total_price"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginVertical="@dimen/dimen_10"
-                android:fontFamily="@font/semibold"
-                android:textColor="@color/mainblack"
-                android:textSize="@dimen/font_16"
-                app:layout_constraintBottom_toTopOf="@+id/divider3"
-                app:layout_constraintEnd_toEndOf="@+id/divider2"
-                app:layout_constraintTop_toBottomOf="@+id/divider2" />
+                <TextView
+                    android:id="@+id/tv_total_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="@dimen/dimen_10"
+                    android:fontFamily="@font/semibold"
+                    android:textColor="@color/mainblack"
+                    android:textSize="@dimen/font_16"
+                    app:layout_constraintBottom_toTopOf="@+id/divider3"
+                    app:layout_constraintEnd_toEndOf="@+id/divider2"
+                    app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
-            <View
-                android:id="@+id/divider3"
-                style="@style/Divider.Horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen_1"
-                android:layout_marginHorizontal="@dimen/dimen_30"
-                android:layout_marginBottom="@dimen/dimen_10"
-                app:layout_constraintTop_toBottomOf="@id/tv_total_price"
-                tools:layout_editor_absoluteX="30dp" />
+                <View
+                    android:id="@+id/divider3"
+                    style="@style/Divider.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_1"
+                    android:layout_marginHorizontal="@dimen/dimen_30"
+                    android:layout_marginBottom="@dimen/dimen_10"
+                    app:layout_constraintTop_toBottomOf="@id/tv_total_price"
+                    tools:layout_editor_absoluteX="30dp" />
 
-            <TextView
-                android:id="@+id/tv_notes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="@dimen/dimen_10"
-                android:fontFamily="@font/semibold"
-                android:text="@string/notes"
-                android:textColor="@color/mainblack"
-                android:textSize="@dimen/font_16"
-                app:layout_constraintBottom_toTopOf="@+id/tv_notes_text"
-                app:layout_constraintStart_toStartOf="@+id/divider3"
-                app:layout_constraintTop_toBottomOf="@+id/divider3" />
+                <TextView
+                    android:id="@+id/tv_notes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/dimen_10"
+                    android:fontFamily="@font/semibold"
+                    android:text="@string/notes"
+                    android:textColor="@color/mainblack"
+                    android:textSize="@dimen/font_16"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_notes_text"
+                    app:layout_constraintStart_toStartOf="@+id/divider3"
+                    app:layout_constraintTop_toBottomOf="@+id/divider3" />
 
-            <TextView
-                android:id="@+id/tv_notes_text"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginVertical="@dimen/dimen_10"
-                android:fontFamily="@font/semibold"
-                android:maxLength="150"
-                android:textColor="@color/mainblack"
-                android:textSize="@dimen/font_16"
-                app:layout_constraintBottom_toTopOf="@+id/divider4"
-                app:layout_constraintEnd_toEndOf="@+id/divider3"
-                app:layout_constraintStart_toEndOf="@+id/tv_notes"
-                app:layout_constraintTop_toBottomOf="@+id/tv_notes" />
+                <TextView
+                    android:id="@+id/tv_notes_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/semibold"
+                    android:layout_marginBottom="@dimen/dimen_10"
+                    android:maxLength="150"
+                    android:textColor="@color/mainblack"
+                    android:textSize="@dimen/font_16"
+                    app:layout_constraintBottom_toTopOf="@+id/divider4"
+                    app:layout_constraintEnd_toEndOf="@+id/divider3"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/tv_notes"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_notes" />
 
-            <View
-                android:id="@+id/divider4"
-                style="@style/Divider.Horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen_1"
-                android:layout_marginHorizontal="@dimen/dimen_30"
-                android:layout_marginBottom="@dimen/dimen_10"
-                app:layout_constraintBottom_toTopOf="@+id/ll_order_id"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                <View
+                    android:id="@+id/divider4"
+                    style="@style/Divider.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_1"
+                    android:layout_marginHorizontal="@dimen/dimen_30"
+                    android:layout_marginBottom="@dimen/dimen_10"
+                    app:layout_constraintBottom_toTopOf="@+id/ll_order_id"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <LinearLayout
                     android:id="@+id/ll_order_id"
