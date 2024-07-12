@@ -1,6 +1,7 @@
 package com.example.alfaresto_customersapp.domain.model
 
 import java.text.NumberFormat
+import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
@@ -19,5 +20,10 @@ data class OrderHistory(
                 orderTotalPrice
             )
         }"
+    }
+
+    fun formattedDate(): String {
+        val dateFormat = SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss", Locale.getDefault())
+        return dateFormat.format(orderDate)
     }
 }
