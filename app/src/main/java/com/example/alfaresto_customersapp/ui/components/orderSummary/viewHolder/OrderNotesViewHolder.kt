@@ -14,21 +14,13 @@ class OrderNotesViewHolder(
 
     fun bind() {
         binding.run {
-            etNotes.setOnFocusChangeListener { _, hasFocus ->
-                if (!hasFocus) {
-                    val etNotesText = etNotes.text.toString()
-                    itemListener?.onNotesFilled(etNotesText)
-                }
-            }
-
-            etNotes.setOnEditorActionListener { _, _, _ ->
-                val etNotesText = etNotes.text.toString()
-                itemListener?.onNotesFilled(etNotesText)
-                etNotes.clearFocus()
-                true
-            }
-
             etNotes.apply {
+                setOnFocusChangeListener { _, hasFocus ->
+                    if (!hasFocus) {
+                        val etNotesText = etNotes.text.toString()
+                        itemListener?.onNotesFilled(etNotesText)
+                    }
+                }
                 setOnEditorActionListener { _, _, _ ->
                     val etNotesText = etNotes.text.toString()
                     Timber.tag("notes vh").d("Notes: $etNotesText")
