@@ -199,6 +199,10 @@ class NotificationForegroundService : Service() {
                                 R.id.notification_text,
                                 getText(R.string.delivered)
                             )
+                            customView?.setImageViewResource(
+                                R.id.iv_on_delivery,
+                                R.drawable.ic_delivery
+                            )
 
                             setAnimationVisibility("Delivered")
                         }
