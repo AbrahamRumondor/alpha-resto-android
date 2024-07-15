@@ -9,5 +9,4 @@ object UserInfo {
     var USER_ADDRESS : Address? = null
     var USER_ID: String? = null
     var SHIPMENT: MutableLiveData<Shipment> = MutableLiveData()
-    var ORDER_CHECKOUT_STATUS = false
 }
