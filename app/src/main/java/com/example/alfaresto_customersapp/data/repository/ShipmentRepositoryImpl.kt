@@ -2,6 +2,7 @@ package com.example.alfaresto_customersapp.data.repository
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -111,6 +112,7 @@ class ShipmentRepositoryImpl @Inject constructor(
     }
 
     private fun notifyUser(shipment: Shipment, user: User) {
+        Timber.tag("notiv").d("$shipment dan $user")
         if (shipment.userId == user.id) {
             startForegroundService(
                 shipmentId = shipment.id,
