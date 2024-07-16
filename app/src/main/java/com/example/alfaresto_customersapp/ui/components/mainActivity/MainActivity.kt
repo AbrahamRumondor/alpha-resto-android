@@ -74,6 +74,7 @@ class MainActivity : AppCompatActivity() {
                     R.id.track_order_fragment -> hideBottomNav()
                     R.id.order_history_detail_fragment -> hideBottomNav()
                     R.id.chat_fragment -> hideBottomNav()
+                    R.id.order_summary_fragment -> hideBottomNav()
                     R.id.detail_food_fragment -> hideBottomNav()
                     R.id.chat_fragment -> hideBottomNav()
                     else -> showBottomNav()

@@ -89,7 +89,11 @@
         </action>
         <action
             android:id="@+id/action_orderSummaryFragment_to_thankYouFragment"
-            app:destination="@id/thank_you_fragment" />
+            app:destination="@id/thank_you_fragment">
+            <argument
+                android:name="checkoutStatus"
+                app:argType="boolean" />
+        </action>
     </fragment>
 
     <fragment
@@ -211,7 +215,7 @@
     </fragment>
     <fragment
         android:id="@+id/thank_you_fragment"
-        android:name="com.example.alfaresto_customersapp.ui.components.restoPage.ThankYouFragment"
+        android:name="com.example.alfaresto_customersapp.ui.components.thankYouPage.ThankYouFragment"
         android:label="fragment_thank_you"
         tools:layout="@layout/fragment_thank_you">
         <argument

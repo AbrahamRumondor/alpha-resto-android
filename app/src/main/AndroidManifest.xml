@@ -53,6 +53,7 @@
         <activity
             android:name=".ui.components.mainActivity.MainActivity"
             android:exported="true"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="nosensor">
             <nav-graph android:value="@navigation/customer_nav" />
 

@@ -16,6 +16,7 @@
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="@dimen/font_17"
+        android:layout_marginBottom="@dimen/dimen_60"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

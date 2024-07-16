@@ -123,12 +123,12 @@ class AddNewAddressViewModel @Inject constructor(
 
     private fun getRoute(home: LatLng, driver: LatLng, osrmCallback: OsrmCallback) {
         val call = osrmApiRepository.getRoute(
-            profile = "car", // Replace with your desired profile
+            profile = routeProfile,
             coordinates = "${driver.longitude},${driver.latitude};${home.longitude},${home.latitude}",
             alternatives = false,
             steps = true,
-            geometries = "polyline", // Choose your desired geometry format
-            overview = "full",
+            geometries = routeGeometries,
+            overview = routeOverview,
             annotations = true
         )
 
@@ -165,5 +165,11 @@ class AddNewAddressViewModel @Inject constructor(
         distance < 40000
     } catch (e: Exception) {
         false
+    }
+
+    companion object {
+        const val routeProfile = "car"
+        const val routeGeometries = "polyline"
+        const val routeOverview = "full"
     }
 }

@@ -1,4 +1,4 @@
-package com.example.alfaresto_customersapp.ui.components.restoPage
+package com.example.alfaresto_customersapp.ui.components.thankYouPage
 
 import android.os.Bundle
 import android.view.LayoutInflater

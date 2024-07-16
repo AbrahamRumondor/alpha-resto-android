@@ -175,14 +175,19 @@ class OrderSummaryFragment : Fragment() {
                         }
 
                         if (!checkoutClicked) {
+                            checkoutClicked = true
                             AlertDialog.Builder(requireContext())
                                 .setTitle(getString(R.string.checkout_confirmation))
                                 .setMessage(getString(R.string.checkout_confirmation_message))
                                 .setNegativeButton(getString(R.string.no)) { dialog, _ ->
+                                    checkoutClicked = false
                                     dialog.dismiss()
                                 }
                                 .setPositiveButton(getString(R.string.yes)) { _, _ ->
                                     checkout()
+                                }
+                                .setOnDismissListener {
+                                    checkoutClicked = false
                                 }
                                 .show()
                         }
@@ -206,7 +211,6 @@ class OrderSummaryFragment : Fragment() {
     }
 
     private fun checkout() {
-        checkoutClicked = true
         orderSummaryViewModel.saveOrderInDatabase {
             if (it != null) {
                 checkoutClicked = false
@@ -221,7 +225,7 @@ class OrderSummaryFragment : Fragment() {
                 OrderSummaryFragmentDirections.actionOrderSummaryFragmentToThankYouFragment(
                     it == null
                 )
-            Navigation.findNavController(binding.root).navigate(action)
+            Navigation.findNavController(requireView()).navigate(action)
         }
     }
 

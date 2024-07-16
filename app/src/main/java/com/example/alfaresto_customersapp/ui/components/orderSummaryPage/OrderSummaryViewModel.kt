@@ -267,17 +267,15 @@ class OrderSummaryViewModel @Inject constructor(
                                             userId = user.id
                                         )
                                     )
+                                    cartUseCase.deleteAllMenus()
                                 }
 
                                 sendNotificationToResto()
 
-                                viewModelScope.launch {
-                                    cartUseCase.deleteAllMenus()
-                                }
-                                onResult(null)
                             }
                         }
                     }
+                    onResult(null)
                 } else {
                     onResult(R.string.failed_checkout_null)
                 }
