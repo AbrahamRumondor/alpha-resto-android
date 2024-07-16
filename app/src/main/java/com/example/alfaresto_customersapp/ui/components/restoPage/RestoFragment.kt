@@ -113,7 +113,11 @@ class RestoFragment : Fragment() {
                 }
                 delay(500)
                 if (menus.isEmpty()) {
-                    Toast.makeText(requireContext(), getString(R.string.menu_not_available), Toast.LENGTH_LONG)
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.menu_not_available),
+                        Toast.LENGTH_LONG
+                    )
                         .show()
                     return@collectLatest
                 }
@@ -170,7 +174,7 @@ class RestoFragment : Fragment() {
     }
 
     fun noInternetConnection(): Boolean {
-         return if (NetworkUtils.isConnectedToNetwork.value == false) {
+        return if (NetworkUtils.isConnectedToNetwork.value == false) {
             Toast.makeText(
                 requireContext(),
                 getString(R.string.no_internet),
@@ -178,8 +182,8 @@ class RestoFragment : Fragment() {
             ).show()
             true
         } else {
-             false
-         }
+            false
+        }
     }
 
     private fun logoutValidation() {
@@ -196,7 +200,8 @@ class RestoFragment : Fragment() {
     private fun logout() {
         Firebase.messaging.deleteToken()
 
-        val sharedPreferences = requireContext().getSharedPreferences(Constants.login, Context.MODE_PRIVATE)
+        val sharedPreferences =
+            requireContext().getSharedPreferences(Constants.login, Context.MODE_PRIVATE)
         with(sharedPreferences.edit()) {
             putBoolean(Constants.isLoggedIn, false)
             apply()

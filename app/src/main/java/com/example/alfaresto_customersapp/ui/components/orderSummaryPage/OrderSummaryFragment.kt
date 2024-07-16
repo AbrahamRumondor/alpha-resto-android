@@ -53,7 +53,8 @@ class OrderSummaryFragment : Fragment() {
         if (NetworkUtils.isConnectedToNetwork.value == false) {
             binding.inclInternet.root.visibility = View.VISIBLE
             binding.rvOrderSummary.visibility = View.GONE
-            Toast.makeText(requireContext(), getString(R.string.no_internet), Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.no_internet), Toast.LENGTH_SHORT)
+                .show()
         } else {
             binding.inclInternet.root.visibility = View.GONE
             binding.rvOrderSummary.visibility = View.VISIBLE

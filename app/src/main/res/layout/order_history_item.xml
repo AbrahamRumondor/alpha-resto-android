@@ -29,9 +29,9 @@
             android:id="@+id/tv_order_price"
             android:layout_width="@dimen/dimen_100"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_40"
             android:fontFamily="@font/semibold"
             android:textSize="@dimen/font_20"
-            android:layout_marginStart="@dimen/dimen_40"
             app:layout_constraintBottom_toTopOf="@+id/middle_guideline"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -69,8 +69,8 @@
                 android:layout_marginHorizontal="@dimen/dimen_16"
                 android:fontFamily="@font/bold"
                 android:padding="@dimen/dimen_8"
-                android:textColor="@color/mainblack"
                 android:textAlignment="center"
+                android:textColor="@color/mainblack"
                 android:textSize="@dimen/font_18"
                 android:textStyle="bold" />
         </androidx.cardview.widget.CardView>

@@ -1,55 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="20dp"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:layout_margin="20dp"
-        >
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:layout_width="@dimen/dimen_100"
             android:layout_height="@dimen/dimen_100"
-            android:src="@drawable/ic_no_internet"
             android:layout_marginVertical="@dimen/dimen_10"
-            />
+            android:src="@drawable/ic_no_internet" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/no_internet_connection"
             android:textSize="30sp"
-            android:textStyle="bold"
-            />
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:textSize="@dimen/dimen_16"
             android:text="@string/your_internet_connection_is_currently_not_available_please_check_or_try_again"
-            />
-        
+            android:textSize="@dimen/dimen_16" />
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_inet_try_again"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/dimen_40"
+            android:background="@drawable/button_radius"
+            android:paddingHorizontal="@dimen/dimen_100"
             android:text="@string/try_again"
             android:textAllCaps="false"
-            android:background="@drawable/button_radius"
-            android:textColor="@color/white"
-            android:layout_marginVertical="@dimen/dimen_40"
-            android:paddingHorizontal="@dimen/dimen_100"
-            />
+            android:textColor="@color/white" />
 
     </LinearLayout>
 

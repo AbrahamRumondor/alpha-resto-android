@@ -31,7 +31,8 @@ class ThankYouFragment : Fragment() {
             val checkoutStatus = args.checkoutStatus
 
             tvOrderTitle.apply {
-                text = if (checkoutStatus) getString(R.string.order_success) else getString(R.string.order_failed)
+                text =
+                    if (checkoutStatus) getString(R.string.order_success) else getString(R.string.order_failed)
             }
 
             tvOrderBody.apply {

@@ -6,7 +6,6 @@
     app:startDestination="@id/resto_fragment">
 
 
-
     <fragment
         android:id="@+id/resto_fragment"
         android:name="com.example.alfaresto_customersapp.ui.components.restoPage.RestoFragment"
@@ -56,7 +55,8 @@
         <action
             android:id="@+id/action_order_history_detail_fragment_to_chat_fragment"
             app:destination="@id/chat_fragment" />
-        <argument android:name="orderStatus"
+        <argument
+            android:name="orderStatus"
             app:argType="string" />
         <argument
             android:name="orderId"
