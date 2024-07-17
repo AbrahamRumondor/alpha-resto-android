@@ -1,6 +1,5 @@
-package com.example.alfaresto_customersapp.ui.components.trackOrderPage.chat
+package com.example.alfaresto_customersapp.ui.components.chatPage
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,13 +14,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alfaresto_customersapp.R
-import com.example.alfaresto_customersapp.databinding.FragmentChatBinding
 import com.example.alfaresto_customersapp.data.network.NetworkUtils
-import com.example.alfaresto_customersapp.ui.components.trackOrderPage.chat.adapter.ChatAdapter
+import com.example.alfaresto_customersapp.databinding.FragmentChatBinding
+import com.example.alfaresto_customersapp.ui.components.chatPage.adapter.ChatAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @AndroidEntryPoint
 class ChatFragment : Fragment() {
@@ -69,27 +67,25 @@ class ChatFragment : Fragment() {
             onEmbeddedBackPressed()
         }
 
+        binding.run {
+            etChatInput.apply {
+                setOnEditorActionListener { _, _, _ ->
+                    val message = binding.etChatInput.text.toString()
+                    onBtnSendClicked(message)
+
+                    true
+                }
+            }
+        }
+
         binding.imgBtnSend.setOnClickListener {
             val message = binding.etChatInput.text.toString()
-            if (message.isNotEmpty()) {
-                viewModel.sendMessage(message)
-                binding.etChatInput.apply {
-                    text.clear()
-                }
-            } else {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.message_cannot_empty),
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
-            }
+            onBtnSendClicked(message)
         }
 
         lifecycleScope.launch {
             viewModel.messages.collectLatest { messages ->
                 adapter.submitList(messages) {
-                    Timber.d("Messages: $messages")
                     binding.rvChat.post {
                         binding.rvChat.scrollToPosition(adapter.itemCount - 1)
                     }
@@ -100,6 +96,15 @@ class ChatFragment : Fragment() {
         setConnectionBehaviour()
         binding.inclInternet.btnInetTryAgain.setOnClickListener {
             setConnectionBehaviour()
+        }
+    }
+
+    private fun onBtnSendClicked(message: String) {
+        if (message.isNotEmpty()) {
+            viewModel.sendMessage(message)
+            binding.etChatInput.apply {
+                text.clear()
+            }
         }
     }
 
