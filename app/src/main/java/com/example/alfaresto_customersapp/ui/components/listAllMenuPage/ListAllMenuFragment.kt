@@ -12,10 +12,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.alfaresto_customersapp.R
-import com.example.alfaresto_customersapp.databinding.FragmentListAllMenuBinding
 import com.example.alfaresto_customersapp.data.network.NetworkUtils
-import com.example.alfaresto_customersapp.ui.components.listener.MenuListener
+import com.example.alfaresto_customersapp.databinding.FragmentListAllMenuBinding
 import com.example.alfaresto_customersapp.ui.components.listAllMenuPage.adapter.ListAllMenuAdapter
+import com.example.alfaresto_customersapp.ui.components.listener.MenuListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -83,8 +83,8 @@ class ListAllMenuFragment : Fragment() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                if (newText.isNullOrEmpty()) {
-                    viewModel.setSearchQuery(null)
+                newText?.let {
+                    viewModel.setSearchQuery(it)
                 }
                 return true
             }

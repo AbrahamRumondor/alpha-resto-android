@@ -55,8 +55,12 @@ class ChatFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.rvChat.adapter = adapter
-        binding.rvChat.layoutManager =
+        val layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        layoutManager.stackFromEnd = true
+
+        binding.rvChat.layoutManager = layoutManager
+        binding.rvChat.itemAnimator = null
 
         binding.toolbar.apply {
             ivToolbarTitle.visibility = View.GONE
