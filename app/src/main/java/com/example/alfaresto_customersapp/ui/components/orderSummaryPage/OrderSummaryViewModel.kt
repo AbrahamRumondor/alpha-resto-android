@@ -35,6 +35,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.Date
@@ -179,8 +180,14 @@ class OrderSummaryViewModel @Inject constructor(
     fun addOrderQuantity(menuId: String, cart: CartEntity?) {
         viewModelScope.launch {
             cart?.let {
-                cartUseCase.insertMenu(it.copy(menuQty = cart.menuQty + 1))
-            } ?: insertMenu(menuId = menuId, menuQty = 1)
+                checkMenuStock(menuId).collectLatest { stock ->
+                    if (cart.menuQty < stock) {
+                        cartUseCase.insertMenu(it.copy(menuQty = cart.menuQty + 1))
+                    }
+                }
+            } ?: run {
+                insertMenu(menuId = menuId, menuQty = 1)
+            }
         }
     }
 
