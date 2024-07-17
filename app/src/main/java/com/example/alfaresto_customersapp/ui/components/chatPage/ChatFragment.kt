@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.alfaresto_customersapp.databinding.FragmentChatBinding
+import com.example.alfaresto_customersapp.domain.model.Chat
 import com.example.alfaresto_customersapp.ui.components.chatPage.adapter.ChatAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -27,6 +28,8 @@ class ChatFragment : Fragment() {
     private val viewModel: ChatViewModel by viewModels()
     private val args: ChatFragmentArgs by navArgs()
     private val adapter by lazy { ChatAdapter() }
+
+    private var messageCollection: List<Chat>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,6 +72,15 @@ class ChatFragment : Fragment() {
 
         binding.run {
             etChatInput.apply {
+                setOnClickListener {
+                    messageCollection?.let {
+                        adapter.submitList(messageCollection) {
+                            binding.rvChat.post {
+                                binding.rvChat.scrollToPosition(adapter.itemCount - 1)
+                            }
+                        }
+                    }
+                }
                 setOnEditorActionListener { _, _, _ ->
                     val message = binding.etChatInput.text.toString()
                     onBtnSendClicked(message)
@@ -85,6 +97,7 @@ class ChatFragment : Fragment() {
 
         lifecycleScope.launch {
             viewModel.messages.collectLatest { messages ->
+                messageCollection = messages
                 adapter.submitList(messages) {
                     binding.rvChat.post {
                         binding.rvChat.scrollToPosition(adapter.itemCount - 1)

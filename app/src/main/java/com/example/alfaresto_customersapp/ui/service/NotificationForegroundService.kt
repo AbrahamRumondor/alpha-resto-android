@@ -69,13 +69,13 @@ class NotificationForegroundService : Service() {
                 notificationManagerCompat.createNotificationChannel(notificationChannel)
 
                 builder = NotificationCompat.Builder(this, channelId)
-                    .setSmallIcon(R.drawable.ic_launcher_background)
+                    .setSmallIcon(R.drawable.alfa_resto_logo)
                     .setCustomContentView(view)
                     .setCustomBigContentView(view)
                     .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.ic_logo))
             } else {
                 builder = NotificationCompat.Builder(this)
-                    .setSmallIcon(R.drawable.ic_launcher_background)
+                    .setSmallIcon(R.drawable.alfa_resto_logo)
                     .setCustomContentView(view)
                     .setCustomBigContentView(view)
                     .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.ic_logo))
