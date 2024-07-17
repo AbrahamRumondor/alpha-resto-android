@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -113,7 +114,11 @@ class RestoFragment : Fragment() {
                 }
                 delay(500)
                 if (menus.isEmpty()) {
-                    Toast.makeText(requireContext(), getString(R.string.menu_not_available), Toast.LENGTH_LONG)
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.menu_not_available),
+                        Toast.LENGTH_LONG
+                    )
                         .show()
                     return@collectLatest
                 }
@@ -154,7 +159,7 @@ class RestoFragment : Fragment() {
             override fun onAddItemClicked(position: Int, menuId: String) {
                 if (!noInternetConnection()) {
                     val item: CartEntity? = cart?.find { it.menuId == menuId }
-                    viewModel.addOrderQuantity(menuId, item)
+                    viewModel.addOrderQuantity(requireContext(), menuId, item)
                     adapter.notifyItemChanged(position)
                 }
             }
@@ -170,7 +175,7 @@ class RestoFragment : Fragment() {
     }
 
     fun noInternetConnection(): Boolean {
-         return if (NetworkUtils.isConnectedToNetwork.value == false) {
+        return if (NetworkUtils.isConnectedToNetwork.value == false) {
             Toast.makeText(
                 requireContext(),
                 getString(R.string.no_internet),
@@ -178,8 +183,8 @@ class RestoFragment : Fragment() {
             ).show()
             true
         } else {
-             false
-         }
+            false
+        }
     }
 
     private fun logoutValidation() {
@@ -196,7 +201,8 @@ class RestoFragment : Fragment() {
     private fun logout() {
         Firebase.messaging.deleteToken()
 
-        val sharedPreferences = requireContext().getSharedPreferences(Constants.login, Context.MODE_PRIVATE)
+        val sharedPreferences =
+            requireContext().getSharedPreferences(Constants.login, Context.MODE_PRIVATE)
         with(sharedPreferences.edit()) {
             putBoolean(Constants.isLoggedIn, false)
             apply()
@@ -305,4 +311,7 @@ class RestoFragment : Fragment() {
         }
     }
 
+    private fun checkMenuStock(menuId: String) {
+        viewModel.checkMenuStock(menuId)
+    }
 }
