@@ -57,6 +57,8 @@ class PushNotificationService : FirebaseMessagingService() {
         notificationManagerCompat =
             NotificationManagerCompat.from(this.applicationContext)
 
+        val logo = BitmapFactory.decodeResource(this.resources, R.drawable.alfa_resto_logo)
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             notificationChannel =
                 NotificationChannel(channelId, description, NotificationManager.IMPORTANCE_HIGH)
@@ -66,16 +68,16 @@ class PushNotificationService : FirebaseMessagingService() {
             notificationManagerCompat.createNotificationChannel(notificationChannel)
 
             builder = NotificationCompat.Builder(this, channelId)
-                .setSmallIcon(R.drawable.alfa_resto_logo)
+                .setSmallIcon(R.drawable.ic_logo)
+                .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.ic_logo))
                 .setContentTitle(title)
                 .setContentText(body)
-                .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.ic_logo))
         } else {
             builder = NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.alfa_resto_logo)
+                .setSmallIcon(R.drawable.ic_logo)
+                .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.ic_logo))
                 .setContentTitle(title)
                 .setContentText(body)
-                .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.ic_logo))
         }
 
         val intent = Intent(this, MainActivity::class.java).apply {
