@@ -172,6 +172,10 @@ class OrderSummaryViewModel @Inject constructor(
         }
     }
 
+    private fun checkMenuStock(menuId: String): StateFlow<Int> {
+        return menuUseCase.getMenuStock(menuId)
+    }
+
     fun addOrderQuantity(menuId: String, cart: CartEntity?) {
         viewModelScope.launch {
             cart?.let {
