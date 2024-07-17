@@ -1,4 +1,4 @@
-package com.example.alfaresto_customersapp.ui.components.trackOrderPage.chat.adapter
+package com.example.alfaresto_customersapp.ui.components.chatPage.adapter
 
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -13,7 +13,6 @@ class ChatViewHolder(private val binding: BubbleChatItemBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(chat: Chat) {
-
         val tvUsernameParams = binding.tvUsername.layoutParams as LinearLayout.LayoutParams
         val tvMessageParams = binding.tvMessage.layoutParams as LinearLayout.LayoutParams
 

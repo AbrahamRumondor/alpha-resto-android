@@ -1,4 +1,4 @@
-package com.example.alfaresto_customersapp.ui.components.trackOrderPage.chat.adapter
+package com.example.alfaresto_customersapp.ui.components.chatPage.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil

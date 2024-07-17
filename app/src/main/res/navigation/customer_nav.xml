@@ -200,7 +200,7 @@
 
     <fragment
         android:id="@+id/chat_fragment"
-        android:name="com.example.alfaresto_customersapp.ui.components.trackOrderPage.chat.ChatFragment"
+        android:name="com.example.alfaresto_customersapp.ui.components.chatPage.ChatFragment"
         android:label="fragment_chat"
         tools:layout="@layout/fragment_chat">
         <argument

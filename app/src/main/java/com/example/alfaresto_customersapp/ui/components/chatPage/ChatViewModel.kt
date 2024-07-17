@@ -1,4 +1,4 @@
-package com.example.alfaresto_customersapp.ui.components.trackOrderPage.chat
+package com.example.alfaresto_customersapp.ui.components.chatPage
 
 import android.content.ContentValues.TAG
 import android.util.Log

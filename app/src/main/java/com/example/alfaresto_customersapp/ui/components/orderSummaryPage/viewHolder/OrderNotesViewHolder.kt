@@ -7,7 +7,6 @@ import android.view.inputmethod.InputMethodManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.alfaresto_customersapp.databinding.OrderSummaryNotesBinding
 import com.example.alfaresto_customersapp.ui.components.listener.OrderSummaryItemListener
-import timber.log.Timber
 
 class OrderNotesViewHolder(
     private val binding: OrderSummaryNotesBinding,
@@ -25,7 +24,6 @@ class OrderNotesViewHolder(
                 }
                 setOnEditorActionListener { _, _, _ ->
                     val etNotesText = etNotes.text.toString()
-                    Timber.tag("notes vh").d("Notes: $etNotesText")
                     itemListener?.onNotesFilled(etNotesText)
 
                     val imm =
