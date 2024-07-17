@@ -23,6 +23,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AlfaRestoCustomersApp"
         android:usesCleartextTraffic="true"
+        android:windowSoftInputMode="adjustResize"
         tools:targetApi="tiramisu">
 
         <meta-data
@@ -53,7 +54,8 @@
         <activity
             android:name=".ui.components.mainActivity.MainActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustPan"
+            android:windowSoftInputMode="stateVisible|adjustResize"
+            android:fitsSystemWindows="true"
             android:screenOrientation="nosensor">
             <nav-graph android:value="@navigation/customer_nav" />
 
