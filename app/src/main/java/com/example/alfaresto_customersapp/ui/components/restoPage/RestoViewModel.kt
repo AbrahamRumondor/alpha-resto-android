@@ -103,6 +103,7 @@ class RestoViewModel @Inject constructor(
                 checkMenuStock(menuId).collectLatest { stock ->
                     if (cart.menuQty < stock) {
                         cartUseCase.insertMenu(it.copy(menuQty = it.menuQty + 1))
+                        Log.d("orderss", "addOrderQuantity: ${it.menuQty}")
                     }
                 }
             } ?: run {

@@ -1,5 +1,6 @@
 package com.example.alfaresto_customersapp.ui.components.orderSummaryPage
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.alfaresto_customersapp.R
@@ -184,6 +185,7 @@ class OrderSummaryViewModel @Inject constructor(
                     if (cart.menuQty < stock) {
                         cartUseCase.insertMenu(it.copy(menuQty = cart.menuQty + 1))
                     }
+                    Log.d("order", "stock: $stock")
                 }
             } ?: run {
                 insertMenu(menuId = menuId, menuQty = 1)
@@ -256,7 +258,8 @@ class OrderSummaryViewModel @Inject constructor(
                                     val menu = _orders.value[i] as Menu
                                     viewModelScope.launch {
                                         try {
-                                            menuUseCase.updateMenuStock(menu.id, menu.stock - menu.orderCartQuantity)
+                                            val newStock = menu.stock - menu.orderCartQuantity
+                                            menuUseCase.updateMenuStock(menu.id, newStock)
                                         } catch (e: Exception) {
                                             Timber.tag("test").d("Failed to update stock: %s", e.message)
                                         }
