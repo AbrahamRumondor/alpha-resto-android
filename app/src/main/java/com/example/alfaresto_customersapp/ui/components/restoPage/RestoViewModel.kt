@@ -82,6 +82,10 @@ class RestoViewModel @Inject constructor(
         }
     }
 
+    private fun checkMenuStock(menuId: String): StateFlow<Int> {
+        return menuUseCase.getMenuStock(menuId)
+    }
+
     fun getCart(): Flow<List<CartEntity>> {
         return cartUseCase.getCart()
     }
@@ -95,14 +99,12 @@ class RestoViewModel @Inject constructor(
     fun addOrderQuantity(context: Context, menuId: String, cart: CartEntity?) {
         viewModelScope.launch {
             Timber.tag("test").d("%s dan %s", cart?.menuId, cart?.menuQty)
-            checkMenuStock(menuId).collectLatest { stock ->
-                Log.d("STOCKKKK", "Stock: $stock")
-                cart?.let {
-                    if (cart.menuQty + 1 <= stock) {
+            cart?.let {
+                checkMenuStock(menuId).collectLatest { stock ->
+                    if (cart.menuQty < stock) {
                         cartUseCase.insertMenu(it.copy(menuQty = cart.menuQty + 1))
                     }
-                } ?: insertMenu(menuId)
-
+                }
             }
         }
     }
@@ -149,9 +151,5 @@ class RestoViewModel @Inject constructor(
                 callback.onFailure(e)
             }
         }
-    }
-
-    fun checkMenuStock(menuId: String): StateFlow<Int> {
-        return menuUseCase.getMenuStock(menuId)
     }
 }

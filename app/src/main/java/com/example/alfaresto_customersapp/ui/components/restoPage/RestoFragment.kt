@@ -105,6 +105,7 @@ class RestoFragment : Fragment() {
                     }
 
                     setRestoAdapterButtons(cart)
+                    Log.d("MENU", "1: $updatedMenus")
                     adapter.submitMenuList(updatedMenus)
 
                     viewModel.cartCount.collectLatest {
@@ -309,9 +310,5 @@ class RestoFragment : Fragment() {
             intent.setData(uri)
             startActivity(intent)
         }
-    }
-
-    private fun checkMenuStock(menuId: String) {
-        viewModel.checkMenuStock(menuId)
     }
 }
