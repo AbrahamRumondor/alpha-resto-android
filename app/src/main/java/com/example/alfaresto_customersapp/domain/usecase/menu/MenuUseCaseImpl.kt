@@ -23,6 +23,6 @@ class MenuUseCaseImpl @Inject constructor(
     }
 
     override suspend fun updateMenuStock(menuId: String, stock: Int) {
-        menuRepository.updateMenuStock(menuId, stock)
+        return menuRepository.updateMenuStock(menuId, stock)
     }
 }

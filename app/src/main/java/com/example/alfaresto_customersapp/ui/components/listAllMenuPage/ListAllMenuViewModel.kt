@@ -80,7 +80,7 @@ class ListAllMenuViewModel @Inject constructor(
                         cartUseCase.insertMenu(it.copy(menuQty = it.menuQty + 1))
                     }
                 }
-            }
+            } ?: insertMenu(menuId)
         }
     }
 

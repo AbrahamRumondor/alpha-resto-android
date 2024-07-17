@@ -80,9 +80,10 @@ class MenuRepositoryImpl @Inject constructor(
 
     override suspend fun updateMenuStock(menuId: String, stock: Int) {
         try {
-            menusRef.document(menuId).update("stock", stock).await()
+            menusRef.document(menuId).update("menu_stock", stock).await()
+            Timber.tag("updateMenuStock").d("Stock for $menuId updated to $stock")
         } catch (e: Exception) {
-            Timber.tag("menu").e("Error updating stock: %s", e.message)
+            Timber.tag("updateMenuStock").e("Error updating stock for $menuId: $e")
         }
     }
 }

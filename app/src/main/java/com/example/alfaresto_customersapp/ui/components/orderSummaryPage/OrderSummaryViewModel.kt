@@ -254,7 +254,13 @@ class OrderSummaryViewModel @Inject constructor(
 
                                 for (i in 1..<TOTAL) {
                                     val menu = _orders.value[i] as Menu
-                                    menu.let {
+                                    viewModelScope.launch {
+                                        try {
+                                            menuUseCase.updateMenuStock(menu.id, menu.stock - menu.orderCartQuantity)
+                                        } catch (e: Exception) {
+                                            Timber.tag("test").d("Failed to update stock: %s", e.message)
+                                        }
+
                                         val orderItem = OrderItem(
                                             id = getOrderItemDocumentId(order.id),
                                             menuName = menu.name,
@@ -267,7 +273,14 @@ class OrderSummaryViewModel @Inject constructor(
                                         orderUseCase.setOrderItem(
                                             order.id, orderItem.id, orderItemResponse
                                         )
+
+                                        try {
+                                            orderUseCase.setOrderItem(order.id, orderItem.id, orderItemResponse)
+                                        } catch (e: Exception) {
+                                            Timber.tag("test").d("Failed to set order item: %s", e.message)
+                                        }
                                     }
+                                    onResult(null)
                                 }
 
                                 viewModelScope.launch {
