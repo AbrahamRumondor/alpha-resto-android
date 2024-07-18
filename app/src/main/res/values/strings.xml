@@ -113,10 +113,11 @@
     <string name="retry">Retry</string>
     <string name="on_delivery_text">On Delivery</string>
     <string name="delivered_text">Delivered</string>
-    <string name="failed_checkout_null">Checkout Failed, make sure to fill the needed fields</string>
+    <string name="failed_checkout_insufficient_field">Checkout Failed, make sure to fill the needed fields</string>
     <string name="failed_create_address">Failed, make sure to fill the needed fields</string>
     <string name="too_far_address">Sorry, the designated place is too far…</string>
-    <string name="failed_checkout_false">Failed, there are problems processing your orders…</string>
+    <string name="failed_checkout_problems">Failed, there are problems processing your orders…</string>
+    <string name="failed_checkout_no_stock">Failed, one of the menu is out of stocks…</string>
     <string name="date">Date</string>
     <string name="new_address_success">Address added successfully</string>
     <string name="order_id">Order ID :</string>

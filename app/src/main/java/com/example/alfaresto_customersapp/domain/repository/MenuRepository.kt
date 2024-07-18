@@ -7,6 +7,6 @@ interface MenuRepository {
     suspend fun getMenus(): StateFlow<List<Menu>>
     suspend fun getMenuDetail(menuId: String): Menu?
     suspend fun getNewMenus(): StateFlow<List<Menu>>
-    fun getMenuStock(menuId: String): StateFlow<Int>
+    fun getMenuStock(menuId: String, onResult: (Int) -> Unit)
     suspend fun updateMenuStock(menuId: String, stock: Int)
 }

@@ -36,7 +36,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.Date
@@ -174,23 +173,24 @@ class OrderSummaryViewModel @Inject constructor(
         }
     }
 
-    private fun checkMenuStock(menuId: String): StateFlow<Int> {
-        return menuUseCase.getMenuStock(menuId)
-    }
-
-    fun addOrderQuantity(menuId: String, cart: CartEntity?) {
-        viewModelScope.launch {
+    fun addOrderQuantity(menuId: String, cart: CartEntity?): Int {
+        var isValidAddition = 0
+        menuUseCase.getMenuStock(menuId) { stock ->
+            if (stock == 0) return@getMenuStock
             cart?.let {
-                checkMenuStock(menuId).collectLatest { stock ->
-                    if (cart.menuQty < stock) {
+                Log.d("order", "ORSUM: stock: $stock && cartstock: ${cart.menuQty}")
+                if (it.menuQty < stock) {
+                    viewModelScope.launch {
                         cartUseCase.insertMenu(it.copy(menuQty = cart.menuQty + 1))
+                        return@launch
                     }
-                    Log.d("order", "stock: $stock")
+                    isValidAddition++
+                    return@getMenuStock
                 }
-            } ?: run {
-                insertMenu(menuId = menuId, menuQty = 1)
-            }
+            } ?: insertMenu(menuId = menuId, menuQty = 1)
+            return@getMenuStock
         }
+        return isValidAddition
     }
 
     fun decreaseOrderQuantity(menuId: String, cart: CartEntity?) {
@@ -232,37 +232,56 @@ class OrderSummaryViewModel @Inject constructor(
                 }
 
                 if (!payment.isNullOrEmpty() && _orders.value.size > 4 && user != null && USER_ADDRESS != null) {
-                    db.runTransaction {
-                        USER_ADDRESS?.let { address ->
-                            USER_TOKEN?.let { token ->
-                                val orderId = getOrderDocumentId()
-                                val order = Order(
-                                    id = orderId,
-                                    userName = user.name,
-                                    userId = user.id,
-                                    fullAddress = address.address,
-                                    restoID = restoID.value,
-                                    date = Date(),
-                                    paymentMethod = payment,
-                                    totalPrice = total.second,
-                                    latitude = address.latitude,
-                                    longitude = address.longitude,
-                                    userToken = token,
-                                    restoToken = restoToken.value,
-                                    notes = notes
-                                )
-                                val orderToFirebase = OrderResponse.toResponse(order)
-                                orderUseCase.setOrder(order.id, orderToFirebase)
+                    try {
+                        val orderId = getOrderDocumentId()
 
-                                for (i in 1..<TOTAL) {
-                                    val menu = _orders.value[i] as Menu
-                                    viewModelScope.launch {
-                                        try {
-                                            val newStock = menu.stock - menu.orderCartQuantity
-                                            menuUseCase.updateMenuStock(menu.id, newStock)
-                                        } catch (e: Exception) {
-                                            Timber.tag("test").d("Failed to update stock: %s", e.message)
+                        db.runTransaction { transaction ->
+                            USER_ADDRESS?.let { address ->
+                                USER_TOKEN?.let { token ->
+                                    val order = Order(
+                                        id = orderId,
+                                        userName = user.name,
+                                        userId = user.id,
+                                        fullAddress = address.address,
+                                        restoID = restoID.value,
+                                        date = Date(),
+                                        paymentMethod = payment,
+                                        totalPrice = total.second,
+                                        latitude = address.latitude,
+                                        longitude = address.longitude,
+                                        userToken = token,
+                                        restoToken = restoToken.value,
+                                        notes = notes
+                                    )
+                                    val orderToFirebase = OrderResponse.toResponse(order)
+
+                                    val menuRefs = _orders.value.subList(1, TOTAL).map { menu ->
+                                        db.collection("menus").document((menu as Menu).id) to menu
+                                    }
+
+                                    val snapshots = menuRefs.map { (ref, _) ->
+                                        transaction.get(ref)
+                                    }
+
+                                    // Validate stock availability
+                                    snapshots.forEachIndexed { index, snapshot ->
+                                        val menu = menuRefs[index].second
+                                        val currentStock = snapshot.getLong("menu_stock")
+                                            ?: throw Exception("Stock field missing")
+                                        if (currentStock < (menu as Menu).orderCartQuantity) {
+                                            throw Exception("Stock is below the threshold, transaction cancelled.")
                                         }
+                                    }
+
+                                    transaction.set(
+                                        db.collection("orders").document(order.id), orderToFirebase
+                                    )
+
+                                    snapshots.forEachIndexed { index, snapshot ->
+                                        val (ref, menu) = menuRefs[index]
+                                        val currentStock = snapshot.getLong("menu_stock")
+                                            ?: throw Exception("Stock field missing")
+                                        val newStock = currentStock - (menu as Menu).orderCartQuantity
 
                                         val orderItem = OrderItem(
                                             id = getOrderItemDocumentId(order.id),
@@ -271,45 +290,47 @@ class OrderSummaryViewModel @Inject constructor(
                                             menuPrice = menu.price,
                                             menuImage = menu.image
                                         )
-                                        val orderItemResponse =
-                                            OrderItemResponse.toResponse(orderItem)
-                                        orderUseCase.setOrderItem(
-                                            order.id, orderItem.id, orderItemResponse
-                                        )
+                                        val orderItemResponse = OrderItemResponse.toResponse(orderItem)
 
-                                        try {
-                                            orderUseCase.setOrderItem(order.id, orderItem.id, orderItemResponse)
-                                        } catch (e: Exception) {
-                                            Timber.tag("test").d("Failed to set order item: %s", e.message)
-                                        }
+                                        transaction.set(
+                                            db.collection("orders").document(order.id).collection("order_items")
+                                                .document(orderItem.id), orderItemResponse
+                                        )
+                                        transaction.update(ref, "menu_stock", newStock)
                                     }
-                                    onResult(null)
                                 }
-
-                                viewModelScope.launch {
-                                    shipmentUseCase.createShipment(
-                                        Shipment(
-                                            orderID = orderId,
-                                            statusDelivery = ON_PROCESS,
-                                            userId = user.id
-                                        )
-                                    )
-                                    cartUseCase.deleteAllMenus()
-                                }
-
-                                sendNotificationToResto()
-
                             }
+                        }.addOnSuccessListener {
+                            viewModelScope.launch {
+                                shipmentUseCase.createShipment(
+                                    Shipment(
+                                        orderID = orderId,
+                                        statusDelivery = ON_PROCESS,
+                                        userId = user.id
+                                    )
+                                )
+                                cartUseCase.deleteAllMenus()
+                            }
+
+                            sendNotificationToResto()
+                            Log.d("orsum", "success")
+                            onResult(null)
+                        }.addOnFailureListener { e ->
+                            Timber.tag("test").d("transaction failed: %s", e.message)
+                            onResult(R.string.failed_checkout_no_stock)
                         }
+                    } catch (e: Exception) {
+                        Timber.tag("test")
+                            .d("transaction faled: %s", e.message)
+                        onResult(R.string.failed_checkout_problems)
                     }
-                    onResult(null)
                 } else {
-                    onResult(R.string.failed_checkout_null)
+                    onResult(R.string.failed_checkout_insufficient_field)
                 }
             }
 
             override fun onFailure(exception: Exception) {
-                onResult(R.string.failed_checkout_false)
+                onResult(R.string.failed_checkout_problems)
             }
         })
     }

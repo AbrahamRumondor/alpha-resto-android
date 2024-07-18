@@ -56,26 +56,24 @@ class MenuRepositoryImpl @Inject constructor(
         return menus
     }
 
-    override fun getMenuStock(menuId: String): StateFlow<Int> {
-        val stockMenu = MutableStateFlow(0)
+    override fun getMenuStock(menuId: String, onResult: (Int) -> Unit) {
         menusRef.addSnapshotListener { snapshot, error ->
             if (error != null) {
                 Log.e("getMenuStock", "Error fetching menu document: $error")
-                stockMenu.value = 0
+                onResult(0)
                 return@addSnapshotListener
             }
 
             if (snapshot != null && !snapshot.isEmpty) {
                 val menuResponse = snapshot.toObjects(MenuResponse::class.java)
                 val stock = menuResponse.first { it.id == menuId }.stock
-                stockMenu.value = stock
+                onResult(stock)
                 Log.d("getMenuStock", "Stock menu for $menuId: $stock")
             } else {
-                stockMenu.value = 0
+                onResult(0)
                 Log.d("getMenuStock", "Menu document for $menuId doesn't exist")
             }
         }
-        return stockMenu
     }
 
     override suspend fun updateMenuStock(menuId: String, stock: Int) {

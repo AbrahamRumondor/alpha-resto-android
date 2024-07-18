@@ -68,19 +68,19 @@ class ListAllMenuViewModel @Inject constructor(
         _searchQuery.value = query
     }
 
-    private fun checkMenuStock(menuId: String): StateFlow<Int> {
-        return menuUseCase.getMenuStock(menuId)
-    }
-
     fun addOrderQuantity(menuId: String, cart: CartEntity?) {
-        viewModelScope.launch {
+        menuUseCase.getMenuStock(menuId) { stock ->
+            if (stock == 0) return@getMenuStock
             cart?.let {
-                checkMenuStock(menuId).collectLatest { stock ->
-                    if (cart.menuQty < stock) {
+                if (it.menuQty < stock) {
+                    viewModelScope.launch {
                         cartUseCase.insertMenu(it.copy(menuQty = it.menuQty + 1))
+                        return@launch
                     }
+                    return@getMenuStock
                 }
             } ?: insertMenu(menuId)
+            return@getMenuStock
         }
     }
 

@@ -82,10 +82,6 @@ class RestoViewModel @Inject constructor(
         }
     }
 
-    private fun checkMenuStock(menuId: String): StateFlow<Int> {
-        return menuUseCase.getMenuStock(menuId)
-    }
-
     fun getCart(): Flow<List<CartEntity>> {
         return cartUseCase.getCart()
     }
@@ -97,18 +93,25 @@ class RestoViewModel @Inject constructor(
     }
 
     fun addOrderQuantity(context: Context, menuId: String, cart: CartEntity?) {
-        viewModelScope.launch {
-            Timber.tag("test").d("%s dan %s", cart?.menuId, cart?.menuQty)
+        Timber.tag("test").d("%s dan %s", cart?.menuId, cart?.menuQty)
+        menuUseCase.getMenuStock(menuId) { stock ->
+            if (stock == 0) return@getMenuStock
             cart?.let {
-                checkMenuStock(menuId).collectLatest { stock ->
-                    if (cart.menuQty < stock) {
+                if (it.menuQty < stock) {
+                    viewModelScope.launch {
                         cartUseCase.insertMenu(it.copy(menuQty = it.menuQty + 1))
-                        Log.d("orderss", "addOrderQuantity: ${it.menuQty}")
+                        return@launch
                     }
+                    return@getMenuStock
+                    Log.d("orderss", "addOrderQuantity: ${it.menuQty}")
+                } else {
+                    Log.d("orderss", "cartstock: ${it.menuQty} && stock: $stock")
+
+                    Toast.makeText(context, "You have reached max item stocks", Toast.LENGTH_LONG)
+                        .show()
                 }
-            } ?: run {
-                insertMenu(menuId)
-            }
+            } ?: insertMenu(menuId)
+            return@getMenuStock
         }
     }
 

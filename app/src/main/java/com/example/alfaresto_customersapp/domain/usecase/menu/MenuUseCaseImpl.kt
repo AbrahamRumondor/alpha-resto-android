@@ -18,8 +18,8 @@ class MenuUseCaseImpl @Inject constructor(
         return menuRepository.getNewMenus()
     }
 
-    override fun getMenuStock(menuId: String): StateFlow<Int> {
-        return menuRepository.getMenuStock(menuId)
+    override fun getMenuStock(menuId: String, onResult: (Int) -> Unit) {
+        return menuRepository.getMenuStock(menuId, onResult)
     }
 
     override suspend fun updateMenuStock(menuId: String, stock: Int) {
