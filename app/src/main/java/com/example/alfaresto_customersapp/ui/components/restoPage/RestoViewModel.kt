@@ -93,25 +93,32 @@ class RestoViewModel @Inject constructor(
     }
 
     fun addOrderQuantity(context: Context, menuId: String, cart: CartEntity?) {
+        var isFromUserClick = menuId.isNotEmpty()
         Timber.tag("test").d("%s dan %s", cart?.menuId, cart?.menuQty)
         menuUseCase.getMenuStock(menuId) { stock ->
-            if (stock == 0) return@getMenuStock
-            cart?.let {
-                if (it.menuQty < stock) {
-                    viewModelScope.launch {
-                        cartUseCase.insertMenu(it.copy(menuQty = it.menuQty + 1))
-                        return@launch
-                    }
-                    return@getMenuStock
-                    Log.d("orderss", "addOrderQuantity: ${it.menuQty}")
-                } else {
-                    Log.d("orderss", "cartstock: ${it.menuQty} && stock: $stock")
+            if (isFromUserClick) {
+                isFromUserClick = false
+                if (stock == 0) return@getMenuStock
+                cart?.let {
+                    if (it.menuQty < stock) {
+                        viewModelScope.launch {
+                            cartUseCase.insertMenu(it.copy(menuQty = it.menuQty + 1))
+                            return@launch
+                        }
+                        Log.d("orderss", "addOrderQuantity: ${it.menuQty}")
+                    } else {
+                        Log.d("orderss", "cartstock: ${it.menuQty} && stock: $stock")
 
-                    Toast.makeText(context, "You have reached max item stocks", Toast.LENGTH_LONG)
-                        .show()
-                }
-            } ?: insertMenu(menuId)
-            return@getMenuStock
+                        Toast.makeText(
+                            context,
+                            "You have reached max item stocks",
+                            Toast.LENGTH_LONG
+                        )
+                            .show()
+                    }
+                } ?: insertMenu(menuId)
+                return@getMenuStock
+            }
         }
     }
 

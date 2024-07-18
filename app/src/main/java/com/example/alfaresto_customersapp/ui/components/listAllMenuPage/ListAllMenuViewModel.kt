@@ -69,18 +69,22 @@ class ListAllMenuViewModel @Inject constructor(
     }
 
     fun addOrderQuantity(menuId: String, cart: CartEntity?) {
+        var isFromUserClick = menuId.isNotEmpty()
+
         menuUseCase.getMenuStock(menuId) { stock ->
-            if (stock == 0) return@getMenuStock
-            cart?.let {
-                if (it.menuQty < stock) {
-                    viewModelScope.launch {
-                        cartUseCase.insertMenu(it.copy(menuQty = it.menuQty + 1))
-                        return@launch
+            if (isFromUserClick) {
+                isFromUserClick = false
+                if (stock == 0) return@getMenuStock
+                cart?.let {
+                    if (it.menuQty < stock) {
+                        viewModelScope.launch {
+                            cartUseCase.insertMenu(it.copy(menuQty = it.menuQty + 1))
+                            return@launch
+                        }
                     }
-                    return@getMenuStock
-                }
-            } ?: insertMenu(menuId)
-            return@getMenuStock
+                } ?: insertMenu(menuId)
+                return@getMenuStock
+            }
         }
     }
 

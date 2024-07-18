@@ -35,6 +35,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.Date
@@ -174,21 +175,25 @@ class OrderSummaryViewModel @Inject constructor(
     }
 
     fun addOrderQuantity(menuId: String, cart: CartEntity?): Int {
+        var isFromUserClick = menuId.isNotEmpty()
+
         var isValidAddition = 0
         menuUseCase.getMenuStock(menuId) { stock ->
-            if (stock == 0) return@getMenuStock
-            cart?.let {
-                Log.d("order", "ORSUM: stock: $stock && cartstock: ${cart.menuQty}")
-                if (it.menuQty < stock) {
-                    viewModelScope.launch {
-                        cartUseCase.insertMenu(it.copy(menuQty = cart.menuQty + 1))
-                        return@launch
+            if (isFromUserClick) {
+                isFromUserClick = false
+                if (stock == 0) return@getMenuStock
+                cart?.let {
+                    Log.d("order", "ORSUM: stock: $stock && cartstock: ${cart.menuQty}")
+                    if (it.menuQty < stock) {
+                        viewModelScope.launch {
+                            cartUseCase.insertMenu(it.copy(menuQty = cart.menuQty + 1))
+                            return@launch
+                        }
+                        isValidAddition++
                     }
-                    isValidAddition++
-                    return@getMenuStock
-                }
-            } ?: insertMenu(menuId = menuId, menuQty = 1)
-            return@getMenuStock
+                } ?: insertMenu(menuId = menuId, menuQty = 1)
+                return@getMenuStock
+            }
         }
         return isValidAddition
     }
@@ -227,7 +232,7 @@ class OrderSummaryViewModel @Inject constructor(
                     return
                 }
 
-                if (!payment.isNullOrEmpty() && _orders.value.size > 4 && user != null && USER_ADDRESS != null) {
+                if (!USER_PAYMENT_METHOD.isNullOrEmpty() && _orders.value.size > 4 && user != null && USER_ADDRESS != null) {
                     try {
                         val orderId = getOrderDocumentId()
 
@@ -241,7 +246,7 @@ class OrderSummaryViewModel @Inject constructor(
                                         fullAddress = address.address,
                                         restoID = restoID.value,
                                         date = Date(),
-                                        paymentMethod = payment,
+                                        paymentMethod = USER_PAYMENT_METHOD!!,
                                         totalPrice = total.second,
                                         latitude = address.latitude,
                                         longitude = address.longitude,
