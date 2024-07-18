@@ -13,10 +13,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
+import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.alfaresto_customersapp.databinding.FragmentOrderSummaryBinding
 import com.example.alfaresto_customersapp.databinding.OrderSummaryPaymentMethodBinding
 import com.example.alfaresto_customersapp.domain.model.Menu
-import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.alfaresto_customersapp.ui.components.listener.OrderSummaryItemListener
 import com.example.alfaresto_customersapp.utils.singleton.UserInfo.USER_ADDRESS
 import dagger.hilt.android.AndroidEntryPoint
@@ -204,6 +204,28 @@ class OrderSummaryFragment : Fragment() {
             false
         }
     }
+
+//    private fun checkout() {
+//        orderSummaryViewModel.saveOrderInDatabase {
+//            if (it != null) {
+//                checkoutClicked = false
+//                Toast.makeText(
+//                    requireContext(),
+//                    getString(it),
+//                    Toast.LENGTH_SHORT
+//                ).show()
+//            }
+//
+//            // Ensure the fragment's view is still attached to its activity
+//            if (isAdded && view != null) {
+//                val action =
+//                    OrderSummaryFragmentDirections.actionOrderSummaryFragmentToThankYouFragment(
+//                        it == null
+//                    )
+//                Navigation.findNavController(requireView()).navigate(action)
+//            }
+//        }
+//    }
 
     private fun checkout() {
         checkoutClicked = true

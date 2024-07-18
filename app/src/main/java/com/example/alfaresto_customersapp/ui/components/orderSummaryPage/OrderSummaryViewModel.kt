@@ -7,6 +7,7 @@ import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.data.model.OrderItemResponse
 import com.example.alfaresto_customersapp.data.model.OrderResponse
+import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.alfaresto_customersapp.data.remote.response.pushNotification.NotificationBody
 import com.example.alfaresto_customersapp.data.remote.response.pushNotification.SendMessageDto
 import com.example.alfaresto_customersapp.domain.callbacks.FirestoreCallback
@@ -18,7 +19,6 @@ import com.example.alfaresto_customersapp.domain.model.Order
 import com.example.alfaresto_customersapp.domain.model.OrderItem
 import com.example.alfaresto_customersapp.domain.model.Shipment
 import com.example.alfaresto_customersapp.domain.model.User
-import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.alfaresto_customersapp.domain.repository.FcmApiRepository
 import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
 import com.example.alfaresto_customersapp.domain.usecase.menu.MenuUseCase
@@ -27,9 +27,8 @@ import com.example.alfaresto_customersapp.domain.usecase.resto.RestaurantUseCase
 import com.example.alfaresto_customersapp.domain.usecase.shipment.ShipmentUseCase
 import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase
 import com.example.alfaresto_customersapp.ui.components.mainActivity.MainActivity.Companion.ON_PROCESS
-import com.example.alfaresto_customersapp.ui.components.orderSummaryPage.OrderSummaryFragment.Companion.COD
-import com.example.alfaresto_customersapp.ui.components.orderSummaryPage.OrderSummaryFragment.Companion.GOPAY
 import com.example.alfaresto_customersapp.utils.singleton.UserInfo.USER_ADDRESS
+import com.example.alfaresto_customersapp.utils.singleton.UserInfo.USER_PAYMENT_METHOD
 import com.example.alfaresto_customersapp.utils.singleton.UserInfo.USER_TOKEN
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
@@ -86,10 +85,10 @@ class OrderSummaryViewModel @Inject constructor(
 
     fun setPayment(method: String) {
         _orders.value[orders.value.size - 3] = method
+        USER_PAYMENT_METHOD = method
     }
 
     fun setNotes(notes: String) {
-        Timber.tag("notes setvm").d("Notes: $notes")
         _orders.value[orders.value.size - 2] = notes
     }
 
@@ -139,15 +138,16 @@ class OrderSummaryViewModel @Inject constructor(
 
     fun isRestoClosed(currentTime: String, onResult: (Boolean) -> Unit) {
         viewModelScope.launch {
-            onResult((currentTime >= restoClosedHour.value && currentTime < restoOpenHour.value) || restaurantUseCase.isRestaurantClosedTemporary())
+            onResult((currentTime >= restoClosedHour.value && currentTime < restoOpenHour.value) || restoIsClosedTemporarily.value)
         }
     }
 
     private fun fetchMenus() {
         viewModelScope.launch {
             try {
-                val fetchedMenus = menuUseCase.getMenus().value
-                _menus.value = fetchedMenus
+                menuUseCase.getMenus().collectLatest {
+                    _menus.value = it
+                }
             } catch (e: Exception) {
                 Timber.tag("MENU").e("Error fetching menus: %s", e.message)
             }
@@ -213,16 +213,12 @@ class OrderSummaryViewModel @Inject constructor(
     fun saveOrderInDatabase(onResult: (msg: Int?) -> Unit) {
         getUserFromDB(object : FirestoreCallback {
             override fun onSuccess(user: User?) {
-
                 val NOTES = orders.value.size - 2
                 val PAYMENT_METHOD = orders.value.size - 3
                 val TOTAL = orders.value.size - 4
 
                 val notes =
                     if (_orders.value[NOTES] != "notes") _orders.value[NOTES].toString() else ""
-
-                val payment =
-                    if (orders.value[PAYMENT_METHOD].toString() == COD || orders.value[PAYMENT_METHOD].toString() == GOPAY) orders.value[PAYMENT_METHOD].toString() else null
 
                 val total = orders.value[TOTAL] as Pair<Int, Int>
 

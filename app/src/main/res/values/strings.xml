@@ -144,5 +144,6 @@
     <string name="try_again">Try again</string>
     <string name="notes_hint">Add special instructions for your order</string>
     <string name="notes">Order Notes :</string>
+    <string name="stock_not_enough">One or more items in your cart are out of stock. Please adjust the quantities.</string>
     <string name="out_of_stock">Out of Stock</string>
 </resources>
