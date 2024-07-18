@@ -7,7 +7,6 @@ import com.google.firebase.firestore.CollectionReference
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.tasks.await
-import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -19,13 +18,24 @@ class MenuRepositoryImpl @Inject constructor(
     private val menus: StateFlow<List<Menu>> = _menus
 
     override suspend fun getMenus(): StateFlow<List<Menu>> {
-        try {
-            val snapshot = menusRef.get().await()
-            val menuList = snapshot.toObjects(MenuResponse::class.java)
-            _menus.value = menuList.map { MenuResponse.transform(it) }
-        } catch (e: Exception) {
-            _menus.value = emptyList()
+        menusRef.addSnapshotListener { snapshots, error ->
+            if (error != null) {
+                _menus.value = emptyList()
+                return@addSnapshotListener
+            }
+
+            val menuList = mutableListOf<Menu>()
+            if (snapshots != null) {
+                for (doc in snapshots) {
+                    if (doc.exists()) {
+                        val menuResponse = doc.toObject(MenuResponse::class.java)
+                        menuList.add(MenuResponse.transform(menuResponse))
+                    }
+                }
+            }
+            _menus.value = menuList
         }
+
         return menus
     }
 
@@ -46,7 +56,6 @@ class MenuRepositoryImpl @Inject constructor(
                 .sortedByDescending { it.dateCreated }.take(3)
 
             _menus.value = sortedMenu
-            Timber.tag("menu").d("New menus: $sortedMenu")
         } catch (e: Exception) {
             _menus.value = emptyList()
         }

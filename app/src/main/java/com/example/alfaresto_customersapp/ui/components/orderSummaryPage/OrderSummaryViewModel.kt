@@ -6,6 +6,7 @@ import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.data.model.OrderItemResponse
 import com.example.alfaresto_customersapp.data.model.OrderResponse
+import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.alfaresto_customersapp.data.remote.response.pushNotification.NotificationBody
 import com.example.alfaresto_customersapp.data.remote.response.pushNotification.SendMessageDto
 import com.example.alfaresto_customersapp.domain.callbacks.FirestoreCallback
@@ -17,7 +18,6 @@ import com.example.alfaresto_customersapp.domain.model.Order
 import com.example.alfaresto_customersapp.domain.model.OrderItem
 import com.example.alfaresto_customersapp.domain.model.Shipment
 import com.example.alfaresto_customersapp.domain.model.User
-import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.alfaresto_customersapp.domain.repository.FcmApiRepository
 import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
 import com.example.alfaresto_customersapp.domain.usecase.menu.MenuUseCase
@@ -26,15 +26,15 @@ import com.example.alfaresto_customersapp.domain.usecase.resto.RestaurantUseCase
 import com.example.alfaresto_customersapp.domain.usecase.shipment.ShipmentUseCase
 import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase
 import com.example.alfaresto_customersapp.ui.components.mainActivity.MainActivity.Companion.ON_PROCESS
-import com.example.alfaresto_customersapp.ui.components.orderSummaryPage.OrderSummaryFragment.Companion.COD
-import com.example.alfaresto_customersapp.ui.components.orderSummaryPage.OrderSummaryFragment.Companion.GOPAY
 import com.example.alfaresto_customersapp.utils.singleton.UserInfo.USER_ADDRESS
+import com.example.alfaresto_customersapp.utils.singleton.UserInfo.USER_PAYMENT_METHOD
 import com.example.alfaresto_customersapp.utils.singleton.UserInfo.USER_TOKEN
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.Date
@@ -85,10 +85,10 @@ class OrderSummaryViewModel @Inject constructor(
 
     fun setPayment(method: String) {
         _orders.value[orders.value.size - 3] = method
+        USER_PAYMENT_METHOD = method
     }
 
     fun setNotes(notes: String) {
-        Timber.tag("notes setvm").d("Notes: $notes")
         _orders.value[orders.value.size - 2] = notes
     }
 
@@ -138,15 +138,16 @@ class OrderSummaryViewModel @Inject constructor(
 
     fun isRestoClosed(currentTime: String, onResult: (Boolean) -> Unit) {
         viewModelScope.launch {
-            onResult((currentTime >= restoClosedHour.value && currentTime < restoOpenHour.value) || restaurantUseCase.isRestaurantClosedTemporary())
+            onResult((currentTime >= restoClosedHour.value && currentTime < restoOpenHour.value) || restoIsClosedTemporarily.value)
         }
     }
 
     private fun fetchMenus() {
         viewModelScope.launch {
             try {
-                val fetchedMenus = menuUseCase.getMenus().value
-                _menus.value = fetchedMenus
+                menuUseCase.getMenus().collectLatest {
+                    _menus.value = it
+                }
             } catch (e: Exception) {
                 Timber.tag("MENU").e("Error fetching menus: %s", e.message)
             }
@@ -200,16 +201,12 @@ class OrderSummaryViewModel @Inject constructor(
     fun saveOrderInDatabase(onResult: (msg: Int?) -> Unit) {
         getUserFromDB(object : FirestoreCallback {
             override fun onSuccess(user: User?) {
-
                 val NOTES = orders.value.size - 2
                 val PAYMENT_METHOD = orders.value.size - 3
                 val TOTAL = orders.value.size - 4
 
                 val notes =
                     if (_orders.value[NOTES] != "notes") _orders.value[NOTES].toString() else ""
-
-                val payment =
-                    if (orders.value[PAYMENT_METHOD].toString() == COD || orders.value[PAYMENT_METHOD].toString() == GOPAY) orders.value[PAYMENT_METHOD].toString() else null
 
                 val total = orders.value[TOTAL] as Pair<Int, Int>
 
@@ -218,68 +215,74 @@ class OrderSummaryViewModel @Inject constructor(
                     return
                 }
 
-                if (!payment.isNullOrEmpty() && _orders.value.size > 4 && user != null && USER_ADDRESS != null) {
-                    db.runTransaction {
-                        USER_ADDRESS?.let { address ->
-                            USER_TOKEN?.let { token ->
-                                val orderId = getOrderDocumentId()
-                                val order = Order(
-                                    id = orderId,
-                                    userName = user.name,
-                                    userId = user.id,
-                                    fullAddress = address.address,
-                                    restoID = restoID.value,
-                                    date = Date(),
-                                    paymentMethod = payment,
-                                    totalPrice = total.second,
-                                    latitude = address.latitude,
-                                    longitude = address.longitude,
-                                    userToken = token,
-                                    restoToken = restoToken.value,
-                                    notes = notes
-                                )
-                                val orderToFirebase = OrderResponse.toResponse(order)
-                                orderUseCase.setOrder(order.id, orderToFirebase)
+                val address = USER_ADDRESS
+                val token = USER_TOKEN
+                val paymentMethod = USER_PAYMENT_METHOD
+                val restoId = restoID.value
+                val restoToken = restoToken.value
 
-                                for (i in 1..<TOTAL) {
-                                    val menu = _orders.value[i] as Menu
-                                    menu.let {
-                                        val orderItem = OrderItem(
-                                            id = getOrderItemDocumentId(order.id),
-                                            menuName = menu.name,
-                                            quantity = menu.orderCartQuantity,
-                                            menuPrice = menu.price,
-                                            menuImage = menu.image
-                                        )
-                                        val orderItemResponse =
-                                            OrderItemResponse.toResponse(orderItem)
-                                        orderUseCase.setOrderItem(
-                                            order.id, orderItem.id, orderItemResponse
-                                        )
-                                    }
-                                }
-
-                                viewModelScope.launch {
-                                    shipmentUseCase.createShipment(
-                                        Shipment(
-                                            orderID = orderId,
-                                            statusDelivery = ON_PROCESS,
-                                            userId = user.id
-                                        )
-                                    )
-                                }
-
-                                sendNotificationToResto()
-
-                                viewModelScope.launch {
-                                    cartUseCase.deleteAllMenus()
-                                }
-                                onResult(null)
-                            }
-                        }
-                    }
-                } else {
+                if (address == null || token == null || paymentMethod == null || user == null || restoId == null || restoToken == null) {
                     onResult(R.string.failed_checkout_null)
+                    return
+                }
+
+                for (i in 1 until TOTAL) {
+                    val menu = _orders.value[i] as Menu
+                    if (menu.stock < menu.orderCartQuantity) {
+                        onResult(R.string.stock_not_enough)
+                        return
+                    }
+                }
+
+                db.runTransaction { transaction ->
+                    val orderId = getOrderDocumentId()
+                    val order = Order(
+                        id = orderId,
+                        userName = user.name,
+                        userId = user.id,
+                        fullAddress = address.address,
+                        restoID = restoId,
+                        date = Date(),
+                        paymentMethod = paymentMethod,
+                        totalPrice = total.second,
+                        latitude = address.latitude,
+                        longitude = address.longitude,
+                        userToken = token,
+                        restoToken = restoToken,
+                        notes = notes
+                    )
+                    val orderToFirebase = OrderResponse.toResponse(order)
+                    orderUseCase.setOrder(order.id, orderToFirebase)
+
+                    for (i in 1 until TOTAL) {
+                        val menu = _orders.value[i] as Menu
+                        val orderItem = OrderItem(
+                            id = getOrderItemDocumentId(order.id),
+                            menuName = menu.name,
+                            quantity = menu.orderCartQuantity,
+                            menuPrice = menu.price,
+                            menuImage = menu.image
+                        )
+                        val orderItemResponse = OrderItemResponse.toResponse(orderItem)
+                        orderUseCase.setOrderItem(order.id, orderItem.id, orderItemResponse)
+                    }
+
+                    viewModelScope.launch {
+                        shipmentUseCase.createShipment(
+                            Shipment(
+                                orderID = orderId,
+                                statusDelivery = ON_PROCESS,
+                                userId = user.id
+                            )
+                        )
+                        cartUseCase.deleteAllMenus()
+                    }
+
+                    sendNotificationToResto()
+                }.addOnSuccessListener {
+                    onResult(null)
+                }.addOnFailureListener { exception ->
+                    onResult(R.string.failed_checkout_false)
                 }
             }
 
@@ -333,6 +336,23 @@ class OrderSummaryViewModel @Inject constructor(
         val date = Timestamp.now().toDate().toString()
         val time = date.substring(11, 16)
         return time
+    }
+
+    private fun isAllMenuQtyAvailable(onResult: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            carts.collectLatest { cartItems ->
+                var allAvailable = true
+                for (cart in cartItems) {
+                    val menu = menus.value.find { it.id == cart.menuId }
+
+                    if (menu != null && cart.menuQty > menu.stock) {
+                        allAvailable = false
+                        break
+                    }
+                }
+                onResult(allAvailable)
+            }
+        }
     }
 
     companion object {
