@@ -146,4 +146,5 @@
     <string name="notes">Order Notes :</string>
     <string name="stock_not_enough">One or more items in your cart are out of stock. Please adjust the quantities.</string>
     <string name="out_of_stock">Out of Stock</string>
+    <string name="reach_max_stock">You have reached max item stocks</string>
 </resources>

@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.viewModelScope
+import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.domain.callbacks.FirestoreCallback
 import com.example.alfaresto_customersapp.domain.model.Menu
@@ -49,8 +50,8 @@ class RestoViewModel @Inject constructor(
         viewModelScope.launch {
             setLoading(true)
             try {
-                menuUseCase.getNewMenus().collectLatest {
-                    _menus.value = it
+                menuUseCase.getMenus().collectLatest {list->
+                    _menus.value = list.sortedByDescending { it.dateCreated }.take(3)
                     setLoading(false)
                 }
             } catch (e: Exception) {
@@ -72,6 +73,12 @@ class RestoViewModel @Inject constructor(
             } catch (e: Exception) {
                 Timber.tag("CART").e("Error fetching cart: %s", e.message)
             }
+        }
+    }
+
+    fun deleteCartByMenuId(menuId: String) {
+        viewModelScope.launch {
+            cartUseCase.deleteMenu(menuId = menuId)
         }
     }
 
@@ -98,7 +105,15 @@ class RestoViewModel @Inject constructor(
         menuUseCase.getMenuStock(menuId) { stock ->
             if (isFromUserClick) {
                 isFromUserClick = false
-                if (stock == 0) return@getMenuStock
+                if (stock == 0) {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.out_of_stock),
+                        Toast.LENGTH_LONG
+                    )
+                        .show()
+                    return@getMenuStock
+                }
                 cart?.let {
                     if (it.menuQty < stock) {
                         viewModelScope.launch {
@@ -111,7 +126,7 @@ class RestoViewModel @Inject constructor(
 
                         Toast.makeText(
                             context,
-                            "You have reached max item stocks",
+                            context.getString(R.string.reach_max_stock),
                             Toast.LENGTH_LONG
                         )
                             .show()

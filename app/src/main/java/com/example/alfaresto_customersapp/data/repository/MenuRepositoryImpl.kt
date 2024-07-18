@@ -5,11 +5,15 @@ import com.example.alfaresto_customersapp.data.model.MenuResponse
 import com.example.alfaresto_customersapp.data.model.OrderResponse
 import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.domain.model.Order
+import com.example.alfaresto_customersapp.domain.repository.CartRepository
 import com.example.alfaresto_customersapp.domain.repository.MenuRepository
 import com.google.firebase.firestore.CollectionReference
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Named
@@ -33,7 +37,8 @@ class MenuRepositoryImpl @Inject constructor(
                 for (doc in snapshots) {
                     if (doc.exists()) {
                         val menuResponse = doc.toObject(MenuResponse::class.java)
-                        menuList.add(MenuResponse.transform(menuResponse))
+                        val menu = MenuResponse.transform(menuResponse)
+                        menuList.add(menu)
                     }
                 }
             }

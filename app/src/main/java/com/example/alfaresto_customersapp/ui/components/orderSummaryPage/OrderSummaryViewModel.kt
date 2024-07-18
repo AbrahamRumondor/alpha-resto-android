@@ -1,6 +1,8 @@
 package com.example.alfaresto_customersapp.ui.components.orderSummaryPage
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.alfaresto_customersapp.R
@@ -174,14 +176,22 @@ class OrderSummaryViewModel @Inject constructor(
         }
     }
 
-    fun addOrderQuantity(menuId: String, cart: CartEntity?): Int {
+    fun addOrderQuantity(menuId: String, cart: CartEntity?, context: Context): Int {
         var isFromUserClick = menuId.isNotEmpty()
 
         var isValidAddition = 0
         menuUseCase.getMenuStock(menuId) { stock ->
             if (isFromUserClick) {
                 isFromUserClick = false
-                if (stock == 0) return@getMenuStock
+                if (stock == 0) {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.out_of_stock),
+                        Toast.LENGTH_LONG
+                    )
+                        .show()
+                    return@getMenuStock
+                }
                 cart?.let {
                     Log.d("order", "ORSUM: stock: $stock && cartstock: ${cart.menuQty}")
                     if (it.menuQty < stock) {
@@ -190,6 +200,13 @@ class OrderSummaryViewModel @Inject constructor(
                             return@launch
                         }
                         isValidAddition++
+                    } else {
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.reach_max_stock),
+                            Toast.LENGTH_LONG
+                        )
+                            .show()
                     }
                 } ?: insertMenu(menuId = menuId, menuQty = 1)
                 return@getMenuStock

@@ -98,7 +98,7 @@ class OrderSummaryFragment : Fragment() {
                     val addMenu = orderSummaryViewModel.orders.value[position] as? Menu
                     addMenu?.let { menu ->
                         val item = cart?.find { it.menuId == menuId }
-                        menu.orderCartQuantity += orderSummaryViewModel.addOrderQuantity(menuId, item)
+                        menu.orderCartQuantity += orderSummaryViewModel.addOrderQuantity(menuId, item, requireContext())
                         orderAdapter.notifyItemChanged(position)
                         orderAdapter.notifyItemChanged(orderSummaryViewModel.orders.value.size - 3)
                         countTotalItemAndPrice(orders)

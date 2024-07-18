@@ -1,10 +1,13 @@
 package com.example.alfaresto_customersapp.ui.components.listAllMenuPage
 
+import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.data.pagingSource.MenuPagingSource
 import com.example.alfaresto_customersapp.domain.model.Menu
@@ -30,10 +33,16 @@ class ListAllMenuViewModel @Inject constructor(
     private val _searchQuery = MutableStateFlow<String?>(null)
     private val _cartItems = MutableStateFlow<List<CartEntity>>(emptyList())
 
+    private val _menus: MutableStateFlow<List<Menu>> = MutableStateFlow(emptyList())
+
     @OptIn(ExperimentalCoroutinesApi::class)
-    val menuList: Flow<PagingData<Menu>> = combine(_searchQuery, _cartItems) { query, cartItems ->
-        query to cartItems
-    }.flatMapLatest { (query, cartItems) ->
+    val menuList: Flow<PagingData<Menu>> = combine(
+        _searchQuery,
+        _cartItems,
+        _menus
+    ) { query, cartItems, menus ->
+        Triple(query, cartItems, menus)
+    }.flatMapLatest { (query, cartItems, _) ->
         Pager(PagingConfig(pageSize = 10)) {
             MenuPagingSource(menusRef, cartItems, query)
         }.flow.cachedIn(viewModelScope)
@@ -44,6 +53,19 @@ class ListAllMenuViewModel @Inject constructor(
 
     init {
         fetchCart()
+        fetchMenus()
+    }
+
+    private fun fetchMenus() {
+        viewModelScope.launch {
+            try {
+                menuUseCase.getMenus().collectLatest {list->
+                    _menus.value = list
+                }
+            } catch (e: Exception) {
+                Timber.tag("MENU").e("Error fetching menus: %s", e.message)
+            }
+        }
     }
 
     private fun fetchCart() {
@@ -68,19 +90,34 @@ class ListAllMenuViewModel @Inject constructor(
         _searchQuery.value = query
     }
 
-    fun addOrderQuantity(menuId: String, cart: CartEntity?) {
+    fun addOrderQuantity(menuId: String, cart: CartEntity?, context: Context) {
         var isFromUserClick = menuId.isNotEmpty()
 
         menuUseCase.getMenuStock(menuId) { stock ->
             if (isFromUserClick) {
                 isFromUserClick = false
-                if (stock == 0) return@getMenuStock
+                if (stock == 0) {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.out_of_stock),
+                        Toast.LENGTH_LONG
+                    )
+                        .show()
+                    return@getMenuStock
+                }
                 cart?.let {
                     if (it.menuQty < stock) {
                         viewModelScope.launch {
                             cartUseCase.insertMenu(it.copy(menuQty = it.menuQty + 1))
                             return@launch
                         }
+                    } else {
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.reach_max_stock),
+                            Toast.LENGTH_LONG
+                        )
+                            .show()
                     }
                 } ?: insertMenu(menuId)
                 return@getMenuStock

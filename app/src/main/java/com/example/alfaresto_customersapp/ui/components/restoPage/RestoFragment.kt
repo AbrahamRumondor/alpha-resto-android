@@ -41,6 +41,7 @@ import com.google.firebase.messaging.messaging
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -92,39 +93,49 @@ class RestoFragment : Fragment() {
         })
 
         lifecycleScope.launch {
-            viewModel.menus.collectLatest { menus ->
-                viewModel.cart.collectLatest { cart ->
+            // Combine the menus and cart flows
+            combine(viewModel.menus, viewModel.cart) { menus, cart ->
+                Pair(menus, cart)
+            }.collectLatest { (menus, cart) ->
+                // Process the combined data
+                val updatedMenus = menus.map { menu ->
+                    val cartItem = cart.find { it.menuId == menu.id }
 
-                    val updatedMenus = menus.map { menu ->
-                        val cartItem = cart.find { it.menuId == menu.id }
-                        if (cartItem != null) {
-                            menu.copy(orderCartQuantity = cartItem.menuQty)
-                        } else {
-                            menu
+
+                    Log.d("test", "menu: ${menu.stock}")
+                    if (cartItem != null) {
+                        if (menu.stock == 0 && cartItem.menuQty > 0) {
+                            Log.d("test", "MASUK")
+                            viewModel.deleteCartByMenuId(menu.id)
                         }
-                    }
-
-                    setRestoAdapterButtons(cart)
-                    Log.d("MENU", "1: $updatedMenus")
-                    adapter.submitMenuList(updatedMenus)
-
-                    viewModel.cartCount.collectLatest {
-                        binding.tvCartCount.text = it.toString()
-                        binding.rlCart.visibility = if (it != 0) View.VISIBLE else View.INVISIBLE
+                        menu.copy(orderCartQuantity = cartItem.menuQty)
+                    } else {
+                        menu
                     }
                 }
+
+                setRestoAdapterButtons(cart)
+                Log.d("MENU", "1: $updatedMenus")
+                adapter.submitMenuList(updatedMenus)
+
+                // Update the cart count
+                viewModel.cartCount.collectLatest { cartCount ->
+                    binding.tvCartCount.text = cartCount.toString()
+                    binding.rlCart.visibility = if (cartCount != 0) View.VISIBLE else View.INVISIBLE
+                }
+
+                // Show a message if the menu is empty
                 delay(500)
                 if (menus.isEmpty()) {
                     Toast.makeText(
                         requireContext(),
                         getString(R.string.menu_not_available),
                         Toast.LENGTH_LONG
-                    )
-                        .show()
-                    return@collectLatest
+                    ).show()
                 }
             }
         }
+
 
         binding.btnAllMenu.setOnClickListener {
             Navigation.findNavController(view)
