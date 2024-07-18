@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class AddressListFragment : Fragment() {
     private lateinit var binding: FragmentAddressListBinding
-    private val addressAdapter by lazy { AddressListAdapter() }
+    private val addressAdapter by lazy { AddressListAdapter(addressBinding = binding) }
     private val addressListViewModel: AddressListViewModel by activityViewModels()
 
     private var hasAddress = false
@@ -80,6 +80,7 @@ class AddressListFragment : Fragment() {
         binding.apply {
             toolbar.btnLogout.visibility = View.GONE
             toolbar.btnBack.visibility = View.VISIBLE
+            toolbar.btnAddAddress.visibility = View.VISIBLE
             toolbar.btnBack.setOnClickListener {
                 Navigation.findNavController(it).popBackStack()
             }
@@ -89,7 +90,7 @@ class AddressListFragment : Fragment() {
     }
 
     private fun setButtonNewAddress() {
-        binding.btnNewAddress.setOnClickListener {
+        binding.toolbar.btnAddAddress.setOnClickListener {
             Navigation.findNavController(it)
                 .navigate(R.id.action_address_list_to_add_new_address_fragment)
         }

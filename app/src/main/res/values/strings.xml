@@ -143,4 +143,5 @@
     <string name="try_again">Try again</string>
     <string name="notes_hint">Add special instructions for your order</string>
     <string name="notes">Order Notes :</string>
+    <string name="choose_address">Choose Address</string>
 </resources>
