@@ -1,5 +1,6 @@
 package com.example.alfaresto_customersapp.ui.components.orderSummaryPage
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.alfaresto_customersapp.R
@@ -35,6 +36,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.Date
@@ -172,11 +174,22 @@ class OrderSummaryViewModel @Inject constructor(
         }
     }
 
+    private fun checkMenuStock(menuId: String): StateFlow<Int> {
+        return menuUseCase.getMenuStock(menuId)
+    }
+
     fun addOrderQuantity(menuId: String, cart: CartEntity?) {
         viewModelScope.launch {
             cart?.let {
-                cartUseCase.insertMenu(it.copy(menuQty = cart.menuQty + 1))
-            } ?: insertMenu(menuId = menuId, menuQty = 1)
+                checkMenuStock(menuId).collectLatest { stock ->
+                    if (cart.menuQty < stock) {
+                        cartUseCase.insertMenu(it.copy(menuQty = cart.menuQty + 1))
+                    }
+                    Log.d("order", "stock: $stock")
+                }
+            } ?: run {
+                insertMenu(menuId = menuId, menuQty = 1)
+            }
         }
     }
 
@@ -243,7 +256,14 @@ class OrderSummaryViewModel @Inject constructor(
 
                                 for (i in 1..<TOTAL) {
                                     val menu = _orders.value[i] as Menu
-                                    menu.let {
+                                    viewModelScope.launch {
+                                        try {
+                                            val newStock = menu.stock - menu.orderCartQuantity
+                                            menuUseCase.updateMenuStock(menu.id, newStock)
+                                        } catch (e: Exception) {
+                                            Timber.tag("test").d("Failed to update stock: %s", e.message)
+                                        }
+
                                         val orderItem = OrderItem(
                                             id = getOrderItemDocumentId(order.id),
                                             menuName = menu.name,
@@ -256,7 +276,14 @@ class OrderSummaryViewModel @Inject constructor(
                                         orderUseCase.setOrderItem(
                                             order.id, orderItem.id, orderItemResponse
                                         )
+
+                                        try {
+                                            orderUseCase.setOrderItem(order.id, orderItem.id, orderItemResponse)
+                                        } catch (e: Exception) {
+                                            Timber.tag("test").d("Failed to set order item: %s", e.message)
+                                        }
                                     }
+                                    onResult(null)
                                 }
 
                                 viewModelScope.launch {

@@ -54,8 +54,8 @@ class OrderHistoryDetailFragment : Fragment() {
         loadData()
         complainButtonHandle()
         onStatusChangeToDelivery()
-
         setConnectionBehaviour()
+
         binding.inclInternet.btnInetTryAgain.setOnClickListener {
             setConnectionBehaviour()
         }

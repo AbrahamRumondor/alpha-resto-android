@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -104,6 +105,7 @@ class RestoFragment : Fragment() {
                     }
 
                     setRestoAdapterButtons(cart)
+                    Log.d("MENU", "1: $updatedMenus")
                     adapter.submitMenuList(updatedMenus)
 
                     viewModel.cartCount.collectLatest {
@@ -158,7 +160,7 @@ class RestoFragment : Fragment() {
             override fun onAddItemClicked(position: Int, menuId: String) {
                 if (!noInternetConnection()) {
                     val item: CartEntity? = cart?.find { it.menuId == menuId }
-                    viewModel.addOrderQuantity(menuId, item)
+                    viewModel.addOrderQuantity(requireContext(), menuId, item)
                     adapter.notifyItemChanged(position)
                 }
             }
@@ -309,5 +311,4 @@ class RestoFragment : Fragment() {
             startActivity(intent)
         }
     }
-
 }

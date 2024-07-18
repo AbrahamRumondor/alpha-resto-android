@@ -1,6 +1,7 @@
 package com.example.alfaresto_customersapp.ui.components.orderSummaryPage
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,8 +54,7 @@ class OrderSummaryFragment : Fragment() {
         if (NetworkUtils.isConnectedToNetwork.value == false) {
             binding.inclInternet.root.visibility = View.VISIBLE
             binding.rvOrderSummary.visibility = View.GONE
-            Toast.makeText(requireContext(), getString(R.string.no_internet), Toast.LENGTH_SHORT)
-                .show()
+            Toast.makeText(requireContext(), getString(R.string.no_internet), Toast.LENGTH_SHORT).show()
         } else {
             binding.inclInternet.root.visibility = View.GONE
             binding.rvOrderSummary.visibility = View.VISIBLE
@@ -176,19 +176,14 @@ class OrderSummaryFragment : Fragment() {
                         }
 
                         if (!checkoutClicked) {
-                            checkoutClicked = true
                             AlertDialog.Builder(requireContext())
                                 .setTitle(getString(R.string.checkout_confirmation))
                                 .setMessage(getString(R.string.checkout_confirmation_message))
                                 .setNegativeButton(getString(R.string.no)) { dialog, _ ->
-                                    checkoutClicked = false
                                     dialog.dismiss()
                                 }
                                 .setPositiveButton(getString(R.string.yes)) { _, _ ->
                                     checkout()
-                                }
-                                .setOnDismissListener {
-                                    checkoutClicked = false
                                 }
                                 .show()
                         }
@@ -212,6 +207,9 @@ class OrderSummaryFragment : Fragment() {
     }
 
     private fun checkout() {
+        checkoutClicked = true
+        Log.d("CHECKOUT", "Total item: ${orderSummaryViewModel.orders.value.size}")
+
         orderSummaryViewModel.saveOrderInDatabase {
             if (it != null) {
                 checkoutClicked = false
@@ -226,7 +224,7 @@ class OrderSummaryFragment : Fragment() {
                 OrderSummaryFragmentDirections.actionOrderSummaryFragmentToThankYouFragment(
                     it == null
                 )
-            Navigation.findNavController(requireView()).navigate(action)
+            Navigation.findNavController(binding.root).navigate(action)
         }
     }
 
