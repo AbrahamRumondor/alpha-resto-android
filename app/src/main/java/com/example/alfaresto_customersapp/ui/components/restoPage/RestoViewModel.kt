@@ -1,5 +1,8 @@
 package com.example.alfaresto_customersapp.ui.components.restoPage
 
+import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.viewModelScope
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.domain.callbacks.FirestoreCallback
@@ -79,6 +82,10 @@ class RestoViewModel @Inject constructor(
         }
     }
 
+    private fun checkMenuStock(menuId: String): StateFlow<Int> {
+        return menuUseCase.getMenuStock(menuId)
+    }
+
     fun getCart(): Flow<List<CartEntity>> {
         return cartUseCase.getCart()
     }
@@ -89,12 +96,19 @@ class RestoViewModel @Inject constructor(
         }
     }
 
-    fun addOrderQuantity(menuId: String, cart: CartEntity?) {
+    fun addOrderQuantity(context: Context, menuId: String, cart: CartEntity?) {
         viewModelScope.launch {
             Timber.tag("test").d("%s dan %s", cart?.menuId, cart?.menuQty)
             cart?.let {
-                cartUseCase.insertMenu(it.copy(menuQty = it.menuQty + 1))
-            } ?: insertMenu(menuId = menuId)
+                checkMenuStock(menuId).collectLatest { stock ->
+                    if (cart.menuQty < stock) {
+                        cartUseCase.insertMenu(it.copy(menuQty = it.menuQty + 1))
+                        Log.d("orderss", "addOrderQuantity: ${it.menuQty}")
+                    }
+                }
+            } ?: run {
+                insertMenu(menuId)
+            }
         }
     }
 

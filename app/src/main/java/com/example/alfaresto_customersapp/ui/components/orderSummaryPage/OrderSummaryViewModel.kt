@@ -1,5 +1,6 @@
 package com.example.alfaresto_customersapp.ui.components.orderSummaryPage
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.alfaresto_customersapp.R
@@ -173,11 +174,22 @@ class OrderSummaryViewModel @Inject constructor(
         }
     }
 
+    private fun checkMenuStock(menuId: String): StateFlow<Int> {
+        return menuUseCase.getMenuStock(menuId)
+    }
+
     fun addOrderQuantity(menuId: String, cart: CartEntity?) {
         viewModelScope.launch {
             cart?.let {
-                cartUseCase.insertMenu(it.copy(menuQty = cart.menuQty + 1))
-            } ?: insertMenu(menuId = menuId, menuQty = 1)
+                checkMenuStock(menuId).collectLatest { stock ->
+                    if (cart.menuQty < stock) {
+                        cartUseCase.insertMenu(it.copy(menuQty = cart.menuQty + 1))
+                    }
+                    Log.d("order", "stock: $stock")
+                }
+            } ?: run {
+                insertMenu(menuId = menuId, menuQty = 1)
+            }
         }
     }
 
@@ -266,6 +278,37 @@ class OrderSummaryViewModel @Inject constructor(
                         val orderItemResponse = OrderItemResponse.toResponse(orderItem)
                         orderUseCase.setOrderItem(order.id, orderItem.id, orderItemResponse)
                     }
+                                for (i in 1..<TOTAL) {
+                                    val menu = _orders.value[i] as Menu
+                                    viewModelScope.launch {
+                                        try {
+                                            val newStock = menu.stock - menu.orderCartQuantity
+                                            menuUseCase.updateMenuStock(menu.id, newStock)
+                                        } catch (e: Exception) {
+                                            Timber.tag("test").d("Failed to update stock: %s", e.message)
+                                        }
+
+                                        val orderItem = OrderItem(
+                                            id = getOrderItemDocumentId(order.id),
+                                            menuName = menu.name,
+                                            quantity = menu.orderCartQuantity,
+                                            menuPrice = menu.price,
+                                            menuImage = menu.image
+                                        )
+                                        val orderItemResponse =
+                                            OrderItemResponse.toResponse(orderItem)
+                                        orderUseCase.setOrderItem(
+                                            order.id, orderItem.id, orderItemResponse
+                                        )
+
+                                        try {
+                                            orderUseCase.setOrderItem(order.id, orderItem.id, orderItemResponse)
+                                        } catch (e: Exception) {
+                                            Timber.tag("test").d("Failed to set order item: %s", e.message)
+                                        }
+                                    }
+                                    onResult(null)
+                                }
 
                     viewModelScope.launch {
                         shipmentUseCase.createShipment(
@@ -336,23 +379,6 @@ class OrderSummaryViewModel @Inject constructor(
         val date = Timestamp.now().toDate().toString()
         val time = date.substring(11, 16)
         return time
-    }
-
-    private fun isAllMenuQtyAvailable(onResult: (Boolean) -> Unit) {
-        viewModelScope.launch {
-            carts.collectLatest { cartItems ->
-                var allAvailable = true
-                for (cart in cartItems) {
-                    val menu = menus.value.find { it.id == cart.menuId }
-
-                    if (menu != null && cart.menuQty > menu.stock) {
-                        allAvailable = false
-                        break
-                    }
-                }
-                onResult(allAvailable)
-            }
-        }
     }
 
     companion object {

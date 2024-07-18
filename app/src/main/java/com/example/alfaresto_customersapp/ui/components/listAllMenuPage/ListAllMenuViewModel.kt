@@ -9,6 +9,7 @@ import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.data.pagingSource.MenuPagingSource
 import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
+import com.example.alfaresto_customersapp.domain.usecase.menu.MenuUseCase
 import com.example.alfaresto_customersapp.ui.components.loadState.LoadStateViewModel
 import com.google.firebase.firestore.CollectionReference
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,7 +23,8 @@ import javax.inject.Named
 @HiltViewModel
 class ListAllMenuViewModel @Inject constructor(
     @Named("menusRef") private val menusRef: CollectionReference,
-    private val cartUseCase: CartUseCase
+    private val cartUseCase: CartUseCase,
+    private val menuUseCase: MenuUseCase
 ) : LoadStateViewModel() {
 
     private val _searchQuery = MutableStateFlow<String?>(null)
@@ -66,13 +68,19 @@ class ListAllMenuViewModel @Inject constructor(
         _searchQuery.value = query
     }
 
+    private fun checkMenuStock(menuId: String): StateFlow<Int> {
+        return menuUseCase.getMenuStock(menuId)
+    }
+
     fun addOrderQuantity(menuId: String, cart: CartEntity?) {
         viewModelScope.launch {
-            if (cart != null) {
-                cartUseCase.insertMenu(cart.copy(menuQty = cart.menuQty + 1))
-            } else {
-                insertMenu(menuId)
-            }
+            cart?.let {
+                checkMenuStock(menuId).collectLatest { stock ->
+                    if (cart.menuQty < stock) {
+                        cartUseCase.insertMenu(it.copy(menuQty = it.menuQty + 1))
+                    }
+                }
+            } ?: insertMenu(menuId)
         }
     }
 

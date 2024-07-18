@@ -1,7 +1,10 @@
 package com.example.alfaresto_customersapp.data.repository
 
+import android.util.Log
 import com.example.alfaresto_customersapp.data.model.MenuResponse
+import com.example.alfaresto_customersapp.data.model.OrderResponse
 import com.example.alfaresto_customersapp.domain.model.Menu
+import com.example.alfaresto_customersapp.domain.model.Order
 import com.example.alfaresto_customersapp.domain.repository.MenuRepository
 import com.google.firebase.firestore.CollectionReference
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -60,5 +63,36 @@ class MenuRepositoryImpl @Inject constructor(
             _menus.value = emptyList()
         }
         return menus
+    }
+
+    override fun getMenuStock(menuId: String): StateFlow<Int> {
+        val stockMenu = MutableStateFlow(0)
+        menusRef.addSnapshotListener { snapshot, error ->
+            if (error != null) {
+                Log.e("getMenuStock", "Error fetching menu document: $error")
+                stockMenu.value = 0
+                return@addSnapshotListener
+            }
+
+            if (snapshot != null && !snapshot.isEmpty) {
+                val menuResponse = snapshot.toObjects(MenuResponse::class.java)
+                val stock = menuResponse.first { it.id == menuId }.stock
+                stockMenu.value = stock
+                Log.d("getMenuStock", "Stock menu for $menuId: $stock")
+            } else {
+                stockMenu.value = 0
+                Log.d("getMenuStock", "Menu document for $menuId doesn't exist")
+            }
+        }
+        return stockMenu
+    }
+
+    override suspend fun updateMenuStock(menuId: String, stock: Int) {
+        try {
+            menusRef.document(menuId).update("menu_stock", stock).await()
+            Timber.tag("updateMenuStock").d("Stock for $menuId updated to $stock")
+        } catch (e: Exception) {
+            Timber.tag("updateMenuStock").e("Error updating stock for $menuId: $e")
+        }
     }
 }
