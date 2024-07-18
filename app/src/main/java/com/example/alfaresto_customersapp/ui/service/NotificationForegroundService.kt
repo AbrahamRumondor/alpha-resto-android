@@ -60,36 +60,39 @@ class NotificationForegroundService : Service() {
         customView = RemoteViews(this.packageName, R.layout.progress_notification_tray)
 
         customView?.let { view ->
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                notificationChannel =
-                    NotificationChannel(channelId, description, NotificationManager.IMPORTANCE_HIGH)
-                notificationChannel.enableLights(true)
-                notificationChannel.lightColor = Color.GREEN
-                notificationChannel.enableVibration(false)
-                notificationManagerCompat.createNotificationChannel(notificationChannel)
+            buildNotificationBasedOnVersion()
 
-                builder = NotificationCompat.Builder(this, channelId)
-                    .setSmallIcon(R.drawable.ic_logo)
-                    .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.ic_logo))
-                    .setCustomContentView(view)
-                    .setCustomBigContentView(view)
-            } else {
-                builder = NotificationCompat.Builder(this)
-                    .setSmallIcon(R.drawable.ic_logo)
-                    .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.ic_logo))
-                    .setCustomContentView(view)
-                    .setCustomBigContentView(view)
+            builder
+                .setSmallIcon(R.drawable.ic_logo)
+                .setCustomContentView(view)
+                .setCustomBigContentView(view)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+
+            if (ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return
             }
+            notificationManagerCompat.notify(1234, builder.build())
         }
+    }
 
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return
+    private fun buildNotificationBasedOnVersion() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            notificationChannel =
+                NotificationChannel(channelId, description, NotificationManager.IMPORTANCE_HIGH)
+            notificationChannel.enableLights(true)
+            notificationChannel.lightColor = Color.GREEN
+            notificationChannel.enableVibration(false)
+            notificationManagerCompat.createNotificationChannel(notificationChannel)
+
+            builder = NotificationCompat.Builder(this, channelId)
+        } else {
+            builder = NotificationCompat.Builder(this)
         }
-        notificationManagerCompat.notify(1234, builder.build())
     }
 
     private fun updateNotification(orderId: String?, shipmentId: String?, orderStatus: String?) {

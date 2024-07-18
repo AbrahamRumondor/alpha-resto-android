@@ -49,7 +49,6 @@ class PushNotificationService : FirebaseMessagingService() {
         val title = message.data.getValue("title")
         val body = message.data.getValue("body")
         Log.d("notiv", "${title}...${body}...${deepLink}")
-//        handleDeepLink(deepLink)
         createNotification(deepLink, title, body)
     }
 
@@ -57,28 +56,15 @@ class PushNotificationService : FirebaseMessagingService() {
         notificationManagerCompat =
             NotificationManagerCompat.from(this.applicationContext)
 
-        val logo = BitmapFactory.decodeResource(this.resources, R.drawable.alfa_resto_logo)
+        buildNotificationBasedOnVersion()
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notificationChannel =
-                NotificationChannel(channelId, description, NotificationManager.IMPORTANCE_HIGH)
-            notificationChannel.enableLights(true)
-            notificationChannel.lightColor = Color.GREEN
-            notificationChannel.enableVibration(false)
-            notificationManagerCompat.createNotificationChannel(notificationChannel)
-
-            builder = NotificationCompat.Builder(this, channelId)
-                .setSmallIcon(R.drawable.ic_logo)
-                .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.ic_logo))
-                .setContentTitle(title)
-                .setContentText(body)
-        } else {
-            builder = NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_logo)
-                .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.ic_logo))
-                .setContentTitle(title)
-                .setContentText(body)
-        }
+        builder
+            .setSmallIcon(R.drawable.ic_logo)
+            .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.ic_logo))
+            .setContentTitle(title)
+            .setContentText(body)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setStyle(NotificationCompat.DecoratedCustomViewStyle())
 
         val intent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -103,15 +89,18 @@ class PushNotificationService : FirebaseMessagingService() {
         notificationManagerCompat.notify(4321, builder.build())
     }
 
+    private fun buildNotificationBasedOnVersion() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            notificationChannel =
+                NotificationChannel(channelId, description, NotificationManager.IMPORTANCE_HIGH)
+            notificationChannel.enableLights(true)
+            notificationChannel.lightColor = Color.GREEN
+            notificationChannel.enableVibration(false)
+            notificationManagerCompat.createNotificationChannel(notificationChannel)
 
-    private fun handleDeepLink(deepLink: String) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(deepLink)).apply {
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-        }
-        try {
-            context.startActivity(intent)
-        } catch (e: Exception) {
-            Timber.d("notiv", "Failed to handle deep link: $deepLink")
+            builder = NotificationCompat.Builder(this, channelId)
+        } else {
+            builder = NotificationCompat.Builder(this)
         }
     }
 
