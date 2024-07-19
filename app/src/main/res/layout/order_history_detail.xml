@@ -18,266 +18,210 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!--    <com.facebook.shimmer.ShimmerFrameLayout-->
-    <!--        android:id="@+id/shimmer_view_container"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="match_parent"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@id/toolbar"-->
-    <!--        app:shimmer_auto_start="true"-->
-    <!--        app:shimmer_duration="1500">-->
+<!--    <com.facebook.shimmer.ShimmerFrameLayout-->
+<!--        android:id="@+id/shimmer_view_container"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/toolbar"-->
+<!--        app:shimmer_auto_start="true">-->
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_base"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/dimen_60"
-        app:layout_constraintTop_toBottomOf="@id/toolbar">
-
-        <ScrollView
-            android:id="@+id/sv_order_detail"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_base"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintVertical_bias="1.0">
+            android:layout_marginTop="@dimen/dimen_60"
+            app:layout_constraintTop_toBottomOf="@id/toolbar">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_order_detail"
+            <ScrollView
+                android:id="@+id/sv_order_detail"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen_none">
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent">
 
-                <TextView
-                    android:id="@+id/tv_user_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/dimen_30"
-                    android:layout_marginTop="@dimen/dimen_25"
-                    android:fontFamily="@font/semibold"
-                    android:text="@string/name"
-                    android:textColor="@color/mainblack"
-                    android:textSize="@dimen/font_16"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_user_phone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimen_10"
-                    android:fontFamily="@font/semibold"
-                    android:text="@string/phone_number"
-                    android:textColor="@color/mainblack"
-                    android:textSize="@dimen/font_16"
-                    app:layout_constraintStart_toStartOf="@+id/tv_user_name"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_user_name" />
-
-                <TextView
-                    android:id="@+id/tv_user_address"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/dimen_30"
-                    android:layout_marginTop="8dp"
-                    android:fontFamily="@font/semibold"
-                    android:text="@string/address"
-                    android:textColor="@color/mainblack"
-                    android:textSize="@dimen/font_16"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_user_phone" />
-
-                <androidx.appcompat.widget.AppCompatImageButton
-                    android:id="@+id/btn_chat"
-                    android:layout_width="@dimen/dimen_60"
-                    android:layout_height="@dimen/dimen_60"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/chat_button"
-                    android:src="@drawable/ic_chat"
-                    app:layout_constraintBottom_toTopOf="@+id/divider1"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.824"
-                    app:layout_constraintStart_toEndOf="@+id/tv_user_phone"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="ContentDescription" />
-
-                <View
-                    android:id="@+id/divider1"
-                    style="@style/Divider.Horizontal"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_order_detail"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginHorizontal="@dimen/dimen_30"
-                    android:layout_marginTop="@dimen/dimen_20"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_user_address"
-                    tools:layout_editor_absoluteX="30dp" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_order_items"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/dimen_28"
-                    android:padding="@dimen/dimen_10"
-                    app:layout_constraintBottom_toTopOf="@+id/divider2"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/divider1"
-                    tools:listitem="@layout/item_order_detail" />
-
-                <View
-                    android:id="@+id/divider2"
-                    style="@style/Divider.Horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimen_1"
-                    android:layout_marginHorizontal="@dimen/dimen_30"
-                    android:layout_marginBottom="@dimen/dimen_10"
-                    app:layout_constraintTop_toBottomOf="@+id/rv_order_items"
-                    tools:layout_editor_absoluteX="30dp" />
-
-                <TextView
-                    android:id="@+id/tv_total"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/dimen_10"
-                    android:fontFamily="@font/semibold"
-                    android:text="@string/total"
-                    android:textColor="@color/mainblack"
-                    android:textSize="@dimen/font_16"
-                    app:layout_constraintBottom_toTopOf="@+id/divider3"
-                    app:layout_constraintStart_toStartOf="@+id/divider2"
-                    app:layout_constraintTop_toBottomOf="@+id/divider2" />
-
-                <TextView
-                    android:id="@+id/tv_total_price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginVertical="@dimen/dimen_10"
-                    android:fontFamily="@font/semibold"
-                    android:textColor="@color/mainblack"
-                    android:textSize="@dimen/font_16"
-                    app:layout_constraintBottom_toTopOf="@+id/divider3"
-                    app:layout_constraintEnd_toEndOf="@+id/divider2"
-                    app:layout_constraintTop_toBottomOf="@+id/divider2" />
-
-                <View
-                    android:id="@+id/divider3"
-                    style="@style/Divider.Horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimen_1"
-                    android:layout_marginHorizontal="@dimen/dimen_30"
-                    android:layout_marginBottom="@dimen/dimen_10"
-                    app:layout_constraintTop_toBottomOf="@id/tv_total_price"
-                    tools:layout_editor_absoluteX="30dp" />
-
-                <TextView
-                    android:id="@+id/tv_notes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/dimen_10"
-                    android:fontFamily="@font/semibold"
-                    android:text="@string/notes"
-                    android:textColor="@color/mainblack"
-                    android:textSize="@dimen/font_16"
-                    app:layout_constraintBottom_toTopOf="@+id/tv_notes_text"
-                    app:layout_constraintStart_toStartOf="@+id/divider3"
-                    app:layout_constraintTop_toBottomOf="@+id/divider3" />
-
-                <TextView
-                    android:id="@+id/tv_notes_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="@dimen/dimen_10"
-                    android:fontFamily="@font/semibold"
-                    android:maxLength="150"
-                    android:textColor="@color/mainblack"
-                    android:textSize="@dimen/font_16"
-                    app:layout_constraintBottom_toTopOf="@+id/divider4"
-                    app:layout_constraintEnd_toEndOf="@+id/divider3"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/tv_notes"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_notes" />
-
-                <View
-                    android:id="@+id/divider4"
-                    style="@style/Divider.Horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimen_1"
-                    android:layout_marginHorizontal="@dimen/dimen_30"
-                    android:layout_marginBottom="@dimen/dimen_10"
-                    app:layout_constraintBottom_toTopOf="@+id/ll_order_id"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <LinearLayout
-                    android:id="@+id/ll_order_id"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/dimen_30"
-                    android:layout_marginBottom="@dimen/dimen_10"
-                    android:orientation="horizontal"
-                    app:layout_constraintBottom_toTopOf="@+id/ll_order_date"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent">
+                    android:layout_height="@dimen/dimen_none">
 
                     <TextView
-                        android:id="@+id/tv_order_id_title"
+                        android:id="@+id/tv_user_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dimen_30"
+                        android:layout_marginTop="@dimen/dimen_25"
+                        android:fontFamily="@font/semibold"
+                        android:text="@string/name"
+                        android:textColor="@color/mainblack"
+                        android:textSize="@dimen/font_16"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_user_phone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_10"
+                        android:fontFamily="@font/semibold"
+                        android:text="@string/phone_number"
+                        android:textColor="@color/mainblack"
+                        android:textSize="@dimen/font_16"
+                        app:layout_constraintStart_toStartOf="@+id/tv_user_name"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_user_name" />
+
+                    <TextView
+                        android:id="@+id/tv_user_address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dimen_30"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/semibold"
+                        android:text="@string/address"
+                        android:textColor="@color/mainblack"
+                        android:textSize="@dimen/font_16"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_user_phone" />
+
+                    <androidx.appcompat.widget.AppCompatImageButton
+                        android:id="@+id/btn_chat"
+                        android:layout_width="@dimen/dimen_60"
+                        android:layout_height="@dimen/dimen_60"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/chat_button"
+                        android:src="@drawable/ic_chat"
+                        app:layout_constraintBottom_toTopOf="@+id/divider1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.824"
+                        app:layout_constraintStart_toEndOf="@+id/tv_user_phone"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="ContentDescription" />
+
+                    <View
+                        android:id="@+id/divider1"
+                        style="@style/Divider.Horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginHorizontal="@dimen/dimen_30"
+                        android:layout_marginTop="@dimen/dimen_20"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_user_address"
+                        tools:layout_editor_absoluteX="30dp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_order_items"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dimen_28"
+                        android:padding="@dimen/dimen_10"
+                        app:layout_constraintBottom_toTopOf="@+id/divider2"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/divider1"
+                        tools:listitem="@layout/item_order_detail" />
+
+                    <View
+                        android:id="@+id/divider2"
+                        style="@style/Divider.Horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dimen_1"
+                        android:layout_marginHorizontal="@dimen/dimen_30"
+                        android:layout_marginBottom="@dimen/dimen_10"
+                        app:layout_constraintTop_toBottomOf="@+id/rv_order_items"
+                        tools:layout_editor_absoluteX="30dp" />
+
+                    <TextView
+                        android:id="@+id/tv_total"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/semibold"
-                        android:text="@string/order_id"
+                        android:text="@string/total"
                         android:textColor="@color/mainblack"
                         android:textSize="@dimen/font_16"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="@+id/tv_order_status"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_order_status" />
+                        app:layout_constraintBottom_toTopOf="@+id/divider3"
+                        app:layout_constraintStart_toStartOf="@+id/divider2"
+                        app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
                     <TextView
-                        android:id="@+id/tv_order_id"
+                        android:id="@+id/tv_total_price"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dimen_10"
-                        android:fontFamily="@font/bold"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/semibold"
                         android:textColor="@color/mainblack"
                         android:textSize="@dimen/font_16"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="@+id/tv_order_status"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_order_status" />
+                        app:layout_constraintBottom_toTopOf="@+id/divider3"
+                        app:layout_constraintEnd_toEndOf="@+id/divider2"
+                        app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
-                </LinearLayout>
+                    <View
+                        android:id="@+id/divider3"
+                        style="@style/Divider.Horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dimen_1"
+                        android:layout_marginHorizontal="@dimen/dimen_30"
+                        android:layout_marginBottom="@dimen/dimen_10"
+                        app:layout_constraintTop_toBottomOf="@id/tv_total_price"
+                        tools:layout_editor_absoluteX="30dp" />
 
-                <LinearLayout
-                    android:id="@+id/ll_order_date"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/dimen_30"
-                    android:layout_marginTop="@dimen/dimen_20"
-                    android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/ll_order_id">
-
-                    <ImageView
-                        android:layout_width="@dimen/dimen_40"
-                        android:layout_height="@dimen/dimen_40"
-                        android:layout_gravity="center_vertical"
-                        android:src="@drawable/ic_time"
-                        tools:ignore="ContentDescription" />
-
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/tv_notes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dimen_20"
-                        android:orientation="vertical">
+                        android:layout_marginVertical="@dimen/dimen_10"
+                        android:fontFamily="@font/semibold"
+                        android:text="@string/notes"
+                        android:textColor="@color/mainblack"
+                        android:textSize="@dimen/font_16"
+                        app:layout_constraintBottom_toTopOf="@+id/tv_notes_text"
+                        app:layout_constraintStart_toStartOf="@+id/divider3"
+                        app:layout_constraintTop_toBottomOf="@+id/divider3" />
+
+                    <TextView
+                        android:id="@+id/tv_notes_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="@dimen/dimen_10"
+                        android:fontFamily="@font/semibold"
+                        android:maxLength="150"
+                        android:textColor="@color/mainblack"
+                        android:textSize="@dimen/font_16"
+                        app:layout_constraintBottom_toTopOf="@+id/divider4"
+                        app:layout_constraintEnd_toEndOf="@+id/divider3"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="@+id/tv_notes"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_notes" />
+
+                    <View
+                        android:id="@+id/divider4"
+                        style="@style/Divider.Horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dimen_1"
+                        android:layout_marginHorizontal="@dimen/dimen_30"
+                        android:layout_marginBottom="@dimen/dimen_10"
+                        app:layout_constraintBottom_toTopOf="@+id/ll_order_id"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <LinearLayout
+                        android:id="@+id/ll_order_id"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dimen_30"
+                        android:layout_marginBottom="@dimen/dimen_10"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toTopOf="@+id/ll_order_date"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent">
 
                         <TextView
-                            android:id="@+id/tv_order_date_title"
+                            android:id="@+id/tv_order_id_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/semibold"
-                            android:text="@string/ordered_at"
+                            android:text="@string/order_id"
                             android:textColor="@color/mainblack"
                             android:textSize="@dimen/font_16"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -286,10 +230,10 @@
                             app:layout_constraintTop_toBottomOf="@+id/tv_order_status" />
 
                         <TextView
-                            android:id="@+id/tv_order_date"
+                            android:id="@+id/tv_order_id"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/dimen_5"
+                            android:layout_marginStart="@dimen/dimen_10"
                             android:fontFamily="@font/bold"
                             android:textColor="@color/mainblack"
                             android:textSize="@dimen/font_16"
@@ -297,44 +241,96 @@
                             app:layout_constraintHorizontal_bias="0.0"
                             app:layout_constraintStart_toStartOf="@+id/tv_order_status"
                             app:layout_constraintTop_toBottomOf="@+id/tv_order_status" />
+
                     </LinearLayout>
-                </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tv_complain"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/dimen_30"
-                    android:layout_marginTop="@dimen/dimen_30"
-                    android:fontFamily="@font/semibold"
-                    android:gravity="center"
-                    android:text="@string/complain_text"
-                    android:textColor="@color/mainblack"
-                    android:textSize="@dimen/font_14"
-                    android:visibility="gone"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/ll_order_date" />
+                    <LinearLayout
+                        android:id="@+id/ll_order_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dimen_30"
+                        android:layout_marginTop="@dimen/dimen_20"
+                        android:orientation="horizontal"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/ll_order_id">
 
-                <Button
-                    android:id="@+id/btn_complain"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/dimen_30"
-                    android:layout_marginTop="@dimen/dimen_15"
-                    android:layout_marginBottom="@dimen/dimen_60"
-                    android:backgroundTint="@color/red"
-                    android:fontFamily="@font/bold"
-                    android:text="@string/complain"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/font_16"
-                    android:visibility="invisible"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_complain" />
+                        <ImageView
+                            android:layout_width="@dimen/dimen_40"
+                            android:layout_height="@dimen/dimen_40"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/ic_time"
+                            tools:ignore="ContentDescription" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </ScrollView>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-    <!--    </com.facebook.shimmer.ShimmerFrameLayout>-->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dimen_20"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_order_date_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/semibold"
+                                android:text="@string/ordered_at"
+                                android:textColor="@color/mainblack"
+                                android:textSize="@dimen/font_16"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.0"
+                                app:layout_constraintStart_toStartOf="@+id/tv_order_status"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_order_status" />
+
+                            <TextView
+                                android:id="@+id/tv_order_date"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/dimen_5"
+                                android:fontFamily="@font/bold"
+                                android:textColor="@color/mainblack"
+                                android:textSize="@dimen/font_16"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.0"
+                                app:layout_constraintStart_toStartOf="@+id/tv_order_status"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_order_status" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tv_complain"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dimen_30"
+                        android:layout_marginTop="@dimen/dimen_30"
+                        android:fontFamily="@font/semibold"
+                        android:gravity="center"
+                        android:text="@string/complain_text"
+                        android:textColor="@color/mainblack"
+                        android:textSize="@dimen/font_14"
+                        android:visibility="gone"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/ll_order_date" />
+
+                    <Button
+                        android:id="@+id/btn_complain"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dimen_30"
+                        android:layout_marginTop="@dimen/dimen_15"
+                        android:layout_marginBottom="@dimen/dimen_60"
+                        android:backgroundTint="@color/red"
+                        android:fontFamily="@font/bold"
+                        android:text="@string/complain"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/font_16"
+                        android:visibility="invisible"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_t9oBottomOf="@id/tv_complain" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </ScrollView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+<!--    </com.facebook.shimmer.ShimmerFrameLayout>-->
 </androidx.constraintlayout.widget.ConstraintLayout>
