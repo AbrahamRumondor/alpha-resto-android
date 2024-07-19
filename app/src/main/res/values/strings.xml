@@ -137,7 +137,7 @@
     <string name="cancel">Cancel</string>
     <string name="canceled">Cancelled</string>
     <string name="no_internet">No internet, please check your connection</string>
-    <string name="no_address">No addresses found</string>
+    <string name="no_address">No addresses found…</string>
     <string name="no_order_history">Order History Loaded. There\'s no order history.</string>
     <string name="no_internet_connection">No internet Connection</string>
     <string name="your_internet_connection_is_currently_not_available_please_check_or_try_again">Your internet connection is currently not available please check or try again.</string>
@@ -148,4 +148,5 @@
     <string name="out_of_stock">Out of Stock</string>
     <string name="reach_max_stock">You have reached max item stocks</string>
     <string name="choose_address">Choose Address</string>
+    <string name="image">image</string>
 </resources>

@@ -7,6 +7,7 @@
     <dimen name="dimen_15">15sp</dimen>
     <dimen name="dimen_16">16dp</dimen>
     <dimen name="dimen_20">20dp</dimen>
+    <dimen name="dimen_20sp">20sp</dimen>
     <dimen name="dimen_22">22dp</dimen>
     <dimen name="dimen_30">30dp</dimen>
     <dimen name="dimen_35">35dp</dimen>
