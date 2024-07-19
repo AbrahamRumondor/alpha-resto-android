@@ -57,7 +57,7 @@
 
                 <RadioButton
                     android:id="@+id/rb_cod"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/cod" />
 
@@ -65,7 +65,7 @@
 
                 <RadioButton
                     android:id="@+id/rb_gopay"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/dimen_10"
                     android:text="@string/gopay" />
