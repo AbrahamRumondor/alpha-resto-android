@@ -35,6 +35,7 @@ import com.example.alfaresto_customersapp.utils.singleton.UserInfo.USER_TOKEN
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -80,10 +81,18 @@ class OrderSummaryViewModel @Inject constructor(
     private val _restoIsClosedTemporarily: MutableStateFlow<Boolean> = MutableStateFlow(false)
     private val restoIsClosedTemporarily: StateFlow<Boolean> = _restoIsClosedTemporarily
 
+    private val _notAvailables: MutableStateFlow<Pair<List<CartEntity>, List<Menu>>> =
+        MutableStateFlow(Pair(emptyList(), emptyList()))
+    val notAvailables: StateFlow<Pair<List<CartEntity>, List<Menu>>> = _notAvailables
+
+    private val cartNotAvailable = mutableListOf<CartEntity>()
+    private val menuNotAvailable = mutableListOf<Menu>()
+
     init {
         fetchMenus()
         fetchCart()
         fetchResto()
+        checkStock()
     }
 
     fun setPayment(method: String) {
@@ -397,6 +406,32 @@ class OrderSummaryViewModel @Inject constructor(
         val date = Timestamp.now().toDate().toString()
         val time = date.substring(11, 16)
         return time
+    }
+
+    private fun checkStock() {
+        viewModelScope.launch {
+            carts.collectLatest { carts ->
+                delay(500)
+                for (i in carts.indices) {
+                    menuUseCase.getMenuStock(carts[i].menuId) {
+                        if (i == 0) {
+                            cartNotAvailable.clear()
+                            menuNotAvailable.clear()
+                            _notAvailables.value = Pair(emptyList(), emptyList())
+                        }
+
+                        if (carts[i].menuQty > it) {
+                            cartNotAvailable.add(carts[i])
+                            menuNotAvailable.add(menus.value.first { menu -> menu.id == carts[i].menuId })
+                        }
+
+                        if (i == carts.size - 1) {
+                            _notAvailables.value = Pair(cartNotAvailable, menuNotAvailable)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     companion object {

@@ -147,4 +147,6 @@
     <string name="stock_not_enough">One or more items in your cart are out of stock. Please adjust the quantities.</string>
     <string name="out_of_stock">Out of Stock</string>
     <string name="reach_max_stock">You have reached max item stocks</string>
+    <string name="items_not_available">Some items are not available</string>
+    <string name="item_not_available">%s: available %d out of %d\n</string>
 </resources>

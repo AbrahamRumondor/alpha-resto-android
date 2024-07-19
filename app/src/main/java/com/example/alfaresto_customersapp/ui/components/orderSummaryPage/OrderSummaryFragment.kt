@@ -1,7 +1,6 @@
 package com.example.alfaresto_customersapp.ui.components.orderSummaryPage
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +21,7 @@ import com.example.alfaresto_customersapp.utils.singleton.UserInfo.USER_ADDRESS
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
 class OrderSummaryFragment : Fragment() {
@@ -54,7 +54,8 @@ class OrderSummaryFragment : Fragment() {
         if (NetworkUtils.isConnectedToNetwork.value == false) {
             binding.inclInternet.root.visibility = View.VISIBLE
             binding.rvOrderSummary.visibility = View.GONE
-            Toast.makeText(requireContext(), getString(R.string.no_internet), Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.no_internet), Toast.LENGTH_SHORT)
+                .show()
         } else {
             binding.inclInternet.root.visibility = View.GONE
             binding.rvOrderSummary.visibility = View.VISIBLE
@@ -98,7 +99,11 @@ class OrderSummaryFragment : Fragment() {
                     val addMenu = orderSummaryViewModel.orders.value[position] as? Menu
                     addMenu?.let { menu ->
                         val item = cart?.find { it.menuId == menuId }
-                        menu.orderCartQuantity += orderSummaryViewModel.addOrderQuantity(menuId, item, requireContext())
+                        menu.orderCartQuantity += orderSummaryViewModel.addOrderQuantity(
+                            menuId,
+                            item,
+                            requireContext()
+                        )
                         orderAdapter.notifyItemChanged(position)
                         orderAdapter.notifyItemChanged(orderSummaryViewModel.orders.value.size - 3)
                         countTotalItemAndPrice(orders)
@@ -175,6 +180,48 @@ class OrderSummaryFragment : Fragment() {
                         }
 
                         if (!checkoutClicked) {
+                            // notAvailables.first = cart items
+                            // notAvailables.second = menu items
+
+                            val notAvailables = orderSummaryViewModel.notAvailables.value
+
+                            val isNotEmpty =
+                                notAvailables.first.isNotEmpty() && notAvailables.second.isNotEmpty()
+
+                            if (isNotEmpty) {
+                                val messageBuilder = StringBuilder()
+                                Timber.tag("CHECKOUT 1").d("messageBuilder: $messageBuilder")
+
+                                notAvailables.first.forEach { cart ->
+                                    Timber.tag("CHECKOUT").d("Cart: ${cart.menuId}")
+                                    notAvailables.second.forEach { menu ->
+                                        Timber.tag("CHECKOUT").d("Menu: ${menu.id}")
+                                        if (cart.menuId == menu.id) {
+                                            messageBuilder.append(
+                                                getString(
+                                                    R.string.item_not_available,
+                                                    menu.name,
+                                                    menu.stock,
+                                                    cart.menuQty
+                                                )
+                                            )
+                                        }
+                                    }
+                                }
+
+                                AlertDialog.Builder(requireContext())
+                                    .setTitle(getString(R.string.items_not_available))
+                                    .setMessage(
+                                        messageBuilder.toString().trim()
+                                    ) // Convert StringBuilder to String
+                                    .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                                        dialog.dismiss()
+                                    }
+                                    .show()
+
+                                return@isRestoClosed
+                            }
+
                             AlertDialog.Builder(requireContext())
                                 .setTitle(getString(R.string.checkout_confirmation))
                                 .setMessage(getString(R.string.checkout_confirmation_message))
@@ -185,6 +232,7 @@ class OrderSummaryFragment : Fragment() {
                                     checkout()
                                 }
                                 .show()
+
                         }
                     }
                 }
@@ -229,7 +277,7 @@ class OrderSummaryFragment : Fragment() {
 
     private fun checkout() {
         checkoutClicked = true
-        Log.d("CHECKOUT", "Total item: ${orderSummaryViewModel.orders.value.size}")
+        Timber.tag("CHECKOUT").d("Total item: " + orderSummaryViewModel.orders.value.size)
 
         orderSummaryViewModel.saveOrderInDatabase {
             if (it != null) {
