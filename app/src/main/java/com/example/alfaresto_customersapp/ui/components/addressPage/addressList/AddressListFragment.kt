@@ -41,6 +41,7 @@ class AddressListFragment : Fragment() {
 
         setupAddressAdapter()
         setButtonNewAddress()
+        setChooseAddressListener()
 
         lifecycleScope.launch {
             addressListViewModel.isLoading.collectLatest { isLoading ->
@@ -118,8 +119,15 @@ class AddressListFragment : Fragment() {
                     addressAdapter.notifyItemChanged(previousSelected)
                 }
                 addressAdapter.notifyItemChanged(position)
+                binding.btnChooseAddress.visibility = View.VISIBLE
             }
         })
+    }
+
+    private fun setChooseAddressListener() {
+        binding.btnChooseAddress.setOnClickListener {
+            Navigation.findNavController(it).popBackStack()
+        }
     }
 
 }
