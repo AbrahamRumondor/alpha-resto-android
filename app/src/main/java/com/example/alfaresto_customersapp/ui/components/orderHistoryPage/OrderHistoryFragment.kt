@@ -50,6 +50,7 @@ class OrderHistoryFragment : Fragment() {
 
         lifecycleScope.launch {
             viewModel.orderHistories.collectLatest { orderHistories ->
+                binding.llNoOrders.visibility = View.GONE
 
                 binding.toolbar.toggleSort.isChecked = true
                 adapter.submitList(orderHistories.sortedByDescending { it.orderDate })
@@ -71,6 +72,7 @@ class OrderHistoryFragment : Fragment() {
 
                 delay(1000)
                 if (orderHistories.isEmpty()) {
+                    binding.llNoOrders.visibility = View.VISIBLE
                     Toast.makeText(
                         requireContext(),
                         getString(R.string.no_order_history),

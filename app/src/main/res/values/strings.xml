@@ -149,4 +149,6 @@
     <string name="reach_max_stock">You have reached max item stocks</string>
     <string name="choose_address">Choose Address</string>
     <string name="image">image</string>
+    <string name="no_history_yet">No history yet</string>
+    <string name="hit_the_orange_cart_to_create_an_order">Hit the orange cart to create an order</string>
 </resources>
