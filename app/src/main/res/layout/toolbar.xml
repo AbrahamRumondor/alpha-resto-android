@@ -19,6 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:fontFamily="@font/bold"
+        android:layout_marginTop="@dimen/dimen_20"
         android:text="@string/address"
         android:textColor="@color/mainblack"
         android:textSize="@dimen/font_24"
@@ -37,6 +38,24 @@
             android:background="@android:color/transparent"
             android:contentDescription="@string/logout_logo"
             android:src="@drawable/ic_logout" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginEnd="@dimen/dimen_12">
+
+        <ImageButton
+            android:id="@+id/btn_add_address"
+            android:layout_width="@dimen/dimen_50"
+            android:layout_height="@dimen/dimen_50"
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/dimen_15"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/add_new_address"
+            android:src="@drawable/ic_add_address" />
 
     </RelativeLayout>
 
