@@ -73,22 +73,27 @@ class ListAllMenuFragment : Fragment() {
     }
 
     private fun setupSearch() {
-        binding.svSearchMenu.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                query?.let {
-                    viewModel.setSearchQuery(it)
-                    binding.svSearchMenu.clearFocus()
+        binding.svSearchMenu.apply {
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    query?.let {
+                        viewModel.setSearchQuery(it)
+                        binding.svSearchMenu.clearFocus()
+                    }
+                    return true
                 }
-                return true
-            }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                newText?.let {
-                    viewModel.setSearchQuery(it)
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    newText?.let {
+                        viewModel.setSearchQuery(it)
+                    }
+                    return true
                 }
-                return true
+            })
+            setOnClickListener {
+                isIconified = false
             }
-        })
+        }
 
         binding.svSearchMenu.setOnCloseListener {
             viewModel.setSearchQuery(null)
