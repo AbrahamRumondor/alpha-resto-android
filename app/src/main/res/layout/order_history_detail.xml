@@ -327,7 +327,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_t9oBottomOf="@id/tv_complain" />
+                        app:layout_constraintTop_toBottomOf="@id/tv_complain" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </ScrollView>

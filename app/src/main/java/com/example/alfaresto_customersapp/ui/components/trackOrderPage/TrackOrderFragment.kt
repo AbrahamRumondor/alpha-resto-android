@@ -130,10 +130,8 @@ class TrackOrderFragment : Fragment() {
                 }
 
                 btnChat.setOnClickListener {
-                    val action =
-                        TrackOrderFragmentDirections.actionTrackOrderFragmentToChatFragment(
-                            orderId = orderId
-                        )
+                    trackOrderViewModel.updateReadStatus(orderId)
+                    val action = TrackOrderFragmentDirections.actionTrackOrderFragmentToChatFragment(orderId = orderId)
                     Navigation.findNavController(requireView()).navigate(action)
                 }
 

@@ -6,5 +6,6 @@ data class Chat(
     val dateSend: Timestamp = Timestamp.now(),
     val message: String = "",
     val senderId: String = "",
-    var userName: String = ""
+    var userName: String = "",
+    var readStatus: Boolean = false
 )

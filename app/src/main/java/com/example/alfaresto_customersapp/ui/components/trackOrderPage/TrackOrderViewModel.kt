@@ -1,5 +1,6 @@
 package com.example.alfaresto_customersapp.ui.components.trackOrderPage
 
+import android.content.ContentValues
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -124,4 +125,13 @@ class TrackOrderViewModel @Inject constructor(
         return (duration / 60.00).toInt().toString() + " min"
     }
 
+    fun updateReadStatus(orderId: String) {
+        viewModelScope.launch {
+            try {
+                orderUseCase.updateReadStatus(orderId, true)
+            } catch (e: Exception) {
+                Timber.tag(ContentValues.TAG).w(e, "Error updating read status")
+            }
+        }
+    }
 }

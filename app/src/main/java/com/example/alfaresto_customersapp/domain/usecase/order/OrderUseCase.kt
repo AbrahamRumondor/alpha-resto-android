@@ -18,4 +18,6 @@ interface OrderUseCase {
     suspend fun getOrderByID(orderId: String): Order?
     suspend fun addChatMessage(orderId: String, messageData: Chat): Result<Unit>
     suspend fun getChatMessages(orderId: String): StateFlow<List<Chat>>
+
+    suspend fun updateReadStatus(orderId: String, status: Boolean)
 }

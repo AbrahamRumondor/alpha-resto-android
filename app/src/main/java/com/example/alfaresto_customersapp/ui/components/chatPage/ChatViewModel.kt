@@ -1,5 +1,6 @@
 package com.example.alfaresto_customersapp.ui.components.chatPage
 
+import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -14,6 +15,7 @@ import com.example.alfaresto_customersapp.domain.usecase.auth.AuthUseCase
 import com.example.alfaresto_customersapp.domain.usecase.order.OrderUseCase
 import com.example.alfaresto_customersapp.domain.usecase.resto.RestaurantUseCase
 import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase
+import com.example.alfaresto_customersapp.ui.components.trackOrderPage.TrackOrderViewModel
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ListenerRegistration
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -141,6 +143,16 @@ class ChatViewModel @Inject constructor(
     private fun getUser() {
         viewModelScope.launch {
             _user.value = userUseCase.getCurrentUser().value
+        }
+    }
+
+    fun updateReadStatus(orderId: String) {
+        viewModelScope.launch {
+            try {
+                orderUseCase.updateReadStatus(orderId, true)
+            } catch (e: Exception) {
+                Timber.tag("Error").e(e, "Error updating read status")
+            }
         }
     }
 }
