@@ -144,4 +144,6 @@
     <string name="notes_hint">Add special instructions for your order</string>
     <string name="notes">Order Notes :</string>
     <string name="choose_address">Choose Address</string>
+    <string name="start_chat_with_resto">Start chat with Resto!</string>
+    <string name="no_chat">There\'s no chat with Resto\nStart chatting now!</string>
 </resources>
