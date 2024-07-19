@@ -107,10 +107,6 @@ class RestoFragment : Fragment() {
 
                     Log.d("test", "menu: ${menu.stock}")
                     if (cartItem != null) {
-                        if (menu.stock == 0 && cartItem.menuQty > 0) {
-                            Log.d("test", "MASUK")
-                            viewModel.deleteCartByMenuId(menu.id)
-                        }
                         menu.copy(orderCartQuantity = cartItem.menuQty)
                     } else {
                         menu
