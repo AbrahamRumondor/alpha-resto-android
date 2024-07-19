@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.data.network.NetworkUtils
@@ -42,8 +43,8 @@ class OrderSummaryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        toolbarSetup()
         populateOrderSummaryAdapter()
-
         setConnectionBehaviour()
         binding.inclInternet.btnInetTryAgain.setOnClickListener {
             setConnectionBehaviour()
@@ -266,6 +267,20 @@ class OrderSummaryFragment : Fragment() {
 //            findNavController().popBackStack()
 //        }
         return Pair(totalItem, totalPrice)
+    }
+
+    private fun toolbarSetup() {
+        binding.toolbar.apply {
+            btnLogout.visibility = View.GONE
+            btnBack.visibility = View.VISIBLE
+            ivToolbarTitle.visibility = View.GONE
+            tvToolbarText.visibility = View.VISIBLE
+            tvToolbarText.text = getString(R.string.checkout)
+
+            btnBack.setOnClickListener {
+                it.findNavController().popBackStack()
+            }
+        }
     }
 
     companion object {

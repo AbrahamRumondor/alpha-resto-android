@@ -111,6 +111,8 @@ dependencies {
     implementation("com.google.maps.android:android-maps-utils:2.2.0")
     implementation("com.google.firebase:firebase-database:21.0.0")
 
+    implementation("com.facebook.shimmer:shimmer:0.5.0")
+
     // timber
     implementation("com.jakewharton.timber:timber:5.0.1")
 }
