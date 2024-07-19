@@ -155,6 +155,19 @@ class OrderHistoryDetailFragment : Fragment() {
     }
 
     private fun loadData() {
+//        lifecycleScope.launch {
+//            viewModel.isLoading.collect { isLoading ->
+//                if (isLoading) {
+//                    binding.shimmerViewContainer.visibility = View.VISIBLE
+//                    binding.shimmerViewContainer.startShimmer()
+//                    binding.clBase.visibility = View.GONE
+//                } else {
+//                    binding.shimmerViewContainer.stopShimmer()
+//                    binding.shimmerViewContainer.visibility = View.GONE
+//                    binding.clBase.visibility = View.VISIBLE
+//                }
+//            }
+//        }
         lifecycleScope.launch {
             viewModel.orderHistory.collectLatest { orderHistory ->
                 delay(500)

@@ -107,6 +107,7 @@ class ChatFragment : Fragment() {
                         binding.rvChat.scrollToPosition(adapter.itemCount - 1)
                     }
                 }
+                binding.clChat.visibility = if (messages.isEmpty()) View.VISIBLE else View.GONE
             }
         }
 
@@ -119,8 +120,9 @@ class ChatFragment : Fragment() {
     private fun onBtnSendClicked(message: String) {
         if (message.isNotEmpty()) {
             viewModel.sendMessage(message)
-            binding.etChatInput.apply {
-                text.clear()
+            binding.apply {
+                etChatInput.text.clear()
+                clChat.visibility = View.GONE
             }
         }
     }
