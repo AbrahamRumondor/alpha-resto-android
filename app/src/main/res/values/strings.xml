@@ -113,10 +113,11 @@
     <string name="retry">Retry</string>
     <string name="on_delivery_text">On Delivery</string>
     <string name="delivered_text">Delivered</string>
-    <string name="failed_checkout_null">Checkout Failed, make sure to fill the needed fields</string>
+    <string name="failed_checkout_insufficient_field">Checkout Failed, make sure to fill the needed fields</string>
     <string name="failed_create_address">Failed, make sure to fill the needed fields</string>
     <string name="too_far_address">Sorry, the designated place is too far…</string>
-    <string name="failed_checkout_false">Failed, there are problems processing your orders…</string>
+    <string name="failed_checkout_problems">Failed, there are problems processing your orders…</string>
+    <string name="failed_checkout_no_stock">Failed, one of the menu is out of stocks…</string>
     <string name="date">Date</string>
     <string name="new_address_success">Address added successfully</string>
     <string name="order_id">Order ID :</string>
@@ -136,14 +137,22 @@
     <string name="cancel">Cancel</string>
     <string name="canceled">Cancelled</string>
     <string name="no_internet">No internet, please check your connection</string>
-    <string name="no_address">No addresses found</string>
+    <string name="no_address">No addresses found…</string>
     <string name="no_order_history">Order History Loaded. There\'s no order history.</string>
     <string name="no_internet_connection">No internet Connection</string>
     <string name="your_internet_connection_is_currently_not_available_please_check_or_try_again">Your internet connection is currently not available please check or try again.</string>
     <string name="try_again">Try again</string>
     <string name="notes_hint">Add special instructions for your order</string>
     <string name="notes">Order Notes :</string>
+    <string name="stock_not_enough">One or more items in your cart are out of stock. Please adjust the quantities.</string>
+    <string name="out_of_stock">Out of Stock</string>
+    <string name="reach_max_stock">You have reached max item stocks</string>
+    <string name="items_not_available">Some items are not available</string>
+    <string name="item_not_available">%s: available %d out of %d\n</string>
     <string name="choose_address">Choose Address</string>
+    <string name="image">image</string>
+    <string name="no_history_yet">No history yet</string>
+    <string name="hit_the_orange_cart_to_create_an_order">Hit the orange cart to create an order</string>
     <string name="start_chat_with_resto">Start chat with Resto!</string>
     <string name="no_chat">There\'s no chat with Resto\nStart chatting now!</string>
 </resources>

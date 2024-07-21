@@ -8,5 +8,6 @@ object UserInfo {
     var USER_TOKEN: String? = null
     var USER_ADDRESS : Address? = null
     var USER_ID: String? = null
+    var USER_PAYMENT_METHOD: String? = null
     var SHIPMENT: MutableLiveData<Shipment> = MutableLiveData()
 }

@@ -1,6 +1,10 @@
 package com.example.alfaresto_customersapp.ui.components.restoPage
 
+import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.viewModelScope
+import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.domain.callbacks.FirestoreCallback
 import com.example.alfaresto_customersapp.domain.model.Menu
@@ -46,8 +50,8 @@ class RestoViewModel @Inject constructor(
         viewModelScope.launch {
             setLoading(true)
             try {
-                menuUseCase.getNewMenus().collectLatest {
-                    _menus.value = it
+                menuUseCase.getMenus().collectLatest {list->
+                    _menus.value = list.sortedByDescending { it.dateCreated }.take(3)
                     setLoading(false)
                 }
             } catch (e: Exception) {
@@ -72,6 +76,12 @@ class RestoViewModel @Inject constructor(
         }
     }
 
+    fun deleteCartByMenuId(menuId: String) {
+        viewModelScope.launch {
+            cartUseCase.deleteMenu(menuId = menuId)
+        }
+    }
+
     private fun insertMenu(menuId: String) {
         viewModelScope.launch {
             val cartEntity = CartEntity(menuId = menuId, menuQty = 1)
@@ -89,12 +99,41 @@ class RestoViewModel @Inject constructor(
         }
     }
 
-    fun addOrderQuantity(menuId: String, cart: CartEntity?) {
-        viewModelScope.launch {
-            Timber.tag("test").d("%s dan %s", cart?.menuId, cart?.menuQty)
-            cart?.let {
-                cartUseCase.insertMenu(it.copy(menuQty = it.menuQty + 1))
-            } ?: insertMenu(menuId = menuId)
+    fun addOrderQuantity(context: Context, menuId: String, cart: CartEntity?) {
+        var isFromUserClick = menuId.isNotEmpty()
+        Timber.tag("test").d("%s dan %s", cart?.menuId, cart?.menuQty)
+        menuUseCase.getMenuStock(menuId) { stock ->
+            if (isFromUserClick) {
+                isFromUserClick = false
+                if (stock == 0) {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.out_of_stock),
+                        Toast.LENGTH_LONG
+                    )
+                        .show()
+                    return@getMenuStock
+                }
+                cart?.let {
+                    if (it.menuQty < stock) {
+                        viewModelScope.launch {
+                            cartUseCase.insertMenu(it.copy(menuQty = it.menuQty + 1))
+                            return@launch
+                        }
+                        Log.d("orderss", "addOrderQuantity: ${it.menuQty}")
+                    } else {
+                        Log.d("orderss", "cartstock: ${it.menuQty} && stock: $stock")
+
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.reach_max_stock),
+                            Toast.LENGTH_LONG
+                        )
+                            .show()
+                    }
+                } ?: insertMenu(menuId)
+                return@getMenuStock
+            }
         }
     }
 

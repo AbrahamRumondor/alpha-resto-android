@@ -24,4 +24,41 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
+    <LinearLayout
+        android:id="@+id/ll_no_orders"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:gravity="center"
+        android:orientation="vertical"
+        >
+        <ImageView
+            android:id="@+id/no_orders"
+            android:layout_width="@dimen/dimen_150"
+            android:layout_height="@dimen/dimen_150"
+            android:src="@drawable/ic_no_orders"
+            android:contentDescription="@string/image" />
+
+        <TextView
+            android:id="@+id/tv_no_orders_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/dimen_30sp"
+            android:textStyle="bold"
+            android:text="@string/no_history_yet"
+            android:layout_marginTop="@dimen/dimen_40"
+            android:layout_marginBottom="@dimen/dimen_10"
+            />
+
+        <TextView
+            android:id="@+id/tv_no_orders_body"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="@dimen/dimen_20sp"
+            android:textColor="@color/dark_gray"
+            android:text="@string/hit_the_orange_cart_to_create_an_order"
+            />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

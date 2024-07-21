@@ -13,15 +13,16 @@ import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
+import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.alfaresto_customersapp.databinding.FragmentOrderSummaryBinding
 import com.example.alfaresto_customersapp.databinding.OrderSummaryPaymentMethodBinding
 import com.example.alfaresto_customersapp.domain.model.Menu
-import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.alfaresto_customersapp.ui.components.listener.OrderSummaryItemListener
 import com.example.alfaresto_customersapp.utils.singleton.UserInfo.USER_ADDRESS
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
 class OrderSummaryFragment : Fragment() {
@@ -99,8 +100,11 @@ class OrderSummaryFragment : Fragment() {
                     val addMenu = orderSummaryViewModel.orders.value[position] as? Menu
                     addMenu?.let { menu ->
                         val item = cart?.find { it.menuId == menuId }
-                        orderSummaryViewModel.addOrderQuantity(menuId, item)
-                        menu.orderCartQuantity += 1
+                        menu.orderCartQuantity += orderSummaryViewModel.addOrderQuantity(
+                            menuId,
+                            item,
+                            requireContext()
+                        )
                         orderAdapter.notifyItemChanged(position)
                         orderAdapter.notifyItemChanged(orderSummaryViewModel.orders.value.size - 3)
                         countTotalItemAndPrice(orders)
@@ -177,21 +181,59 @@ class OrderSummaryFragment : Fragment() {
                         }
 
                         if (!checkoutClicked) {
-                            checkoutClicked = true
+                            // notAvailables.first = cart items
+                            // notAvailables.second = menu items
+
+                            val notAvailables = orderSummaryViewModel.notAvailables.value
+
+                            val isNotEmpty =
+                                notAvailables.first.isNotEmpty() && notAvailables.second.isNotEmpty()
+
+                            if (isNotEmpty) {
+                                val messageBuilder = StringBuilder()
+                                Timber.tag("CHECKOUT 1").d("messageBuilder: $messageBuilder")
+
+                                notAvailables.first.forEach { cart ->
+                                    Timber.tag("CHECKOUT").d("Cart: ${cart.menuId}")
+                                    notAvailables.second.forEach { menu ->
+                                        Timber.tag("CHECKOUT").d("Menu: ${menu.id}")
+                                        if (cart.menuId == menu.id) {
+                                            messageBuilder.append(
+                                                getString(
+                                                    R.string.item_not_available,
+                                                    menu.name,
+                                                    menu.stock,
+                                                    cart.menuQty
+                                                )
+                                            )
+                                        }
+                                    }
+                                }
+
+                                AlertDialog.Builder(requireContext())
+                                    .setTitle(getString(R.string.items_not_available))
+                                    .setMessage(
+                                        messageBuilder.toString().trim()
+                                    ) // Convert StringBuilder to String
+                                    .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                                        dialog.dismiss()
+                                    }
+                                    .show()
+
+                                return@isRestoClosed
+                            }
+
                             AlertDialog.Builder(requireContext())
                                 .setTitle(getString(R.string.checkout_confirmation))
                                 .setMessage(getString(R.string.checkout_confirmation_message))
                                 .setNegativeButton(getString(R.string.no)) { dialog, _ ->
-                                    checkoutClicked = false
                                     dialog.dismiss()
                                 }
                                 .setPositiveButton(getString(R.string.yes)) { _, _ ->
                                     checkout()
                                 }
-                                .setOnDismissListener {
-                                    checkoutClicked = false
-                                }
                                 .show()
+
                         }
                     }
                 }
@@ -212,7 +254,32 @@ class OrderSummaryFragment : Fragment() {
         }
     }
 
+//    private fun checkout() {
+//        orderSummaryViewModel.saveOrderInDatabase {
+//            if (it != null) {
+//                checkoutClicked = false
+//                Toast.makeText(
+//                    requireContext(),
+//                    getString(it),
+//                    Toast.LENGTH_SHORT
+//                ).show()
+//            }
+//
+//            // Ensure the fragment's view is still attached to its activity
+//            if (isAdded && view != null) {
+//                val action =
+//                    OrderSummaryFragmentDirections.actionOrderSummaryFragmentToThankYouFragment(
+//                        it == null
+//                    )
+//                Navigation.findNavController(requireView()).navigate(action)
+//            }
+//        }
+//    }
+
     private fun checkout() {
+        checkoutClicked = true
+        Timber.tag("CHECKOUT").d("Total item: " + orderSummaryViewModel.orders.value.size)
+
         orderSummaryViewModel.saveOrderInDatabase {
             if (it != null) {
                 checkoutClicked = false
@@ -227,7 +294,7 @@ class OrderSummaryFragment : Fragment() {
                 OrderSummaryFragmentDirections.actionOrderSummaryFragmentToThankYouFragment(
                     it == null
                 )
-            Navigation.findNavController(requireView()).navigate(action)
+            Navigation.findNavController(binding.root).navigate(action)
         }
     }
 

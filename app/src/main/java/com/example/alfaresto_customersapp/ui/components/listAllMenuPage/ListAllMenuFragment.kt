@@ -113,7 +113,7 @@ class ListAllMenuFragment : Fragment() {
             override fun onAddItemClicked(position: Int, menuId: String) {
                 if (!noInternetConnection()) {
                     viewModel.getCartByMenuId(menuId) {
-                        viewModel.addOrderQuantity(menuId, it)
+                        viewModel.addOrderQuantity(menuId, it, requireContext())
                         adapter.notifyItemChanged(position)
                     }
                 }

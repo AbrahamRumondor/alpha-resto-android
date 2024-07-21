@@ -3,8 +3,10 @@ package com.example.alfaresto_customersapp.ui.components.restoPage.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.databinding.MenuItemBinding
 import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.ui.components.listener.MenuListener
@@ -13,7 +15,12 @@ class RestoViewHolder(
     private var binding: MenuItemBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(menu: Menu, position: Int, listener: MenuListener?, itemClickListener: ((Menu) -> Unit)?) {
+    fun bind(
+        menu: Menu,
+        position: Int,
+        listener: MenuListener?,
+        itemClickListener: ((Menu) -> Unit)?
+    ) {
         binding.run {
             tvMenuName.text = menu.name
             tvMenuPrice.text = menu.formattedPrice()
@@ -23,6 +30,12 @@ class RestoViewHolder(
                 .load(menu.image)
                 .placeholder(android.R.drawable.ic_menu_report_image)
                 .into(ivMenuImage)
+
+            if (menu.stock == 0) {
+                flNoStock.visibility = View.VISIBLE
+            } else {
+                flNoStock.visibility = View.GONE
+            }
 
             val isVisible = menu.orderCartQuantity != 0
             clActionButtons.visibility = View.VISIBLE

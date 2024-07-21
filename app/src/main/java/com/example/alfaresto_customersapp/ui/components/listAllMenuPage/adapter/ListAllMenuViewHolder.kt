@@ -29,6 +29,12 @@ class ListAllMenuViewHolder(
                 .placeholder(android.R.drawable.ic_menu_report_image)
                 .into(ivMenuImage)
 
+            if (menu.stock == 0) {
+                flNoStock.visibility = View.VISIBLE
+            } else {
+                flNoStock.visibility = View.GONE
+            }
+
             val isVisible = menu.orderCartQuantity != 0
             clActionButtons.visibility = View.VISIBLE
             btnMenuAdd.visibility = View.INVISIBLE

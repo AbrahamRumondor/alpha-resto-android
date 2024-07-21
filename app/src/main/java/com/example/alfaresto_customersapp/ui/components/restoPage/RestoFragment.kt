@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,6 +30,7 @@ import com.example.alfaresto_customersapp.databinding.FragmentRestoBinding
 import com.example.alfaresto_customersapp.domain.callbacks.FirestoreCallback
 import com.example.alfaresto_customersapp.domain.model.User
 import com.example.alfaresto_customersapp.data.network.NetworkUtils
+import com.example.alfaresto_customersapp.domain.model.Menu
 import com.example.alfaresto_customersapp.ui.components.addressPage.addNewAddress.AddNewAddressFragment.Companion.schemePackage
 import com.example.alfaresto_customersapp.ui.components.listener.MenuListener
 import com.example.alfaresto_customersapp.ui.components.loginPage.LoginActivity
@@ -40,6 +42,7 @@ import com.google.firebase.messaging.messaging
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -47,6 +50,8 @@ class RestoFragment : Fragment() {
     private lateinit var binding: FragmentRestoBinding
     private val viewModel: RestoViewModel by activityViewModels()
     private val adapter by lazy { RestoAdapter() }
+
+    private var latestUpdatedMenus: List<Menu>? = null
 
     private lateinit var bottomSheetBinding: BsdLocationPermissionBinding
     private lateinit var bottomSheetDialog: BottomSheetDialog
@@ -91,38 +96,49 @@ class RestoFragment : Fragment() {
         })
 
         lifecycleScope.launch {
-            viewModel.menus.collectLatest { menus ->
-                viewModel.cart.collectLatest { cart ->
+            // Combine the menus and cart flows
+            combine(viewModel.menus, viewModel.cart) { menus, cart ->
+                Pair(menus, cart)
+            }.collectLatest { (menus, cart) ->
+                // Process the combined data
+                val updatedMenus = menus.map { menu ->
+                    val cartItem = cart.find { it.menuId == menu.id }
 
-                    val updatedMenus = menus.map { menu ->
-                        val cartItem = cart.find { it.menuId == menu.id }
-                        if (cartItem != null) {
-                            menu.copy(orderCartQuantity = cartItem.menuQty)
-                        } else {
-                            menu
-                        }
-                    }
 
-                    setRestoAdapterButtons(cart)
-                    adapter.submitMenuList(updatedMenus)
-
-                    viewModel.cartCount.collectLatest {
-                        binding.tvCartCount.text = it.toString()
-                        binding.rlCart.visibility = if (it != 0) View.VISIBLE else View.INVISIBLE
+                    Log.d("test", "menu: ${menu.stock}")
+                    if (cartItem != null) {
+                        menu.copy(orderCartQuantity = cartItem.menuQty)
+                    } else {
+                        menu
                     }
                 }
+
+                updateMenusInRv(
+                    latestUpdatedMenus,
+                    updatedMenus
+                )
+
+                setRestoAdapterButtons(cart, updatedMenus)
+                Log.d("MENU", "1: $updatedMenus")
+
+                // Update the cart count
+                viewModel.cartCount.collectLatest { cartCount ->
+                    binding.tvCartCount.text = cartCount.toString()
+                    binding.rlCart.visibility = if (cartCount != 0) View.VISIBLE else View.INVISIBLE
+                }
+
+                // Show a message if the menu is empty
                 delay(500)
                 if (menus.isEmpty()) {
                     Toast.makeText(
                         requireContext(),
                         getString(R.string.menu_not_available),
                         Toast.LENGTH_LONG
-                    )
-                        .show()
-                    return@collectLatest
+                    ).show()
                 }
             }
         }
+
 
         binding.btnAllMenu.setOnClickListener {
             Navigation.findNavController(view)
@@ -153,13 +169,36 @@ class RestoFragment : Fragment() {
         checkNotificationPermission(true)
     }
 
-    private fun setRestoAdapterButtons(cart: List<CartEntity>?) {
+
+    private fun updateMenusInRv(oldList: List<Menu>?, newList: List<Menu>) {
+        adapter.submitMenuList(newList)
+
+        if (oldList == null) {
+            adapter.notifyItemRangeChanged(0,newList.size)
+            latestUpdatedMenus = newList
+            return
+        }
+
+        if (newList.size > oldList.size) {
+            val newMenusCount = newList.size - oldList.size
+            adapter.notifyItemRangeInserted(oldList.size, newMenusCount)
+        }
+
+        for (i in oldList.indices) {
+            if (oldList[i] != newList[i]) {
+                adapter.notifyItemChanged(i)
+            }
+        }
+
+        latestUpdatedMenus = newList
+    }
+
+    private fun setRestoAdapterButtons(cart: List<CartEntity>?, updatedMenus: List<Menu>) {
         adapter.setItemListener(object : MenuListener {
             override fun onAddItemClicked(position: Int, menuId: String) {
                 if (!noInternetConnection()) {
                     val item: CartEntity? = cart?.find { it.menuId == menuId }
-                    viewModel.addOrderQuantity(menuId, item)
-                    adapter.notifyItemChanged(position)
+                    viewModel.addOrderQuantity(requireContext(), menuId, item)
                 }
             }
 
@@ -167,7 +206,6 @@ class RestoFragment : Fragment() {
                 if (!noInternetConnection()) {
                     val item: CartEntity? = cart?.find { it.menuId == menuId }
                     viewModel.decreaseOrderQuantity(menuId, item)
-                    adapter.notifyItemChanged(position)
                 }
             }
         })
@@ -309,5 +347,4 @@ class RestoFragment : Fragment() {
             startActivity(intent)
         }
     }
-
 }
