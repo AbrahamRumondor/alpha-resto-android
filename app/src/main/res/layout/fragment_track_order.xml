@@ -114,8 +114,7 @@
                                 android:layout_height="@dimen/dimen_60"
                                 android:layout_gravity="center_vertical"
                                 android:background="@drawable/chat_button"
-                                android:src="@drawable/ic_chat_background"
-                                android:scaleType="fitCenter"
+                                android:src="@drawable/ic_chat"
                                 tools:ignore="ContentDescription" />
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
