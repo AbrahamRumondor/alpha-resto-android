@@ -28,7 +28,6 @@ class ChatFragment : Fragment() {
     private val viewModel: ChatViewModel by viewModels()
     private val args: ChatFragmentArgs by navArgs()
     private val adapter by lazy { ChatAdapter() }
-
     private var messageCollection: List<Chat>? = null
 
     override fun onCreateView(
@@ -115,6 +114,8 @@ class ChatFragment : Fragment() {
         binding.inclInternet.btnInetTryAgain.setOnClickListener {
             setConnectionBehaviour()
         }
+
+        viewModel.updateReadStatus(args.orderId)
     }
 
     private fun onBtnSendClicked(message: String) {

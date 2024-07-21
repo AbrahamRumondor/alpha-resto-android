@@ -68,4 +68,8 @@ class OrderUseCaseImpl @Inject constructor(
         Timber.tag("order usecaseimpl").d("getChatMessages")
         return orderRepository.getChatMessages(orderId)
     }
+
+    override suspend fun updateReadStatus(orderId: String, status: Boolean) {
+        orderRepository.updateReadStatus(orderId, status)
+    }
 }

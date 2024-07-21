@@ -171,4 +171,28 @@ class OrderRepositoryImpl @Inject constructor(
 
         return chatMessages
     }
+
+    override suspend fun updateReadStatus(orderId: String, status: Boolean) {
+        try {
+            val ordersSnapshot = ordersRef.get().await()
+            for (orderDoc in ordersSnapshot.documents) {
+                if (orderDoc.id == orderId) {
+                    val chatsSnapshot = orderDoc.reference.collection("chats").get().await()
+                    val batch = ordersRef.firestore.batch()
+                    for (chatDoc in chatsSnapshot.documents) {
+                        batch.update(
+                            chatDoc.reference,
+                            "read_status",
+                            status
+                        )
+                    }
+                    batch.commit().await()
+                    Timber.tag("InitializeReadStatus").d("SUCCESS ON INITIALIZING READ STATUS")
+                    break
+                }
+            }
+        } catch (e: Exception) {
+            Timber.tag("InitializeReadStatus").d("ERROR ON INITIALIZING READ STATUS: ${e.message}")
+        }
+    }
 }

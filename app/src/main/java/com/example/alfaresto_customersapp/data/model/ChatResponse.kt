@@ -22,6 +22,10 @@ data class ChatResponse(
     @get:PropertyName("user_name")
     @set:PropertyName("user_name")
     var userName: String = "",
+
+    @get:PropertyName("read_status")
+    @set:PropertyName("read_status")
+    var readStatus: Boolean = false,
 ) {
 
     constructor() : this("", Timestamp.now(), "", "", "")
@@ -32,7 +36,8 @@ data class ChatResponse(
                 dateSend = itemResponse.dateSend,
                 message = itemResponse.message,
                 senderId = itemResponse.senderId,
-                userName = itemResponse.userName
+                userName = itemResponse.userName,
+                readStatus = itemResponse.readStatus
             )
         }
 
@@ -41,7 +46,8 @@ data class ChatResponse(
                 dateSend = item.dateSend,
                 message = item.message,
                 senderId = item.senderId,
-                userName = item.userName
+                userName = item.userName,
+                readStatus = item.readStatus
             )
         }
     }
