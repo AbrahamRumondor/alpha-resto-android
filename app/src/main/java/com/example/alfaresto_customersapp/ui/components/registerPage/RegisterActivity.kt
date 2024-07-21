@@ -18,6 +18,7 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
     private val viewModel: RegisterViewModel by viewModels()
     private val passwordPatterns = Constants.passwordPatterns
+    private var registerClicked = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +26,10 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.btnRegister.setOnClickListener {
-            storeAndValidation()
+            if (!registerClicked) {
+                registerClicked = true
+                storeAndValidation()
+            }
         }
 
         binding.tvLogin.setOnClickListener {
@@ -42,21 +46,25 @@ class RegisterActivity : AppCompatActivity() {
 
         if (email.isEmpty() || password.isEmpty() || reEnterPassword.isEmpty()) {
             showValidationError(getString(R.string.email_pass_empty))
+            registerClicked = false
             return
         }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             showValidationError(getString(R.string.email_not_valid))
+            registerClicked = false
             return
         }
 
         if (!passwordPatterns.matcher(password).matches()) {
             showValidationError(getString(R.string.password_not_valid))
+            registerClicked = false
             return
         }
 
         if (password != reEnterPassword) {
             showValidationError(getString(R.string.password_not_match))
+            registerClicked = false
             return
         }
 
@@ -66,6 +74,7 @@ class RegisterActivity : AppCompatActivity() {
                 goToLoginPage()
             } else {
                 Toast.makeText(this, R.string.register_failed, Toast.LENGTH_SHORT).show()
+                registerClicked = false
             }
         }
     }
