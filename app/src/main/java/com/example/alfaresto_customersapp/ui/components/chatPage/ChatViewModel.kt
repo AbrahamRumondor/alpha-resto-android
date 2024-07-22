@@ -5,6 +5,7 @@ import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.alfaresto_customersapp.data.model.OrderResponse
 import com.example.alfaresto_customersapp.data.remote.response.pushNotification.NotificationBody
 import com.example.alfaresto_customersapp.data.remote.response.pushNotification.SendMessageDto
 import com.example.alfaresto_customersapp.domain.error.Result
@@ -67,6 +68,8 @@ class ChatViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val orderId = orderId.value
+                val order = orderUseCase.getOrderByID(orderId)
+
                 orderUseCase.addChatMessage(
                     orderId,
                     Chat(
@@ -76,6 +79,14 @@ class ChatViewModel @Inject constructor(
                         userName = user.value.name
                     )
                 )
+
+                order?.let {
+                    orderUseCase.setOrder(
+                        orderId,
+                        OrderResponse.toResponse(order.copy(readStatus = false))
+                    )
+                }
+
                 sendNotificationToResto("[${user.value.name}]: $message", orderId)
             } catch (e: Exception) {
                 Timber.tag(TAG).w(e, "Error sending message")

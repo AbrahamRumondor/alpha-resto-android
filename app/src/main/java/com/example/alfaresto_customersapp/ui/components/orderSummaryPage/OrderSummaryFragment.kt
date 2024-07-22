@@ -181,6 +181,7 @@ class OrderSummaryFragment : Fragment() {
                         }
 
                         if (!checkoutClicked) {
+                            checkoutClicked = true
                             // notAvailables.first = cart items
                             // notAvailables.second = menu items
 
@@ -218,6 +219,9 @@ class OrderSummaryFragment : Fragment() {
                                     .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
                                         dialog.dismiss()
                                     }
+                                    .setOnDismissListener {
+                                        checkoutClicked = false
+                                    }
                                     .show()
 
                                 return@isRestoClosed
@@ -231,6 +235,9 @@ class OrderSummaryFragment : Fragment() {
                                 }
                                 .setPositiveButton(getString(R.string.yes)) { _, _ ->
                                     checkout()
+                                }
+                                .setOnDismissListener {
+                                    checkoutClicked = false
                                 }
                                 .show()
 
@@ -277,7 +284,6 @@ class OrderSummaryFragment : Fragment() {
 //    }
 
     private fun checkout() {
-        checkoutClicked = true
         Timber.tag("CHECKOUT").d("Total item: " + orderSummaryViewModel.orders.value.size)
 
         orderSummaryViewModel.saveOrderInDatabase {

@@ -52,7 +52,11 @@ data class OrderResponse(
     val latitude: Double = 0.0,
     val longitude: Double = 0.0,
 
-    val notes: String = ""
+    val notes: String = "",
+
+    @get:PropertyName("read_status")
+    @set:PropertyName("read_status")
+    var readStatus: Boolean = false
 ) {
 
     constructor() : this("", "", "", "", "", "", Date(), "", 0, "", "", 0.0, 0.0, "")
@@ -73,7 +77,8 @@ data class OrderResponse(
                 userId = orderResponse.userId,
                 userToken = orderResponse.userToken,
                 restoToken = orderResponse.restoToken,
-                notes = orderResponse.notes
+                notes = orderResponse.notes,
+                readStatus = orderResponse.readStatus
             )
         }
 
@@ -93,7 +98,8 @@ data class OrderResponse(
                 userId = order.userId,
                 userToken = order.userToken,
                 restoToken = order.restoToken,
-                notes = order.notes
+                notes = order.notes,
+                readStatus = order.readStatus
             )
         }
     }
