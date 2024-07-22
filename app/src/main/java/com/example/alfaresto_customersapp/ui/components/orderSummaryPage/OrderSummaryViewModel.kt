@@ -150,7 +150,9 @@ class OrderSummaryViewModel @Inject constructor(
 
     fun isRestoClosed(currentTime: String, onResult: (Boolean) -> Unit) {
         viewModelScope.launch {
-            onResult((currentTime >= restoClosedHour.value && currentTime < restoOpenHour.value) || restoIsClosedTemporarily.value)
+            val temporarilyClosed = restaurantUseCase.isRestaurantClosedTemporary()
+
+            onResult((currentTime >= restoClosedHour.value && currentTime < restoOpenHour.value) || temporarilyClosed)
         }
     }
 
@@ -278,7 +280,8 @@ class OrderSummaryViewModel @Inject constructor(
                                         longitude = address.longitude,
                                         userToken = token,
                                         restoToken = restoToken.value,
-                                        notes = notes
+                                        notes = notes,
+                                        readStatus = true
                                     )
                                     val orderToFirebase = OrderResponse.toResponse(order)
 
