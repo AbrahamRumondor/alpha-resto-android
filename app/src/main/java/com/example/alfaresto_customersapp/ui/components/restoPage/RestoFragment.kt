@@ -20,6 +20,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,12 +31,16 @@ import com.example.alfaresto_customersapp.databinding.FragmentRestoBinding
 import com.example.alfaresto_customersapp.domain.callbacks.FirestoreCallback
 import com.example.alfaresto_customersapp.domain.model.User
 import com.example.alfaresto_customersapp.data.network.NetworkUtils
+import com.example.alfaresto_customersapp.domain.model.Address
 import com.example.alfaresto_customersapp.domain.model.Menu
+import com.example.alfaresto_customersapp.domain.model.Shipment
 import com.example.alfaresto_customersapp.ui.components.addressPage.addNewAddress.AddNewAddressFragment.Companion.schemePackage
 import com.example.alfaresto_customersapp.ui.components.listener.MenuListener
 import com.example.alfaresto_customersapp.ui.components.loginPage.LoginActivity
 import com.example.alfaresto_customersapp.ui.components.restoPage.adapter.RestoAdapter
 import com.example.alfaresto_customersapp.utils.singleton.Constants
+import com.example.alfaresto_customersapp.utils.singleton.UserInfo
+import com.example.alfaresto_customersapp.utils.singleton.UserInfo.USER_ADDRESS
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.Firebase
 import com.google.firebase.messaging.messaging
@@ -243,6 +248,14 @@ class RestoFragment : Fragment() {
         with(sharedPreferences.edit()) {
             putBoolean(Constants.isLoggedIn, false)
             apply()
+        }
+
+        UserInfo.run {
+            USER_TOKEN = ""
+            USER_ADDRESS = Address()
+            USER_ID = ""
+            USER_PAYMENT_METHOD = ""
+            SHIPMENT = MutableLiveData(Shipment())
         }
 
         val intent = Intent(requireContext(), LoginActivity::class.java)
