@@ -18,7 +18,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-@AndroidEntryPoint
 class AddressListFragment : Fragment() {
     private lateinit var binding: FragmentAddressListBinding
     private val addressAdapter by lazy { AddressListAdapter(addressBinding = binding) }

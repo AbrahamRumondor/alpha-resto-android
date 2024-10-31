@@ -62,8 +62,8 @@
             android:name="orderId"
             app:argType="string" />
         <deepLink
-            android:id="@+id/dl_to_detail_order"
-            app:uri="example://customers/orderdetail/{orderStatus}/{orderId}" />
+        android:id="@+id/dl_to_detail_order"
+        app:uri="example://customers/orderdetail/{orderStatus}/{orderId}" />
     </fragment>
 
     <fragment

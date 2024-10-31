@@ -26,6 +26,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
+
+
     private val mainActivityViewModel: MainActivityViewModel by viewModels()
 
     @Inject
