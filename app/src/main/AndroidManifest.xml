@@ -26,6 +26,8 @@
         android:windowSoftInputMode="adjustResize"
         tools:targetApi="tiramisu">
 
+        <activity android:name=".ui.HiltTestActivity" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${location.apikey}" />

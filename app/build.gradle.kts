@@ -4,9 +4,9 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.gms.google-services")
-    id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
     id("androidx.navigation.safeargs.kotlin")
+    id("kotlin-kapt")
 }
 
 android {
@@ -47,6 +47,16 @@ android {
         viewBinding = true
         buildConfig = true
     }
+
+    packaging {
+        resources.excludes.addAll(
+            listOf(
+                "META-INF/LICENSE.md",
+                "META-INF/LICENSE-notice.md"
+            )
+        )
+    }
+
 }
 
 kapt {
@@ -57,6 +67,7 @@ dependencies {
 
     implementation("com.google.firebase:firebase-messaging:24.0.0")
     implementation("com.google.firebase:firebase-messaging-ktx:24.0.0")
+    androidTestImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     val coroutinesAndroid = "1.7.1"
     val coroutinesCore = "1.6.4"
 
@@ -68,14 +79,14 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.2")
     implementation("androidx.fragment:fragment-ktx:1.8.0")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
-    implementation("com.google.firebase:firebase-firestore:25.0.0")
-    implementation("com.google.firebase:firebase-auth:23.0.0")
-    implementation("com.google.firebase:firebase-auth-ktx:23.0.0")
-    implementation("com.google.firebase:firebase-storage:21.0.0")
+    implementation("com.google.firebase:firebase-firestore:25.1.1")
+    implementation("com.google.firebase:firebase-auth:23.1.0")
+    implementation("com.google.firebase:firebase-auth-ktx:23.1.0")
+    implementation("com.google.firebase:firebase-storage:21.0.1")
     implementation("com.google.android.gms:play-services-maps:18.2.0")
-    implementation("com.google.firebase:firebase-messaging:24.0.0")
+    implementation("com.google.firebase:firebase-messaging:24.0.3")
     implementation("com.google.firebase:firebase-functions:21.0.0")
-    implementation("com.google.firebase:firebase-messaging-ktx:24.0.0")
+    implementation("com.google.firebase:firebase-messaging-ktx:24.0.3")
     implementation("com.google.firebase:firebase-crashlytics-buildtools:3.0.2")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -115,4 +126,30 @@ dependencies {
 
     // timber
     implementation("com.jakewharton.timber:timber:5.0.1")
+
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+    androidTestImplementation("androidx.test.espresso:espresso-intents:3.6.1")
+    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.6.1")
+
+    // JUnit for Espresso tests
+    androidTestImplementation("androidx.test.ext:junit:1.2.1")
+
+    // JUnit KTX (check the version compatibility)
+    androidTestImplementation("androidx.test.ext:junit-ktx:1.2.1")
+
+    // Other dependencies you might need for testing
+    androidTestImplementation("androidx.test:runner:1.6.2")
+
+    debugImplementation("androidx.fragment:fragment-testing:1.8.5")
+    debugImplementation("androidx.fragment:fragment-testing-manifest:1.8.5")
+
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.51.1")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.51.1")
+
+    debugImplementation("androidx.test:monitor:1.7.2")
+
+    implementation("com.google.protobuf:protobuf-javalite:3.25.1")
+
+    testImplementation("org.mockito:mockito-core:5.4.0")
+    androidTestImplementation("org.mockito:mockito-android:4.0.0")
 }
