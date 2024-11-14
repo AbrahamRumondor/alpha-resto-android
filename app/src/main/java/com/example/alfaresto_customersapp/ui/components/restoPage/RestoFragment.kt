@@ -53,7 +53,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class RestoFragment : Fragment() {
     private lateinit var binding: FragmentRestoBinding
-    private val viewModel: RestoViewModel by activityViewModels()
+    val viewModel: RestoViewModel by activityViewModels()
     private val adapter by lazy { RestoAdapter() }
 
     private var latestUpdatedMenus: List<Menu>? = null

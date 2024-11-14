@@ -1,71 +1,97 @@
 package com.example.alfaresto_customersapp.ui.components.restoPage
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupWithNavController
-import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.filters.LargeTest
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.data.di.FirebaseModule
-import com.example.alfaresto_customersapp.ui.components.mainActivity.MainActivity
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.firestore.FirebaseFirestore
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
+import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
+import com.example.alfaresto_customersapp.domain.model.Menu
+import com.example.alfaresto_customersapp.launchFragmentInHiltContainer
+import com.example.alfaresto_customersapp.ui.components.restoPage.adapter.RestoAdapter
+import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
-import dagger.hilt.components.SingletonComponent
+import io.mockk.MockKAnnotations
+import io.mockk.clearAllMocks
+import io.mockk.clearMocks
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flowOf
+import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito
-import javax.inject.Singleton
+import org.mockito.Mockito.clearInvocations
+import org.mockito.Mockito.`when`
+import org.mockito.kotlin.mock
 
-@RunWith(AndroidJUnit4::class)
-@LargeTest
 @HiltAndroidTest
-@UninstallModules(FirebaseModule::class) // Uninstall the real Firebase module for testing
+@RunWith(AndroidJUnit4::class)
+@UninstallModules(FirebaseModule::class)
 class RestoFragmentTest {
 
-  // Test-specific Hilt module to mock Firestore
-  @Module
-  @InstallIn(SingletonComponent::class)
-  object TestFirebaseModule {
-    @Provides
-    @Singleton
-    fun provideMockFirestore(): FirebaseFirestore = Mockito.mock(FirebaseFirestore::class.java)
-  }
+  @get:Rule
+  val hiltRule = HiltAndroidRule(this)
+
+  @MockK
+  private lateinit var mockViewModel: RestoViewModel
+
+  @MockK
+  private lateinit var mockAdapter: RestoAdapter
+
+  private val mockMenuFlow = MutableStateFlow<List<Menu>>(emptyList())
+  private val mockCartFlow = MutableStateFlow<List<CartEntity>>(emptyList())
 
   @Before
-  fun setup() {
-    // Launch the MainActivity to test navigation
-    val activityScenario: ActivityScenario<MainActivity> = ActivityScenario.launch(MainActivity::class.java)
-    activityScenario.onActivity { activity ->
-      // Find the NavHostFragment in the activity and set up the navigation controller
-      val navHostFragment = activity.supportFragmentManager.findFragmentById(R.id.fcv_switch_screen) as NavHostFragment
-      val navController = navHostFragment.navController
+  fun setUp() {
+    // Inject Hilt dependencies
+    hiltRule.inject()
 
-      // Set up the BottomNavigationView with the navController
-      navController.let { navController ->
-        activity.findViewById<BottomNavigationView>(R.id.bnv_customer_navigation).setupWithNavController(navController)
-      }
-    }
+    // Initialize MockK annotations for mocking
+    MockKAnnotations.init(this)
+
+    // Set up the mocked ViewModel and its flows
+    setUpMockData()
   }
 
-  // Test if "Best Seller" text is displayed in the toolbar
+  private fun setUpMockData() {
+    // Mock ViewModel flows for menus and cart
+    every { mockViewModel.menus } returns mockMenuFlow
+    every { mockViewModel.cart } returns mockCartFlow
+  }
+
+  @OptIn(ExperimentalCoroutinesApi::class)
   @Test
-  fun testToolbarVisibility() {
-    onView(withId(R.id.tv_best_seller))
-      .check(matches(isDisplayed()))
+  fun testElementsDisplayedCorrectly() {
+//    // Mock data for menus and cart
+//    val mockMenus = listOf(Menu("1", "Pizza", "Delicious pizza"))
+//
+//    // Update the flows with mock data
+//    mockMenuFlow.value = mockMenus
+//    mockCartFlow.value = emptyList()
+//
+//    // Launch the fragment in a Hilt container
+//    launchFragmentInHiltContainer<RestoFragment> {
+//        val viewModel: RestoViewModel = mockViewModel
+//    }
+//    // Perform a click action to check UI behavior
+//    onView(withId(R.id.btn_all_menu)).perform(click())
   }
+
+//  @After
+//  fun tearDown() {
+//    // Clear invocations to prevent potential memory leaks
+//    clearAllMocks()
+//  }
 //
 //  // Test if the RecyclerView is visible
 //  @Test

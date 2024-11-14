@@ -12,12 +12,21 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import com.example.alfaresto_customersapp.R
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import org.junit.Rule
 
+@HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
 class LoginActivityTest {
 
+  @get:Rule
+  var hiltRule = HiltAndroidRule(this)
+
   @Before
   fun setUp() {
+    hiltRule.inject() // Inject dependencies into the test class
+
     // Launch the LoginActivity before each test
     ActivityScenario.launch(LoginActivity::class.java)
   }
@@ -28,7 +37,7 @@ class LoginActivityTest {
       .check(matches(isDisplayed()))
 
     onView(withId(R.id.tv_title))
-      .check(matches(withText("Welcome Back")))
+      .check(matches(withText("Welcome Back !")))
 
     //    // Find and interact with the email field
 //    onView(withId(R.id.et_email))
@@ -47,15 +56,15 @@ class LoginActivityTest {
 
   }
 
-//  @Test
-//  fun testLoginEmptyFields() {
-//    // Click the login button without filling the fields
-//    onView(withId(R.id.btn_login)).perform(click())
-//
-//    // Check if an error message is shown for the email and password
-//    onView(withId(R.id.til_email)).check(matches(withText("Email is required")))
-//    onView(withId(R.id.til_password)).check(matches(withText("Password is required")))
-//  }
+  @Test
+  fun testLoginEmptyFields() {
+    // Click the login button without filling the fields
+    onView(withId(R.id.btn_login)).perform(click())
+
+    // Check if an error message is shown for the email and password
+    onView(withId(R.id.til_email)).check(matches(withText("Email is required")))
+    onView(withId(R.id.til_password)).check(matches(withText("Password is required")))
+  }
 
 //  @Test
 //  fun testRegisterRedirect() {

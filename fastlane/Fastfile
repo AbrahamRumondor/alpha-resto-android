@@ -1,0 +1,48 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+platform :android do
+  desc "UI test"
+  lane :ui_tests do
+    result = gradle(
+      task: "connectedAndroidTest",
+      print_command: true,  # Print the command being executed
+      flags: "--info",      # Use --info for detailed output
+    )
+
+    # Filter the result to display only the relevant test results
+    puts "Filtered Test Results:\n\n"
+
+    # Regex to capture the test results
+    result.each_line do |line|
+      # Check for lines that indicate test results
+      if line.match(/(SUCCESS|FAILED)/)
+        puts line.strip
+      end
+    end
+
+    # Optionally, print the summary at the end if it exists
+    summary = result.match(/Total tests (\d+), failure (\d+), passed (\d+)/)
+    if summary
+      total_tests = summary[1]
+      failed_tests = summary[2]
+      passed_tests = summary[3]
+      puts "\nSummary:"
+      puts "Total Tests: #{total_tests}, Passed: #{passed_tests}, Failed: #{failed_tests}"
+    end
+  end
+end
