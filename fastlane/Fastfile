@@ -16,6 +16,14 @@
 default_platform(:android)
 
 platform :android do
+
+  lane :build_apk do
+    gradle(
+      task: "assembleDebug",
+      print_command: true,
+      flags: "--verbose"
+    )
+
   desc "UI test"
   lane :ui_tests do
     result = gradle(
