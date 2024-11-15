@@ -23,6 +23,7 @@ platform :android do
       print_command: true,
       flags: "--verbose"
     )
+  end
 
   desc "UI test"
   lane :ui_tests do
