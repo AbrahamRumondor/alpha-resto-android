@@ -19,19 +19,22 @@ platform :android do
 
   lane :build_apk do
     gradle(
-      task: "assembleDebug",
+      task: "assemble",
+      build_type: 'Debug'
     )
   end
 
   desc "UI test"
   lane :ui_tests do
+
+    build_apk
+
     result = gradle(
       task: "connectedAndroidTest",
       print_command: true,  # Print the command being executed
       flags: "--info",      # Use --info for detailed output
     )
 
-    # Filter the result to display only the relevant test results
     puts "Filtered Test Results:\n\n"
 
     # Regex to capture the test results
