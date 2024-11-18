@@ -64,6 +64,10 @@ class ChatViewModel @Inject constructor(
         _orderId.value = orderId
     }
 
+    fun add(a: Int, b: Int): Int {
+        return a + b
+    }
+
     fun sendMessage(message: String) {
         viewModelScope.launch {
             try {
