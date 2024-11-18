@@ -69,9 +69,9 @@ class RestoFragmentTest {
     every { mockViewModel.cart } returns mockCartFlow
   }
 
-  @OptIn(ExperimentalCoroutinesApi::class)
-  @Test
-  fun testElementsDisplayedCorrectly() {
+//  @OptIn(ExperimentalCoroutinesApi::class)
+//  @Test
+//  fun testElementsDisplayedCorrectly() {
 //    // Mock data for menus and cart
 //    val mockMenus = listOf(Menu("1", "Pizza", "Delicious pizza"))
 //
@@ -85,7 +85,7 @@ class RestoFragmentTest {
 //    }
 //    // Perform a click action to check UI behavior
 //    onView(withId(R.id.btn_all_menu)).perform(click())
-  }
+//  }
 
 //  @After
 //  fun tearDown() {
