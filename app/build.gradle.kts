@@ -77,6 +77,10 @@ tasks.withType(QuarkusDev::class.java).configureEach {
   jvmArgs.add("-Djdk.attach.allowAttachSelf")
 }
 
+tasks.named("connectedDebugAndroidTest") {
+  outputs.upToDateWhen { true }
+}
+
 kapt {
   correctErrorTypes = true
 }
