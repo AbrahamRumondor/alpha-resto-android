@@ -24,13 +24,18 @@ platform :android do
     )
   end
 
-  desc "Run UI tests"
+  desc "Run UI tests with unique report file naming"
   lane :ui_tests do
 
     build_apk
 
     # Initialize a variable for test results
     result_output = ""
+
+    # Generate a unique file name using a timestamp
+    timestamp = Time.now.strftime('%Y%m%d_%H%M%S')
+    default_report_path = "app/build/reports/androidTests/connected/debug/index.html"
+    unique_report_path = "app/build/reports/androidTests/connected/debug/index_#{timestamp}.html"
 
     begin
       # Run connected Android tests
@@ -43,6 +48,20 @@ platform :android do
       # Capture error output from the exception
       UI.message("Gradle command failed while running tests.")
       result_output = e.message # Use exception's message as the output
+    ensure
+      # Always rename the default report file to the unique file name
+      if File.exist?(default_report_path)
+        File.rename(default_report_path, unique_report_path)
+        UI.message("Test report saved as #{unique_report_path}")
+
+        # Construct and log the full URL for the report
+        base_url = "http://10.4.76.108:8080/job/alfaresto-android"
+        job_number = ENV['BUILD_NUMBER'] || "N/A"
+        report_url = "#{base_url}/#{job_number}/execution/node/3/ws/#{unique_report_path}"
+        UI.message("Test report available at: #{report_url}")
+      else
+        UI.message("Default test report not found at #{default_report_path}")
+      end
     end
 
     puts "Filtered Test Results:\n\n"
