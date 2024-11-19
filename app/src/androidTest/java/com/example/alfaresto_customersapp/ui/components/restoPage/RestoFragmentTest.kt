@@ -3,6 +3,7 @@ package com.example.alfaresto_customersapp.ui.components.restoPage
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isClickable
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -10,29 +11,25 @@ import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.data.di.FirebaseModule
 import com.example.alfaresto_customersapp.data.local.room.entity.CartEntity
 import com.example.alfaresto_customersapp.domain.model.Menu
+import com.example.alfaresto_customersapp.domain.usecase.cart.CartUseCase
+import com.example.alfaresto_customersapp.domain.usecase.menu.MenuUseCase
+import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCase
 import com.example.alfaresto_customersapp.launchFragmentInHiltContainer
 import com.example.alfaresto_customersapp.ui.components.restoPage.adapter.RestoAdapter
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
 import io.mockk.MockKAnnotations
-import io.mockk.clearAllMocks
-import io.mockk.clearMocks
-import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flowOf
-import org.junit.After
+import org.hamcrest.CoreMatchers.not
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito.clearInvocations
-import org.mockito.Mockito.`when`
-import org.mockito.kotlin.mock
+
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
@@ -48,6 +45,10 @@ class RestoFragmentTest {
   @MockK
   private lateinit var mockAdapter: RestoAdapter
 
+  private val menuUseCase: MenuUseCase = mockk()
+  private val cartUseCase: CartUseCase = mockk()
+  private val userUseCase: UserUseCase = mockk()
+
   private val mockMenuFlow = MutableStateFlow<List<Menu>>(emptyList())
   private val mockCartFlow = MutableStateFlow<List<CartEntity>>(emptyList())
 
@@ -58,33 +59,31 @@ class RestoFragmentTest {
 
     // Initialize MockK annotations for mocking
     MockKAnnotations.init(this)
-
-    // Set up the mocked ViewModel and its flows
-    setUpMockData()
   }
 
   private fun setUpMockData() {
-    // Mock ViewModel flows for menus and cart
-    every { mockViewModel.menus } returns mockMenuFlow
-    every { mockViewModel.cart } returns mockCartFlow
+    // This can be used to setup any additional mock data
+    //    // Mock the ViewModel methods
+//    coEvery { mockViewModel.fetchMenus() } answers {
+//      mockMenuFlow.value = listOf(Menu("1", "Pizza", "Delicious pizza"))
+//    }
+//    coEvery { mockViewModel.fetchCart() } answers {
+//      mockCartFlow.value = listOf(CartEntity(menuId = "1", menuQty = 1))
+//    }
+//    coEvery { mockViewModel.getToken() } answers {
+//      "mock_token"
+//    }
   }
 
 //  @OptIn(ExperimentalCoroutinesApi::class)
 //  @Test
 //  fun testElementsDisplayedCorrectly() {
-//    // Mock data for menus and cart
-//    val mockMenus = listOf(Menu("1", "Pizza", "Delicious pizza"))
-//
-//    // Update the flows with mock data
-//    mockMenuFlow.value = mockMenus
-//    mockCartFlow.value = emptyList()
-//
-//    // Launch the fragment in a Hilt container
-//    launchFragmentInHiltContainer<RestoFragment> {
-//        val viewModel: RestoViewModel = mockViewModel
-//    }
-//    // Perform a click action to check UI behavior
-//    onView(withId(R.id.btn_all_menu)).perform(click())
+//    // Launch the fragment with Hilt container
+//    launchFragmentInHiltContainer<RestoFragment>()
+//    onView(withId(R.id.btn_all_menu))
+//      .check(matches(isDisplayed()))
+//      .check(matches(isClickable()))
+////    onView(withId(R.id.btn_all_menu)).perform(click())
 //  }
 
 //  @After

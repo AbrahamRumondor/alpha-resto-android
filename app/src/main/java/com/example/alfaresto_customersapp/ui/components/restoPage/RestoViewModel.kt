@@ -46,7 +46,7 @@ class RestoViewModel @Inject constructor(
         getToken()
     }
 
-    private fun fetchMenus() {
+    fun fetchMenus() {
         viewModelScope.launch {
             setLoading(true)
             try {
@@ -60,7 +60,7 @@ class RestoViewModel @Inject constructor(
         }
     }
 
-    private fun fetchCart() {
+    fun fetchCart() {
         viewModelScope.launch {
             try {
                 cartUseCase.getCart().collectLatest {
@@ -146,7 +146,7 @@ class RestoViewModel @Inject constructor(
         }
     }
 
-    private fun getToken() {
+    fun getToken() {
         FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
             if (token != null) {
                 USER_TOKEN = token
