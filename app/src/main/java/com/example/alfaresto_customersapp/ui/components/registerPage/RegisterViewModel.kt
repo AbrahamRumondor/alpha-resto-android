@@ -44,7 +44,7 @@ class RegisterViewModel @Inject constructor(
         }
     }
 
-    private fun hashPassword(password: String): String {
+    fun hashPassword(password: String): String {
         return MessageDigest.getInstance("SHA-256")
             .digest(password.toByteArray())
             .joinToString("") { "%02x".format(it) }
