@@ -36,7 +36,7 @@ platform :android do
       # Run connected Android tests
       result_output = gradle(
         task: "connectedAndroidTest",
-        print_command: true,  # Print the command being executed
+        print_command: false,  # Print the command being executed
         flags: "--info",      # Use --info for detailed output
       )
     rescue => e
