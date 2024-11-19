@@ -56,15 +56,15 @@ class LoginActivityTest {
 
   }
 
-//  @Test
-//  fun testLoginEmptyFields() {
-//    // Click the login button without filling the fields
-//    onView(withId(R.id.btn_login)).perform(click())
-//
-//    // Check if an error message is shown for the email and password
-//    onView(withId(R.id.til_email)).check(matches(withText("Email is required")))
-//    onView(withId(R.id.til_password)).check(matches(withText("Password is required")))
-//  }
+  @Test
+  fun testLoginEmptyFields() {
+    // Click the login button without filling the fields
+    onView(withId(R.id.btn_login)).perform(click())
+
+    // Check if an error message is shown for the email and password
+    onView(withId(R.id.til_email)).check(matches(withText("Email is required")))
+    onView(withId(R.id.til_password)).check(matches(withText("Password is required")))
+  }
 
 //  @Test
 //  fun testRegisterRedirect() {
