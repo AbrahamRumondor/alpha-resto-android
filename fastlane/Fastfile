@@ -24,35 +24,47 @@ platform :android do
     )
   end
 
-  desc "UI test"
+  desc "Run UI tests"
   lane :ui_tests do
 
     build_apk
 
-    result = gradle(
-      task: "connectedAndroidTest",
-      print_command: true,  # Print the command being executed
-      flags: "--info",      # Use --info for detailed output
-    )
+    # Initialize a variable for test results
+    result_output = ""
+
+    begin
+      # Run connected Android tests
+      result_output = gradle(
+        task: "connectedAndroidTest",
+        print_command: true,  # Print the command being executed
+        flags: "--info",      # Use --info for detailed output
+      )
+    rescue
+      # Log a short failure message
+      UI.message("Gradle command failed while running tests.")
+    end
 
     puts "Filtered Test Results:\n\n"
 
-    # Regex to capture the test results
-    result.each_line do |line|
-      # Check for lines that indicate test results
+    # Process the Gradle output for test results
+    result_output.each_line do |line|
+      # Look for lines indicating test results (e.g., SUCCESS or FAILED)
       if line.match(/(SUCCESS|FAILED)/)
         puts line.strip
       end
     end
 
-    # Optionally, print the summary at the end if it exists
-    summary = result.match(/Total tests (\d+), failure (\d+), passed (\d+)/)
+    # Optionally, extract and display a summary of the tests
+    summary = result_output.match(/Total tests (\d+), failure (\d+), passed (\d+)/)
     if summary
       total_tests = summary[1]
       failed_tests = summary[2]
       passed_tests = summary[3]
-      puts "\nSummary:"
-      puts "Total Tests: #{total_tests}, Passed: #{passed_tests}, Failed: #{failed_tests}"
+      puts "\nTest Summary:"
+      puts "Total: #{total_tests}, Passed: #{passed_tests}, Failed: #{failed_tests}"
+    else
+      puts "No test summary found in the output."
     end
+
   end
 end

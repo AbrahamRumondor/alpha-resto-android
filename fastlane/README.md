@@ -29,7 +29,7 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 [bundle exec] fastlane android ui_tests
 ```
 
-UI test
+Run UI tests
 
 ----
 

@@ -75,16 +75,16 @@ class RestoFragmentTest {
 //    }
   }
 
-//  @OptIn(ExperimentalCoroutinesApi::class)
-//  @Test
-//  fun testElementsDisplayedCorrectly() {
-//    // Launch the fragment with Hilt container
-//    launchFragmentInHiltContainer<RestoFragment>()
-//    onView(withId(R.id.btn_all_menu))
-//      .check(matches(isDisplayed()))
-//      .check(matches(isClickable()))
-////    onView(withId(R.id.btn_all_menu)).perform(click())
-//  }
+  @OptIn(ExperimentalCoroutinesApi::class)
+  @Test
+  fun testElementsDisplayedCorrectly() {
+    // Launch the fragment with Hilt container
+    launchFragmentInHiltContainer<RestoFragment>()
+    onView(withId(R.id.btn_all_menu))
+      .check(matches(isDisplayed()))
+      .check(matches(isClickable()))
+//    onView(withId(R.id.btn_all_menu)).perform(click())
+  }
 
 //  @After
 //  fun tearDown() {
