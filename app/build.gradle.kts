@@ -1,6 +1,8 @@
 import java.util.Properties
 import io.quarkus.gradle.tasks.QuarkusDev
 import org.gradle.internal.classpath.Instrumented.systemProperty
+import java.text.SimpleDateFormat
+import java.util.Date
 
 
 plugins {
@@ -69,13 +71,36 @@ android {
       }
     }
 
-
     execution = "ANDROIDX_TEST_ORCHESTRATOR"
   }
 }
 
 tasks.withType(QuarkusDev::class.java).configureEach {
   jvmArgs.add("-Djdk.attach.allowAttachSelf")
+}
+
+tasks.register("renameTestReport") {
+  doLast {
+    val reportDir = file("$buildDir/reports/androidTests/connected/debug")
+    val oldFile = file("$reportDir/index.html")
+
+    // Format the current date and time for the file name
+    val timestamp = SimpleDateFormat("yyyyMMdd-HHmmss").format(Date())
+    val newFile = file("$reportDir/report-$timestamp.html")
+
+    if (oldFile.exists()) {
+      oldFile.renameTo(newFile)
+      println("Test report renamed to: ${newFile.name}")
+    } else {
+      println("No test report found to rename.")
+    }
+  }
+}
+
+gradle.projectsEvaluated {
+  tasks.named("connectedDebugAndroidTest") {
+    finalizedBy("renameTestReport")
+  }
 }
 
 kapt {
