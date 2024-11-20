@@ -1,18 +1,3 @@
-# This file contains the fastlane.tools configuration
-# You can find the documentation at https://docs.fastlane.tools
-#
-# For a list of all available actions, check out
-#
-#     https://docs.fastlane.tools/actions
-#
-# For a list of all available plugins, check out
-#
-#     https://docs.fastlane.tools/plugins/available-plugins
-#
-
-# Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
-
 default_platform(:android)
 
 platform :android do
@@ -24,9 +9,22 @@ platform :android do
     )
   end
 
+  desc "Run unit tests"
+  lane :unit_tests do
+    # Run unit tests
+    result_output = gradle(
+      task: "test",
+      print_command: true,
+      flags: "--info"
+    )
+
+    # Process the Gradle output for test results
+    puts "Unit Test Results:\n\n"
+    puts result_output
+  end
+
   desc "Run UI tests"
   lane :ui_tests do
-
     build_apk
 
     # Initialize a variable for test results
@@ -36,40 +34,35 @@ platform :android do
       # Run connected Android tests
       result_output = gradle(
         task: "connectedAndroidTest",
-        print_command: true,  # Print the command being executed
-        flags: "--info",      # Use --info for detailed output
+        print_command: true,
+        flags: "--info"
       )
     rescue => e
-      # Capture error output from the exception
       UI.message("Gradle command failed while running tests.")
-      result_output = e.message # Use exception's message as the output
+      result_output = e.message
     end
 
     puts "Filtered Test Results:\n\n"
 
-    failed_tests = 0 # Initialize a counter for failed tests
+    failed_tests = 0
 
     # Process the Gradle output for test results
     result_output.each_line do |line|
-      # Look for lines indicating test results (e.g., SUCCESS or FAILED)
       if line.match(/(SUCCESS|FAILED)/)
         puts line.strip
       end
 
-      # Count failed tests based on the output
       if line.match(/FAILED/)
         failed_tests += 1
       end
     end
 
-    # Optionally, extract and display a summary of the tests
     summary = result_output.match(/Total tests (\d+), failure (\d+), passed (\d+)/)
     if summary
       total_tests = summary[1]
       failed_tests = summary[2].to_i
       passed_tests = summary[3]
 
-      # Add the formatted test results output
       border_line = "+-----------------------+"
       puts "\n#{border_line}"
       puts "|     Test Results      |"
@@ -78,14 +71,18 @@ platform :android do
       puts "| Number of success:  #{passed_tests.ljust(3)} |"
       puts "| Number of failures: #{failed_tests.to_s.ljust(3)} |"
       puts "#{border_line}\n"
-
     else
       puts "No test summary found in the output."
     end
 
-    # Throw a custom error if there are any failed tests
     if failed_tests > 0
       raise "UI Tests failed: #{failed_tests} test(s) did not pass."
     end
+  end
+
+  desc "Run all tests"
+  lane :run_all_tests do
+    unit_tests
+    ui_tests
   end
 end

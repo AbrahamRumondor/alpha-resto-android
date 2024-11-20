@@ -23,6 +23,14 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 
 
+### android unit_tests
+
+```sh
+[bundle exec] fastlane android unit_tests
+```
+
+Run unit tests
+
 ### android ui_tests
 
 ```sh
@@ -30,6 +38,14 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 ```
 
 Run UI tests
+
+### android run_all_tests
+
+```sh
+[bundle exec] fastlane android run_all_tests
+```
+
+Run all tests
 
 ----
 
