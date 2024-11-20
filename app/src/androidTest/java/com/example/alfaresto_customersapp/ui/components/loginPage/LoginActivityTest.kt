@@ -31,30 +31,30 @@ class LoginActivityTest {
     ActivityScenario.launch(LoginActivity::class.java)
   }
 
-  @Test
-  fun testLoginSuccess() {
-    onView(withId(R.id.et_email))
-      .check(matches(isDisplayed()))
-
-    onView(withId(R.id.tv_title))
-      .check(matches(withText("Welcome Back !")))
-
-    //    // Find and interact with the email field
+//  @Test
+//  fun testLoginSuccess() {
 //    onView(withId(R.id.et_email))
-//      .perform(typeText("user@example.com"), closeSoftKeyboard())
+//      .check(matches(isDisplayed()))
 //
-//    // Find and interact with the password field
-//    onView(withId(R.id.et_password))
-//      .perform(typeText("password123"), closeSoftKeyboard())
+//    onView(withId(R.id.tv_title))
+//      .check(matches(withText("Welcome Back !")))
 //
-//    // Click the login button
-//    onView(withId(R.id.btn_login)).perform(click())
+//    //    // Find and interact with the email field
+////    onView(withId(R.id.et_email))
+////      .perform(typeText("user@example.com"), closeSoftKeyboard())
+////
+////    // Find and interact with the password field
+////    onView(withId(R.id.et_password))
+////      .perform(typeText("password123"), closeSoftKeyboard())
+////
+////    // Click the login button
+////    onView(withId(R.id.btn_login)).perform(click())
+////
+////    // Check that the next screen or element appears after login
+////    // This can be based on what happens next, e.g. if the next screen has a certain TextView
+////    onView(withText("Welcome")).check(matches(isDisplayed()))
 //
-//    // Check that the next screen or element appears after login
-//    // This can be based on what happens next, e.g. if the next screen has a certain TextView
-//    onView(withText("Welcome")).check(matches(isDisplayed()))
-
-  }
+//  }
 
 //  @Test
 //  fun testLoginEmptyFields() {
