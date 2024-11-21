@@ -10,66 +10,62 @@ platform :android do
   end
 
   desc "Run unit tests"
-  lane :unit_tests do
+lane :unit_tests do
+  # Initialize a variable for test results
+  result_output = ""
 
-    # Initialize a variable for test results
-    result_output = ""
+  # Run unit tests
+  begin
+    result_output = gradle(
+      task: "test",
+      print_command: true,
+      flags: "--info"
+    )
+  rescue => e
+    UI.message("Gradle command failed while running tests.")
+    result_output = e.message
+  end
 
-    # Run unit tests
-    begin
-      result_output = gradle(
-        task: "test",
-        print_command: true,
-        flags: "--info"
-      )
-    rescue => e
-      UI.message("Gradle command failed while running tests.")
-      result_output = e.message
+  puts "Filtered Test Results:\n\n"
+
+  failed_tests = 0 # Initialize a counter for failed tests
+  total_tests = 0  # Initialize a counter for total tests
+  passed_tests = 0 # Initialize a counter for passed tests
+
+  # Process the Gradle output for test results
+  result_output.each_line do |line|
+    # Look for lines indicating test results (e.g., SUCCESS or FAILED)
+    if line.match(/(SUCCESS|FAILED)/)
+      puts line.strip
     end
 
-    puts "Filtered Test Results:\n\n"
-
-    failed_tests = 0 # Initialize a counter for failed tests
-
-    # Process the Gradle output for test results
-    result_output.each_line do |line|
-      # Look for lines indicating test results (e.g., SUCCESS or FAILED)
-      if line.match(/(SUCCESS|FAILED)/)
-        puts line.strip
-      end
-
-      # Count failed tests based on the output
-      if line.match(/FAILED/)
-        failed_tests += 1
-      end
-    end
-
-    # Optionally, extract and display a summary of the tests
-    summary = result_output.match(/Total tests (\d+), failure (\d+), passed (\d+)/)
-    if summary
-      total_tests = summary[1]
-      failed_tests = summary[2].to_i
-      passed_tests = summary[3]
-
-      # Add the formatted test results output
-      border_line = "+-----------------------+"
-      puts "\n#{border_line}"
-      puts "|     Test Results      |"
-      puts "#{border_line}"
-      puts "| Number of tests:    #{total_tests.ljust(3)} |"
-      puts "| Number of success:  #{passed_tests.ljust(3)} |"
-      puts "| Number of failures: #{failed_tests.to_s.ljust(3)} |"
-      puts "#{border_line}\n"
-
-    else
-      puts "No test summary found in the output."
-    end
-
-    # Throw a custom error if there are any failed tests
-    if failed_tests > 0
-      raise "UI Tests failed: #{failed_tests} test(s) did not pass."
+    # Extract total, passed, and failed tests from Gradle output
+    if line.match(/Total tests (\d+), failures (\d+), passed (\d+)/)
+      total_tests = $1.to_i
+      failed_tests = $2.to_i
+      passed_tests = $3.to_i
     end
   end
+
+  # Add the formatted test results output
+  border_line = "+-----------------------+"
+  puts "\n#{border_line}"
+  puts "|     Test Results      |"
+  puts "#{border_line}"
+  puts "| Number of tests:    #{total_tests.to_s.ljust(3)} |"
+  puts "| Number of success:  #{passed_tests.to_s.ljust(3)} |"
+  puts "| Number of failures: #{failed_tests.to_s.ljust(3)} |"
+  puts "#{border_line}\n"
+
+  # Handle success or failure cases
+  if failed_tests > 0
+    # Throw a custom error if there are any failed tests
+    raise "Unit Tests failed: #{failed_tests} test(s) did not pass."
+  else
+    UI.success("🎉 All tests passed successfully!")
+  end
+end
+
 
   desc "Run UI tests"
   lane :ui_tests do
