@@ -11,16 +11,64 @@ platform :android do
 
   desc "Run unit tests"
   lane :unit_tests do
+
+    # Initialize a variable for test results
+    result_output = ""
+
     # Run unit tests
-    result_output = gradle(
-      task: "test",
-      print_command: true,
-      flags: "--info"
-    )
+    begin
+      result_output = gradle(
+        task: "test",
+        print_command: true,
+        flags: "--info"
+      )
+    rescue => e
+      UI.message("Gradle command failed while running tests.")
+      result_output = e.message
+    end
+
+    puts "Filtered Test Results:\n\n"
+
+    failed_tests = 0 # Initialize a counter for failed tests
 
     # Process the Gradle output for test results
-    puts "Unit Test Results:\n\n"
-    puts result_output
+    result_output.each_line do |line|
+      # Look for lines indicating test results (e.g., SUCCESS or FAILED)
+      if line.match(/(SUCCESS|FAILED)/)
+        puts line.strip
+      end
+
+      # Count failed tests based on the output
+      if line.match(/FAILED/)
+        failed_tests += 1
+      end
+    end
+
+    # Optionally, extract and display a summary of the tests
+    summary = result_output.match(/Total tests (\d+), failure (\d+), passed (\d+)/)
+    if summary
+      total_tests = summary[1]
+      failed_tests = summary[2].to_i
+      passed_tests = summary[3]
+
+      # Add the formatted test results output
+      border_line = "+-----------------------+"
+      puts "\n#{border_line}"
+      puts "|     Test Results      |"
+      puts "#{border_line}"
+      puts "| Number of tests:    #{total_tests.ljust(3)} |"
+      puts "| Number of success:  #{passed_tests.ljust(3)} |"
+      puts "| Number of failures: #{failed_tests.to_s.ljust(3)} |"
+      puts "#{border_line}\n"
+
+    else
+      puts "No test summary found in the output."
+    end
+
+    # Throw a custom error if there are any failed tests
+    if failed_tests > 0
+      raise "UI Tests failed: #{failed_tests} test(s) did not pass."
+    end
   end
 
   desc "Run UI tests"
@@ -78,11 +126,5 @@ platform :android do
     if failed_tests > 0
       raise "UI Tests failed: #{failed_tests} test(s) did not pass."
     end
-  end
-
-  desc "Run all tests"
-  lane :run_all_tests do
-    unit_tests
-    ui_tests
   end
 end
