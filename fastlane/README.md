@@ -39,14 +39,6 @@ Run unit tests
 
 Run UI tests
 
-### android run_all_tests
-
-```sh
-[bundle exec] fastlane android run_all_tests
-```
-
-Run all tests
-
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.
