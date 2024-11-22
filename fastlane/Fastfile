@@ -22,9 +22,9 @@ platform :android do
         print_command: true,
         flags: "--info"
       )
-    rescue => e
-      UI.message("Gradle command failed while running tests.")
-      result_output = e.message
+    # rescue => e
+    #   UI.message("Gradle command failed while running tests.")
+    #   result_output = e.message
     end
 
     # puts "Filtered Test Results:\n\n"
