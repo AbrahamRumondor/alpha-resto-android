@@ -48,6 +48,8 @@ platform :android do
     puts "Filtered Test Results:\n\n"
 
     failed_tests = 0 # Initialize a counter for failed tests
+    total_tests = 0
+    passed_tests = -1
 
     # Process the Gradle output for test results
     result_output.each_line do |line|
@@ -57,31 +59,30 @@ platform :android do
       end
 
       # Count failed tests based on the output
-      if line.match(/FAILED/)
-        failed_tests += 1
-      end
+      failed_tests += 1 if line.match(/FAILED/)
+passed_tests += 1 if line.match(/SUCCESS/)
     end
 
-    # Optionally, extract and display a summary of the tests
+    # Extract test summary, even if no failures
     summary = result_output.match(/Total tests (\d+), failure (\d+), passed (\d+)/)
     if summary
-      total_tests = summary[1]
+      total_tests = summary[1].to_i
       failed_tests = summary[2].to_i
-      passed_tests = summary[3]
-
-      # Add the formatted test results output
-      border_line = "+-----------------------+"
-      puts "\n#{border_line}"
-      puts "|     Test Results      |"
-      puts "#{border_line}"
-      puts "| Number of tests:    #{total_tests.ljust(3)} |"
-      puts "| Number of success:  #{passed_tests.ljust(3)} |"
-      puts "| Number of failures: #{failed_tests.to_s.ljust(3)} |"
-      puts "#{border_line}\n"
-
+      passed_tests = summary[3].to_i
     else
-      puts "No test summary found in the output."
+      # Fallback if the summary isn't present in the Gradle output
+      total_tests = passed_tests + failed_tests
     end
+
+    # Add the formatted test results output
+    border_line = "+-----------------------+"
+    puts "\n#{border_line}"
+    puts "|     Test Results      |"
+    puts "#{border_line}"
+    puts "| Number of tests:    #{total_tests.to_s.ljust(3)} |"
+    puts "| Number of success:  #{passed_tests.to_s.ljust(3)} |"
+    puts "| Number of failures: #{failed_tests.to_s.ljust(3)} |"
+    puts "#{border_line}\n"
 
     # Throw a custom error if there are any failed tests
     if failed_tests > 0
