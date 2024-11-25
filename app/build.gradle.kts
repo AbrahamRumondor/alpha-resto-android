@@ -1,3 +1,4 @@
+import com.adarshr.gradle.testlogger.theme.ThemeType
 import java.util.Properties
 import io.quarkus.gradle.tasks.QuarkusDev
 import org.gradle.internal.classpath.Instrumented.systemProperty
@@ -11,8 +12,26 @@ plugins {
   id("androidx.navigation.safeargs.kotlin")
   id("kotlin-kapt")
   id("dagger.hilt.android.plugin")
+  id("com.adarshr.test-logger") version "3.2.0"
 }
 
+testlogger {
+  theme = ThemeType.MOCHA
+  showExceptions = true
+  showStackTraces = true
+  showFullStackTraces = false
+  showCauses = true
+  slowThreshold = 2000
+  showSummary = true
+  showSimpleNames = false
+  showPassed = true
+  showSkipped = true
+  showFailed = true
+  showStandardStreams = false
+  showPassedStandardStreams = true
+  showSkippedStandardStreams = true
+  showFailedStandardStreams = true
+}
 
 android {
   namespace = "com.example.alfaresto_customersapp"
