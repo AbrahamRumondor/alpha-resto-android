@@ -9,131 +9,106 @@ platform :android do
   end
 
   desc "Run unit tests"
-  lane :unit_tests do |options|
-    # Initialize a variable for test results
-    result_output = ""
-
-    # Run unit tests
-    begin
-      result_output = gradle(
+    lane :unit_tests do
+        gradle(
         task: "test",
         print_command: false,
-        flags: "--stacktrace",
         properties: {
-          "testBuildType" => "debug",
           "color" => "always"
         }
-      )
-
-      display_test_summary
-      
-      if options[:coverage]
-        UI.message "📊 Generating Coverage Report..."
-        gradle(
-          task: "jacocoTestReport",
-          flags: "--stacktrace",
-          print_command: false
         )
-      end
-    rescue => ex
-      UI.error "❌ Tests failed: #{ex.message}"
-      handle_test_failure(ex)
-      raise ex
     end
-  end
 
-  private_lane :display_test_summary do
-    require 'nokogiri'
-    begin
-      # Find all test result XML files
-      test_reports = Dir.glob("app/build/test-results/test*/TEST-*.xml")
-      
-      total_tests = 0
-      total_failures = 0
-      total_skipped = 0
-      total_time = 0.0
-      failed_tests = []
-
-      test_reports.each do |report_path|
-        xml = File.read(report_path)
-        doc = Nokogiri::XML(xml)
-        
-        # Get test suite information
-        testsuite = doc.at_xpath('//testsuite')
-        next unless testsuite
-        
-        total_tests += testsuite['tests'].to_i
-        total_failures += testsuite['failures'].to_i
-        total_skipped += testsuite['skipped'].to_i
-        total_time += testsuite['time'].to_f
-        
-        # Collect failed test cases
-        doc.xpath('//testcase[failure]').each do |testcase|
-          failed_tests << {
-            class_name: testcase['classname'],
-            name: testcase['name'],
-            message: testcase.at_xpath('failure')['message']
-          }
-        end
-      end
-      
-      # Print summary
-      UI.success "✅ Test Results Summary:"
-      UI.message "📊 Total Tests: #{total_tests}"
-      UI.success "✅ Passed: #{total_tests - total_failures - total_skipped}"
-      UI.error "❌ Failed: #{total_failures}" if total_failures > 0
-      UI.important "⏭️ Skipped: #{total_skipped}" if total_skipped > 0
-      UI.important "⏱️ Total Duration: #{total_time.round(2)} seconds"
-      
-      # Show failed test details
-      if total_failures > 0
-        UI.error "\nFailed Tests Details:"
-        failed_tests.each do |failure|
-          UI.error "❌ #{failure[:class_name]}##{failure[:name]}"
-          UI.error "   #{failure[:message]}"
-        end
-      end
-      
-      # Save report to file
-      report_dir = "fastlane/test_output"
-      FileUtils.mkdir_p(report_dir)
-      File.open("#{report_dir}/test_summary.txt", "w") do |f|
-        f.puts "Test Results Summary"
-        f.puts "-------------------"
-        f.puts "Total Tests: #{total_tests}"
-        f.puts "Passed: #{total_tests - total_failures - total_skipped}"
-        f.puts "Failed: #{total_failures}"
-        f.puts "Skipped: #{total_skipped}"
-        f.puts "Duration: #{total_time.round(2)} seconds"
-        
-        if total_failures > 0
-          f.puts "\nFailed Tests:"
-          failed_tests.each do |failure|
-            f.puts "\n#{failure[:class_name]}##{failure[:name]}"
-            f.puts "Error: #{failure[:message]}"
-          end
-        end
-      end
-    rescue => e
-      UI.error "Error parsing test results: #{e.message}"
-    end
-  end
-  
-  private_lane :handle_test_failure do |exception|
-    # Parse stack trace for better readability
-    if exception.message.include?("Native crash")
-      UI.message "🔍 Processing native crash stack trace..."
-      current_dir = Dir.pwd
-      Dir.chdir("..")
-      sh("#{ENV['ANDROID_HOME']}/ndk-bundle/ndk-stack -sym app/build/intermediates/cmake/debug/obj/local/#{ENV['ABI']} -dump crash.log")
-      Dir.chdir(current_dir)
-    end
-    
-    # Save detailed logs for debugging
-    FileUtils.mkdir_p("fastlane/test_output")
-    File.write("fastlane/test_output/error_details.log", exception.message)
-    UI.important "📝 Detailed error log saved to fastlane/test_output/error_details.log"
-  end
+#   desc "Run unit tests"
+#     lane :unit_tests do |options|
+#       # Run unit tests
+#       begin
+#         gradle(
+#           task: "test",
+#           print_command: false,
+#           flags: "--stacktrace",
+#           properties: {
+#             "testBuildType" => "debug",
+#             "color" => "always"
+#           }
+#         )
+#
+#         # Check test results
+#         check_test_results
+#
+#         if options[:coverage]
+#           UI.message "📊 Generating Coverage Report..."
+#           gradle(
+#             task: "jacocoTestReport",
+#             flags: "--stacktrace",
+#             print_command: false
+#           )
+#         end
+#       rescue => ex
+# #         UI.error "❌ Tests failed: #{ex.message}"
+#         handle_test_failure(ex)
+#         raise ex
+#       end
+#     end
+#
+#     private_lane :check_test_results do
+#       # Define paths for test results
+#       test_results_dir = "app/build/test-results/testDebugUnitTest"
+#
+#       # Check if test results directory exists
+#       unless Dir.exist?(test_results_dir)
+# #         UI.error "❌ Test results directory not found!"
+#         return
+#       end
+#
+#       # Count test result files
+#       xml_files = Dir.glob("#{test_results_dir}/*.xml")
+#
+#       if xml_files.empty?
+# #         UI.error "❌ No test result files found!"
+#         return
+#       end
+#
+#       # Summarize test results
+#       total_tests = 0
+#       total_failures = 0
+#       total_skipped = 0
+#
+#       xml_files.each do |file|
+#         # Basic XML parsing without Nokogiri
+#         file_content = File.read(file)
+#
+#         # Extract basic stats using simple regex
+#         total_tests += file_content.match(/tests="(\d+)"/)[1].to_i rescue 0
+#         total_failures += file_content.match(/failures="(\d+)"/)[1].to_i rescue 0
+#         total_skipped += file_content.match(/skipped="(\d+)"/)[1].to_i rescue 0
+#       end
+#
+#       # Display summary
+#       passed_tests = total_tests - total_failures - total_skipped
+#
+#       border_line = "+-----------------------+"
+#       puts "\n#{border_line}"
+#       puts "|     Test Results      |"
+#       puts "#{border_line}"
+#       puts "| Total tests:       #{total_tests.to_s.ljust(4)} |"
+#       puts "| Passed tests:      #{passed_tests.to_s.ljust(4)} |"
+#       puts "| Failed tests:      #{total_failures.to_s.ljust(4)} |"
+#       puts "| Skipped tests:     #{total_skipped.to_s.ljust(4)} |"
+#       puts "#{border_line}\n"
+#
+#       # Raise error if tests failed
+#       if total_failures > 0
+#         raise "❌ #{total_failures} test(s) failed!"
+#       end
+#     end
+#
+#     private_lane :handle_test_failure do |exception|
+#       # Save detailed logs for debugging
+#       FileUtils.mkdir_p("fastlane/test_output")
+#       File.write("fastlane/test_output/error_details.log", exception.message)
+#       UI.important "📝 Detailed error log saved to fastlane/test_output/error_details.log"
+#     end
 
   desc "Run UI tests"
   lane :ui_tests do

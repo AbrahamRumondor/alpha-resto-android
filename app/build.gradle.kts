@@ -105,6 +105,8 @@ dependencies {
 
   implementation("com.google.firebase:firebase-messaging:24.0.0")
   implementation("com.google.firebase:firebase-messaging-ktx:24.0.0")
+
+  //For Testing
   testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
   testImplementation("org.testng:testng:6.9.6")
   androidTestImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
