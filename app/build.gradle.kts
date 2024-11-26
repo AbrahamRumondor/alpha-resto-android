@@ -97,6 +97,14 @@ tasks.withType(QuarkusDev::class.java).configureEach {
   jvmArgs.add("-Djdk.attach.allowAttachSelf")
 }
 
+tasks.withType<Test> {
+  testLogging {
+    events("passed", "skipped", "failed")
+    showStandardStreams = false
+    exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.SHORT
+  }
+}
+
 kapt {
   correctErrorTypes = true
 }
