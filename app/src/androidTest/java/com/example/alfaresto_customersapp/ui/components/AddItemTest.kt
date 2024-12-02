@@ -1,6 +1,7 @@
 package com.example.alfaresto_customersapp.ui.components
 
 
+import android.Manifest
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -24,7 +25,9 @@ import androidx.test.espresso.matcher.ViewMatchers.withParent
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
+import com.example.alfaresto_customersapp.BuildConfig
 import com.example.alfaresto_customersapp.R
 import com.example.alfaresto_customersapp.ui.components.loginPage.LoginActivity
 import com.example.alfaresto_customersapp.ui.components.restoPage.adapter.RestoViewHolder
@@ -53,14 +56,19 @@ class AddItemTest {
 //  @get:Rule
 //  var mActivityScenarioRule = ActivityScenarioRule(LoginActivity::class.java)
 
-  @get:Rule
-  var mGrantPermissionRule = GrantPermissionRule.grant(
-    "android.permission.POST_NOTIFICATIONS"
-  )
+//  @get:Rule
+//  var mGrantPermissionRule = GrantPermissionRule.grant(
+//    "android.permission.POST_NOTIFICATIONS"
+//  )
 
   @Before
   fun init() {
     hiltRule.inject() // This line initializes Hilt
+    val permission = Manifest.permission.POST_NOTIFICATIONS
+    InstrumentationRegistry.getInstrumentation().uiAutomation.grantRuntimePermission(
+      BuildConfig.APPLICATION_ID,
+      permission
+    )
   }
 
   @Test
