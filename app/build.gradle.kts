@@ -71,6 +71,7 @@ android {
       }
     }
 
+    animationsDisabled = true
     execution = "ANDROIDX_TEST_ORCHESTRATOR"
   }
 }

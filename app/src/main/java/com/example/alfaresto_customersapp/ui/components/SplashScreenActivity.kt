@@ -8,6 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.alfaresto_customersapp.databinding.ActivitySplashScreenBinding
 import com.example.alfaresto_customersapp.ui.components.loginPage.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
