@@ -13,14 +13,14 @@ platform :android do
     test_type = params[:type] || "Both"
 
     case test_type.downcase
-    when "Both"
+    when "both"
       puts "🚀 Running Both Unit and UI Tests"
       unit_tests
       ui_tests
-    when "UI Test"
+    when "uitest"
       puts "🖥️ Running UI Tests Only"
       ui_tests
-    when "Unit Test"
+    when "unittest"
       puts "🧪 Running Unit Tests Only"
       unit_tests
     else
