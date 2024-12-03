@@ -8,19 +8,6 @@ platform :android do
     )
   end
 
-  lane :run_test do | params |
-      if params == "Both"
-        unit_tests
-        ui_tests
-      end
-      if params == "UI Test"
-        ui_tests
-      end
-      if params == "Unit Test"
-        unit_tests
-      end
-  end
-
   lane :run_tests do |params|
     # Validate input parameters
     test_type = params[:type] || "Both"
