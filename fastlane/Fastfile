@@ -8,6 +8,39 @@ platform :android do
     )
   end
 
+  lane :run_test do | params |
+      if params == "Both"
+        unit_tests
+        ui_tests
+      end
+      if params == "UI Test"
+        ui_tests
+      end
+      if params == "Unit Test"
+        unit_tests
+      end
+  end
+
+  lane :run_tests do |params|
+    # Validate input parameters
+    test_type = params[:type] || "Both"
+
+    case test_type.downcase
+    when "Both"
+      puts "🚀 Running Both Unit and UI Tests"
+      unit_tests
+      ui_tests
+    when "UI Test"
+      puts "🖥️ Running UI Tests Only"
+      ui_tests
+    when "Unit Test"
+      puts "🧪 Running Unit Tests Only"
+      unit_tests
+    else
+      UI.user_error!("Invalid test type. Use 'Both', 'UI', or 'Unit'")
+    end
+  end
+
   desc "Run unit tests"
     lane :unit_tests do
       ENV['TERM'] = 'dumb'
@@ -19,97 +52,6 @@ platform :android do
         }
         )
     end
-
-#   desc "Run unit tests"
-#     lane :unit_tests do |options|
-#       # Run unit tests
-#       begin
-#         gradle(
-#           task: "test",
-#           print_command: false,
-#           flags: "--stacktrace",
-#           properties: {
-#             "testBuildType" => "debug",
-#             "color" => "always"
-#           }
-#         )
-#
-#         # Check test results
-#         check_test_results
-#
-#         if options[:coverage]
-#           UI.message "📊 Generating Coverage Report..."
-#           gradle(
-#             task: "jacocoTestReport",
-#             flags: "--stacktrace",
-#             print_command: false
-#           )
-#         end
-#       rescue => ex
-# #         UI.error "❌ Tests failed: #{ex.message}"
-#         handle_test_failure(ex)
-#         raise ex
-#       end
-#     end
-#
-#     private_lane :check_test_results do
-#       # Define paths for test results
-#       test_results_dir = "app/build/test-results/testDebugUnitTest"
-#
-#       # Check if test results directory exists
-#       unless Dir.exist?(test_results_dir)
-# #         UI.error "❌ Test results directory not found!"
-#         return
-#       end
-#
-#       # Count test result files
-#       xml_files = Dir.glob("#{test_results_dir}/*.xml")
-#
-#       if xml_files.empty?
-# #         UI.error "❌ No test result files found!"
-#         return
-#       end
-#
-#       # Summarize test results
-#       total_tests = 0
-#       total_failures = 0
-#       total_skipped = 0
-#
-#       xml_files.each do |file|
-#         # Basic XML parsing without Nokogiri
-#         file_content = File.read(file)
-#
-#         # Extract basic stats using simple regex
-#         total_tests += file_content.match(/tests="(\d+)"/)[1].to_i rescue 0
-#         total_failures += file_content.match(/failures="(\d+)"/)[1].to_i rescue 0
-#         total_skipped += file_content.match(/skipped="(\d+)"/)[1].to_i rescue 0
-#       end
-#
-#       # Display summary
-#       passed_tests = total_tests - total_failures - total_skipped
-#
-#       border_line = "+-----------------------+"
-#       puts "\n#{border_line}"
-#       puts "|     Test Results      |"
-#       puts "#{border_line}"
-#       puts "| Total tests:       #{total_tests.to_s.ljust(4)} |"
-#       puts "| Passed tests:      #{passed_tests.to_s.ljust(4)} |"
-#       puts "| Failed tests:      #{total_failures.to_s.ljust(4)} |"
-#       puts "| Skipped tests:     #{total_skipped.to_s.ljust(4)} |"
-#       puts "#{border_line}\n"
-#
-#       # Raise error if tests failed
-#       if total_failures > 0
-#         raise "❌ #{total_failures} test(s) failed!"
-#       end
-#     end
-#
-#     private_lane :handle_test_failure do |exception|
-#       # Save detailed logs for debugging
-#       FileUtils.mkdir_p("fastlane/test_output")
-#       File.write("fastlane/test_output/error_details.log", exception.message)
-#       UI.important "📝 Detailed error log saved to fastlane/test_output/error_details.log"
-#     end
 
   desc "Run UI tests"
   lane :ui_tests do
