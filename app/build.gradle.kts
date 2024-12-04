@@ -97,6 +97,7 @@ tasks.withType(QuarkusDev::class.java).configureEach {
   jvmArgs.add("-Djdk.attach.allowAttachSelf")
 }
 
+//config for test logger
 tasks.withType<Test> {
   testLogging {
     events("passed", "skipped", "failed")
