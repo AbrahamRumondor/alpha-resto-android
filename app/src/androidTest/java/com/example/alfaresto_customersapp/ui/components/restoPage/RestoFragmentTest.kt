@@ -61,8 +61,6 @@ class RestoFragmentTest {
     MockKAnnotations.init(this)
   }
 
-
-
   private fun setUpMockData() {
     // This can be used to setup any additional mock data
     //    // Mock the ViewModel methods
