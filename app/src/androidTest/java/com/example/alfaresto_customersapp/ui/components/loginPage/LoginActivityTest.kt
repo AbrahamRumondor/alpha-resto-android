@@ -37,6 +37,9 @@ class LoginActivityTest {
     onView(withId(R.id.et_email))
       .check(matches(isDisplayed()))
 
+
+
+
     onView(withId(R.id.tv_title))
       .check(matches(withText("Welcome Back !")))
 
