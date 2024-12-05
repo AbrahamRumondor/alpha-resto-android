@@ -55,6 +55,7 @@ class AddItemTest {
   @get:Rule
   var hiltRule = HiltAndroidRule(this)
 
+
 //  @get:Rule
 //  var mActivityScenarioRule = ActivityScenarioRule(LoginActivity::class.java)
 
