@@ -23,6 +23,7 @@ class LoginActivityTest {
   @get:Rule
   var hiltRule = HiltAndroidRule(this)
 
+  // nambha perubahan lagi kita coba.
   @Before
   fun setUp() {
     hiltRule.inject() // Inject dependencies into the test class
