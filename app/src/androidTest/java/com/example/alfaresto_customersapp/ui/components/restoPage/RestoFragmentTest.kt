@@ -37,8 +37,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
-
-
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
 @UninstallModules(FirebaseModule::class)
