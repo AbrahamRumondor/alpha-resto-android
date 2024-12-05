@@ -1,22 +1,6 @@
-# This file contains the fastlane.tools configuration
-# You can find the documentation at https://docs.fastlane.tools
-#
-# For a list of all available actions, check out
-#
-#     https://docs.fastlane.tools/actions
-#
-# For a list of all available plugins, check out
-#
-#     https://docs.fastlane.tools/plugins/available-plugins
-#
-
-# Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
-
 default_platform(:android)
 
 platform :android do
-
   lane :build_apk do
     gradle(
       task: "assemble",
@@ -24,67 +8,86 @@ platform :android do
     )
   end
 
+  lane :run_tests do |params|
+    # Validate input parameters
+    test_type = params[:type] || "Both"
+
+    case test_type.downcase
+    when "both"
+      puts "🚀 Running Both Unit and UI Tests"
+      unit_tests
+      ui_tests
+    when "uitest"
+      puts "🖥️ Running UI Tests Only"
+      ui_tests
+    when "unittest"
+      puts "🧪 Running Unit Tests Only"
+      unit_tests
+    else
+      UI.user_error!("Invalid test type. Use 'Both', 'UI', or 'Unit'")
+    end
+  end
+
+  desc "Run unit tests"
+    lane :unit_tests do
+      ENV['TERM'] = 'dumb'
+        gradle(
+        task: "test",
+        print_command: false,
+        properties: {
+          "color" => "always"
+        }
+        )
+    end
+
   desc "Run UI tests"
   lane :ui_tests do
-
     build_apk
 
-    # Initialize a variable for test results
     result_output = ""
 
     begin
-      # Run connected Android tests
       result_output = gradle(
         task: "connectedAndroidTest",
-        print_command: true,  # Print the command being executed
-        flags: "--info",      # Use --info for detailed output
+        print_command: true,
+        flags: "--info"
       )
     rescue => e
-      # Capture error output from the exception
       UI.message("Gradle command failed while running tests.")
-      result_output = e.message # Use exception's message as the output
+      result_output = e.message
     end
 
     puts "Filtered Test Results:\n\n"
+    failed_tests = 0
 
-    failed_tests = 0 # Initialize a counter for failed tests
-    total_tests = 0
-    passed_tests = -1
-
-    # Process the Gradle output for test results
     result_output.each_line do |line|
-      # Look for lines indicating test results (e.g., SUCCESS or FAILED)
       if line.match(/(SUCCESS|FAILED)/)
         puts line.strip
       end
 
-      # Count failed tests based on the output
-      failed_tests += 1 if line.match(/FAILED/)
-passed_tests += 1 if line.match(/SUCCESS/)
+      if line.match(/FAILED/)
+        failed_tests += 1
+      end
     end
 
-    # Extract test summary, even if no failures
     summary = result_output.match(/Total tests (\d+), failure (\d+), passed (\d+)/)
     if summary
-      total_tests = summary[1].to_i
+      total_tests = summary[1]
       failed_tests = summary[2].to_i
-      passed_tests = summary[3].to_i
+      passed_tests = summary[3]
+
+      border_line = "+-----------------------+"
+      puts "\n#{border_line}"
+      puts "|     Test Results      |"
+      puts "#{border_line}"
+      puts "| Number of tests:    #{total_tests.ljust(3)} |"
+      puts "| Number of success:  #{passed_tests.ljust(3)} |"
+      puts "| Number of failures: #{failed_tests.to_s.ljust(3)} |"
+      puts "#{border_line}\n"
     else
-      # Fallback if the summary isn't present in the Gradle output
-      total_tests = passed_tests + failed_tests
+      puts "No test summary found in the output."
     end
 
-    # Add the formatted test results output
-    border_line = "+-----------------------+"
-    puts "\n#{border_line}"
-    puts "|     Test Results      |"
-    puts "#{border_line}"
-    puts "| Number of tests:    #{total_tests.to_s.ljust(3)} |"
-    puts "| Number of success:  #{passed_tests.to_s.ljust(3)} |"
-    puts "| Number of failures: #{failed_tests.to_s.ljust(3)} |"
-    puts "#{border_line}\n"
-
-    # Throw a custom error if there are any failed tests
     if failed_tests > 0
       raise "UI Tests failed: #{failed_tests} test(s) did not pass."
     end
