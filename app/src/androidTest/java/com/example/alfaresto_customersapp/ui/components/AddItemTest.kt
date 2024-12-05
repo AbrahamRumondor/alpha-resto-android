@@ -66,7 +66,6 @@ class AddItemTest {
     GrantPermissionRule.grant(Manifest.permission.INTERNET)
   }
 
-
   @Before
   fun init() {
     hiltRule.inject() // This line initializes Hilt
