@@ -32,8 +32,6 @@ class LoginActivityTest {
     ActivityScenario.launch(LoginActivity::class.java)
   }
 
-
-
   @Test
   fun testLoginSuccess() {
     onView(withId(R.id.et_email))
