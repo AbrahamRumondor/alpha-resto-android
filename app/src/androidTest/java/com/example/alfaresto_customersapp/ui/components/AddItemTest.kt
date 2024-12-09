@@ -58,11 +58,6 @@ class AddItemTest {
 //  @get:Rule
 //  var mActivityScenarioRule = ActivityScenarioRule(LoginActivity::class.java)
 
-
-
-
-
-
   // ini plis yang di run
   @get:Rule
   val mGrantPermissionRule: GrantPermissionRule = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
