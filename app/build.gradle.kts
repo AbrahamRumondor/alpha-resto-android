@@ -100,7 +100,7 @@ tasks.withType(QuarkusDev::class.java).configureEach {
 //config for test logger
 tasks.withType<Test> {
   testLogging {
-    events("passed", "skipped", "failed")
+    events("PASSED", "SKIPPED", "FAILED")
     showStandardStreams = true
     exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.SHORT
   }
