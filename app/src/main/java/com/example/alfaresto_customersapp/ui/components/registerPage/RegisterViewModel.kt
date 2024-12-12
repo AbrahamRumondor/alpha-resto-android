@@ -49,4 +49,8 @@ class RegisterViewModel @Inject constructor(
             .digest(password.toByteArray())
             .joinToString("") { "%02x".format(it) }
     }
+
+    fun sum(a: Int, b: Int): Int {
+        return a + b
+    }
 }

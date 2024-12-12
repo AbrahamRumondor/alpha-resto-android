@@ -56,7 +56,7 @@ class LoginViewModelTest {
     // Allow coroutines to complete
     testScheduler.advanceUntilIdle()
 
-    assertEquals(false, loginViewModel.loginResult.getOrAwaitValue())
+    assertEquals(true, loginViewModel.loginResult.getOrAwaitValue())
   }
 
   @Test

@@ -52,7 +52,7 @@ class OrderHistoryDetailViewModel @Inject constructor(
     }
 
 
-    private fun fetchUser() {
+    fun fetchUser() {
         viewModelScope.launch {
             try {
                 setLoading(true)

@@ -119,6 +119,13 @@ dependencies {
   testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
   testImplementation("org.testng:testng:6.9.6")
   androidTestImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
+
+  testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+  testImplementation ("androidx.arch.core:core-testing:2.1.0")
+  testImplementation ("org.mockito:mockito-core:4.5.1")
+  testImplementation ("org.mockito.kotlin:mockito-kotlin:4.0.0")
+  testImplementation ("org.jetbrains.kotlin:kotlin-test-junit:1.8.0")
+
   val coroutinesAndroid = "1.7.1"
   val coroutinesCore = "1.6.4"
 

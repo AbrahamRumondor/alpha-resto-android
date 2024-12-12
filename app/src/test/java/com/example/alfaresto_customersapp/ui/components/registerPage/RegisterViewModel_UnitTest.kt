@@ -19,6 +19,18 @@ class RegisterViewModel_UnitTest {
             authUseCase = mock(AuthUseCase::class.java)
         )
     }
+    @Test
+    fun test_registerViewModel_sum() {
+        //Given
+        val x = 2
+        val y = 3
+
+        //When
+        val result = viewModel.sum(x, y)
+
+        //Then
+        assertEquals(5, result)
+    }
 
     @Test
     fun `hashPassword returns correct hash for given password`() {
